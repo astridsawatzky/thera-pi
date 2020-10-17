@@ -30,6 +30,7 @@ import ag.ion.noa.printing.IPrinter;
 import emailHandling.EmailSendenExtern;
 import environment.Path;
 import hauptFenster.Reha;
+import office.OOService;
 import systemEinstellungen.SystemConfig;
 
 public class TerminplanDrucken extends Thread {
@@ -94,11 +95,11 @@ public class TerminplanDrucken extends Thread {
         /**********/
 
         IDocumentService documentService = null;
-        if (!Reha.officeapplication.isActive()) {
+        if (!new OOService().getOfficeapplication().isActive()) {
             Reha.starteOfficeApplication();
         }
         try {
-            documentService = Reha.officeapplication.getDocumentService();
+            documentService = new OOService().getOfficeapplication().getDocumentService();
 
         } catch (OfficeApplicationException e) {
             e.printStackTrace();
@@ -435,7 +436,7 @@ public class TerminplanDrucken extends Thread {
                     // eltern.setFortschrittSetzen(termindat.size()+(termindat.size()/20));
                     /*
                      * new SwingWorker<Void,Void>(){
-                     * 
+                     *
                      * @Override protected Void doInBackground() throws Exception {
                      * System.out.println("vor print()"); try { xdoc.print();
                      * //textDocument.print(); Thread.sleep(150); }catch (InterruptedException e) {

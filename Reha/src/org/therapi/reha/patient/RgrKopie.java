@@ -11,7 +11,7 @@ import hauptFenster.Reha;
 import hauptFenster.RehaIOServer;
 import hauptFenster.ReverseSocket;
 import io.RehaIOMessages;
-import oOorgTools.OOTools;
+import oOorgTools.RehaOOTools;
 import opRgaf.OpRgaf;
 import systemEinstellungen.SystemConfig;
 

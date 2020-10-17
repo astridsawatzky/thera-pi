@@ -34,6 +34,7 @@ import javax.swing.UIManager;
 import org.jdesktop.swingworker.SwingWorker;
 import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.painter.Painter;
+import org.slf4j.LoggerFactory;
 
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
@@ -97,7 +98,9 @@ import ag.ion.noa.search.ISearchResult;
 import ag.ion.noa.search.SearchDescriptor;
 import rehaHMK.dialoge.ArztAuswahl;
 import environment.Path;
+import gui.Cursors;
 import io.RehaIOMessages;
+import rehaHMK.CompoundPainters;
 import rehaHMK.RehaHMK;
 import rehaHMK.RehaHMKTab;
 import uk.co.mmscomputing.device.scanner.Scanner;
@@ -111,24 +114,40 @@ public class RehaHMKPanel2 extends JXPanel implements ScannerListener {
 
     RehaHMKTab eltern;
     Scanner scanner;
-    JPanel content = null;
-    int ckERST_VO = 0, ckFOLGE_VO = 1, ckADR_VO = 2, ckGRUPPEN_TH = 3, ckREZEPT_DAT = 4;
-    int ckBEHANDL_BEGIN = 5, ckHB_JANEIN = 6, ckTB_JANEIN = 7;
-    int ckINDI_SCHL = 8, ckMAX_ANZAHL = 9, ckFREQU_WO = 10;
+    JPanel content;
+    int ckERST_VO;
+    int ckFOLGE_VO = 1;
+    int ckADR_VO = 2;
+    int ckGRUPPEN_TH = 3;
+    int ckREZEPT_DAT = 4;
+    int ckBEHANDL_BEGIN = 5;
+    int ckHB_JANEIN = 6;
+    int ckTB_JANEIN = 7;
+    int ckINDI_SCHL = 8;
+    int ckMAX_ANZAHL = 9;
+    int ckFREQU_WO = 10;
     int ckBEH_DAUER = 11;
-    int ckHEIL_MITTEL = 12, ckLEIT_SYMPTOMATIK = 13, ckDIAG_NOSE = 14, ckBEGRUEND_ADR = 15;
+    int ckHEIL_MITTEL = 12;
+    int ckLEIT_SYMPTOMATIK = 13;
+    int ckDIAG_NOSE = 14;
+    int ckBEGRUEND_ADR = 15;
     int ckSONSTIGER_GRUND = 16;
-    int tfsREZEPT_DAT = 0, tfsBEHANDL_BEGIN = 1;
-    int tfsINDI_SCHL = 2, tfsMAX_ANZAHL = 3;
-    int tfsFREQU_WO = 4, tfsBEH_DAUER = 5;
-    int tfsHEIL_MITTEL = 6, tfsLEIT_SYMPTOMATIK = 7;
-    int tfsDIAG_NOSE = 8, tfsBEGRUEND_ADR = 9;
+    int tfsREZEPT_DAT;
+    int tfsBEHANDL_BEGIN = 1;
+    int tfsINDI_SCHL = 2;
+    int tfsMAX_ANZAHL = 3;
+    int tfsFREQU_WO = 4;
+    int tfsBEH_DAUER = 5;
+    int tfsHEIL_MITTEL = 6;
+    int tfsLEIT_SYMPTOMATIK = 7;
+    int tfsDIAG_NOSE = 8;
+    int tfsBEGRUEND_ADR = 9;
     int tfsSONSTIGER_GRUND = 10;
-    int rbHB_JA = 0;
+    int rbHB_JA;
     int rbHB_NEIN = 1;
     int rbTB_JA = 2;
     int rbTB_NEIN = 3;
-    int xversatz = 0;
+    int xversatz;
 
     JRtaCheckBox[] chbox = new JRtaCheckBox[20];
     JRtaTextField[] tfs = new JRtaTextField[11];
@@ -137,18 +156,18 @@ public class RehaHMKPanel2 extends JXPanel implements ScannerListener {
     ButtonGroup tbgroup = new ButtonGroup();
     JTextArea[] tas = new JTextArea[4];
     JButton[] buts = new JButton[4];
-    JRtaComboBox scanners = null;
-    JRtaComboBox scanformat = null;
-    JRtaCheckBox scandialog = null;
-    boolean scannerok = false;
-    Settings inifile = null;
-    ActionListener al = null;
-    IDocument document = null;
-    ITextDocument textDocument = null;
-    boolean sourceenabled = false;
-    JEditorPane htmlpane = null;
+    JRtaComboBox scanners;
+    JRtaComboBox scanformat;
+    JRtaCheckBox scandialog;
+    boolean scannerok;
+    Settings inifile;
+    ActionListener al;
+    IDocument document;
+    ITextDocument textDocument;
+    boolean sourceenabled;
+    JEditorPane htmlpane;
     StringBuffer arztbuf = new StringBuffer();
-    JRtaTextField reznummer = null;
+    JRtaTextField reznummer;
 
     int[][] kreuzpos = new int[][] { new int[2], { 3, 0 }, { 0, 2 }, { 3, 2 }, { 0, 5 }, { 5, 5 }, { 0, 8 }, { 8, 8 },
             { 0, 11 }, { 4, 11 }, { 0, 14 }, { 4, 14 }, { 0, 17 }, { 0, 21 }, { 0, 25 }, { 0, 29 }, { 0, 33 } };
@@ -161,10 +180,10 @@ public class RehaHMKPanel2 extends JXPanel implements ScannerListener {
     public RehaHMKPanel2(RehaHMKTab xeltern) {
         this.eltern = xeltern;
         setOpaque(false);
-        setBackgroundPainter((Painter) RehaHMK.cp);
+        setBackgroundPainter((Painter) CompoundPainters.CP);
         setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
         setLayout(new BorderLayout());
-        (new SwingWorker<Void, Void>() {
+        new SwingWorker<Void, Void>() {
             protected Void doInBackground() throws Exception {
                 try {
                     UIManager.put("Separator.foreground", new Color(231, 120, 23));
@@ -190,7 +209,7 @@ public class RehaHMKPanel2 extends JXPanel implements ScannerListener {
                 }
                 return null;
             }
-        }).execute();
+        }.execute();
     }
 
     private JXPanel getScannerSaich() {
@@ -220,11 +239,12 @@ public class RehaHMKPanel2 extends JXPanel implements ScannerListener {
         this.reznummer.setText("");
         pb.add(this.buts[0] = ButtonTools.macheButton("Formular erzeugen", "ooformular", this.al), cc.xy(2, 6));
         String sdummy = null;
-        if (this.scannerok)
+        if (this.scannerok) {
             try {
                 pb.addLabel("Scanner auswählen", cc.xy(12, 4));
                 pb.add((Component) (this.scanners = new JRtaComboBox(this.scanner.getDeviceNames())), cc.xy(12, 6));
-                if ((sdummy = this.inifile.getStringProperty("HMRModul", "Scanner")) == null) {
+                sdummy = this.inifile.getStringProperty("HMRModul", "Scanner");
+                if (sdummy == null) {
                     this.inifile.setStringProperty("HMRModul", "Scanner", this.scanners.getSelectedItem()
                                                                                        .toString(),
                             null);
@@ -232,22 +252,22 @@ public class RehaHMKPanel2 extends JXPanel implements ScannerListener {
                     mustsave = true;
                 } else {
                     this.scanners.setSelectedItem(sdummy);
-                    if ((sdummy = this.inifile.getStringProperty("HMRModul", "XVersatz")) == null) {
+                    sdummy = this.inifile.getStringProperty("HMRModul", "XVersatz");
+                    if (sdummy == null) {
                         this.inifile.setStringProperty("HMRModul", "XVersatz", "0", null);
                         mustsave = true;
                     } else {
-                        this.xversatz = this.inifile.getIntegerProperty("HMRModul", "XVersatz")
-                                                    .intValue();
+                        this.xversatz = this.inifile.getIntegerProperty("HMRModul", "XVersatz");
                     }
                 }
                 this.scanners.setActionCommand("scannerwahl");
                 this.scanners.addActionListener(this.al);
-            } catch (ScannerIOException scannerIOException) {
-
-            } catch (NullPointerException nullPointerException) {
+            } catch (ScannerIOException | NullPointerException nullPointerException) {
             }
+        }
         this.scanformat = new JRtaComboBox(new String[] { "DIN A5", "DIN A4" });
-        if ((sdummy = this.inifile.getStringProperty("HMRModul", "Scanformat")) == null) {
+        sdummy = this.inifile.getStringProperty("HMRModul", "Scanformat");
+        if (sdummy == null) {
             this.inifile.setStringProperty("HMRModul", "Scanformat", this.scanformat.getSelectedItem()
                                                                                     .toString(),
                     null);
@@ -260,8 +280,9 @@ public class RehaHMKPanel2 extends JXPanel implements ScannerListener {
         this.scanformat.addActionListener(this.al);
         pb.add(this.buts[2] = ButtonTools.macheButton("Arzt suchen", "arztadresse", this.al), cc.xy(10, 4));
         pb.add(this.buts[3] = ButtonTools.macheButton("finde Arzt über RezNr.", "arztreznr", this.al), cc.xy(10, 6));
-        if (mustsave)
+        if (mustsave) {
             this.inifile.save();
+        }
         this.htmlpane = new JEditorPane();
         this.htmlpane.setContentType("text/html");
         this.htmlpane.setEditable(false);
@@ -365,10 +386,11 @@ public class RehaHMKPanel2 extends JXPanel implements ScannerListener {
         pb.add((Component) (this.chbox[this.ckSONSTIGER_GRUND] = new JRtaCheckBox("Sonstige Änderungen")),
                 cc.xy(3, 30));
         pb.add((Component) (this.tfs[this.tfsSONSTIGER_GRUND] = new JRtaTextField("nix", true)), cc.xyw(3, 32, 3));
-        for (i = 0; i < 11; i++)
+        for (i = 0; i < 11; i++) {
             this.tfs[i].setEnabled(false);
+        }
         for (i = 0; i < 17; i++) {
-            this.chbox[i].setActionCommand("cbox-" + Integer.toString(i));
+            this.chbox[i].setActionCommand("cbox-" + i);
             this.chbox[i].addActionListener(this.al);
         }
         pb.getPanel()
@@ -393,15 +415,17 @@ public class RehaHMKPanel2 extends JXPanel implements ScannerListener {
         JRtaCheckBox box = new JRtaCheckBox(text);
         box.setFont(font);
         box.setForeground(fcolor);
-        if (al != null)
+        if (al != null) {
             box.addActionListener(al);
+        }
         return box;
     }
 
     private void scanStarten() {
         try {
-            if (this.scanner == null)
+            if (this.scanner == null) {
                 this.scanner = Scanner.getDevice();
+            }
             String[] arrayOfString = this.scanner.getDeviceNames();
         } catch (ScannerIOException e2) {
             e2.printStackTrace();
@@ -415,139 +439,159 @@ public class RehaHMKPanel2 extends JXPanel implements ScannerListener {
                 if (cmd.contains("-")) {
                     int zahl = Integer.parseInt(cmd.split("-")[1]);
                     if (zahl < 4) {
-                        if (RehaHMKPanel2.this.chbox[zahl].isSelected())
+                        if (RehaHMKPanel2.this.chbox[zahl].isSelected()) {
                             for (int i = 0; i < 4; i++) {
-                                if (i != zahl)
+                                if (i != zahl) {
                                     RehaHMKPanel2.this.chbox[i].setSelected(false);
+                                }
                             }
-                    } else if (zahl == 4) {
-                        if (RehaHMKPanel2.this.chbox[4].isSelected()) {
-                            RehaHMKPanel2.this.tfs[0].setEnabled(true);
-                            RehaHMKPanel2.this.tfs[0].requestFocus();
-                        } else {
-                            RehaHMKPanel2.this.tfs[0].setText("  .  .    ");
-                            RehaHMKPanel2.this.tfs[0].setEnabled(false);
                         }
-                    } else if (zahl == 5) {
-                        if (RehaHMKPanel2.this.chbox[5].isSelected()) {
-                            RehaHMKPanel2.this.tfs[1].setEnabled(true);
-                            RehaHMKPanel2.this.tfs[1].requestFocus();
-                        } else {
-                            RehaHMKPanel2.this.tfs[1].setText("  .  .    ");
-                            RehaHMKPanel2.this.tfs[1].setEnabled(false);
-                        }
-                    } else if (zahl == 6) {
-                        if (RehaHMKPanel2.this.chbox[6].isSelected()) {
-                            RehaHMKPanel2.this.rbuts[0].setEnabled(true);
-                            RehaHMKPanel2.this.rbuts[1].setEnabled(true);
-                            RehaHMKPanel2.this.rbuts[0].requestFocus();
-                        } else {
-                            RehaHMKPanel2.this.rbuts[1].setSelected(true);
-                            RehaHMKPanel2.this.rbuts[0].setEnabled(false);
-                            RehaHMKPanel2.this.rbuts[1].setEnabled(false);
-                        }
-                    } else if (zahl == 7) {
-                        if (RehaHMKPanel2.this.chbox[7].isSelected()) {
-                            RehaHMKPanel2.this.rbuts[2].setEnabled(true);
-                            RehaHMKPanel2.this.rbuts[3].setEnabled(true);
-                            RehaHMKPanel2.this.rbuts[2].requestFocus();
-                        } else {
-                            RehaHMKPanel2.this.rbuts[3].setSelected(true);
-                            RehaHMKPanel2.this.rbuts[2].setEnabled(false);
-                            RehaHMKPanel2.this.rbuts[3].setEnabled(false);
-                        }
-                    } else if (zahl == 8) {
-                        if (RehaHMKPanel2.this.chbox[8].isSelected()) {
-                            RehaHMKPanel2.this.tfs[2].setEnabled(true);
-                            RehaHMKPanel2.this.tfs[2].requestFocus();
-                        } else {
-                            RehaHMKPanel2.this.tfs[2].setText("");
-                            RehaHMKPanel2.this.tfs[2].setEnabled(false);
-                        }
-                    } else if (zahl == 9) {
-                        if (RehaHMKPanel2.this.chbox[9].isSelected()) {
-                            RehaHMKPanel2.this.tfs[3].setEnabled(true);
-                            RehaHMKPanel2.this.tfs[3].requestFocus();
-                        } else {
-                            RehaHMKPanel2.this.tfs[3].setText("");
-                            RehaHMKPanel2.this.tfs[3].setEnabled(false);
-                        }
-                    } else if (zahl == 10) {
-                        if (RehaHMKPanel2.this.chbox[10].isSelected()) {
-                            RehaHMKPanel2.this.tfs[4].setEnabled(true);
-                            RehaHMKPanel2.this.tfs[4].requestFocus();
-                        } else {
-                            RehaHMKPanel2.this.tfs[4].setText("");
-                            RehaHMKPanel2.this.tfs[4].setEnabled(false);
-                        }
-                    } else if (zahl == 11) {
-                        if (RehaHMKPanel2.this.chbox[11].isSelected()) {
-                            RehaHMKPanel2.this.tfs[5].setEnabled(true);
-                            RehaHMKPanel2.this.tfs[5].requestFocus();
-                        } else {
-                            RehaHMKPanel2.this.tfs[5].setText("");
-                            RehaHMKPanel2.this.tfs[5].setEnabled(false);
-                        }
-                    } else if (zahl == 12) {
-                        if (RehaHMKPanel2.this.chbox[12].isSelected()) {
-                            RehaHMKPanel2.this.tfs[6].setEnabled(true);
-                            RehaHMKPanel2.this.tfs[6].requestFocus();
-                        } else {
-                            RehaHMKPanel2.this.tfs[6].setText("");
-                            RehaHMKPanel2.this.tfs[6].setEnabled(false);
-                        }
-                    } else if (zahl == 13) {
-                        if (RehaHMKPanel2.this.chbox[13].isSelected()) {
-                            RehaHMKPanel2.this.tfs[7].setEnabled(true);
-                            RehaHMKPanel2.this.tfs[7].requestFocus();
-                        } else {
-                            RehaHMKPanel2.this.tfs[7].setText("");
-                            RehaHMKPanel2.this.tfs[7].setEnabled(false);
-                        }
-                    } else if (zahl == 14) {
-                        if (RehaHMKPanel2.this.chbox[14].isSelected()) {
-                            RehaHMKPanel2.this.tfs[8].setEnabled(true);
-                            RehaHMKPanel2.this.tfs[8].requestFocus();
-                        } else {
-                            RehaHMKPanel2.this.tfs[8].setText("");
-                            RehaHMKPanel2.this.tfs[8].setEnabled(false);
-                        }
-                    } else if (zahl == 15) {
-                        if (RehaHMKPanel2.this.chbox[15].isSelected()) {
-                            RehaHMKPanel2.this.tfs[9].setEnabled(true);
-                            RehaHMKPanel2.this.tfs[9].requestFocus();
-                        } else {
-                            RehaHMKPanel2.this.tfs[9].setText("");
-                            RehaHMKPanel2.this.tfs[9].setEnabled(false);
-                        }
-                    } else if (zahl == 16) {
-                        if (RehaHMKPanel2.this.chbox[16].isSelected()) {
-                            RehaHMKPanel2.this.tfs[10].setEnabled(true);
-                            RehaHMKPanel2.this.tfs[10].requestFocus();
-                        } else {
-                            RehaHMKPanel2.this.tfs[10].setText("");
-                            RehaHMKPanel2.this.tfs[10].setEnabled(false);
+                    } else {
+                        switch (zahl) {
+                        case 4:
+                            if (RehaHMKPanel2.this.chbox[4].isSelected()) {
+                                RehaHMKPanel2.this.tfs[0].setEnabled(true);
+                                RehaHMKPanel2.this.tfs[0].requestFocus();
+                            } else {
+                                RehaHMKPanel2.this.tfs[0].setText("  .  .    ");
+                                RehaHMKPanel2.this.tfs[0].setEnabled(false);
+                            }
+                            break;
+                        case 5:
+                            if (RehaHMKPanel2.this.chbox[5].isSelected()) {
+                                RehaHMKPanel2.this.tfs[1].setEnabled(true);
+                                RehaHMKPanel2.this.tfs[1].requestFocus();
+                            } else {
+                                RehaHMKPanel2.this.tfs[1].setText("  .  .    ");
+                                RehaHMKPanel2.this.tfs[1].setEnabled(false);
+                            }
+                            break;
+                        case 6:
+                            if (RehaHMKPanel2.this.chbox[6].isSelected()) {
+                                RehaHMKPanel2.this.rbuts[0].setEnabled(true);
+                                RehaHMKPanel2.this.rbuts[1].setEnabled(true);
+                                RehaHMKPanel2.this.rbuts[0].requestFocus();
+                            } else {
+                                RehaHMKPanel2.this.rbuts[1].setSelected(true);
+                                RehaHMKPanel2.this.rbuts[0].setEnabled(false);
+                                RehaHMKPanel2.this.rbuts[1].setEnabled(false);
+                            }
+                            break;
+                        case 7:
+                            if (RehaHMKPanel2.this.chbox[7].isSelected()) {
+                                RehaHMKPanel2.this.rbuts[2].setEnabled(true);
+                                RehaHMKPanel2.this.rbuts[3].setEnabled(true);
+                                RehaHMKPanel2.this.rbuts[2].requestFocus();
+                            } else {
+                                RehaHMKPanel2.this.rbuts[3].setSelected(true);
+                                RehaHMKPanel2.this.rbuts[2].setEnabled(false);
+                                RehaHMKPanel2.this.rbuts[3].setEnabled(false);
+                            }
+                            break;
+                        case 8:
+                            if (RehaHMKPanel2.this.chbox[8].isSelected()) {
+                                RehaHMKPanel2.this.tfs[2].setEnabled(true);
+                                RehaHMKPanel2.this.tfs[2].requestFocus();
+                            } else {
+                                RehaHMKPanel2.this.tfs[2].setText("");
+                                RehaHMKPanel2.this.tfs[2].setEnabled(false);
+                            }
+                            break;
+                        case 9:
+                            if (RehaHMKPanel2.this.chbox[9].isSelected()) {
+                                RehaHMKPanel2.this.tfs[3].setEnabled(true);
+                                RehaHMKPanel2.this.tfs[3].requestFocus();
+                            } else {
+                                RehaHMKPanel2.this.tfs[3].setText("");
+                                RehaHMKPanel2.this.tfs[3].setEnabled(false);
+                            }
+                            break;
+                        case 10:
+                            if (RehaHMKPanel2.this.chbox[10].isSelected()) {
+                                RehaHMKPanel2.this.tfs[4].setEnabled(true);
+                                RehaHMKPanel2.this.tfs[4].requestFocus();
+                            } else {
+                                RehaHMKPanel2.this.tfs[4].setText("");
+                                RehaHMKPanel2.this.tfs[4].setEnabled(false);
+                            }
+                            break;
+                        case 11:
+                            if (RehaHMKPanel2.this.chbox[11].isSelected()) {
+                                RehaHMKPanel2.this.tfs[5].setEnabled(true);
+                                RehaHMKPanel2.this.tfs[5].requestFocus();
+                            } else {
+                                RehaHMKPanel2.this.tfs[5].setText("");
+                                RehaHMKPanel2.this.tfs[5].setEnabled(false);
+                            }
+                            break;
+                        case 12:
+                            if (RehaHMKPanel2.this.chbox[12].isSelected()) {
+                                RehaHMKPanel2.this.tfs[6].setEnabled(true);
+                                RehaHMKPanel2.this.tfs[6].requestFocus();
+                            } else {
+                                RehaHMKPanel2.this.tfs[6].setText("");
+                                RehaHMKPanel2.this.tfs[6].setEnabled(false);
+                            }
+                            break;
+                        case 13:
+                            if (RehaHMKPanel2.this.chbox[13].isSelected()) {
+                                RehaHMKPanel2.this.tfs[7].setEnabled(true);
+                                RehaHMKPanel2.this.tfs[7].requestFocus();
+                            } else {
+                                RehaHMKPanel2.this.tfs[7].setText("");
+                                RehaHMKPanel2.this.tfs[7].setEnabled(false);
+                            }
+                            break;
+                        case 14:
+                            if (RehaHMKPanel2.this.chbox[14].isSelected()) {
+                                RehaHMKPanel2.this.tfs[8].setEnabled(true);
+                                RehaHMKPanel2.this.tfs[8].requestFocus();
+                            } else {
+                                RehaHMKPanel2.this.tfs[8].setText("");
+                                RehaHMKPanel2.this.tfs[8].setEnabled(false);
+                            }
+                            break;
+                        case 15:
+                            if (RehaHMKPanel2.this.chbox[15].isSelected()) {
+                                RehaHMKPanel2.this.tfs[9].setEnabled(true);
+                                RehaHMKPanel2.this.tfs[9].requestFocus();
+                            } else {
+                                RehaHMKPanel2.this.tfs[9].setText("");
+                                RehaHMKPanel2.this.tfs[9].setEnabled(false);
+                            }
+                            break;
+                        case 16:
+                            if (RehaHMKPanel2.this.chbox[16].isSelected()) {
+                                RehaHMKPanel2.this.tfs[10].setEnabled(true);
+                                RehaHMKPanel2.this.tfs[10].requestFocus();
+                            } else {
+                                RehaHMKPanel2.this.tfs[10].setText("");
+                                RehaHMKPanel2.this.tfs[10].setEnabled(false);
+                            }
+                            break;
                         }
                     }
-                } else if (cmd.equals("scannerwahl")) {
+                } else if ("scannerwahl".equals(cmd)) {
                     RehaHMKPanel2.this.doIniFile("HMRModul", "Scanner", RehaHMKPanel2.this.scanners.getSelectedItem()
                                                                                                    .toString());
-                } else if (cmd.equals("scandialog")) {
+                } else if ("scandialog".equals(cmd)) {
                     RehaHMKPanel2.this.doIniFile("HMRModul", "Scandialog",
                             RehaHMKPanel2.this.scandialog.isSelected() ? "1" : "0");
-                } else if (cmd.equals("scanformat")) {
+                } else if ("scanformat".equals(cmd)) {
                     RehaHMKPanel2.this.doIniFile("HMRModul", "Scanformat",
                             RehaHMKPanel2.this.scanformat.getSelectedItem()
                                                          .toString());
-                } else if (cmd.equals("ooformular")) {
-                    if (RehaHMKPanel2.this.RezNumOk())
+                } else if ("ooformular".equals(cmd)) {
+                    if (RehaHMKPanel2.this.RezNumOk()) {
                         RehaHMKPanel2.this.doOOFormular();
-                } else if (cmd.equals("scannen")) {
-                    if (RehaHMKPanel2.this.scannerok && RehaHMKPanel2.this.RezNumOk())
+                    }
+                } else if ("scannen".equals(cmd)) {
+                    if (RehaHMKPanel2.this.scannerok && RehaHMKPanel2.this.RezNumOk()) {
                         RehaHMKPanel2.this.doScannen();
-                } else if (cmd.equals("arztadresse")) {
+                    }
+                } else if ("arztadresse".equals(cmd)) {
                     RehaHMKPanel2.this.doArztAdresse();
-                } else if (cmd.equals("arztreznr")) {
+                } else if ("arztreznr".equals(cmd)) {
                     RehaHMKPanel2.this.doArztReznum();
                 }
             }
@@ -556,13 +600,13 @@ public class RehaHMKPanel2 extends JXPanel implements ScannerListener {
 
     private boolean RezNumOk() {
         String rezNr = this.reznummer.getText()
-                .trim();
-        if (rezNr.equals("")) {
+                                     .trim();
+        if ("".equals(rezNr)) {
             JOptionPane.showMessageDialog(null, "Ohne die Eingabe der Rezeptnummer ist dieser Vorgang nicht möglich");
             this.reznummer.requestFocus();
             return false;
         }
-        if (this.arztkorrektur.equals("")) {
+        if ("".equals(this.arztkorrektur)) {
             JOptionPane.showMessageDialog(null, "Ohne die Eingabe eines Arztes ist dieser Vorgang nicht möglich");
             this.reznummer.requestFocus();
             return false;
@@ -570,7 +614,7 @@ public class RehaHMKPanel2 extends JXPanel implements ScannerListener {
         String patintern = SqlInfo.holeEinzelFeld(
                 "select t2.pat_intern from verordn as t1 join pat5 as t2 on (t1.pat_intern = t2.pat_intern) where t1.rez_nr = '"
                         + rezNr + "' LIMIT 1");
-        if (patintern.equals("")) {
+        if ("".equals(patintern)) {
             JOptionPane.showMessageDialog(null,
                     "Ungültige Rezeptnummer, kein Patient zugeordnet, Scanvorgang nicht möglich");
             return false;
@@ -586,7 +630,7 @@ public class RehaHMKPanel2 extends JXPanel implements ScannerListener {
                     + "' where pat_intern = '" + patintern + "' LIMIT 1");
             SwingUtilities.invokeLater(new Runnable() {
                 public void run() {
-                    (new SocketClient()).setzeRehaNachricht(RehaHMK.rehaReversePort,
+                    new SocketClient().setzeRehaNachricht(RehaHMK.rehaReversePort,
                             "RehaHMK#" + RehaIOMessages.MUST_REZFIND + "#" + rezNr);
                 }
             });
@@ -605,32 +649,29 @@ public class RehaHMKPanel2 extends JXPanel implements ScannerListener {
         awahl.setVisible(true);
         awahl.dispose();
         awahl = null;
-        if (!tf3.getText()
-                .equals("")) {
+        if (!"".equals(tf3.getText())) {
             regleHTML(tf3.getText());
         } else {
             this.htmlpane.setText("");
-            RehaHMK.hmAdrADaten = new HashMap<String, String>();
+            RehaHMK.hmAdrADaten = new HashMap<>();
         }
     }
 
     private void doArztReznum() {
         Object reznum = JOptionPane.showInputDialog((Component) null, "Bitte geben Sie die Rezeptnummer ein");
-        if (reznum == null || reznum.toString()
-                                    .equals("")) {
+        if (reznum == null || "".equals(reznum.toString())) {
             this.htmlpane.setText("");
-            RehaHMK.hmAdrADaten = new HashMap<String, String>();
+            RehaHMK.hmAdrADaten = new HashMap<>();
             return;
         }
-        String test = SqlInfo.holeEinzelFeld(
-                "select arztid from verordn where rez_nr = '" + reznum.toString() + "' LIMIT 1");
-        if (test.equals("")) {
-            test = SqlInfo.holeEinzelFeld("select arztid from lza where rez_nr = '" + reznum.toString() + "' LIMIT 1");
-            if (test.equals("")) {
+        String test = SqlInfo.holeEinzelFeld("select arztid from verordn where rez_nr = '" + reznum + "' LIMIT 1");
+        if ("".equals(test)) {
+            test = SqlInfo.holeEinzelFeld("select arztid from lza where rez_nr = '" + reznum + "' LIMIT 1");
+            if ("".equals(test)) {
                 JOptionPane.showMessageDialog(null,
                         "Die Rezeptnummer ist weder im aktuellen Rezeptstamm noch in der Historie vorhanden!");
                 this.htmlpane.setText("");
-                RehaHMK.hmAdrADaten = new HashMap<String, String>();
+                RehaHMK.hmAdrADaten = new HashMap<>();
             } else {
                 JOptionPane.showMessageDialog(null, "Zur Info: Das angegebene Rezept ist bereits in der Historie!");
                 this.reznummer.setText(reznum.toString());
@@ -647,16 +688,23 @@ public class RehaHMKPanel2 extends JXPanel implements ScannerListener {
         this.arztbuf.setLength(0);
         this.arztbuf.trimToSize();
         this.arztbuf.append("<html><body><br><font face='Arial, Helvetica'>");
-        this.arztbuf.append("Klinik: " + (((String) RehaHMK.hmAdrADaten.get("<Aklinik>")).equals("") ? "keine Klinik!!!"
-                : (String) RehaHMK.hmAdrADaten.get("<Aklinik>")) + "<br>");
-        this.arztbuf.append("Anrede: " + (String) RehaHMK.hmAdrADaten.get("<Aadr1>") + " "
-                + (String) RehaHMK.hmAdrADaten.get("<Aadr2>") + "<br>");
-        this.arztbuf.append("Fax: " + (((String) RehaHMK.hmAdrADaten.get("<Afax>")).equals("")
-                ? "keine Faxnummer vorhanden!!!" : (String) RehaHMK.hmAdrADaten.get("<Afax>")));
-        this.arztbuf.append("<br>Briefanrede: " + (String) RehaHMK.hmAdrADaten.get("<Aadr5>"));
+        this.arztbuf.append("Klinik: ")
+                    .append("".equals((String) RehaHMK.hmAdrADaten.get("<Aklinik>")) ? "keine Klinik!!!"
+                            : (String) RehaHMK.hmAdrADaten.get("<Aklinik>"))
+                    .append("<br>");
+        this.arztbuf.append("Anrede: ")
+                    .append((String) RehaHMK.hmAdrADaten.get("<Aadr1>"))
+                    .append(" ")
+                    .append((String) RehaHMK.hmAdrADaten.get("<Aadr2>"))
+                    .append("<br>");
+        this.arztbuf.append("Fax: ")
+                    .append("".equals((String) RehaHMK.hmAdrADaten.get("<Afax>")) ? "keine Faxnummer vorhanden!!!"
+                            : (String) RehaHMK.hmAdrADaten.get("<Afax>"));
+        this.arztbuf.append("<br>Briefanrede: ")
+                    .append((String) RehaHMK.hmAdrADaten.get("<Aadr5>"));
         this.arztbuf.append("</font></body></html>");
         this.htmlpane.setText(this.arztbuf.toString());
-        this.arztkorrektur = (String) RehaHMK.hmAdrADaten.get("<Aadr2>");
+        this.arztkorrektur = RehaHMK.hmAdrADaten.get("<Aadr2>");
     }
 
     private void doIniFile(String sektion, String property, String value) {
@@ -665,176 +713,174 @@ public class RehaHMKPanel2 extends JXPanel implements ScannerListener {
     }
 
     private void doOOFormular() {
-        IDocumentService documentService = null;
-        RehaHMK.thisFrame.setCursor(RehaHMK.thisClass.wartenCursor);
-        if (!RehaHMK.officeapplication.isActive()) {
-            RehaHMK.starteOfficeApplication();
-            try {
-                Thread.sleep(100L);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+        if (!RehaHMK.officeapplication.isPresent()) {
+            return;
         }
         try {
-            documentService = RehaHMK.officeapplication.getDocumentService();
-        } catch (OfficeApplicationException e) {
-            e.printStackTrace();
-        }
-        DocumentDescriptor documentDescriptor = new DocumentDescriptor();
-        documentDescriptor.setHidden(true);
-        documentDescriptor.setAsTemplate(true);
-        IDocument document = null;
-        String url = (scanformat.getSelectedIndex() == 0
-                ? progHome + "vorlagen/" + RehaHMK.aktIK + "/Rezeptkorrektur_A5-Rezepte.ott"
-                : progHome + "vorlagen/" + RehaHMK.aktIK + "/Rezeptkorrektur_A4-Rezepte.ott");
+            IDocumentService documentService;
+            RehaHMK.thisFrame.setCursor(Cursors.wartenCursor);
+            documentService = RehaHMK.officeapplication.get()
+                                                       .getDocumentService();
+            DocumentDescriptor documentDescriptor = new DocumentDescriptor();
+            documentDescriptor.setHidden(true);
+            documentDescriptor.setAsTemplate(true);
+            IDocument document;
+            String url = scanformat.getSelectedIndex() == 0
+                    ? progHome + "vorlagen/" + RehaHMK.aktIK + "/Rezeptkorrektur_A5-Rezepte.ott"
+                    : progHome + "vorlagen/" + RehaHMK.aktIK + "/Rezeptkorrektur_A4-Rezepte.ott";
 
-        try {
             document = documentService.loadDocument(url, (IDocumentDescriptor) documentDescriptor);
-        } catch (NOAException e) {
-            e.printStackTrace();
-        }
-        this.textDocument = (ITextDocument) document;
-        ITextFieldService textFieldService = this.textDocument.getTextFieldService();
-        ITextField[] placeholders = null;
-        try {
+            this.textDocument = (ITextDocument) document;
+            ITextFieldService textFieldService = this.textDocument.getTextFieldService();
+            ITextField[] placeholders;
             placeholders = textFieldService.getPlaceholderFields();
-        } catch (TextException e) {
-            e.printStackTrace();
-        }
-        try {
-            String placeholderDisplayText = null;
-            for (int i = 0; i < placeholders.length; i++) {
-                boolean schonersetzt = false;
-                try {
-                    placeholderDisplayText = placeholders[i].getDisplayText()
-                                                            .toLowerCase();
-                } catch (RuntimeException ex) {
-                    ex.printStackTrace();
-                }
-                Set<?> entries = RehaHMK.hmAdrADaten.entrySet();
-                Iterator<?> it = entries.iterator();
-                while (it.hasNext()) {
-                    Map.Entry<?, ?> entry = (Map.Entry<?, ?>) it.next();
-                    if (entry.getKey()
-                             .toString()
-                             .toLowerCase()
-                             .equals(placeholderDisplayText)) {
-                        if (entry.getValue()
+            try {
+                String placeholderDisplayText = null;
+                for (int i = 0; i < placeholders.length; i++) {
+                    boolean schonersetzt = false;
+                    try {
+                        placeholderDisplayText = placeholders[i].getDisplayText()
+                                                                .toLowerCase();
+                    } catch (RuntimeException ex) {
+                        ex.printStackTrace();
+                    }
+                    Set<?> entries = RehaHMK.hmAdrADaten.entrySet();
+                    Iterator<?> it = entries.iterator();
+                    while (it.hasNext()) {
+                        Map.Entry<?, ?> entry = (Map.Entry<?, ?>) it.next();
+                        if (entry.getKey()
                                  .toString()
-                                 .trim()
-                                 .equals("")) {
-                            placeholders[i].getTextRange()
-                                           .setText("");
-                        } else {
-                            placeholders[i].getTextRange()
-                                           .setText(entry.getValue()
-                                                         .toString());
+                                 .toLowerCase()
+                                 .equals(placeholderDisplayText)) {
+                            if ("".equals(entry.getValue()
+                                               .toString()
+                                               .trim())) {
+                                placeholders[i].getTextRange()
+                                               .setText("");
+                            } else {
+                                placeholders[i].getTextRange()
+                                               .setText(entry.getValue()
+                                                             .toString());
+                            }
+                            schonersetzt = true;
+                            break;
                         }
-                        schonersetzt = true;
-                        break;
                     }
                 }
+            } catch (Exception ex) {
+                ex.printStackTrace();
             }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        ITextTable textTable = null;
-        try {
-            textTable = this.textDocument.getTextTableService()
-                                         .getTextTable("Tabelle1");
-        } catch (TextException e) {
-            e.printStackTrace();
-        }
-        if (textTable == null) {
-            JOptionPane.showMessageDialog(null, "Kann Tabelle nicht finden");
-        } else {
-            try {
-                for (int i2 = 0; i2 < this.kreuzpos.length; i2++) {
-                    textTable.getCell(this.kreuzpos[i2][0], this.kreuzpos[i2][1])
-                             .getTextService()
-                             .getText()
-                             .setText(this.chbox[i2].isSelected() ? "X" : "");
-                    if (i2 >= 8)
-                        textTable.getCell(this.textpos[i2 - 8][0], this.textpos[i2 - 8][1])
-                                 .getTextService()
-                                 .getText()
-                                 .setText(this.tfs[i2 - 8 + 2].getText());
-                }
-                if (this.chbox[4].isSelected() && !this.tfs[0].getText()
-                                                              .trim()
-                                                              .equals(".  ."))
-                    textTable.getCell(4, 5)
-                             .getTextService()
-                             .getText()
-                             .setText(this.tfs[0].getText());
-                if (this.chbox[5].isSelected() && !this.tfs[1].getText()
-                                                              .trim()
-                                                              .equals(".  ."))
-                    textTable.getCell(9, 5)
-                             .getTextService()
-                             .getText()
-                             .setText(this.tfs[1].getText());
-                if (this.chbox[6].isSelected())
-                    if (this.rbuts[0].isSelected()) {
-                        textTable.getCell(3, 8)
-                                 .getTextService()
-                                 .getText()
-                                 .setText("X");
-                    } else {
-                        textTable.getCell(5, 8)
-                                 .getTextService()
-                                 .getText()
-                                 .setText("X");
-                    }
-                if (this.chbox[7].isSelected())
-                    if (this.rbuts[2].isSelected()) {
-                        textTable.getCell(11, 8)
-                                 .getTextService()
-                                 .getText()
-                                 .setText("X");
-                    } else {
-                        textTable.getCell(13, 8)
-                                 .getTextService()
-                                 .getText()
-                                 .setText("X");
-                    }
-            } catch (TextException e) {
-                e.printStackTrace();
-            }
-            try {
-                Thread.sleep(50L);
-                this.textDocument.getFrame()
-                                 .getXFrame()
-                                 .getContainerWindow()
-                                 .setFocus();
-                doRefresh(this.textDocument);
-                this.textDocument.getFrame()
-                                 .getXFrame()
-                                 .getContainerWindow()
-                                 .setFocus();
-                Thread.sleep(100L);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            ITextTable textTable = null;
             try {
                 textTable = this.textDocument.getTextTableService()
                                              .getTextTable("Tabelle1");
             } catch (TextException e) {
                 e.printStackTrace();
             }
-            sucheNachPlatzhalter((ITextDocument) document);
-        }
-        if (this.scannerok) {
-            int frage = JOptionPane.showConfirmDialog(null, "Wollen Sie im Anschluß ein Rezept einscannen",
-                    "Benutzeranfrage", 0);
-            if (frage == 0) {
+            if (textTable == null) {
+                JOptionPane.showMessageDialog(null, "Kann Tabelle nicht finden");
+            } else {
                 try {
-                    doScannen();
-                } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(null, "Scanner nicht angeschlossen oder nicht eingeschaltet");
+                    for (int i2 = 0; i2 < this.kreuzpos.length; i2++) {
+                        textTable.getCell(this.kreuzpos[i2][0], this.kreuzpos[i2][1])
+                                 .getTextService()
+                                 .getText()
+                                 .setText(this.chbox[i2].isSelected() ? "X" : "");
+                        if (i2 >= 8) {
+                            textTable.getCell(this.textpos[i2 - 8][0], this.textpos[i2 - 8][1])
+                                     .getTextService()
+                                     .getText()
+                                     .setText(this.tfs[i2 - 8 + 2].getText());
+                        }
+                    }
+                    if (this.chbox[4].isSelected() && !".  .".equals(this.tfs[0].getText()
+                                                                                .trim())) {
+                        textTable.getCell(4, 5)
+                                 .getTextService()
+                                 .getText()
+                                 .setText(this.tfs[0].getText());
+                    }
+                    if (this.chbox[5].isSelected() && !".  .".equals(this.tfs[1].getText()
+                                                                                .trim())) {
+                        textTable.getCell(9, 5)
+                                 .getTextService()
+                                 .getText()
+                                 .setText(this.tfs[1].getText());
+                    }
+                    if (this.chbox[6].isSelected()) {
+                        if (this.rbuts[0].isSelected()) {
+                            textTable.getCell(3, 8)
+                                     .getTextService()
+                                     .getText()
+                                     .setText("X");
+                        } else {
+                            textTable.getCell(5, 8)
+                                     .getTextService()
+                                     .getText()
+                                     .setText("X");
+                        }
+                    }
+                    if (this.chbox[7].isSelected()) {
+                        if (this.rbuts[2].isSelected()) {
+                            textTable.getCell(11, 8)
+                                     .getTextService()
+                                     .getText()
+                                     .setText("X");
+                        } else {
+                            textTable.getCell(13, 8)
+                                     .getTextService()
+                                     .getText()
+                                     .setText("X");
+                        }
+                    }
+                } catch (TextException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    Thread.sleep(50L);
+                    this.textDocument.getFrame()
+                                     .getXFrame()
+                                     .getContainerWindow()
+                                     .setFocus();
+                    doRefresh(this.textDocument);
+                    this.textDocument.getFrame()
+                                     .getXFrame()
+                                     .getContainerWindow()
+                                     .setFocus();
+                    Thread.sleep(100L);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    textTable = this.textDocument.getTextTableService()
+                                                 .getTextTable("Tabelle1");
+                } catch (TextException e) {
+                    e.printStackTrace();
+                }
+                sucheNachPlatzhalter((ITextDocument) document);
+            }
+            if (this.scannerok) {
+                int frage = JOptionPane.showConfirmDialog(null, "Wollen Sie im Anschluß ein Rezept einscannen",
+                        "Benutzeranfrage", 0);
+                if (frage == 0) {
+                    try {
+                        doScannen();
+                    } catch (Exception ex) {
+                        JOptionPane.showMessageDialog(null, "Scanner nicht angeschlossen oder nicht eingeschaltet");
+                    }
+                } else {
+                    new SwingWorker<Void, Void>() {
+                        protected Void doInBackground() throws Exception {
+                            RehaHMKPanel2.this.textDocument.getFrame()
+                                                           .getXFrame()
+                                                           .getContainerWindow()
+                                                           .setVisible(true);
+                            return null;
+                        }
+                    }.execute();
                 }
             } else {
-                (new SwingWorker<Void, Void>() {
+                new SwingWorker<Void, Void>() {
                     protected Void doInBackground() throws Exception {
                         RehaHMKPanel2.this.textDocument.getFrame()
                                                        .getXFrame()
@@ -842,25 +888,18 @@ public class RehaHMKPanel2 extends JXPanel implements ScannerListener {
                                                        .setVisible(true);
                         return null;
                     }
-                }).execute();
+                }.execute();
             }
-        } else {
-            (new SwingWorker<Void, Void>() {
-                protected Void doInBackground() throws Exception {
-                    RehaHMKPanel2.this.textDocument.getFrame()
-                                                   .getXFrame()
-                                                   .getContainerWindow()
-                                                   .setVisible(true);
-                    return null;
-                }
-            }).execute();
+        } catch (OfficeApplicationException | NOAException | TextException e) {
+            LoggerFactory.getLogger(RehaHMK.class)
+                         .error("something bad happens here", e);
         }
-        RehaHMK.thisFrame.setCursor(RehaHMK.thisClass.normalCursor);
+        RehaHMK.thisFrame.setCursor(Cursors.normalCursor);
     }
 
     private static void doRefresh(ITextDocument document) {
-        XRefreshable refresh = null;
-        refresh = (XRefreshable) UnoRuntime.queryInterface(XRefreshable.class, document.getXTextDocument());
+        XRefreshable refresh;
+        refresh = UnoRuntime.queryInterface(XRefreshable.class, document.getXTextDocument());
         refresh.refresh();
         try {
             Thread.sleep(50L);
@@ -892,19 +931,18 @@ public class RehaHMKPanel2 extends JXPanel implements ScannerListener {
         int start = 0;
         int vars = 0;
         boolean noendfound = false;
-        while ((start = stext.indexOf("^")) >= 0) {
+        while ((start = stext.indexOf('^')) >= 0) {
             noendfound = true;
             for (int i = 1; i < 150; i++) {
-                if (stext.substring(start + i, start + i + 1)
-                         .equals("^")) {
+                if ("^".equals(stext.substring(start + i, start + i + 1))) {
                     String dummy = stext.substring(start, start + i + 1);
-                    String sanweisung = dummy.toString()
-                                             .replace("^", "");
+                    String sanweisung = dummy.replace("^", "");
                     Object ret = JOptionPane.showInputDialog(null,
                             "<html>Bitte Wert eingeben f--><b> " + sanweisung + " </b> &nbsp; </html>",
                             "Platzhalter gefunden", 1);
-                    if (ret == null)
+                    if (ret == null) {
                         return true;
+                    }
                     sucheErsetze(document, dummy, ((String) ret).trim(), false);
                     stext = text.getText();
                     noendfound = false;
@@ -934,14 +972,16 @@ public class RehaHMKPanel2 extends JXPanel implements ScannerListener {
         }
         if (!searchResult.isEmpty()) {
             ITextRange[] textRanges = searchResult.getTextRanges();
-            for (int resultIndex = 0; resultIndex < textRanges.length; resultIndex++)
+            for (int resultIndex = 0; resultIndex < textRanges.length; resultIndex++) {
                 textRanges[resultIndex].setText(ersetzemit);
+            }
         }
     }
 
     private void doScannen() {
-        if (!this.scannerok)
+        if (!this.scannerok) {
             return;
+        }
         try {
             if (this.textDocument == null) {
                 JOptionPane.showMessageDialog(null, "Erzeugen Sie zuerst das Formular");
@@ -958,12 +998,10 @@ public class RehaHMKPanel2 extends JXPanel implements ScannerListener {
     }
 
     public void update(ScannerIOMetadata.Type type, ScannerIOMetadata metadata) {
-        if (!ScannerIOMetadata.NEGOTIATE.equals(type))
+        if (!ScannerIOMetadata.NEGOTIATE.equals(type)) {
             if (ScannerIOMetadata.STATECHANGE.equals(type)) {
-                if (metadata.getStateStr()
-                            .equals("Source Manager Open")
-                        && this.sourceenabled) {
-                    (new SwingWorker<Void, Void>() {
+                if ("Source Manager Open".equals(metadata.getStateStr()) && this.sourceenabled) {
+                    new SwingWorker<Void, Void>() {
                         protected Void doInBackground() throws Exception {
                             RehaHMKPanel2.this.textDocument.getFrame()
                                                            .getXFrame()
@@ -971,13 +1009,12 @@ public class RehaHMKPanel2 extends JXPanel implements ScannerListener {
                                                            .setVisible(true);
                             return null;
                         }
-                    }).execute();
-                } else if (metadata.getStateStr()
-                                   .equals("Source Enabled")) {
+                    }.execute();
+                } else if ("Source Enabled".equals(metadata.getStateStr())) {
                     this.sourceenabled = true;
                 }
             } else if (type.equals(ScannerIOMetadata.EXCEPTION)) {
-                (new SwingWorker<Void, Void>() {
+                new SwingWorker<Void, Void>() {
                     protected Void doInBackground() throws Exception {
                         RehaHMKPanel2.this.textDocument.getFrame()
                                                        .getXFrame()
@@ -985,33 +1022,28 @@ public class RehaHMKPanel2 extends JXPanel implements ScannerListener {
                                                        .setVisible(true);
                         return null;
                     }
-                }).execute();
+                }.execute();
             } else if (ScannerIOMetadata.ACQUIRED.equals(type)) {
                 this.scanner.removeListener(this);
-                // File file = new File(String.valueOf(progHome) + "temp/" + RehaHMK.aktIK + "/rezkorrekt.jpg");
+                // File file = new File(String.valueOf(progHome) + "temp/" + RehaHMK.aktIK +
+                // "/rezkorrekt.jpg");
                 try {
                     saveScanToTempJpegFile(metadata);
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-//                } catch (ImageFormatException e) {
-//                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
+                } catch (IOException | InterruptedException e) {
                     e.printStackTrace();
                 }
-                GraphicInfo graphicInfo = null;
-                String imagePath = (new File(
-                        String.valueOf(progHome) + "temp/" + RehaHMK.aktIK + "/rezkorrekt.jpg")).getAbsolutePath();
+                GraphicInfo graphicInfo;
+                String imagePath = new File(
+                        String.valueOf(progHome) + "temp/" + RehaHMK.aktIK + "/rezkorrekt.jpg").getAbsolutePath();
                 graphicInfo = new GraphicInfo(imagePath, 200, true, 200, true, (short) 1, (short) 1,
                         TextContentAnchorType.AT_PAGE);
-                XMultiServiceFactory multiServiceFactory = (XMultiServiceFactory) UnoRuntime.queryInterface(
-                        XMultiServiceFactory.class, this.textDocument.getXTextDocument());
+                XMultiServiceFactory multiServiceFactory = UnoRuntime.queryInterface(XMultiServiceFactory.class,
+                        this.textDocument.getXTextDocument());
                 XText xText = this.textDocument.getXTextDocument()
                                                .getText();
                 XTextCursor xTextCursor = xText.createTextCursor();
                 embedGraphic(graphicInfo, multiServiceFactory, xTextCursor);
-                (new SwingWorker<Void, Void>() {
+                new SwingWorker<Void, Void>() {
                     protected Void doInBackground() throws Exception {
                         RehaHMKPanel2.this.textDocument.getFrame()
                                                        .getXFrame()
@@ -1019,45 +1051,42 @@ public class RehaHMKPanel2 extends JXPanel implements ScannerListener {
                                                        .setVisible(true);
                         return null;
                     }
-                }).execute();
+                }.execute();
                 this.sourceenabled = false;
                 this.reznummer.setText("");
                 this.arztkorrektur = "";
                 this.htmlpane.setText("");
-                RehaHMK.hmAdrADaten = new HashMap<String, String>();
+                RehaHMK.hmAdrADaten = new HashMap<>();
             }
+        }
     }
 
-    /**
-     * @param metadata
-     * @param file
-     * @throws FileNotFoundException
-     * @throws IOException
-     * @throws InterruptedException
-     */
     private void saveScanToTempJpegFile(ScannerIOMetadata metadata)
             throws FileNotFoundException, IOException, InterruptedException {
-        FileOutputStream fout = new FileOutputStream(new File(String.valueOf(progHome) 
-                                        + "temp/" + RehaHMK.aktIK + "/rezkorrekt.jpg"));
-        //ByteArrayOutputStream os = new ByteArrayOutputStream();
-        ImageOutputStream os =  ImageIO.createImageOutputStream(fout);
-        
+        FileOutputStream fout = new FileOutputStream(
+                new File(String.valueOf(progHome) + "temp/" + RehaHMK.aktIK + "/rezkorrekt.jpg"));
+        // ByteArrayOutputStream os = new ByteArrayOutputStream();
+        ImageOutputStream os = ImageIO.createImageOutputStream(fout);
+
         // JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(os);
-        JPEGImageWriter imageWriter = (JPEGImageWriter) ImageIO.getImageWritersBySuffix("jpeg").next();
+        JPEGImageWriter imageWriter = (JPEGImageWriter) ImageIO.getImageWritersBySuffix("jpeg")
+                                                               .next();
         imageWriter.setOutput(os);
-        
-        // JPEGEncodeParam param = encoder.getDefaultJPEGEncodeParam(metadata.getImage());
+
+        // JPEGEncodeParam param =
+        // encoder.getDefaultJPEGEncodeParam(metadata.getImage());
         JPEGImageWriteParam param = (JPEGImageWriteParam) imageWriter.getDefaultWriteParam();
-        
+
         // param.setQuality(1.0F, false);
         // encoder.setJPEGEncodeParam(param);
         param.setCompressionMode(JPEGImageWriteParam.MODE_EXPLICIT);
         param.setCompressionQuality(1.0F);
-        
+
         // encoder.encode(metadata.getImage());
-        IIOMetadata imageMetaData = imageWriter.getDefaultImageMetadata(new ImageTypeSpecifier(metadata.getImage()), null);
+        IIOMetadata imageMetaData = imageWriter.getDefaultImageMetadata(new ImageTypeSpecifier(metadata.getImage()),
+                null);
         imageWriter.write(imageMetaData, new IIOImage(metadata.getImage(), null, null), null);
-        
+
         os.close();
         // fout.write(os.toByteArray());
         fout.flush();
@@ -1073,11 +1102,11 @@ public class RehaHMKPanel2 extends JXPanel implements ScannerListener {
         String internalURL = null;
         String url = null;
         try {
-            xBitmapContainer = (XNameContainer) UnoRuntime.queryInterface(XNameContainer.class,
+            xBitmapContainer = UnoRuntime.queryInterface(XNameContainer.class,
                     xMSF.createInstance("com.sun.star.drawing.BitmapTable"));
-            xImage = (XTextContent) UnoRuntime.queryInterface(XTextContent.class,
+            xImage = UnoRuntime.queryInterface(XTextContent.class,
                     xMSF.createInstance("com.sun.star.text.TextGraphicObject"));
-            XPropertySet xProps = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xImage);
+            XPropertySet xProps = UnoRuntime.queryInterface(XPropertySet.class, xImage);
             url = "file:///" + progHome + "temp/" + RehaHMK.aktIK + "/rezkorrekt.jpg";
             xBitmapContainer.insertByName("someID", url);
             internalURL = AnyConverter.toString(xBitmapContainer.getByName("someID"));

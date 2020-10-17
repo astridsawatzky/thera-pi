@@ -35,6 +35,7 @@ import ag.ion.noa.graphic.GraphicInfo;
 import environment.Path;
 import gui.Cursors;
 import hauptFenster.Reha;
+import office.OOService;
 
 class DruckeViewPanel extends SwingWorker<Void, Void> {
     private JXPanel printPan = null;
@@ -62,7 +63,7 @@ class DruckeViewPanel extends SwingWorker<Void, Void> {
             speichernQualitaet("", 1.0F);
 
             String url = Path.Instance.getProghome() + "vorlagen/" + Reha.getAktIK() + "/terminshot_.ott";
-            IDocumentService documentService = Reha.officeapplication.getDocumentService();
+            IDocumentService documentService = new OOService().getOfficeapplication().getDocumentService();
             IDocumentDescriptor docdescript = new DocumentDescriptor();
             docdescript.setHidden(false);
             docdescript.setAsTemplate(true);

@@ -48,7 +48,6 @@ import CommonTools.DblCellEditor;
 import CommonTools.DoubleTableCellRenderer;
 import CommonTools.JCompTools;
 import CommonTools.JRtaComboBox;
-import CommonTools.OOTools;
 import CommonTools.SqlInfo;
 import CommonTools.TableTool;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
@@ -58,13 +57,9 @@ import ag.ion.bion.officelayer.document.IDocumentDescriptor;
 import ag.ion.bion.officelayer.document.IDocumentService;
 import ag.ion.bion.officelayer.spreadsheet.ISpreadsheetDocument;
 import ag.ion.noa.NOAException;
+import office.OOTools;
 
 public class RehaKassenbuchEdit extends JXPanel implements TableModelListener {
-
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 903327960325888094L;
 
     RehaKassenbuchTab eltern;
     JButton[] buts = { null, null, null, null };
@@ -104,28 +99,10 @@ public class RehaKassenbuchEdit extends JXPanel implements TableModelListener {
         CellConstraints cc = new CellConstraints();
         JXPanel jpan = new JXPanel();
         jpan.setLayout(lay);
-        long zeit = System.currentTimeMillis();
-        while (!RehaKassenbuch.DbOk) {
-            try {
-                Thread.sleep(50);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            if (System.currentTimeMillis() - zeit > 5000) {
-                break;
-            }
-        }
-        if (RehaKassenbuch.DbOk) {
+
             doKBErmitteln();
-        } else {
-            JOptionPane.showMessageDialog(null, "Datenbankserver kann nicht geöffnet werden.\nSystem wird beendet.");
-            System.exit(0);
-        }
         tabmod = new MyKassenbuchTableModel();
         feldNamen = SqlInfo.holeFelder("describe kasse");
-        // Vector<Vector<String>> felder = SqlInfo.holeFelder("describe faktura");
-        // System.out.println(feldNamen);
-        // System.out.println(feldNamen.size());
         String[] spalten = new String[feldNamen.size()];
         for (int i = 0; i < feldNamen.size(); i++) {
             spalten[i] = feldNamen.get(i)
@@ -133,22 +110,6 @@ public class RehaKassenbuchEdit extends JXPanel implements TableModelListener {
         }
         tabmod.setColumnIdentifiers(spalten);
         tab = new JXTable(tabmod);
-        /*
-         * tab = new JXTable(tabmod){ private static final long serialVersionUID = 1L;
-         * 
-         * @Override public boolean editCellAt(int row, int column, EventObject e) {
-         * ////System.out.println("edit! in Zeile: "+row+" Spalte: "+column);
-         * ////System.out.println("Event = "+e); if (e == null) { return false;
-         * ////System.out.println("edit! in Zeile: "+row+" Spalte: "+column); } if (e
-         * instanceof MouseEvent) { MouseEvent mouseEvent = (MouseEvent) e; if
-         * (mouseEvent.getClickCount() > 1) { //System.out.println("edit!"); return
-         * super.editCellAt(row, column, e); } }else if (e instanceof KeyEvent) {
-         * KeyEvent keyEvent = (KeyEvent) e; if (keyEvent.getKeyChar()==10) {
-         * //System.out.println("edit!"); return super.editCellAt(row, column, e); } }
-         * return false;
-         * 
-         * } };
-         */
         tab.setCellSelectionEnabled(true);
         tab.setAutoStartEditOnKeyStroke(true);
         tab.setHighlighters(HighlighterFactory.createSimpleStriping(HighlighterFactory.CLASSIC_LINE_PRINTER));
@@ -219,12 +180,10 @@ public class RehaKassenbuchEdit extends JXPanel implements TableModelListener {
     private class MyListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            // Object src = e.getSource();
             String actionCmd = e.getActionCommand();
             if (actionCmd.equals("Enter")) {
                 int row = tab.getSelectedRow();
                 int col = tab.getSelectedColumn();
-                // System.out.println(row+" / "+col);
                 tab.getCellEditor(row, col)
                    .stopCellEditing();
                 if (col == tab.getColumnCount() - 1) {
@@ -306,7 +265,6 @@ public class RehaKassenbuchEdit extends JXPanel implements TableModelListener {
         if (tab.getSelectedRow() < 0) {
             return;
         }
-        // int id = Integer.parseInt((String)tab.getValueAt(tab.getSelectedRow(), 6));
         SqlInfo.sqlAusfuehren("delete from " + combo.getSelectedItem()
                                                     .toString()
                 + " where id = '" + tab.getValueAt(tab.getSelectedRow(), 6)
@@ -318,19 +276,6 @@ public class RehaKassenbuchEdit extends JXPanel implements TableModelListener {
     public void doKBErmitteln() {
 
         long zeit = System.currentTimeMillis();
-        while (!RehaKassenbuch.DbOk) {
-            try {
-                Thread.sleep(50);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            if (System.currentTimeMillis() - zeit > 5000) {
-                break;
-            }
-        }
-        if (!RehaKassenbuch.DbOk) {
-            System.exit(0);
-        }
 
         Vector<Vector<String>> vec = SqlInfo.holeFelder("show tables");
         datavec.clear();
@@ -343,7 +288,6 @@ public class RehaKassenbuchEdit extends JXPanel implements TableModelListener {
                                .get(0));
             }
         }
-        // System.out.println(datavec);
         if (combo == null) {
             System.out.println("combo == null");
             return;
@@ -351,7 +295,6 @@ public class RehaKassenbuchEdit extends JXPanel implements TableModelListener {
         combo.setDataVector(datavec);
         combo.setSelectedIndex(0);
         fuelleTabelle(0);
-        // kbvorhanden.setListData(datavec);
     }
 
     public void fuelleTabelle(int tabindex) {
@@ -365,19 +308,9 @@ public class RehaKassenbuchEdit extends JXPanel implements TableModelListener {
         tabmod.setRowCount(0);
         tab.validate();
         tab.repaint();
-        Statement stmt = null;
-        ResultSet rs = null;
         String mystmt = "select * from " + datavec.get(tabindex) + " order by id";
-        try {
-            stmt = RehaKassenbuch.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
-                    ResultSet.CONCUR_UPDATABLE);
-        } catch (SQLException e) {
-
-            e.printStackTrace();
-        }
-        try {
-
-            rs = stmt.executeQuery(mystmt);
+        try (Statement stmt = RehaKassenbuch.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+                ResultSet.CONCUR_UPDATABLE); ResultSet rs = stmt.executeQuery(mystmt);) {
             Vector<Object> vec = new Vector<Object>();
             int durchlauf = 0;
             int lang = feldNamen.size();
@@ -450,24 +383,6 @@ public class RehaKassenbuchEdit extends JXPanel implements TableModelListener {
             tab.repaint();
 
         } catch (SQLException ev) {
-            // System.out.println("SQLException: " + ev.getMessage());
-            // System.out.println("SQLState: " + ev.getSQLState());
-            // System.out.println("VendorError: " + ev.getErrorCode());
-        } finally {
-            if (rs != null) {
-                try {
-                    rs.close();
-                } catch (SQLException sqlEx) { // ignore }
-                    rs = null;
-                }
-            }
-            if (stmt != null) {
-                try {
-                    stmt.close();
-                } catch (SQLException sqlEx) { // ignore }
-                    stmt = null;
-                }
-            }
         }
 
     }
@@ -475,16 +390,13 @@ public class RehaKassenbuchEdit extends JXPanel implements TableModelListener {
     @Override
     public void tableChanged(TableModelEvent arg0) {
         if (arg0.getType() == TableModelEvent.INSERT) {
-            //// System.out.println("Insert");
             return;
         }
         if (arg0.getType() == TableModelEvent.UPDATE) {
             try {
                 int col = arg0.getColumn();
                 int row = arg0.getFirstRow();
-                // String colname = tabmod.getColumnName(col).toString();
                 String value = "";
-                // String id = Integer.toString((Integer)tabmod.getValueAt(row,6));
 
                 if (tabmod.getColumnClass(col) == Boolean.class) {
                     value = (tabmod.getValueAt(row, col) == Boolean.FALSE ? "F" : "T");
@@ -509,16 +421,11 @@ public class RehaKassenbuchEdit extends JXPanel implements TableModelListener {
 
             return;
         }
-        if (arg0.getType() == TableModelEvent.DELETE) {
-        }
+
 
     }
 
     class MyKassenbuchTableModel extends DefaultTableModel {
-        /**
-        * 
-        */
-        private static final long serialVersionUID = 1L;
 
         @Override
         public Class<?> getColumnClass(int columnIndex) {
@@ -573,7 +480,6 @@ public class RehaKassenbuchEdit extends JXPanel implements TableModelListener {
                 + " set " + feldNamen.get(col)
                                      .get(0)
                 + " = '" + value + "' where id = '" + id + "' LIMIT 1";
-        // System.out.println(cmd);
         SqlInfo.sqlAusfuehren(cmd);
 
     }
@@ -586,82 +492,79 @@ public class RehaKassenbuchEdit extends JXPanel implements TableModelListener {
             return;
         }
         fuelleTabelle(tabindex);
-        if (!RehaKassenbuch.officeapplication.isActive()) {
-            RehaKassenbuch.starteOfficeApplication();
-        }
-        IDocumentService documentService = RehaKassenbuch.officeapplication.getDocumentService();
-        IDocumentDescriptor docdescript = new DocumentDescriptor();
-        docdescript.setHidden(true);
-        docdescript.setAsTemplate(false);
-        document = documentService.constructNewDocument(IDocument.CALC, DocumentDescriptor.DEFAULT);
-        spreadsheetDocument = (ISpreadsheetDocument) document;
-        // Tools.OOTools.setzePapierFormatCalc((ISpreadsheetDocument)
-        // spreadsheetDocument, 21000, 29700);
-        // Tools.OOTools.setzeRaenderCalc((ISpreadsheetDocument) spreadsheetDocument,
-        // 1000,1000, 1000, 1000);
+        if (RehaKassenbuch.officeapplication.isPresent()) {
+            IDocumentService documentService = RehaKassenbuch.officeapplication.get()
+                                                                               .getDocumentService();
+            IDocumentDescriptor docdescript = new DocumentDescriptor();
+            docdescript.setHidden(true);
+            docdescript.setAsTemplate(false);
+            document = documentService.constructNewDocument(IDocument.CALC, DocumentDescriptor.DEFAULT);
+            spreadsheetDocument = (ISpreadsheetDocument) document;
 
-        XSpreadsheets spreadsheets = spreadsheetDocument.getSpreadsheetDocument()
-                                                        .getSheets();
-        String sheetName = "Tabelle1";
-        XSpreadsheet spreadsheet1 = UnoRuntime.queryInterface(XSpreadsheet.class, spreadsheets.getByName(sheetName));
-        cellCursor = spreadsheet1.createCursor();
-        final ISpreadsheetDocument xspredsheetDocument = spreadsheetDocument;
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                xspredsheetDocument.getFrame()
-                                   .getXFrame()
-                                   .getContainerWindow()
-                                   .setVisible(true);
-                xspredsheetDocument.getFrame()
-                                   .setFocus();
-            }
-        });
-        OOTools.doColWidth(spreadsheetDocument, sheetName, 3, 3, 1000);
-        OOTools.doColWidth(spreadsheetDocument, sheetName, 4, 4, 10000);
-        OOTools.doColNumberFormat(spreadsheetDocument, sheetName, 0, 1, 2);
+            XSpreadsheets spreadsheets = spreadsheetDocument.getSpreadsheetDocument()
+                                                            .getSheets();
+            String sheetName = "Tabelle1";
+            XSpreadsheet spreadsheet1 = UnoRuntime.queryInterface(XSpreadsheet.class,
+                    spreadsheets.getByName(sheetName));
+            cellCursor = spreadsheet1.createCursor();
+            final ISpreadsheetDocument xspredsheetDocument = spreadsheetDocument;
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    xspredsheetDocument.getFrame()
+                                       .getXFrame()
+                                       .getContainerWindow()
+                                       .setVisible(true);
+                    xspredsheetDocument.getFrame()
+                                       .setFocus();
+                }
+            });
+            OOTools.doColWidth(spreadsheetDocument, sheetName, 3, 3, 1000);
+            OOTools.doColWidth(spreadsheetDocument, sheetName, 4, 4, 10000);
+            OOTools.doColNumberFormat(spreadsheetDocument, sheetName, 0, 1, 2);
 
-        OOTools.doCellValue(cellCursor, 0, 0, "EINNAHME");
-        OOTools.doCellValue(cellCursor, 1, 0, "AUSGABE");
-        OOTools.doCellValue(cellCursor, 2, 0, "DATUM");
-        OOTools.doCellValue(cellCursor, 4, 0, "TEXT");
-        Vector<Vector<Object>> vec = tabmod.getDataVector();
-        for (int i = 0; i < vec.size(); i++) {
-            if (vec.get(i)
-                   .get(0) instanceof Double) {
-                if (((Double) vec.get(i)
-                                 .get(0)) != 0.) {
-                    OOTools.doCellValue(cellCursor, 0, i + 1, vec.get(i)
-                                                                 .get(0));
+            OOTools.doCellValue(cellCursor, 0, 0, "EINNAHME");
+            OOTools.doCellValue(cellCursor, 1, 0, "AUSGABE");
+            OOTools.doCellValue(cellCursor, 2, 0, "DATUM");
+            OOTools.doCellValue(cellCursor, 4, 0, "TEXT");
+            Vector<Vector<Object>> vec = tabmod.getDataVector();
+            for (int i = 0; i < vec.size(); i++) {
+                if (vec.get(i)
+                       .get(0) instanceof Double) {
+                    if (((Double) vec.get(i)
+                                     .get(0)) != 0.) {
+                        OOTools.doCellValue(cellCursor, 0, i + 1, vec.get(i)
+                                                                     .get(0));
+                    }
+                    if (((Double) vec.get(i)
+                                     .get(1)) != 0.) {
+                        OOTools.doCellValue(cellCursor, 1, i + 1, vec.get(i)
+                                                                     .get(1));
+                    }
                 }
-                if (((Double) vec.get(i)
-                                 .get(1)) != 0.) {
-                    OOTools.doCellValue(cellCursor, 1, i + 1, vec.get(i)
-                                                                 .get(1));
+                if (vec.get(i)
+                       .get(0) instanceof java.lang.String) {
+                    if (((Double) vec.get(i)
+                                     .get(0)) != 0.) {
+                        OOTools.doCellValue(cellCursor, 0, i + 1, vec.get(i)
+                                                                     .get(0));
+                    }
+                    if (((Double) vec.get(i)
+                                     .get(1)) != 0.) {
+                        OOTools.doCellValue(cellCursor, 1, i + 1, vec.get(i)
+                                                                     .get(1));
+                    }
                 }
-            }
-            if (vec.get(i)
-                   .get(0) instanceof java.lang.String) {
-                if (((Double) vec.get(i)
-                                 .get(0)) != 0.) {
-                    OOTools.doCellValue(cellCursor, 0, i + 1, vec.get(i)
-                                                                 .get(0));
-                }
-                if (((Double) vec.get(i)
-                                 .get(1)) != 0.) {
-                    OOTools.doCellValue(cellCursor, 1, i + 1, vec.get(i)
-                                                                 .get(1));
-                }
-            }
 
-            try {
-                OOTools.doCellValue(cellCursor, 2, i + 1, DatFunk.sDatInDeutsch(((Date) vec.get(i)
-                                                                                           .get(2)).toString()));
-            } catch (Exception ex) {
-            }
-            OOTools.doCellValue(cellCursor, 4, i + 1, vec.get(i)
-                                                         .get(3));
+                try {
+                    OOTools.doCellValue(cellCursor, 2, i + 1, DatFunk.sDatInDeutsch(((Date) vec.get(i)
+                                                                                               .get(2)).toString()));
+                } catch (Exception ex) {
+                }
+                OOTools.doCellValue(cellCursor, 4, i + 1, vec.get(i)
+                                                             .get(3));
 
+            }
         }
     }
 

@@ -31,6 +31,7 @@ import CommonTools.ini.Settings;
 import crypt.Verschluesseln;
 import environment.Path;
 import hauptFenster.Reha;
+import office.OOService;
 import socketClients.SMSClient;
 import stammDatenTools.RezTools;
 import systemEinstellungen.config.Datenbank;
@@ -64,9 +65,7 @@ public class SystemConfig {
 
     public static ArrayList<ArrayList<ArrayList<String[]>>> aRoogleGruppen;
 
-    public static String OpenOfficePfad = null;
-    public static String OpenOfficeNativePfad = null;
-    private static Settings termkalini;
+    private static  Settings termkalini;
     private static Settings colini;
     public static java.net.InetAddress dieseMaschine = null;
     public static String dieseCallbackIP = null;
@@ -432,10 +431,10 @@ public class SystemConfig {
     }
 
     public void openoffice() {
-        OpenOfficePfad = termkalini.getStringProperty("OpenOffice.org", "OfficePfad");
-        if (!new File(OpenOfficePfad).exists()) {
+        OOService.OpenOfficePfad = termkalini.getStringProperty("OpenOffice.org", "OfficePfad");
+        if (!new File(OOService.OpenOfficePfad).exists()) {
             String meldung = "Es konnte keine gültige OpenOffice-Installation entdeckt werden\n"
-                    + "Bislang zeigt der Pfad auf OO.org auf " + OpenOfficePfad + "\n\n"
+                    + "Bislang zeigt der Pfad auf OO.org auf " + OOService.OpenOfficePfad + "\n\n"
                     + "Öffnen Sie bitte in Thera-Pi die System-Initialisierung und\n"
                     + "gehen Sie dann auf die Seite -> sonsige Einstellungen -> Fremdprogramme.\n\n"
                     + "Stellen Sie dann bitte auf dieser Seite den Pfad zu OpenOffice.org ein\n\n"
@@ -444,7 +443,7 @@ public class SystemConfig {
                     + "Everything should then be fine - wie der Schwabe zu sagen pflegt!";
             JOptionPane.showMessageDialog(null, meldung);
         }
-        OpenOfficeNativePfad = termkalini.getStringProperty("OpenOffice.org", "OfficeNativePfad");
+        OOService.OpenOfficeNativePfad = termkalini.getStringProperty("OpenOffice.org", "OfficeNativePfad");
 
         termkalini = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/", "nachrichten.ini");
         timerdelay = termkalini.getLongProperty("RehaNachrichten", "NachrichtenTimer");

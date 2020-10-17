@@ -29,6 +29,8 @@ import ag.ion.bion.officelayer.application.IOfficeApplication;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import io.RehaIOMessages;
 import logging.Logging;
+import offenePosten.RehaIO.RehaReverseServer;
+import offenePosten.RehaIO.SocketClient;
 import office.OOService;
 import sql.DatenquellenFactory;
 
@@ -93,7 +95,7 @@ public class OffenePosten implements WindowListener {
                 String officeProgrammPfad = inif.getStringProperty("OpenOffice.org", "OfficePfad");
                 String officeNativePfad = inif.getStringProperty("OpenOffice.org", "OfficeNativePfad");
                 try {
-                    new OOService().start(officeNativePfad, officeProgrammPfad);
+                    new OOService().start();
                 } catch (FileNotFoundException | OfficeApplicationException e) {
                     e.printStackTrace();
                 }

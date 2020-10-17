@@ -4,7 +4,9 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -13,6 +15,8 @@ import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
+import org.ini4j.Ini;
+import org.ini4j.InvalidFileFormatException;
 import org.jdesktop.swingworker.SwingWorker;
 
 import CommonTools.SqlInfo;
@@ -27,7 +31,7 @@ import sql.DatenquellenFactory;
 
 public class RehaUrlaub implements WindowListener {
 
-
+    private DatenquellenFactory datenquellenFactory;
     public static boolean DbOk = false;
     JFrame jFrame;
     public static JFrame thisFrame = null;
@@ -43,10 +47,8 @@ public class RehaUrlaub implements WindowListener {
     public final Cursor normalCursor = new Cursor(Cursor.DEFAULT_CURSOR);
 
 
-    public static String officeProgrammPfad = "C:/Program Files (x86)/OpenOffice 4";
-    public static String officeNativePfad = "C:/RehaVerwaltung/Libraries/lib/openofficeorg/";
     public static String progHome;
-    public static String aktIK ;
+    public static String aktIK;
     public static String urlaubsDateiVorlage = "UrlaubUndStunden.ods";
     public boolean isLibreOffice;
 
@@ -55,31 +57,48 @@ public class RehaUrlaub implements WindowListener {
     public static boolean testcase = false;
     SqlInfo sqlInfo = null;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InvalidFileFormatException, IOException {
+        if (args.length < 2) {
+            return;
+        }
+
+         progHome= args[0];
+         aktIK = args[1];
+
+
+
+
         new Logging("urlaub");
+        
+        
+        try {
+            Ini rehjavaini = new Ini(new File(progHome + "ini/" + aktIK + "/rehajava.ini"));
+            OOService officeService = new OOService(rehjavaini);
+            officeapplication =officeService.start();
+            officeOk=true;
+        } catch (IOException | OfficeApplicationException e1) {
+
+            officeOk=false;
+        }
+
+
+
+
         RehaUrlaub application = new RehaUrlaub();
-        application.getInstance();
-        application.getInstance().sqlInfo = new SqlInfo();
+        application.sqlInfo = new SqlInfo();
         try {
 
             if (args.length > 0 || testcase) {
-                if (!testcase) {
                     System.out.println("hole daten aus INI-Datei " + args[0]);
                     Settings rehjavaini = new INIFile(args[0] + "ini/" + args[1] + "/rehajava.ini");
 
 
-                    officeProgrammPfad = rehjavaini.getStringProperty("OpenOffice.org", "OfficePfad");
-                    officeNativePfad = rehjavaini.getStringProperty("OpenOffice.org", "OfficeNativePfad");
-
-                    Settings abrechnungini = new INIFile(args[0] + "ini/" + args[1] + "/abrechnung.ini");
+                    INIFile abrechnungini = new INIFile(args[0] + "ini/" + args[1] + "/abrechnung.ini");
                     String rechnung = abrechnungini.getStringProperty("HMPRIRechnung", "Pformular");
                     rechnung = rechnung.replace(".ott", "");
                     rechnung = rechnung + "Kopie.ott";
-                    // hmRechnungPrivat = rechnung;
 
-                    progHome = args[0];
-                    aktIK = args[1];
-                }
+
 
                 final RehaUrlaub xapplication = application;
                 new SwingWorker<Void, Void>() {
@@ -98,12 +117,7 @@ public class RehaUrlaub implements WindowListener {
                                 e.printStackTrace();
                             }
                         }
-                        if (!DbOk) {
-                            // JOptionPane.showMessageDialog(null, "Datenbank konnte nicht geöffnet
-                            // werden!\nReha-Statistik kann nicht gestartet werden");
-                            // System.exit(0);
-                        }
-                        RehaUrlaub.starteOfficeApplication();
+
                         return null;
                     }
 
@@ -112,19 +126,11 @@ public class RehaUrlaub implements WindowListener {
                 while (!DbOk) {
                     try {
                         Thread.sleep(20);
-                        // JOptionPane.showMessageDialog(null, "Datenbank konnte nicht geöffnet
-                        // werden!\nReha-Statistik kann nicht gestartet werden");
                         if (System.currentTimeMillis() - zeit > 7000) {
-                            // System.exit(0);
                         }
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                }
-                if (!DbOk) {
-                    // JOptionPane.showMessageDialog(null, "Datenbank konnte nicht geöffnet
-                    // werden!\nReha-Statistik kann nicht gestartet werden");
-                    // System.exit(0);
                 }
                 application.getJFrame();
             } else {
@@ -160,8 +166,7 @@ public class RehaUrlaub implements WindowListener {
         jFrame.addWindowListener(this);
         jFrame.setSize(1000, 500);
         jFrame.setPreferredSize(new Dimension(1000, 500));
-        jFrame.setTitle(
-                "Thera-Pi  Urlaub- / Überstundenverwaltung  [IK: " + aktIK + "] ");
+        jFrame.setTitle("Thera-Pi  Urlaub- / Überstundenverwaltung  [IK: " + aktIK + "] ");
         jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         jFrame.setLocationRelativeTo(null);
         RehaUrlaubTab urlaubTab = new RehaUrlaubTab();
@@ -187,7 +192,7 @@ public class RehaUrlaub implements WindowListener {
     /*******************/
 
     public void starteDB() {
-        DatenbankStarten dbstart = new DatenbankStarten();
+        DatenbankStarten dbstart = new DatenbankStarten(this);
         dbstart.run();
     }
 
@@ -206,39 +211,21 @@ public class RehaUrlaub implements WindowListener {
      *
      */
     final class DatenbankStarten implements Runnable {
+
+        private RehaUrlaub urlaub;
+
+        public DatenbankStarten(RehaUrlaub urlaub) {
+            this.urlaub = urlaub;
+        }
+
         private void StarteDB() {
-            final RehaUrlaub obj = RehaUrlaub.thisClass;
+            ;
 
-            final String sDB = "SQL";
-            if (obj.conn != null) {
-                try {
-                    obj.conn.close();
-                } catch (final SQLException e) {
-                }
-            }
-            try {
-                Class.forName("com.mysql.jdbc.Driver")
-                     .newInstance();
-            } catch (InstantiationException e) {
-                e.printStackTrace();
-                System.out.println(sDB + "Treiberfehler: " + e.getMessage());
-                RehaUrlaub.DbOk = false;
-                return;
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-                System.out.println(sDB + "Treiberfehler: " + e.getMessage());
-                RehaUrlaub.DbOk = false;
-                return;
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-                System.out.println(sDB + "Treiberfehler: " + e.getMessage());
-                RehaUrlaub.DbOk = false;
-                return;
-            }
             try {
 
-                obj.conn = new DatenquellenFactory(aktIK).createConnection();
-                sqlInfo.setConnection(obj.conn);
+                urlaub.datenquellenFactory = new DatenquellenFactory(aktIK);
+                urlaub.conn = datenquellenFactory.createConnection();
+                sqlInfo.setConnection(urlaub.conn);
                 RehaUrlaub.DbOk = true;
                 System.out.println("Datenbankkontakt hergestellt");
             } catch (final SQLException ex) {
@@ -319,16 +306,6 @@ public class RehaUrlaub implements WindowListener {
 
     /***************************/
 
-    public static void starteOfficeApplication() {
-        try {
-        	new OOService().start(officeNativePfad, officeProgrammPfad);
-        	
-            officeapplication = new OOService().getOfficeapplication();
-            RehaUrlaub.officeOk = true;
-        } catch (OfficeApplicationException | FileNotFoundException e1) {
-            e1.printStackTrace();
-        }
-
-    }
+   
 
 }

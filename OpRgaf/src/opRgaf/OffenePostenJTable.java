@@ -1,8 +1,8 @@
 package opRgaf;
-import static opRgaf.OffenePostenTableModel.KENNUNG;
 import static opRgaf.OffenePostenTableModel.BEARBEITUNGSGEBUEHR;
 import static opRgaf.OffenePostenTableModel.BEZAHLTAM;
 import static opRgaf.OffenePostenTableModel.GESAMTBETRAG;
+import static opRgaf.OffenePostenTableModel.KENNUNG;
 import static opRgaf.OffenePostenTableModel.MAHNUNGEINS;
 import static opRgaf.OffenePostenTableModel.MAHNUNGZWEI;
 import static opRgaf.OffenePostenTableModel.OFFEN;

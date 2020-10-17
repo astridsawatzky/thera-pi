@@ -39,7 +39,6 @@ import CommonTools.ButtonTools;
 import CommonTools.JCompTools;
 import CommonTools.JRtaRadioButton;
 import CommonTools.JRtaTextField;
-import CommonTools.OOTools;
 import CommonTools.SqlInfo;
 import CommonTools.StringTools;
 import CommonTools.ini.INITool;
@@ -59,6 +58,8 @@ import ag.ion.noa.internal.printing.PrintProperties;
 import ag.ion.noa.printing.IPrinter;
 import environment.Path;
 import hauptFenster.Reha;
+import office.OOTools;
+import office.OOService;
 import systemEinstellungen.SystemConfig;
 import verkauf.model.Artikel;
 import verkauf.model.ArtikelVerkauf;
@@ -631,7 +632,7 @@ public class VerkaufGUI extends JXPanel {
             String propSection = "Bon";
             String nummernkreis = "VB-" + SqlInfo.erzeugeNummer("vbon");
 
-            IOfficeApplication application = Reha.officeapplication;
+            IOfficeApplication application = new OOService().getOfficeapplication();
             try {
                 IDocumentService service = application.getDocumentService();
                 IDocumentDescriptor descriptor = new DocumentDescriptor();
@@ -775,7 +776,7 @@ public class VerkaufGUI extends JXPanel {
                 String nummernkreis = "VR-" + SqlInfo.erzeugeNummer("vrechnung");
                 String url = null;
 
-                IOfficeApplication application = Reha.officeapplication;
+                IOfficeApplication application = new OOService().getOfficeapplication();
                 boolean hideOfficeInBackground = settings.getBooleanProperty(propSection, "SofortDrucken");
                 try {
                     IDocumentService service = application.getDocumentService();
@@ -900,7 +901,6 @@ public class VerkaufGUI extends JXPanel {
 
                         };
                     } else {
-//					OOTools.inDenVordergrund(doc);		// w7: öffnet Dokument meist im Hintergrund
                         OOTools.bringDocToFront(application.getDocumentService(), doc, descriptor, url);
                     }
                 } catch (Exception e) {

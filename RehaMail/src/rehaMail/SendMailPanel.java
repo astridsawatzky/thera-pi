@@ -353,7 +353,7 @@ public class SendMailPanel extends JXPanel implements KeyListener {
                             out.flush();
                             out.close();
                             ByteArrayInputStream ins = new ByteArrayInputStream(out.toByteArray());
-                            rehaMail.Tools.OOTools.starteWriterMitStream(ins, "mailprint");
+                            office.OOTools.starteWriterMitStream(ins, "mailprint");
                             ins.close();
                             return null;
                         }
@@ -952,10 +952,10 @@ public class SendMailPanel extends JXPanel implements KeyListener {
                                    .endsWith(".ODT")
                         || komplett.toUpperCase()
                                    .endsWith(".ODT")) {
-                    rehaMail.Tools.OOTools.starteWriterMitDatei(komplett.replace("//", "/"));
+                    office.OOTools.starteWriterMitDatei(komplett.replace("//", "/"));
                 } else if (komplett.toUpperCase()
                                    .endsWith(".ODS")) {
-                    rehaMail.Tools.OOTools.starteCalcMitDatei(komplett);
+                    office.OOTools.starteCalcMitDatei(komplett);
                 }
             } else {
                 String[] indatei = dateiDialog(attachmentFileName.get(RehaMail.toolsDlgRueckgabe));

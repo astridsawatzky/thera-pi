@@ -80,7 +80,7 @@ public class OpRgaf implements WindowListener {
         String officeProgrammPfad = inif.getStringProperty("OpenOffice.org", "OfficePfad");
         String officeNativePfad = inif.getStringProperty("OpenOffice.org", "OfficeNativePfad");
         try {
-            new OOService().start(officeNativePfad, officeProgrammPfad);
+            new OOService().start();
         } catch (FileNotFoundException | OfficeApplicationException e) {
             e.printStackTrace();
         }

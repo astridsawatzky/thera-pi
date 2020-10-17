@@ -1,5 +1,6 @@
 package arztBaustein;
 
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.WindowAdapter;
@@ -10,30 +11,30 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 import javax.swing.JFrame;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.SwingUtilities;
 
 import org.jdesktop.swingx.JXFrame;
 
+import CommonTools.Monitor;
 import CommonTools.ini.INIFile;
 import CommonTools.ini.Settings;
 import ag.ion.bion.officelayer.application.IOfficeApplication;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
+import gui.LaF;
 import logging.Logging;
 import mandant.IK;
 import office.OOService;
 import sql.DatenquellenFactory;
 
 public class ArztBaustein {
-
     private IOfficeApplication officeapplication;
-    Connection conn = null;
+    Connection conn;
 
-    JXFrame jFrame = null;
+    JXFrame jFrame;
 
-    ArztBausteinPanel arztbausteinpanel = null;
+    private ArztBausteinPanel arztbausteinpanel;
 
-    public ArztBaustein(Connection connection, IOfficeApplication officeapplication) {
+    private ArztBaustein(Connection connection, IOfficeApplication officeapplication) {
         conn = connection;
         this.officeapplication = officeapplication;
     }
@@ -57,11 +58,9 @@ public class ArztBaustein {
         IOfficeApplication officeapp = starteOfficeApplication(OpenOfficePfad, OpenOfficeNativePfad);
 
         start(ik, officeapp);
-
     }
 
     public static void start(IK ik, IOfficeApplication officeapplication) throws SQLException {
-
         Connection connection = new DatenquellenFactory(ik.digitString()).createConnection();
         ArztBaustein arztbaustein = new ArztBaustein(connection, officeapplication);
         arztbaustein.getJFrame();
@@ -70,18 +69,27 @@ public class ArztBaustein {
     public JXFrame getJFrame() {
         if (jFrame == null) {
             jFrame = new JXFrame();
+            Monitor monitor = new Monitor() {
 
-            try {
-                UIManager.setLookAndFeel("com.jgoodies.looks.plastic.PlasticXPLookAndFeel");
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            } catch (InstantiationException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            } catch (UnsupportedLookAndFeelException e) {
-                e.printStackTrace();
-            }
+                @Override
+                public void statusChange(Object status) {
+                    SwingUtilities.invokeLater(() -> {
+                        if(status ==Monitor.START) {
+                            jFrame.setCursor(new Cursor(Cursor.WAIT_CURSOR));
+                        }
+                        else {
+                            jFrame.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                        }
+
+                    });
+
+                }
+            };
+
+
+
+            jFrame.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+            LaF.setPlastic();
 
             jFrame.addWindowListener(new WindowAdapter() {
                 public void windowClosed(WindowEvent arg0) {
@@ -98,42 +106,35 @@ public class ArztBaustein {
             jFrame.getContentPane()
                   .setLayout(new GridLayout());
             jFrame.getContentPane()
-                  .add(arztbausteinpanel = new ArztBausteinPanel(this, this.officeapplication));
+                  .add(arztbausteinpanel = new ArztBausteinPanel(this.conn, this.officeapplication, monitor));
             WindowListener wl = new ArztBausteinWindowlistener(arztbausteinpanel);
             jFrame.addWindowListener(wl);
             jFrame.setVisible(true);
 
             jFrame.pack();
-
         }
         return jFrame;
     }
 
-    public void closeconnection() {
+    private void closeconnection() {
         if (conn != null) {
             try {
                 conn.close();
-                System.out.println("Datenbankverbindung wurde geschlossen-2");
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
     }
 
-    public static IOfficeApplication starteOfficeApplication(String ooPath, String ooNativePath) {
+    private static IOfficeApplication starteOfficeApplication(String ooPath, String ooNativePath) {
         IOfficeApplication application = null;
         try {
-        	new OOService().start(ooNativePath, ooPath);
+            new OOService().start();
             application = new OOService().getOfficeapplication();
             System.out.println("OpenOffice ist gestartet und Active =" + application.isActive());
-        } catch (OfficeApplicationException e1) {
-            e1.printStackTrace();
-        } catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+        } catch (OfficeApplicationException | FileNotFoundException e) {
+            e.printStackTrace();
+        }
         return application;
-
     }
-
 }

@@ -24,7 +24,8 @@ import generalSplash.RehaSplash;
 import gui.Cursors;
 import io.RehaIOMessages;
 import mandant.IK;
-import oOorgTools.OOTools;
+import office.OOService;
+import office.OOTools;
 import rechteTools.Rechte;
 import rehaWissen.RehaWissen;
 import systemEinstellungen.SystemConfig;
@@ -260,7 +261,7 @@ final class LinkeTaskPaneListener implements ActionListener {
                 @Override
                 public void run() {
                     try {
-                        ArztBaustein.start(new IK(Reha.getAktIK()), Reha.officeapplication);
+                        ArztBaustein.start(new IK(Reha.getAktIK()), new OOService().getOfficeapplication());
                     } catch (SQLException e) {
                         e.printStackTrace();
                     }
@@ -361,7 +362,7 @@ final class LinkeTaskPaneListener implements ActionListener {
                     Reha.getThisFrame()
                         .setCursor(Cursors.wartenCursor);
                     try {
-                        new AkutListe(Reha.officeapplication.getDocumentService());
+                        new AkutListe(new OOService().getOfficeapplication().getDocumentService());
                     } catch (TextException | OfficeApplicationException e) {
 
                         e.printStackTrace();

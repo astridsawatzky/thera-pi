@@ -55,7 +55,8 @@ import events.RehaTPEventClass;
 import events.RehaTPEventListener;
 import gui.Cursors;
 import hauptFenster.Reha;
-import oOorgTools.OOTools;
+import office.OOService;
+import office.OOTools;
 import stammDatenTools.ZuzahlTools.ZZStat;
 import systemEinstellungen.SystemConfig;
 
@@ -386,17 +387,17 @@ public class RezeptGebuehrRechnung extends JXDialog implements ActionListener, K
 
     private synchronized void officeStarten(String url)
             throws OfficeApplicationException, NOAException, TextException, DocumentException {
-        IDocumentService documentService;
         Reha.getThisFrame()
             .setCursor(Cursors.wartenCursor);
 
-        documentService = Reha.officeapplication.getDocumentService();
-
+        IDocumentService documentService = new OOService().getOfficeapplication().getDocumentService();
         IDocumentDescriptor docdescript = new DocumentDescriptor();
         docdescript.setHidden(true);
         docdescript.setAsTemplate(true);
         final ITextDocument textDocument = (ITextDocument) documentService.loadDocument(url, docdescript);
+        /**********************/
         OOTools.druckerSetzen(textDocument, SystemConfig.hmAbrechnung.get("hmgkvrechnungdrucker"));
+        /**********************/
         ITextFieldService textFieldService = textDocument.getTextFieldService();
         ITextField[] placeholders = textFieldService.getPlaceholderFields();
         String placeholderDisplayText = "";

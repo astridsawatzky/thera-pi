@@ -15,7 +15,7 @@ import CommonTools.ini.INITool;
 import CommonTools.ini.Settings;
 import egk.EgkReader;
 import environment.Path;
-import oOorgTools.OOTools;
+import oOorgTools.RehaOOTools;
 import ocf.OcKVK;
 import systemEinstellungen.SystemConfig;
 
@@ -25,7 +25,7 @@ final class ErsterLogin implements Runnable {
             @Override
             public void run() {
                 Reha.starteOfficeApplication();
-                OOTools.ooOrgAnmelden();
+                RehaOOTools.ooOrgAnmelden(Reha.instance);
             }
         }.start();
         ProgLoader.PasswortDialog();

@@ -9,7 +9,6 @@ import javax.swing.JOptionPane;
 
 import com.sun.star.beans.XPropertySet;
 
-import CommonTools.OOTools;
 import CommonTools.SqlInfo;
 import ag.ion.bion.officelayer.document.DocumentDescriptor;
 import ag.ion.bion.officelayer.document.IDocument;
@@ -24,6 +23,7 @@ import ag.ion.bion.officelayer.text.ITextTableCellProperties;
 import ag.ion.bion.officelayer.text.TextException;
 import offenePosten.OffenePosten;
 import office.OOService;
+import office.OOTools;
 
 public class AbrechnungDrucken {
     int aktuellePosition = 0;

@@ -56,7 +56,8 @@ import events.RehaTPEventClass;
 import events.RehaTPEventListener;
 import gui.Cursors;
 import hauptFenster.Reha;
-import oOorgTools.OOTools;
+import oOorgTools.RehaOOTools;
+import office.OOTools;
 import systemEinstellungen.SystemConfig;
 import systemTools.IconListRenderer;
 
@@ -557,9 +558,10 @@ public class EmailDialog extends JXDialog implements  RehaTPEventListener {
 
                 }.execute();
             } else if (test.endsWith(".odt") || test.endsWith(".ott")) {
-                new OOTools().starteWriterMitDatei(attachments.get(wahl)[0].replace("\\", "/"));
+                OOTools.starteWriterMitDatei(attachments.get(wahl)[0].replace("\\", "/"));
             } else if (test.endsWith(".ods") || test.endsWith(".ots")) {
-                new OOTools().starteCalcMitDatei(attachments.get(wahl)[0].replace("\\", "/"));
+                RehaOOTools r = new RehaOOTools();
+                OOTools.starteCalcMitDatei(attachments.get(wahl)[0].replace("\\", "/"));
             } else {
                 Runtime.getRuntime()
                        .exec("C:/Windows/notepad.exe " + attachments.get(wahl)[0].replace("\\", "/"));

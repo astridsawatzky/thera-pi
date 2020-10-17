@@ -7,7 +7,6 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -17,6 +16,10 @@ import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.UnknownHostException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
+import java.security.SignatureException;
 import java.security.cert.X509Certificate;
 import java.util.HashMap;
 import java.util.Vector;
@@ -45,21 +48,26 @@ import org.thera_pi.nebraska.gui.utils.ButtonTools;
 import org.thera_pi.nebraska.gui.utils.FileStatics;
 import org.thera_pi.nebraska.gui.utils.JRtaComboBox;
 import org.thera_pi.nebraska.gui.utils.MultiLineLabel;
-import org.thera_pi.nebraska.gui.utils.OOorgTools;
+import org.thera_pi.nebraska.gui.utils.NebraskaOOTools;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
 import CommonTools.DatFunk;
 import CommonTools.JRtaTextField;
+import CommonTools.Monitor;
 import CommonTools.ini.INIFile;
 import CommonTools.ini.Settings;
+import ag.ion.bion.officelayer.application.OfficeApplicationException;
+import ag.ion.bion.officelayer.text.TextException;
+import ag.ion.noa.NOAException;
 import crypt.Verschluesseln;
+import office.OOTools;
 
 public class NebraskaRequestDlg extends JDialog {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 6958116962234351720L;
 
@@ -77,7 +85,7 @@ public class NebraskaRequestDlg extends JDialog {
     private String person = null;
     NebraskaKeystore keystore = null;
 
-	public static HashMap<String, String> hmZertifikat = new HashMap<String, String>();
+    public static HashMap<String, String> hmZertifikat = new HashMap<String, String>();
 
     public NebraskaRequestDlg(NebraskaZertAntrag zertantrag, boolean importiert, String therapidir) {
         super();
@@ -115,7 +123,7 @@ public class NebraskaRequestDlg extends JDialog {
 
     /*****
      * Für Benutzer von Thera-Pi, die die Mandantendaten zuvor importiert haben
-     * 
+     *
      * @param importiert
      * @param therapidir
      * @param ik
@@ -265,16 +273,7 @@ public class NebraskaRequestDlg extends JDialog {
             }
         }
         Vector<String> dummy = new Vector<String>();
-        /*
-         * dummy.add( ini.getStringProperty("KeyStores",
-         * "KeyStoreFile"+Integer.toString(i+1)) ); dummy.add(
-         * man.decrypt(ini.getStringProperty("KeyStores",
-         * "KeyStorePw"+Integer.toString(i+1))) ); dummy.add(
-         * ini.getStringProperty("KeyStores", "KeyStoreAlias"+Integer.toString(i+1)) );
-         * dummy.add( man.decrypt(ini.getStringProperty("KeyStores",
-         * "KeyStoreKeyPw"+Integer.toString(i+1))) ); keyStoreParameter.add(
-         * (Vector<String>) dummy.clone() );
-         */
+
         int inipos = -1;
         if (neuerEintrag && eintragBei < 0) { // es gibt noch keinen Eintrag
             inipos = 1;
@@ -379,7 +378,6 @@ public class NebraskaRequestDlg extends JDialog {
             // for RSASSA-PSS set PSS-parameters too
             // McM 2020-02: default settings work - no action neccessary for now
             keystore.generateKeyPairAndSaveToFile(true, privkeyfile, pathtoprivkeydir);
-            // keystore.generateKeyPairAndSaveToFile(false, privkeyfile, pathtoprivkeydir);
         } catch (NebraskaCryptoException e) {
             JOptionPane.showMessageDialog(null,
                     "Fehler, es existiert bereits ein gültiges Schlüsselpaar, überschreiben ist nicht erlaubt!"
@@ -414,7 +412,7 @@ public class NebraskaRequestDlg extends JDialog {
             NebraskaRequestDlg.hmZertifikat.put("<Subjectou1>", "OU=" + keystore.getCompanyName());
             NebraskaRequestDlg.hmZertifikat.put("<Subjectou2>", "OU=" + "IK" + keystore.getIK());
             NebraskaRequestDlg.hmZertifikat.put("<Subjectcn>", "CN=" + keystore.getCEO());
-            NebraskaRequestDlg.hmZertifikat.put("<Algorithm>", NebraskaUtil.decodeHashAlgorithm(keystore.getCertSignatureAlgorithm())); 
+            NebraskaRequestDlg.hmZertifikat.put("<Algorithm>", NebraskaUtil.decodeHashAlgorithm(keystore.getCertSignatureAlgorithm()));
             // Nebraska.hmZertifikat.put("<Md5publickey>",md5Buf.toString().replace(":", "
             // "));
             PKCS10CertificationRequest request = keystore.getCertificateRequest();
@@ -428,13 +426,9 @@ public class NebraskaRequestDlg extends JDialog {
                 System.out.println("Objec Nr." + i + " aus der ASN1-Struktur = " + aseq.getObjectAt(i));
                 if (aseq.getObjectAt(i) instanceof SubjectPublicKeyInfo) {
                     spub = (SubjectPublicKeyInfo) aseq.getObjectAt(i);
-                    // System.out.println("Public Key des Requests = "+spub.getPublicKeyData());
-                    // System.out.println("SHA1-Hash aus dem PubKey des Requests =
-                    // "+BCStatics2.getSHA1fromByte(spub.getPublicKeyData().getEncoded()));
                 }
             }
 
-            // String sha1 = BCStatics2.getSHA1fromByte(spub.getPublicKeyData().getBytes());
             String hash = BCStatics2.getSHA256fromByte(spub.getPublicKeyData()
                                                            .getBytes());
             NebraskaRequestDlg.hmZertifikat.put("<Sha1publickey>", BCStatics2.macheHexDump(hash, 20, " "));
@@ -443,7 +437,6 @@ public class NebraskaRequestDlg extends JDialog {
                                                        .getBytes());
             NebraskaRequestDlg.hmZertifikat.put("<Md5publickey>", BCStatics2.macheHexDump(md5, 20, " "));
 
-            // sha1 = BCStatics2.getSHA1fromByte(request.getEncoded());
             hash = BCStatics2.getSHA256fromByte(request.getEncoded());
             NebraskaRequestDlg.hmZertifikat.put("<Sha1certificate>", BCStatics2.macheHexDump(hash, 20, " "));
 
@@ -453,7 +446,6 @@ public class NebraskaRequestDlg extends JDialog {
             java.security.interfaces.RSAPublicKey pub = (java.security.interfaces.RSAPublicKey) request.getPublicKey();
             String hexstring = new BigInteger(pub.getModulus()
                                                  .toByteArray()).toString(16);
-            // System.out.println("Hexstring = "+hexstring);
             String modulus = BCStatics2.macheHexDump(hexstring, 20, " ");
             NebraskaRequestDlg.hmZertifikat.put("<Modulus>", modulus);
 
@@ -462,28 +454,31 @@ public class NebraskaRequestDlg extends JDialog {
             NebraskaRequestDlg.hmZertifikat.put("<Exponent>", (hexstring.length() == 5 ? "0" + hexstring : hexstring));
             String vorlage = this.zertantrag.therapidir + "/defaults/vorlagen/ZertBegleitzettel-SHA256.ott";
             File f = new File(vorlage);
-            if (!f.exists()) {
-                vorlage = FileStatics.dirChooser(this.zertantrag.therapidir + "/defaults/vorlagen/",
-                        "Bitte wählen Sie die Vorlage auswählen (Standard = ZertBegleitzettel-SHA256.ott)");
-                if (!vorlage.equals("")) {
-                    OOorgTools.starteStandardFormular(vorlage, null);
+            Monitor monitor = new Monitor() {
+
+                @Override
+                public void statusChange(Object status) {
+                    if(status.equals(Monitor.START)) {
+                        NebraskaMain.jf.setCursor(new Cursor(Cursor.WAIT_CURSOR));
+                    } else {
+                        NebraskaMain.jf.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                    }
+
                 }
+            };
+            if (f.exists()) {
+                NebraskaOOTools.starteStandardFormular(vorlage, null,monitor);
             } else {
-                OOorgTools.starteStandardFormular(vorlage, null);
+                String auswahl= FileStatics.dirChooser(this.zertantrag.therapidir + "/defaults/vorlagen/",
+                        "Bitte wählen Sie die Vorlage auswählen (Standard = ZertBegleitzettel-SHA256.ott)");
+
+                if (!auswahl.equals("")) {
+                    vorlage = auswahl;
+                    NebraskaOOTools.starteStandardFormular(vorlage, null, monitor);
+                }
             }
             System.out.println(md5Buf);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (NebraskaCryptoException e) {
-            e.printStackTrace();
-        } catch (NebraskaFileException e) {
-            e.printStackTrace();
-        } catch (NebraskaNotInitializedException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch ( NebraskaCryptoException | NebraskaFileException | NebraskaNotInitializedException | IOException | SignatureException | OfficeApplicationException | NOAException | TextException | InvalidKeyException | NoSuchAlgorithmException | NoSuchProviderException e) {
         }
     }
 

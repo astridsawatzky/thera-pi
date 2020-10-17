@@ -27,9 +27,7 @@ public class RehaReverseServer extends SwingWorker<Void, Void> {
         execute();
     }
 
-    public String getPort() {
-        return Integer.toString(RehaHMK.xport);
-    }
+
 
     private void msgFromReha(String op) {
         String data[] = op.split("#");
@@ -38,7 +36,7 @@ public class RehaReverseServer extends SwingWorker<Void, Void> {
             System.out.println("Meldung in RehaHMK eingetroffen: in den Vordergund");
             RehaHMK.thisFrame.setVisible(true);
         } else if (msg.equals(RehaIOMessages.NEED_AKTUSER)) {
-            RehaHMK.aktUser = data[2];             
+            RehaHMK.aktUser = data[2];
         }
     }
 
@@ -50,12 +48,10 @@ public class RehaReverseServer extends SwingWorker<Void, Void> {
                 serv = new ServerSocket(RehaHMK.xport);
                 break;
             } catch (Exception e) {
-                // System.out.println("In Exception währen der Portsuche - 1");
                 if (serv != null) {
                     try {
                         serv.close();
                     } catch (IOException e1) {
-                        // System.out.println("In Exception währen der Portsuche - 2");
                         e1.printStackTrace();
                     }
                     serv = null;
@@ -69,7 +65,6 @@ public class RehaReverseServer extends SwingWorker<Void, Void> {
             serv = null;
             return null;
         }
-        RehaHMK.xportOk = true;
         Socket client = null;
 
         while (true) {

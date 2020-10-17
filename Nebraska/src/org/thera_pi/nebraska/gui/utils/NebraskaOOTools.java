@@ -1,6 +1,5 @@
 package org.thera_pi.nebraska.gui.utils;
 
-import java.awt.Cursor;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -15,6 +14,8 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.view.XLineCursor;
 
 import CommonTools.DatFunk;
+import CommonTools.Monitor;
+import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import ag.ion.bion.officelayer.document.DocumentDescriptor;
 import ag.ion.bion.officelayer.document.IDocument;
 import ag.ion.bion.officelayer.document.IDocumentDescriptor;
@@ -24,9 +25,11 @@ import ag.ion.bion.officelayer.text.ITextDocument;
 import ag.ion.bion.officelayer.text.ITextField;
 import ag.ion.bion.officelayer.text.ITextFieldService;
 import ag.ion.bion.officelayer.text.IViewCursor;
+import ag.ion.bion.officelayer.text.TextException;
+import ag.ion.noa.NOAException;
 import ag.ion.noa.printing.IPrinter;
 
-public class OOorgTools {
+public class NebraskaOOTools {
     public static void loescheLeerenPlatzhalter(ITextDocument textDocument, ITextField placeholders) {
         IViewCursor viewCursor = textDocument.getViewCursorService()
                                              .getViewCursor();
@@ -46,12 +49,12 @@ public class OOorgTools {
         textCursor.setString("");
     }
 
-    public static void starteStandardFormular(String url, String drucker) throws Exception {
-        IDocumentService documentService = null;
-        NebraskaMain.jf.setCursor(new Cursor(Cursor.WAIT_CURSOR));
-        System.out.println("Starte Datei -> " + url);
+    public static void starteStandardFormular(String url, String drucker, Monitor monitor) throws OfficeApplicationException, NOAException, TextException  {
+        monitor.statusChange(Monitor.START);
 
-        documentService = NebraskaMain.officeapplication.getDocumentService();
+        System.out.println("Starte Datei -> " + url);
+        IDocumentService documentService = NebraskaMain.officeapplication.getDocumentService();
+
         IDocumentDescriptor docdescript = new DocumentDescriptor();
         docdescript.setHidden(true);
         docdescript.setAsTemplate(true);
@@ -111,7 +114,9 @@ public class OOorgTools {
             }
             /*****************/
         }
-        NebraskaMain.jf.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+
+        monitor.statusChange(Monitor.STOP);
+
         IViewCursor viewCursor = textDocument.getViewCursorService()
                                              .getViewCursor();
         viewCursor.getPageCursor()

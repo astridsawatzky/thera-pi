@@ -47,7 +47,9 @@ import ag.ion.bion.officelayer.document.IDocumentService;
 import ag.ion.bion.officelayer.spreadsheet.ISpreadsheetDocument;
 import ag.ion.noa.NOAException;
 import hauptFenster.Reha;
-import oOorgTools.OOTools;
+import oOorgTools.RehaOOTools;
+import office.OOService;
+import office.OOTools;
 import rehaInternalFrame.JBeteiligungInternal;
 import stammDatenTools.RezTools;
 import systemTools.ButtonTools;
@@ -477,10 +479,10 @@ public class Beteiligung extends JXPanel {
     private void starteCalc()
             throws OfficeApplicationException, NOAException, NoSuchElementException, WrappedTargetException,
             IndexOutOfBoundsException, UnknownPropertyException, PropertyVetoException, IllegalArgumentException {
-        if (!Reha.officeapplication.isActive()) {
+        if (!new OOService().getOfficeapplication().isActive()) {
             Reha.starteOfficeApplication();
         }
-        IDocumentService documentService = Reha.officeapplication.getDocumentService();
+        IDocumentService documentService = new OOService().getOfficeapplication().getDocumentService();
         IDocumentDescriptor docdescript = new DocumentDescriptor();
         docdescript.setHidden(true);
         docdescript.setAsTemplate(true);
@@ -508,18 +510,17 @@ public class Beteiligung extends JXPanel {
     private void doTabellenKopf() throws IndexOutOfBoundsException, UnknownPropertyException, PropertyVetoException,
             IllegalArgumentException, WrappedTargetException {
         OOTools.doCellFontBold(cellCursor, 0, 0);
-        OOTools.doCellValue(cellCursor, 0, 0,
-                "Gesamtumsätze vom " + tfs[0].getText() + " bis einschließlich " + tfs[1].getText());
+        OOTools.doCellValue(cellCursor, 0, 0, "Gesamtumsätze vom " + tfs[0].getText() + " bis einschließlich " + tfs[1].getText());
         OOTools.doCellColor(cellCursor, 11, 0, 0xffffff);
         OOTools.doCellColor(cellCursor, 12, 0, 0xffffff);
         OOTools.doCellColor(cellCursor, 13, 0, 0xffffff);
-        OOTools.doCellValue(cellCursor, 11, 0, Double.parseDouble(tfbeteil[0].getText()));
-        OOTools.doCellValue(cellCursor, 12, 0, Double.parseDouble(tfbeteil[1].getText()));
-        OOTools.doCellValue(cellCursor, 13, 0, Double.parseDouble(tfbeteil[2].getText()));
+        OOTools.doCellValue(cellCursor, 11, 0, (Object) Double.parseDouble(tfbeteil[0].getText()));
+        OOTools.doCellValue(cellCursor, 12, 0, (Object) Double.parseDouble(tfbeteil[1].getText()));
+        OOTools.doCellValue(cellCursor, 13, 0, (Object) Double.parseDouble(tfbeteil[2].getText()));
         calcrow++;
         OOTools.doCellFontBold(cellCursor, 0, calcrow);
         OOTools.doCellValue(cellCursor, 0, calcrow, jcmb.getSelectedItem()
-                                                        .toString());
+        .toString());
         calcrow += 2;
     }
 
@@ -566,10 +567,9 @@ public class Beteiligung extends JXPanel {
                 OOTools.doCellFontBold(cellCursor, 0, calcrow);
             }
             for (int i = 8; i < 13; i++) {
-                OOTools.doCellValue(cellCursor, i, calcrow, Double.parseDouble("0.00"));
+                OOTools.doCellValue(cellCursor, i, calcrow, (Object) Double.parseDouble("0.00"));
             }
-            OOTools.doCellFormula(cellCursor, 14, calcrow,
-                    "=sum(I" + Integer.toString(calcrow + 1) + ":N" + Integer.toString(calcrow + 1) + ")");
+            OOTools.doCellFormula(cellCursor, 14, calcrow, "=sum(I" + Integer.toString(calcrow + 1) + ":N" + Integer.toString(calcrow + 1) + ")");
             calcrow++;
         } catch (IndexOutOfBoundsException e) {
             e.printStackTrace();
@@ -610,7 +610,7 @@ public class Beteiligung extends JXPanel {
         try {
             OOTools.doCellValue(cellCursor, 0, calcrow, name.replace(copyright, ""));
             OOTools.doCellValue(cellCursor, 1, calcrow, rezvec.get(0)
-                                                              .get(41));
+              .get(41));
             String formula;
             for (int i = 0; i < 6; i++) {
 
@@ -625,8 +625,7 @@ public class Beteiligung extends JXPanel {
                 }
                 OOTools.doCellFormula(cellCursor, i + 8, calcrow, formula);
             }
-            OOTools.doCellFormula(cellCursor, 14, calcrow,
-                    "=sum(I" + Integer.toString(calcrow + 1) + ":N" + Integer.toString(calcrow + 1) + ")");
+            OOTools.doCellFormula(cellCursor, 14, calcrow, "=sum(I" + Integer.toString(calcrow + 1) + ":N" + Integer.toString(calcrow + 1) + ")");
             if (history) {
                 OOTools.doCellValue(cellCursor, 15, calcrow, "X");
             }
@@ -695,8 +694,7 @@ public class Beteiligung extends JXPanel {
             OOTools.doCellColor(cellCursor, 0, calcrow + 1, 0xff0000);
             OOTools.doCellValue(cellCursor, 0, calcrow + 1, "FK 2 = Tag ist erfaßt aber keine Positionen zugeordnet");
             OOTools.doCellColor(cellCursor, 0, calcrow + 2, 0xff0000);
-            OOTools.doCellValue(cellCursor, 0, calcrow + 2,
-                    "FK 3 = Tag ist erfaßt aber Positionen einer anderen Tarifgruppe zugeordnet");
+            OOTools.doCellValue(cellCursor, 0, calcrow + 2, "FK 3 = Tag ist erfaßt aber Positionen einer anderen Tarifgruppe zugeordnet");
 
         } catch (IndexOutOfBoundsException e) {
             e.printStackTrace();

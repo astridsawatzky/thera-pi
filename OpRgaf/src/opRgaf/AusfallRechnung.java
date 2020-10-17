@@ -32,7 +32,6 @@ import com.jgoodies.forms.layout.FormLayout;
 import CommonTools.DatFunk;
 import CommonTools.JRtaCheckBox;
 import CommonTools.LeistungTools;
-import CommonTools.OOTools;
 import CommonTools.SqlInfo;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import ag.ion.bion.officelayer.document.DocumentDescriptor;
@@ -47,6 +46,7 @@ import ag.ion.noa.NOAException;
 import environment.Path;
 import mandant.IK;
 import office.OOService;
+import office.OOTools;
 
 class AusfallRechnung extends JDialog implements WindowListener, ActionListener, KeyListener {
     private static final long serialVersionUID = 1L;

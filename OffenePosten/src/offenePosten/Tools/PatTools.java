@@ -15,17 +15,15 @@ public class PatTools {
      * "<Padr4>", "<Padr5>", "<Pgeboren>", "<Panrede>", "<Pnname>", "<Pvname>",
      * "<Pbanrede>", "<Ptelp>", "<Ptelg>", "<Ptelmob>", "<Pfax>", "<Pemail>",
      * "<Pid>"}); "<Palter>", "<Pzigsten>"} hmAdrPDaten.put(lAdrPDaten.get(i),"");
-     * 
-     * 
+     *
+     *
      */
     public static void constructPatHMap(Vector<String> patDaten) {
         boolean isherr = false;
         boolean iskind = false;
         try {
             OffenePosten.hmAdrPDaten.clear();
-            // int lang = SystemConfig.hmAdrPDaten.hashCode();
-            //// System.out.println(lang);
-            // SystemConfig.hmAdrPDaten.put("<Padr1>", patDaten.get(0));
+
             String anrede = StringTools.EGross(patDaten.get(0));
             if (anrede.toUpperCase()
                       .equals("HERR")) {

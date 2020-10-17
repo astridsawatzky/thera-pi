@@ -1373,7 +1373,7 @@ public class Dta301 extends JXPanel implements FocusListener {
     }
 
     private void doZeigeEdifact(String buf) {
-        ITextDocument document = oOorgTools.OOTools.starteLeerenWriter();
+        ITextDocument document = office.OOTools.starteLeerenWriter();
         try {
             document.getTextService()
                     .getCursorService()

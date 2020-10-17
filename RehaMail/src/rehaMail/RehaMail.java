@@ -7,13 +7,13 @@ import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.io.FileNotFoundException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Optional;
 import java.util.Properties;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -27,20 +27,22 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import org.jdesktop.swingworker.SwingWorker;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import CommonTools.SqlInfo;
-import CommonTools.ini.INIFile;
 import CommonTools.ini.INITool;
 import CommonTools.ini.Settings;
 import rehaMail.RehaIO.RehaReverseServer;
 import rehaMail.RehaIO.SocketClient;
 import ag.ion.bion.officelayer.application.IOfficeApplication;
-import ag.ion.bion.officelayer.application.OfficeApplicationException;
+import ch.qos.logback.classic.util.ContextInitializer;
 import crypt.Verschluesseln;
+import gui.LaF;
 import io.RehaIOMessages;
-import logging.Logging;
-import office.OOService;
+import office.OOTools;
 import sql.DatenquellenFactory;
+import uk.org.lidalia.sysoutslf4j.context.SysOutOverSLF4J;
 
 public class RehaMail implements WindowListener {
 
@@ -50,7 +52,7 @@ public class RehaMail implements WindowListener {
     public Connection conn;
     public static RehaMail thisClass;
 
-    public static IOfficeApplication officeapplication;
+    public static Optional<IOfficeApplication> officeapplication;
 
     public String dieseMaschine = null;
     public static boolean inPatMessage = false;
@@ -61,9 +63,7 @@ public class RehaMail implements WindowListener {
     public final Cursor normalCursor = new Cursor(Cursor.DEFAULT_CURSOR);
 
 
-    public static String officeProgrammPfad = "C:/Program Files (x86)/OpenOffice.org 3";
 
-    public static String officeNativePfad = "C:/RehaVerwaltung/Libraries/lib/openofficeorg/";
     public static String progHome ;
     public static String aktIK ;
 
@@ -118,144 +118,136 @@ public class RehaMail implements WindowListener {
 
     SqlInfo sqlInfo = null;
 
+    private static Logger LOGGER;
+
     public static void main(String[] args) {
-        new Logging("mail");
-        try {
-            UIManager.setLookAndFeel("com.jgoodies.looks.plastic.PlasticXPLookAndFeel");
-            UIManager.put("TabbedPane.contentOpaque", Boolean.FALSE);
-            UIManager.put("TabbedPane.tabsOpaque", Boolean.FALSE);
-        } catch (ClassNotFoundException e1) {
-            e1.printStackTrace();
-        } catch (InstantiationException e1) {
-            e1.printStackTrace();
-        } catch (IllegalAccessException e1) {
-            e1.printStackTrace();
-        } catch (UnsupportedLookAndFeelException e1) {
-            e1.printStackTrace();
-        }
+        startLogging();
+        LOGGER = LoggerFactory.getLogger(RehaMail.class);
+        LaF.setPlastic();
 
-        if (args.length > 0 || testcase) {
-            if (!testcase) {
-                System.out.println("hole daten aus INI-Datei " + args[0]);
-                INITool.init(args[0] + "ini/" + args[1] + "/");
-                Settings inif = new INIFile(args[0] + "ini/" + args[1] + "/rehajava.ini");
-
-                officeProgrammPfad = inif.getStringProperty("OpenOffice.org", "OfficePfad");
-                officeNativePfad = inif.getStringProperty("OpenOffice.org", "OfficeNativePfad");
-                progHome = args[0];
-                aktIK = args[1];
-                if (args.length >= 3) {
-                    rehaReversePort = Integer.parseInt(args[2]);
-                }
-                if (args.length >= 4) {
-                    mailUser = args[3].replace("#", " ");
-                }
-                inif = INITool.openIni(args[0] + "ini/" + args[1] + "/", "nachrichten.ini");
-                try {
-                    timerdelay = Long.parseLong(inif.getStringProperty("RehaNachrichten", "NachrichtenTimer"));
-                    timerpopup = (Integer.parseInt(inif.getStringProperty("RehaNachrichten", "NachrichtenPopUp")) <= 0
-                            ? false
-                            : true);
-                    timerprogressbar = (Integer.parseInt(
-                            inif.getStringProperty("RehaNachrichten", "NachrichtenProgressbar")) <= 0 ? false : true);
-                } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(null,
-                            "Fehler in der nachrichten.ini\nEs wird versucht die ini neu zu schreiben.\nStarten Sie im Anschluß Thera-Pi Nachrichten erneut");
-                    inif.setStringProperty("RehaNachrichten", "NachrichtenTimer", "600000", null);
-                    inif.setStringProperty("RehaNachrichten", "NachrichtenPopUp", "1", null);
-                    inif.setStringProperty("RehaNachrichten", "NachrichtenProgressbar", "1", null);
-                    System.exit(0);
-                }
-                try {
-                    inif = INITool.openIni(args[0] + "ini/" + args[1] + "/", "fremdprog.ini");
-                    pdfReader = inif.getStringProperty("FestProg", "FestProgPfad1");
-                } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(null, "Fehler in der fremdprog.ini");
-                }
-
-            }
-
-            RehaMail application = new RehaMail();
-            application.getInstance();
-            application.getInstance().sqlInfo = new SqlInfo();
-            final RehaMail xapplication = application;
-            new SwingWorker<Void, Void>() {
-                @Override
-                protected Void doInBackground() throws java.lang.Exception {
-
-                    xapplication.starteDB();
-                    long zeit = System.currentTimeMillis();
-                    while (!DbOk) {
-                        try {
-                            Thread.sleep(20);
-                            if (System.currentTimeMillis() - zeit > 5000) {
-                                System.exit(0);
-                            }
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                    /*********************************/
-
-                    Verschluesseln man = Verschluesseln.getInstance();
-                    einzelMail = SqlInfo.holeFelder("select user,rights,id from rehalogin");
-                    for (int i = 0; i < einzelMail.size(); i++) {
-                        einzelMail.get(i)
-                                  .set(0, man.decrypt(einzelMail.get(i)
-                                                                .get(0)));
-                        einzelMail.get(i)
-                                  .set(1, man.decrypt(einzelMail.get(i)
-                                                                .get(1)));
-                    }
-                    Vector<String> vdummy = new Vector<String>();
-                    vdummy.add("");
-                    vdummy.add("kein Passwort");
-                    einzelMail.insertElementAt((Vector<String>) vdummy.clone(), 0);
-                    Comparator<Vector<String>> comparator = new Comparator<Vector<String>>() {
-                        @Override
-                        public int compare(Vector<String> o1, Vector<String> o2) {
-                            String s1 = o1.get(0);
-                            String s2 = o2.get(0);
-                            return s1.compareTo(s2);
-                        }
-                    };
-                    Collections.sort(einzelMail, comparator);
-                    gruppenMail = SqlInfo.holeFelder("select groupname,groupmembers,id from pimailgroup");
-                    Collections.sort(gruppenMail, comparator);
-                    setRechte();
-                    // System.out.println(einzelMail);
-                    // System.out.println(gruppenMail);
-                    /*********************************/
-                    if (!DbOk) {
-                        JOptionPane.showMessageDialog(null,
-                                "Datenbank konnte nicht geöffnet werden!\\nReha-Sql kann nicht gestartet werden");
-                    }
-                    xapplication.getJFrame();
-                    if (timerdelay > 0) {
-                        xapplication.starteTimer();
-                    }
-
-                    return null;
-                }
-
-            }.execute();
-
-            new Thread() {
-                @Override
-                public void run() {
-                    RehaMail.starteOfficeApplication();
-                }
-            }.start();
-
-        } else {
+        if (args.length == 0 ) {
 
             JOptionPane.showMessageDialog(null,
                     "Keine Datenbankparameter übergeben!\\nReha-Sql kann nicht gestartet werden");
-            System.exit(0);
+            return;
 
         }
 
+        progHome = args[0];
+        String aktik = args[1];
+        if (args.length >= 3) {
+            String port = args[2];
+            rehaReversePort = Integer.parseInt(port);
+        }
+        if (args.length >= 4) {
+            String mailuser = args[3].replace("#", " ");
+            mailUser = mailuser;
+        }
+
+        aktIK = aktik;
+
+       LOGGER.info("hole daten aus INI-Datei " + progHome);
+        INITool.init(progHome + "ini/" + aktik + "/");
+
+        officeapplication = OOTools.initOffice(progHome, aktik);
+
+      Settings  nachrichtenini = INITool.openIni(progHome + "ini/" + aktik + "/", "nachrichten.ini");
+        try {
+            timerdelay = Long.parseLong(nachrichtenini.getStringProperty("RehaNachrichten", "NachrichtenTimer"));
+            timerpopup = (Integer.parseInt(nachrichtenini.getStringProperty("RehaNachrichten", "NachrichtenPopUp")) <= 0
+                    ? false
+                    : true);
+            timerprogressbar = (Integer.parseInt(
+                    nachrichtenini.getStringProperty("RehaNachrichten", "NachrichtenProgressbar")) <= 0 ? false : true);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null,
+                    "Fehler in der nachrichten.ini\nEs wird versucht die ini neu zu schreiben.\nStarten Sie im Anschluß Thera-Pi Nachrichten erneut");
+            nachrichtenini.setStringProperty("RehaNachrichten", "NachrichtenTimer", "600000", null);
+            nachrichtenini.setStringProperty("RehaNachrichten", "NachrichtenPopUp", "1", null);
+            nachrichtenini.setStringProperty("RehaNachrichten", "NachrichtenProgressbar", "1", null);
+            System.exit(0);
+        }
+        try {
+         Settings   fremdprogIni = INITool.openIni(progHome + "ini/" + aktik + "/", "fremdprog.ini");
+            pdfReader = fremdprogIni.getStringProperty("FestProg", "FestProgPfad1");
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Fehler in der fremdprog.ini");
+        }
+
+        RehaMail application = new RehaMail();
+        application.getInstance().sqlInfo = new SqlInfo();
+        final RehaMail xapplication = application;
+        new SwingWorker<Void, Void>() {
+            @Override
+            protected Void doInBackground() throws java.lang.Exception {
+
+                xapplication.starteDB();
+                long zeit = System.currentTimeMillis();
+                while (!DbOk) {
+                    try {
+                        Thread.sleep(20);
+                        if (System.currentTimeMillis() - zeit > 5000) {
+                            System.exit(0);
+                        }
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                /*********************************/
+
+                Verschluesseln man = Verschluesseln.getInstance();
+                einzelMail = SqlInfo.holeFelder("select user,rights,id from rehalogin");
+                for (int i = 0; i < einzelMail.size(); i++) {
+                    einzelMail.get(i)
+                              .set(0, man.decrypt(einzelMail.get(i)
+                                                            .get(0)));
+                    einzelMail.get(i)
+                              .set(1, man.decrypt(einzelMail.get(i)
+                                                            .get(1)));
+                }
+                Vector<String> vdummy = new Vector<String>();
+                vdummy.add("");
+                vdummy.add("kein Passwort");
+                einzelMail.insertElementAt((Vector<String>) vdummy.clone(), 0);
+                Comparator<Vector<String>> comparator = new Comparator<Vector<String>>() {
+                    @Override
+                    public int compare(Vector<String> o1, Vector<String> o2) {
+                        String s1 = o1.get(0);
+                        String s2 = o2.get(0);
+                        return s1.compareTo(s2);
+                    }
+                };
+                Collections.sort(einzelMail, comparator);
+                gruppenMail = SqlInfo.holeFelder("select groupname,groupmembers,id from pimailgroup");
+                Collections.sort(gruppenMail, comparator);
+                setRechte();
+                // System.out.println(einzelMail);
+                // System.out.println(gruppenMail);
+                /*********************************/
+                if (!DbOk) {
+                    JOptionPane.showMessageDialog(null,
+                            "Datenbank konnte nicht geöffnet werden!\\nReha-Sql kann nicht gestartet werden");
+                }
+                xapplication.getJFrame();
+                if (timerdelay > 0) {
+                    xapplication.starteTimer();
+                }
+
+                return null;
+            }
+
+        }.execute();
+
+
+
+    }
+
+    private static void startLogging() {
+        String path = "./logs/conf/" + "mail" + ".xml";
+        System.setProperty(ContextInitializer.CONFIG_FILE_PROPERTY, path);
+
+        SysOutOverSLF4J.sendSystemOutAndErrToSLF4J();
     }
 
     public static void setRechte() {
@@ -484,8 +476,6 @@ public class RehaMail implements WindowListener {
 
     public void starteDB() {
 
-        // piHelpDatenbankStarten dbstart = new piHelpDatenbankStarten();
-        // dbstart.run();
 
         DatenbankStarten dbstart = new DatenbankStarten();
         dbstart.run();
@@ -728,21 +718,7 @@ public class RehaMail implements WindowListener {
 
     }
 
-    /**
-     * @throws Throwable
-     *************************/
 
-    public static void starteOfficeApplication() {
-
-        try {
-            System.out.println(RehaMail.officeProgrammPfad + " / " + RehaMail.officeNativePfad);
-            new OOService().start(officeNativePfad, officeProgrammPfad);
-            officeapplication = new OOService().getOfficeapplication();
-            System.out.println("OpenOffice ist gestartet und Active =" + officeapplication.isActive());
-        } catch (OfficeApplicationException | FileNotFoundException e1) {
-            e1.printStackTrace();
-        }
-    }
 
     public final static String notread = "{\\rtf1\\ansi\\deff0\\adeflang1025"
             + "{\\fonttbl{\\f0\\froman\\fprq2\\fcharset0 Times New Roman;}{\\f1\\froman\\fprq2\\fcharset2 Symbol;}{\\f2\\fswiss\\fprq2\\fcharset0 Arial;}{\\f3\\fswiss\\fprq2\\fcharset128 Arial;}{\\f4\\fnil\\fprq2\\fcharset0 Microsoft YaHei;}{\\f5\\fnil\\fprq2\\fcharset0 Mangal;}{\\f6\\fnil\\fprq0\\fcharset0 Mangal;}}"

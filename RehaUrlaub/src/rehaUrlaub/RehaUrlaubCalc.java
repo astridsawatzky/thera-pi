@@ -2,6 +2,8 @@ package rehaUrlaub;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.text.DecimalFormat;
 
 import javax.swing.JOptionPane;
@@ -18,15 +20,11 @@ import com.sun.star.sheet.XSpreadsheet;
 import com.sun.star.sheet.XSpreadsheets;
 import com.sun.star.uno.UnoRuntime;
 
-import CommonTools.FileTools;
-import CommonTools.OOTools;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
-import ag.ion.bion.officelayer.document.DocumentDescriptor;
 import ag.ion.bion.officelayer.document.IDocument;
-import ag.ion.bion.officelayer.document.IDocumentDescriptor;
-import ag.ion.bion.officelayer.document.IDocumentService;
 import ag.ion.bion.officelayer.spreadsheet.ISpreadsheetDocument;
 import ag.ion.noa.NOAException;
+import office.OOTools;
 
 public class RehaUrlaubCalc {
 
@@ -72,45 +70,42 @@ public class RehaUrlaubCalc {
     }
 
     private boolean testeObExistiert(String jahr, String user) {
-        boolean ret = false;
         String vorlage = RehaUrlaub.urlaubsDateiVorlage.replace(".ods", "");
         String pfadvorlage = RehaUrlaub.progHome + "vorlagen/" + RehaUrlaub.aktIK + "/"
                 + RehaUrlaub.urlaubsDateiVorlage;
         this.urlaubsdatei = RehaUrlaub.progHome + "urlaub/" + RehaUrlaub.aktIK + "/" + vorlage + "_" + jahr + "_" + user
                 + ".ods";
         File f = new File(urlaubsdatei);
-        if (!f.exists()) {
+        if (f.exists()) {
+            return true;
+        } else {
             JOptionPane.showMessageDialog(null,
                     "Urlaubstabelle für das Jahr -> " + jahr + " <- und User -> " + user + " <- wird angelegt");
             try {
-                FileTools.copyFile(new File(pfadvorlage), f, 8192, true);
+                f.getParentFile().mkdirs();
+                Files.copy(new File(pfadvorlage).toPath(), f.toPath(),StandardCopyOption.REPLACE_EXISTING);
+                return true;
             } catch (IOException e) {
                 JOptionPane.showMessageDialog(null, "Fehler beim anlegen der Urlaubstabelle");
                 e.printStackTrace();
+                return false;
             }
-        } else {
-            // System.out.println(pfadvorlage);
-            // System.out.println(urlaubsdatei);
         }
-        return ret;
+
     }
 
     private void starteCalc()
             throws OfficeApplicationException, NOAException, NoSuchElementException, WrappedTargetException {
-        if (!RehaUrlaub.officeapplication.isActive()) {
-            RehaUrlaub.starteOfficeApplication();
-        }
-        IDocumentService documentService = RehaUrlaub.officeapplication.getDocumentService();
-        IDocumentDescriptor docdescript = new DocumentDescriptor();
-        docdescript.setHidden(true);
-        docdescript.setAsTemplate(false);
-        document = documentService.loadDocument(this.urlaubsdatei, docdescript);
-        spreadsheetDocument = (ISpreadsheetDocument) document;
+
+
+
+
+        spreadsheetDocument =  OOTools.starteCalcMitDatei(urlaubsdatei);;
         // Tools.OOTools.setzePapierFormatCalc((ISpreadsheetDocument)
         // spreadsheetDocument, 21000, 29700);
         // Tools.OOTools.setzeRaenderCalc((ISpreadsheetDocument) spreadsheetDocument,
         // 1000,1000, 1000, 1000);
-
+document = spreadsheetDocument;
         XSpreadsheets spreadsheets = spreadsheetDocument.getSpreadsheetDocument()
                                                         .getSheets();
         String sheetName = "Tabelle1";

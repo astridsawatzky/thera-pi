@@ -22,7 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class SqlInfo {
-    private static Logger logger = LoggerFactory.getLogger(SqlInfo.class);
+    static Logger logger = LoggerFactory.getLogger(SqlInfo.class);
     private static JFrame frame;
     static Connection conn;
     private static InetAddress dieseMaschine;
@@ -185,7 +185,7 @@ public class SqlInfo {
         return vec;
     }
 
-    private static Vector<String> holeFeldForUpdate(String tabelle, String feld, String kriterium) {
+    static Vector<String> holeFeldForUpdate(String tabelle, String feld, String kriterium) {
         Vector<String> retvec = new Vector<>();
         String sstmt = "select " + feld + " from " + tabelle + kriterium;
 
@@ -374,41 +374,6 @@ public class SqlInfo {
                 conn.setAutoCommit(true);
             } catch (SQLException e) {
                 e.printStackTrace();
-            }
-        }
-        numvec = null;
-        return reznr;
-    }
-
-    public static int erzeugeNummerMitMax(String nummer, int max) {
-        int reznr = -1;
-        /* Zunächst eine neue Rezeptnummer holen */
-        Vector<String> numvec = null;
-        try {
-            conn.setAutoCommit(false);
-
-            numvec = holeFeldForUpdate("nummern", nummer + ",id", " FOR UPDATE");
-        } catch (SQLException e) {
-            logger.error("something bad happens here", e);
-        }
-        if (!numvec.isEmpty()) {
-            reznr = Integer.parseInt(numvec.get(0));
-            if (reznr + 1 > max) {
-                reznr = 1;
-            }
-            String cmd = "update nummern set " + nummer + "='" + (reznr + 1) + "' where id='" + numvec.get(1) + "'";
-            new ExUndHop().setzeStatement(cmd);
-            try {
-                conn.setAutoCommit(true);
-            } catch (SQLException e) {
-                logger.error("something bad happens here", e);
-            }
-        } else {
-            try {
-                conn.rollback();
-                conn.setAutoCommit(true);
-            } catch (SQLException e) {
-                logger.error("something bad happens here", e);
             }
         }
         numvec = null;

@@ -34,6 +34,7 @@ import CommonTools.ini.Settings;
 import environment.Path;
 import gui.Cursors;
 import hauptFenster.Reha;
+import office.OOService;
 
 public class SysUtilFremdprogramme extends JXPanel implements KeyListener, ActionListener {
 
@@ -127,7 +128,7 @@ public class SysUtilFremdprogramme extends JXPanel implements KeyListener, Actio
 
         // progtab = new JXTable();
         oopfad = new JTextField();
-        oopfad.setText(SystemConfig.OpenOfficePfad);
+        oopfad.setText(OOService.OpenOfficePfad);
         adobepfad = new JTextField();
         adobepfad.setText(SystemConfig.hmFremdProgs.get("AcrobatReader"));
         grafpfad = new JTextField();
@@ -333,10 +334,10 @@ public class SysUtilFremdprogramme extends JXPanel implements KeyListener, Actio
         wert = oopfad.getText()
                      .trim();
         inif.setStringProperty("OpenOffice.org", "OfficePfad", wert, null);
-        SystemConfig.OpenOfficePfad = wert;
+        OOService.OpenOfficePfad = wert;
         wert = Path.Instance.getProghome() + "Libraries/lib/openofficeorg";
         inif.setStringProperty("OpenOffice.org", "OfficeNativePfad", wert, null);
-        SystemConfig.OpenOfficeNativePfad = wert;
+        OOService.OpenOfficeNativePfad = wert;
         INITool.saveIni(inif);
         SystemConfig.FremdProgs();
         JOptionPane.showMessageDialog(null, "Einstellungen Fremdprogramme wurden erfolgreich gespeichert");

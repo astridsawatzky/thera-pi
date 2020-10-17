@@ -29,6 +29,7 @@ import org.jdesktop.swingx.JXFrame;
 import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.JXTitledPanel;
 
+import gui.Cursors;
 import rehaHMK.RehaHMK;
 
 public class RehaSmartDialog extends JXDialog
@@ -36,7 +37,7 @@ public class RehaSmartDialog extends JXDialog
 //public class RehaSmartDialog extends JXDialog implements RehaTPEventListener{
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = -8192593796486061674L;
 
@@ -118,7 +119,7 @@ public class RehaSmartDialog extends JXDialog
 
     /**
      * This method initializes this
-     * 
+     *
      * @return void
      */
     private void initialize() {
@@ -139,7 +140,7 @@ public class RehaSmartDialog extends JXDialog
 
     /**
      * This method initializes jContentPane
-     * 
+     *
      * @return javax.swing.JPanel
      */
     private JPanel getJContentPane() {
@@ -154,7 +155,7 @@ public class RehaSmartDialog extends JXDialog
 
     /**
      * This method initializes JXTitledPanel
-     * 
+     *
      * @return org.jdesktop.swingx.JXTitledPanel
      */
     private JXTitledPanel getJXTitledPanel() {
@@ -275,7 +276,6 @@ public class RehaSmartDialog extends JXDialog
 
     @Override
     public void windowActivated(java.awt.event.WindowEvent e) {
-        // RehaHMK.thisClass.shiftLabel.setText("Dialog -Focus da");
         if (pinPanel != null) {
             jtp.getContentContainer()
                .requestFocus();
@@ -288,20 +288,16 @@ public class RehaSmartDialog extends JXDialog
 
         ListenerSchliessen();
         this.removeWindowListener(this);
-        // System.out.println("Basisklasse wird geschlossen - "+getName()+" IgnoreReturn
-        // = "+ignorereturn);
 
     }
 
     @Override
     public void windowClosing(WindowEvent arg0) {
-        // System.out.println("In Closing der Elternklasse "+arg0);
 
     }
 
     @Override
     public void windowDeactivated(java.awt.event.WindowEvent e) {
-        // RehaHMK.thisClass.shiftLabel.setText("Dialog -Focus weg");
         if (pinPanel != null) {
             pinPanel.SetzeAktivButton(false);
         }
@@ -330,7 +326,6 @@ public class RehaSmartDialog extends JXDialog
 
     @Override
     public void mouseClicked(MouseEvent arg0) {
-        //// System.out.println("In Click Klick Y bei "+arg0);
 
     }
 
@@ -351,7 +346,6 @@ public class RehaSmartDialog extends JXDialog
 
     @Override
     public void mousePressed(java.awt.event.MouseEvent e) {
-        //// System.out.println("Klick bei "+e.getY());
         if (e.getY() <= 25) {
             clickY = e.getY();
             clickX = e.getX();
@@ -366,17 +360,15 @@ public class RehaSmartDialog extends JXDialog
 
     @Override
     public void mouseReleased(java.awt.event.MouseEvent e) {
-        // final java.awt.event.MouseEvent ex = e;
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                setCursor(RehaHMK.thisClass.cdefault);
+                setCursor(Cursors.cdefault);
                 clickX = -1;
                 clickY = -1;
                 orgbounds[0] = -1;
                 orgbounds[1] = -1;
                 insize = false;
-                setCursor(RehaHMK.thisClass.cdefault);
                 hilfsint = getWidth() / 2;
                 waagrecht[0] = hilfsint - 15;
                 waagrecht[1] = hilfsint + 15;
@@ -390,27 +382,19 @@ public class RehaSmartDialog extends JXDialog
 
     @Override
     public void mouseDragged(java.awt.event.MouseEvent e) {
-        // int center = (int) getSize().getHeight();
-        //// System.out.println("in Mousedragged");
-        //// System.out.println("Insize = "+insize+" clickY="+clickY);
-        //// System.out.println("Klick Y bei "+e.getY());
-        // clickX = e.getX();
+
         if (!insize && clickY > 0) {
-            // RehaSmartDialog.thisClass.getLocationOnScreen();
-            //// System.out.println("in Mousedragged");
             final java.awt.event.MouseEvent ex = e;
             SwingUtilities.invokeLater(new Runnable() {
                 @Override
                 public void run() {
-                    setCursor(RehaHMK.thisClass.cmove);
+                    setCursor(Cursors.cmove);
                     setLocation(ex.getXOnScreen() - clickX, ex.getYOnScreen() - clickY);
                 }
             });
 
         } else if (insize) {
             final java.awt.event.MouseEvent ex = e;
-//			SwingUtilities.invokeLater(new Runnable(){
-//				public  void run(){
 
             Dimension dim = getSize();
             int oX = ex.getXOnScreen();
@@ -426,7 +410,7 @@ public class RehaSmartDialog extends JXDialog
                     orgbounds[1] = oY;
                     setSize(dim);
                     setLocation(ex.getXOnScreen(), ex.getYOnScreen());
-                    setCursor(RehaHMK.thisClass.cnwsize);
+                    setCursor(Cursors.cnwsize);
                     break;
                 }
                 if (sizeart == 2) { // nord-ost
@@ -439,7 +423,7 @@ public class RehaSmartDialog extends JXDialog
                     orgbounds[1] = oY;
                     setSize(dim);
                     setLocation(ex.getXOnScreen() - dim.width, ex.getYOnScreen());
-                    setCursor(RehaHMK.thisClass.cnesize);
+                    setCursor(Cursors.cnesize);
                     break;
                 }
                 if (sizeart == 3) { // nord
@@ -451,7 +435,7 @@ public class RehaSmartDialog extends JXDialog
                     orgbounds[1] = oY;
                     setSize(dim);
                     setLocation(ex.getXOnScreen() - ex.getX(), ex.getYOnScreen());
-                    setCursor(RehaHMK.thisClass.cnsize);
+                    setCursor(Cursors.cnsize);
                     break;
                 }
                 if (sizeart == 4) { // s�d-west
@@ -464,7 +448,7 @@ public class RehaSmartDialog extends JXDialog
                     orgbounds[1] = oY;
                     setSize(dim);
                     setLocation(ex.getXOnScreen(), ex.getYOnScreen() - dim.height);
-                    setCursor(RehaHMK.thisClass.cswsize);
+                    setCursor(Cursors.cswsize);
                     break;
                 }
                 if (sizeart == 5) { // west
@@ -475,7 +459,7 @@ public class RehaSmartDialog extends JXDialog
                     orgbounds[1] = oY;
                     setSize(dim);
                     setLocation(ex.getXOnScreen(), ex.getYOnScreen() - ex.getY());
-                    setCursor(RehaHMK.thisClass.cwsize);
+                    setCursor(Cursors.cwsize);
                     break;
                 }
                 if (sizeart == 6) { // s�d-ost
@@ -488,7 +472,7 @@ public class RehaSmartDialog extends JXDialog
                     orgbounds[1] = oY;
                     setSize(dim);
                     setLocation(ex.getXOnScreen() - dim.width, ex.getYOnScreen() - dim.height);
-                    setCursor(RehaHMK.thisClass.cwsize);
+                    setCursor(Cursors.cwsize);
                     break;
                 }
                 if (sizeart == 7) { // s�d
@@ -500,7 +484,7 @@ public class RehaSmartDialog extends JXDialog
                     orgbounds[1] = oY;
                     setSize(dim);
                     setLocation(ex.getXOnScreen() - ex.getX(), ex.getYOnScreen() - dim.height);
-                    setCursor(RehaHMK.thisClass.cssize);
+                    setCursor(Cursors.cssize);
                     break;
                 }
                 if (sizeart == 8) { // ost
@@ -511,20 +495,18 @@ public class RehaSmartDialog extends JXDialog
                     orgbounds[1] = oY;
                     setSize(dim);
                     setLocation(ex.getXOnScreen() - ex.getX(), ex.getYOnScreen() - ex.getY());
-                    setCursor(RehaHMK.thisClass.cesize);
+                    setCursor(Cursors.cesize);
                     break;
                 }
 
                 insize = false;
-                setCursor(RehaHMK.thisClass.cdefault);
+                setCursor(Cursors.cdefault);
             }
-            // }
-            // });
 
         } else {
 
             insize = false;
-            setCursor(RehaHMK.thisClass.cdefault);
+            setCursor(Cursors.cdefault);
         }
     }
 
@@ -532,13 +514,13 @@ public class RehaSmartDialog extends JXDialog
     public void mouseMoved(java.awt.event.MouseEvent e) {
         for (int i = 0; i < 1; i++) {
             sizeart = -1;
-            setCursor(RehaHMK.thisClass.cdefault);
+            setCursor(Cursors.cdefault);
             if ((e.getX() <= 4 && e.getY() <= 4)) { // nord-west
                 insize = true;
                 sizeart = 1;
                 orgbounds[0] = e.getXOnScreen();
                 orgbounds[1] = e.getYOnScreen();
-                setCursor(RehaHMK.thisClass.cnwsize);
+                setCursor(Cursors.cnwsize);
                 break;
             }
             if ((e.getX() >= (((JComponent) e.getSource()).getWidth() - 4)) && e.getY() <= 4) {// nord-ost
@@ -546,7 +528,7 @@ public class RehaSmartDialog extends JXDialog
                 sizeart = 2;
                 orgbounds[0] = e.getXOnScreen();
                 orgbounds[1] = e.getYOnScreen();
-                setCursor(RehaHMK.thisClass.cnesize);
+                setCursor(Cursors.cnesize);
                 break;
             }
             if (e.getY() <= 6 && WertZwischen(e.getX(), waagrecht[0], waagrecht[1])) {// nord
@@ -554,7 +536,7 @@ public class RehaSmartDialog extends JXDialog
                 sizeart = 3;
                 orgbounds[0] = e.getXOnScreen();
                 orgbounds[1] = e.getYOnScreen();
-                setCursor(RehaHMK.thisClass.cnsize);
+                setCursor(Cursors.cnsize);
                 break;
             }
             if ((e.getX() <= 4 && e.getY() >= (((JComponent) e.getSource()).getHeight() - 4))) { // s�d-west
@@ -562,7 +544,7 @@ public class RehaSmartDialog extends JXDialog
                 sizeart = 4;
                 orgbounds[0] = e.getXOnScreen();
                 orgbounds[1] = e.getYOnScreen();
-                setCursor(RehaHMK.thisClass.cswsize);
+                setCursor(Cursors.cswsize);
                 break;
             }
             if ((e.getX() <= 6) && WertZwischen(e.getY(), senkrecht[0], senkrecht[1])) { // west
@@ -570,7 +552,7 @@ public class RehaSmartDialog extends JXDialog
                 sizeart = 5;
                 orgbounds[0] = e.getXOnScreen();
                 orgbounds[1] = e.getYOnScreen();
-                setCursor(RehaHMK.thisClass.cwsize);
+                setCursor(Cursors.cwsize);
                 break;
             }
             if ((e.getX() >= (((JComponent) e.getSource()).getWidth() - 4)) && // s�d-ost
@@ -579,7 +561,7 @@ public class RehaSmartDialog extends JXDialog
                 sizeart = 6;
                 orgbounds[0] = e.getXOnScreen();
                 orgbounds[1] = e.getYOnScreen();
-                setCursor(RehaHMK.thisClass.csesize);
+                setCursor(Cursors.csesize);
                 break;
             }
             if (e.getY() >= (((JComponent) e.getSource()).getHeight() - 4)
@@ -588,7 +570,7 @@ public class RehaSmartDialog extends JXDialog
                 sizeart = 7;
                 orgbounds[0] = e.getXOnScreen();
                 orgbounds[1] = e.getYOnScreen();
-                setCursor(RehaHMK.thisClass.cssize);
+                setCursor(Cursors.cssize);
                 break;
             }
             if (e.getX() >= (((JComponent) e.getSource()).getWidth() - 6)
@@ -597,13 +579,13 @@ public class RehaSmartDialog extends JXDialog
                 sizeart = 8;
                 orgbounds[0] = e.getXOnScreen();
                 orgbounds[1] = e.getYOnScreen();
-                setCursor(RehaHMK.thisClass.cesize);
+                setCursor(Cursors.cesize);
                 break;
             }
 
             insize = false;
             sizeart = -1;
-            setCursor(RehaHMK.thisClass.cdefault);
+            setCursor(Cursors.cdefault);
 
         }
     }

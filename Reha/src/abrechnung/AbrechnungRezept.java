@@ -115,7 +115,7 @@ import jxTableTools.DoubleTableCellRenderer;
 import jxTableTools.MitteRenderer;
 import jxTableTools.MyTableCheckBox;
 import jxTableTools.MyTableComboBox;
-import oOorgTools.OOTools;
+import oOorgTools.RehaOOTools;
 import patientenFenster.KassenAuswahl;
 import patientenFenster.PatUndVOsuchen;
 import patientenFenster.RezNeuanlage;
@@ -1086,7 +1086,7 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener, Acti
             String formular = Path.Instance.getProghome() + "vorlagen/" + Reha.getAktIK() + "/"
                     + tbcombo.getSelectedItem()
                              .toString();
-            OOTools.starteTaxierung(formular, taxWerte);
+            RehaOOTools.starteTaxierung(formular, taxWerte,Reha.instance);
         } catch (OfficeApplicationException e) {
             e.printStackTrace();
         } catch (NOAException e) {

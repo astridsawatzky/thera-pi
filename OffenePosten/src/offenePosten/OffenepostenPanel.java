@@ -37,20 +37,9 @@ import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
-import CommonTools.ButtonTools;
-import CommonTools.DatFunk;
-import CommonTools.DateTableCellEditor;
-import CommonTools.DblCellEditor;
-import CommonTools.DoubleTableCellRenderer;
-import CommonTools.JCompTools;
-import CommonTools.JRtaCheckBox;
-import CommonTools.JRtaComboBox;
-import CommonTools.JRtaTextField;
-import CommonTools.MitteRenderer;
-import CommonTools.OpShowGesamt;
-import CommonTools.SqlInfo;
-import offenePosten.RehaIO.SocketClient;
+import CommonTools.*;
 import io.RehaIOMessages;
+import offenePosten.RehaIO.SocketClient;
 
 public class OffenepostenPanel extends JXPanel implements TableModelListener {
 

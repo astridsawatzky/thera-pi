@@ -38,18 +38,7 @@ import org.jdesktop.swingx.decorator.HighlighterFactory;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
-import CommonTools.ButtonTools;
-import CommonTools.DatFunk;
-import CommonTools.DateTableCellEditor;
-import CommonTools.DblCellEditor;
-import CommonTools.DoubleTableCellRenderer;
-import CommonTools.JCompTools;
-import CommonTools.JRtaCheckBox;
-import CommonTools.JRtaTextField;
-import CommonTools.SqlInfo;
-import CommonTools.TableTool;
-import offenePosten.Tools.PatTools;
-import offenePosten.Tools.RezTools;
+import CommonTools.*;
 import ag.ion.bion.officelayer.document.DocumentDescriptor;
 import ag.ion.bion.officelayer.document.IDocument;
 import ag.ion.bion.officelayer.document.IDocumentDescriptor;
@@ -61,6 +50,8 @@ import ag.ion.bion.officelayer.text.ITextTable;
 import ag.ion.bion.officelayer.text.TextException;
 import offenePosten.OffenePosten;
 import offenePosten.OffenepostenTab;
+import offenePosten.Tools.PatTools;
+import offenePosten.Tools.RezTools;
 import office.OOService;
 
 public class RehaBillPanel extends JXPanel implements   TableModelListener {

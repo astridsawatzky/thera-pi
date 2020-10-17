@@ -60,8 +60,8 @@ import events.PatStammEventClass;
 import events.RehaTPEventClass;
 import hauptFenster.Reha;
 import jxTableTools.TableTool;
-import oOorgTools.OOTools;
 import office.OOService;
+import office.OOTools;
 import stammDatenTools.RezTools;
 import systemEinstellungen.SystemConfig;
 import systemEinstellungen.SystemPreislisten;
@@ -1641,6 +1641,7 @@ public class AbrechnungPrivat extends JXDialog {
                 exemplare = Integer.parseInt(hmAbrechnung.get("hmbgeexemplare"));
             }
             OOTools.printAndClose(textDocument, exemplare);
+
         }
     }
 

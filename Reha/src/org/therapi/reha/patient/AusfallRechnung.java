@@ -45,7 +45,8 @@ import environment.Path;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
 import hauptFenster.Reha;
-import oOorgTools.OOTools;
+import office.OOService;
+import office.OOTools;
 import systemEinstellungen.SystemConfig;
 import systemTools.LeistungTools;
 
@@ -258,7 +259,7 @@ public class AusfallRechnung extends RehaSmartDialog implements ActionListener {
             }.execute();
             /*
              * new SwingWorker<Void,Void>(){
-             * 
+             *
              * @Override protected Void doInBackground() throws Exception {
              * if(leistung[4].isSelected()){ macheMemoEintrag(); } return null; }
              * }.execute(); this.dispose();
@@ -381,11 +382,11 @@ public class AusfallRechnung extends RehaSmartDialog implements ActionListener {
     public static void starteAusfallRechnung(String url) {
         IDocumentService documentService = null;
         // System.out.println("Starte Datei -> "+url);
-        if (!Reha.officeapplication.isActive()) {
+        if (!new OOService().getOfficeapplication().isActive()) {
             Reha.starteOfficeApplication();
         }
         try {
-            documentService = Reha.officeapplication.getDocumentService();
+            documentService = new OOService().getOfficeapplication().getDocumentService();
         } catch (OfficeApplicationException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(null,

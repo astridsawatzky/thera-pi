@@ -36,7 +36,6 @@ import com.sun.star.uno.UnoRuntime;
 
 import CommonTools.DatFunk;
 import CommonTools.JRtaTextField;
-import CommonTools.OOTools;
 import CommonTools.SqlInfo;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import ag.ion.bion.officelayer.document.DocumentDescriptor;
@@ -48,6 +47,7 @@ import ag.ion.noa.NOAException;
 import gui.Cursors;
 import hauptFenster.Reha;
 import office.OOService;
+import office.OOTools;
 import rehaInternalFrame.JUmsaetzeInternal;
 import stammDatenTools.RezTools;
 import systemTools.ButtonTools;

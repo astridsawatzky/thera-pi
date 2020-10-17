@@ -54,7 +54,7 @@ import gui.Cursors;
 import hauptFenster.Reha;
 import jxTableTools.DateTableCellEditor;
 import jxTableTools.TableTool;
-import oOorgTools.OOTools;
+import oOorgTools.RehaOOTools;
 import patientenFenster.HistorDaten;
 import patientenFenster.KeinRezept;
 import rechteTools.Rechte;
@@ -996,9 +996,9 @@ public class Historie extends JXPanel implements ActionListener, TableModelListe
             String bezdatum = SqlInfo.holeEinzelFeld("select datum from kasse where rez_nr = '" + sreznum
                     + "' or ktext like '%" + sreznum + "%'LIMIT 1");
             SystemConfig.hmRgkDaten.put("<Rgkbezahldatum>", String.valueOf(DatFunk.sDatInDeutsch(bezdatum)));
-            OOTools.starteRGKopie(
+            RehaOOTools.starteRGKopie(
                     Path.Instance.getProghome() + "vorlagen/" + Reha.getAktIK() + "/Rezeptgebuehr.ott.Kopie.ott",
-                    SystemConfig.rezGebDrucker);
+                    SystemConfig.rezGebDrucker,Reha.instance);
             return;
         }
         if (einnahme.equals("")) {

@@ -41,38 +41,31 @@ import ag.ion.bion.officelayer.text.TextException;
 import ag.ion.bion.officelayer.web.IWebDocument;
 import ag.ion.noa.NOAException;
 import ag.ion.noa.frame.ILayoutManager;
+import office.OOService;
 
 public class OOoPanel {
+    public ITextDocument doc;
+    public IFrame frame;
+    public ICloseListener clListener;
 
-    public ITextDocument doc = null;
-    public IFrame frame = null;
-    public ICloseListener clListener = null;
 
-    private XExtendedToolkit extendedToolkit = null;
-    private com.sun.star.awt.XTopWindowListener topWindowListener = null;
-    private XFrame xxframe = null;
-    private XTopWindow myTopWindow = null;
-    static OOoPanel thisClass;
-    public JPanel noaPanel = null;
-    private static IFrame officeFrame = null;
-    static ITextDocument document = null;
+    public JPanel noaPanel;
+    private static IFrame officeFrame;
+    static ITextDocument document;
     public static ITextDocument textDocument;
-    public static IWebDocument webdocument = null;
+    public static IWebDocument webdocument;
     public static IWebDocument webtextDocument;
-    final static int ANSICHT_WEB = 1;
-    final static int ANSICHT_DOKUMENT = 0;
-    public static int ansicht = 0;
-    DokumentListener doclistener = null;
+    static final int ANSICHT_WEB = 1;
+    static final int ANSICHT_DOKUMENT = 0;
+    public static int ansicht;
+    DokumentListener doclistener;
 
     public OOoPanel(JPanel jpan) {
-        super();
         noaPanel = jpan;
-        thisClass = this;
         fillNOAPanel();
         try {
-            configureOOOFrame(GBriefe.officeapplication, officeFrame);
+            configureOOOFrame(GBriefe.officeapplication.get(), officeFrame);
         } catch (Throwable e) {
-
             e.printStackTrace();
         }
     }
@@ -89,15 +82,10 @@ public class OOoPanel {
             // document = (ITextDocument)
             // GBriefe.officeapplication.getDocumentService().loadDocument(datei,
             // docdescript);
-            document = (ITextDocument) GBriefe.officeapplication.getDocumentService()
+            document = (ITextDocument) GBriefe.officeapplication.get().getDocumentService()
                                                                 .loadDocument(officeFrame, datei, docdescript);
             document.zoom(DocumentZoomType.BY_VALUE, (short) 75);
-
-        } catch (OfficeApplicationException e) {
-
-            e.printStackTrace();
-        } catch (DocumentException e) {
-
+        } catch (OfficeApplicationException | DocumentException e) {
             e.printStackTrace();
         }
 
@@ -106,15 +94,14 @@ public class OOoPanel {
         try {
             placeholders = textFieldService.getPlaceholderFields();
         } catch (TextException e) {
-
             e.printStackTrace();
         }
-        int alter = new Integer((String) vec.get(6));
+        int alter = Integer.parseInt((String) vec.get(6));
         for (int i = 0; i < placeholders.length; i++) {
             String placeholderDisplayText = placeholders[i].getDisplayText();
             System.out.println("Platzhalter-Text = " + placeholderDisplayText);
 
-            if (placeholderDisplayText.equals("<Anrede>")) {
+            if ("<Anrede>".equals(placeholderDisplayText)) {
                 if (alter > 13) {
                     placeholders[i].getTextRange()
                                    .setText((String) vec.get(0));
@@ -123,23 +110,23 @@ public class OOoPanel {
                                    .setText("");
                 }
             }
-            if (placeholderDisplayText.equals("<Banrede>")) {
+            if ("<Banrede>".equals(placeholderDisplayText)) {
                 placeholders[i].getTextRange()
                                .setText((String) vec.get(1));
             }
-            if (placeholderDisplayText.equals("<Strasse>")) {
+            if ("<Strasse>".equals(placeholderDisplayText)) {
                 placeholders[i].getTextRange()
                                .setText((String) vec.get(3));
             }
-            if (placeholderDisplayText.equals("<Ort>")) {
+            if ("<Ort>".equals(placeholderDisplayText)) {
                 placeholders[i].getTextRange()
                                .setText((String) vec.get(4));
             }
-            if (placeholderDisplayText.equals("<BriefAnrede>")) {
+            if ("<BriefAnrede>".equals(placeholderDisplayText)) {
                 placeholders[i].getTextRange()
                                .setText((String) vec.get(2));
             }
-            if (placeholderDisplayText.equals("<Jahre>")) {
+            if ("<Jahre>".equals(placeholderDisplayText)) {
                 if (alter >= 20) {
                     placeholders[i].getTextRange()
                                    .setText((String) vec.get(6) + "-sten");
@@ -148,22 +135,18 @@ public class OOoPanel {
                                    .setText((String) vec.get(6) + "-ten");
                 }
             }
-
         }
         if (direktPrint) {
             try {
-
                 // document.getFrame().getXFrame().getContainerWindow().setVisible(true);
                 document.print();
                 Toolkit.getDefaultToolkit()
                        .beep();
                 SteuerPanel.thisClass.setzteFertig();
             } catch (DocumentException e) {
-
                 e.printStackTrace();
             }
         }
-
     }
 
     public void dokumentSchreibeText(String datei) {
@@ -172,38 +155,31 @@ public class OOoPanel {
         }
         DocumentDescriptor d = new DocumentDescriptor();
         try {
-            document = (ITextDocument) GBriefe.officeapplication.getDocumentService()
+            document = (ITextDocument) GBriefe.officeapplication.get().getDocumentService()
                                                                 .constructNewDocument(officeFrame, IDocument.WRITER, d);
-        } catch (NOAException e) {
-
-            e.printStackTrace();
-        } catch (OfficeApplicationException e) {
-
+        } catch (NOAException | OfficeApplicationException e) {
             e.printStackTrace();
         }
     }
 
-    /*********************************************************/
     private void fillNOAPanel() {
-        if (noaPanel != null) {
+        if (noaPanel != null && GBriefe.officeapplication.isPresent()) {
             try {
-                if (GBriefe.officeapplication == null) {
-                    GBriefe.officeapplication = startOOO();
-                }
-                officeFrame = constructOOOFrame(GBriefe.officeapplication, noaPanel);
+                IOfficeApplication officeApplication = GBriefe.officeapplication.get();
+                officeFrame = constructOOOFrame(officeApplication, noaPanel);
                 System.out.println("nach constructOOOFrame");
 
                 DocumentDescriptor d = new DocumentDescriptor();
                 d.setTitle("Geburtstagsbriefe");
-                document = (ITextDocument) GBriefe.officeapplication.getDocumentService()
+                document = (ITextDocument) officeApplication.getDocumentService()
                                                                     .constructNewDocument(officeFrame, IDocument.WRITER,
                                                                             d);
 
                 // textDocument = (ITextDocument)document;
                 if (doclistener == null) {
-                    doclistener = new DokumentListener(GBriefe.officeapplication);
+                    doclistener = new DokumentListener(officeApplication);
                 }
-                GBriefe.officeapplication.getDesktopService()
+                officeApplication.getDesktopService()
                                          .addDocumentListener(doclistener);
                 officeFrame.disableDispatch(GlobalCommands.CLOSE_DOCUMENT);
                 officeFrame.disableDispatch(GlobalCommands.QUIT_APPLICATION);
@@ -218,10 +194,8 @@ public class OOoPanel {
         }
     }
 
-    /*********************************************************/
-
     private IOfficeApplication startOOO() throws Throwable {
-        IApplicationAssistant applicationAssistant = new ApplicationAssistant(GBriefe.OfficeNativePfad);
+        IApplicationAssistant applicationAssistant = new ApplicationAssistant(OOService.OpenOfficeNativePfad);
         // IApplicationAssistant applicationAssistant = new
         // ApplicationAssistant(System.getProperty("user.dir") + "\\lib");
         ILazyApplicationInfo[] appInfos = applicationAssistant.getLocalApplications();
@@ -229,8 +203,9 @@ public class OOoPanel {
             System.out.println(appInfos[i]);
         }
 
-        if (appInfos.length < 1)
+        if (appInfos.length < 1) {
             throw new Throwable("No OpenOffice.org Application found.");
+        }
         HashMap configuration = new HashMap();
         configuration.put(IOfficeApplication.APPLICATION_HOME_KEY, appInfos[0].getHome());
         configuration.put(IOfficeApplication.APPLICATION_TYPE_KEY, IOfficeApplication.LOCAL_APPLICATION);
@@ -241,15 +216,13 @@ public class OOoPanel {
         return officeAplication;
     }
 
-    /*********************************************************/
-
     private IFrame constructOOOFrame(IOfficeApplication officeApplication, final Container parent) throws Throwable {
-        final NativeView nativeView = new NativeView(GBriefe.OfficeNativePfad);
+        final NativeView nativeView = new NativeView(OOService.OpenOfficeNativePfad);
 
         if (parent == null) {
             System.out.println("nativeView == null");
         }
-        System.out.println("Pfad = " + GBriefe.OfficeNativePfad);
+        System.out.println("Pfad = " + OOService.OpenOfficeNativePfad);
         parent.add(nativeView);
         System.out.println("nach add nativeView");
         parent.addComponentListener(new ComponentAdapter() {
@@ -281,7 +254,7 @@ public class OOoPanel {
          * layoutManager.showElement(ILayoutManager.URL_TOOLBAR_STANDARDBAR);
          * layoutManager.showElement(ILayoutManager.URL_TOOLBAR_TEXTOBJECTBAR);
          * layoutManager.showElement(ILayoutManager.URL_STATUSBAR);
-         * 
+         *
          * officeFrame.disableDispatch(GlobalCommands.CLOSE_DOCUMENT);
          * officeFrame.disableDispatch(GlobalCommands.CLOSE_WINDOW);
          * officeFrame.disableDispatch(GlobalCommands.QUIT_APPLICATION);
@@ -306,14 +279,10 @@ public class OOoPanel {
 
         // officeFrame.getDispatch(".uno:PrintLayout").dispatch();
     }
-
 }
 
-/******************************************************************/
-
 class DokumentListener implements IDocumentListener {
-
-    private IOfficeApplication officeAplication = null;
+    private IOfficeApplication officeAplication;
 
     public DokumentListener(IOfficeApplication officeAplication) {
         this.officeAplication = officeAplication;
@@ -321,110 +290,89 @@ class DokumentListener implements IDocumentListener {
 
     @Override
     public void onAlphaCharInput(IDocumentEvent arg0) {
-
     }
 
     @Override
     public void onFocus(IDocumentEvent arg0) {
-
     }
 
     @Override
     public void onInsertDone(IDocumentEvent arg0) {
-
     }
 
     @Override
     public void onInsertStart(IDocumentEvent arg0) {
-
     }
 
     @Override
     public void onLoad(IDocumentEvent arg0) {
-
     }
 
     @Override
     public void onLoadDone(IDocumentEvent arg0) {
-
         System.out.println("************************Dokument geladen************************* " + arg0);
-
     }
 
     @Override
     public void onLoadFinished(IDocumentEvent arg0) {
-
         System.out.println("************************Dokument geladen finished************************* " + arg0);
         /*
          * try {
          * Reha.officeapplication.getDesktopService().removeDocumentListener(this); }
          * catch (OfficeApplicationException e) {
-         * 
+         *
          * e.printStackTrace(); }
          */
     }
 
     @Override
     public void onModifyChanged(IDocumentEvent arg0) {
-
     }
 
     @Override
     public void onMouseOut(IDocumentEvent arg0) {
-
     }
 
     @Override
     public void onMouseOver(IDocumentEvent arg0) {
-
     }
 
     @Override
     public void onNew(IDocumentEvent arg0) {
-
     }
 
     @Override
     public void onNonAlphaCharInput(IDocumentEvent arg0) {
-
     }
 
     @Override
     public void onSave(IDocumentEvent arg0) {
-
         System.out.println("************************Dokument gespeichert - doneSave************************* " + arg0);
     }
 
     @Override
     public void onSaveAs(IDocumentEvent arg0) {
-
     }
 
     @Override
     public void onSaveAsDone(IDocumentEvent arg0) {
-
     }
 
     @Override
     public void onSaveDone(IDocumentEvent arg0) {
-
         System.out.println("************************Dokument gespeichert - done************************* " + arg0);
     }
 
     @Override
     public void onSaveFinished(IDocumentEvent arg0) {
-
         System.out.println("************************Dokument gespeichert - finished************************* " + arg0);
     }
 
     @Override
     public void onUnload(IDocumentEvent arg0) {
-
     }
 
     @Override
     public void disposing(IEvent arg0) {
-
     }
-
 }

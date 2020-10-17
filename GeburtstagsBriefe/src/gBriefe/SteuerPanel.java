@@ -59,6 +59,7 @@ public class SteuerPanel extends JXPanel implements ActionListener, MouseListene
     public int insgesamt;
     public Vector noPrint = new Vector();
     public JCheckBox direktPrint = null;
+    private OOoPanel oOoPanel;
 
     public SteuerPanel() {
 
@@ -74,8 +75,6 @@ public class SteuerPanel extends JXPanel implements ActionListener, MouseListene
         Point2D end = new Point2D.Float(0, 250);
         float[] dist = { 0.0f, 0.75f };
         Color[] colors = { Color.WHITE, new Color(231, 120, 23) };
-        // Color[] colors = {Color.WHITE,Colors.TaskPaneBlau.alpha(0.5f)};
-        // Color[] colors = {Color.WHITE,getBackground()};
         LinearGradientPaint p = new LinearGradientPaint(start, end, dist, colors);
         MattePainter mp = new MattePainter(p);
         setBackgroundPainter(new CompoundPainter(mp));
@@ -103,23 +102,16 @@ public class SteuerPanel extends JXPanel implements ActionListener, MouseListene
         JScrollPane jscr = new JScrollPane(getTabelle());
         jscr.validate();
         add(new JScrollPane(getTabelle()), cc.xyw(4, 4, 7));
-        // System.out.println("Grafik = "+GBriefe.proghome+"icons/rta.gif");
         lab = new JLabel();
-        // BufferedImage img =
-        // (BufferedImage)Toolkit.getDefaultToolkit().createImage(GBriefe.proghome+"icons/rta.gif");//
-        // Image(GBriefe.proghome+"icons/rta.gif");
         BufferedImage img = null;
         try {
-            // img = (BufferedImage) new ImageIcon(ImageIO.read(new
-            // File(GBriefe.proghome+"icons/rta.gif"))).getImage();
             img = (BufferedImage) new ImageIcon(
                     ImageIO.read(new File(Path.Instance.getProghome() + "icons/handschlag.gif"))).getImage();
         } catch (IOException e) {
 
             e.printStackTrace();
-        } // Image(GBriefe.proghome+"icons/rta.gif"))).getImage();
+        }
         lab.setIcon(new ImageIcon(img));
-        // lab.setIcon(new ImageIcon(img.getScaledInstance(150, 100,1)));
         add(lab, cc.xy(12, 4));
 
     }
@@ -129,7 +121,6 @@ public class SteuerPanel extends JXPanel implements ActionListener, MouseListene
 
         String comm = arg0.getActionCommand();
         if (comm.equals("datenholen")) {
-            // System.out.println("Geburtstage vom "+suchdatum.getText().trim());
             new GeburtstagHolen(suchdatum.getText()
                                          .trim());
         }
@@ -143,7 +134,6 @@ public class SteuerPanel extends JXPanel implements ActionListener, MouseListene
         jtab = new JXTable(dtblm);
         jtab.setHighlighters(HighlighterFactory.createSimpleStriping(new Color(204, 255, 255)));
         jtab.setDoubleBuffered(true);
-        // jtab.setEditable(false);
         jtab.setSortable(false);
         jtab.getColumn(0)
             .setMaxWidth(50);
@@ -168,23 +158,17 @@ public class SteuerPanel extends JXPanel implements ActionListener, MouseListene
         return jtab;
     }
 
-    public Vector holEinzeldaten(String patint) {
-        Vector vec = new Vector();
-        Statement stmt = null;
-        ResultSet rs = null;
+    public Vector<String> holEinzeldaten(String patint) {
+        Vector<String> vec = new Vector<>();
         String sstmt = new String();
 
         sstmt = "select * from pat5 where PAT_INTERN = '" + patint + "'";
 
-        try {
-            stmt = GBriefe.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-        } catch (SQLException e) {
-
-            e.printStackTrace();
-        }
-        try {
-            // {"Anrede","Nachname","Voname","Geboren","Pat-Nr."};
-            rs = stmt.executeQuery(sstmt);
+        try (
+                Statement            stmt = GBriefe.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+                ResultSet rs  = stmt.executeQuery(sstmt);
+                )
+                {
             GBriefe.thisFrame.setCursor(new Cursor(Cursor.WAIT_CURSOR));
 
             while (rs.next()) {
@@ -192,35 +176,15 @@ public class SteuerPanel extends JXPanel implements ActionListener, MouseListene
                 int end = rm.getColumnCount();
                 for (int i = 1; i <= end; i++) {
                     vec.add(rs.getString(i));
-                    // System.out.println("Feld "+i+" => "+rs.getString(i));
                 }
 
             }
-            // anzahlRezepte.setText("Anzahl aktueller Rezepte: "+anzahl);
             GBriefe.thisFrame.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
             SteuerPanel.thisClass.jtab.validate();
 
         } catch (SQLException ev) {
-            // System.out.println("SQLException: " + ev.getMessage());
-            // System.out.println("SQLState: " + ev.getSQLState());
-            // System.out.println("VendorError: " + ev.getErrorCode());
-        } finally {
-            if (rs != null) {
-                try {
-                    rs.close();
-                } catch (SQLException sqlEx) { // ignore }
-                    rs = null;
-                }
-            }
-            if (stmt != null) {
-                try {
-                    stmt.close();
-                } catch (SQLException sqlEx) { // ignore }
-                    stmt = null;
-                }
-            }
         }
-        return (Vector) vec.clone();
+        return  vec;
     }
 
     class GeburtstagHolen {
@@ -236,26 +200,17 @@ public class SteuerPanel extends JXPanel implements ActionListener, MouseListene
             } else {
                 SteuerPanel.thisClass.nachtraeglich = false;
             }
-            Statement stmt = null;
-            ResultSet rs = null;
             String sstmt = new String();
             String daten[] = testDatum(geb);
             sstmt = "select * from pat5 where geboren like '%" + (daten[1].length() < 2 ? "0" + daten[1] : daten[1])
                     + "-" + (daten[0].length() < 2 ? "0" + daten[0] : daten[0]) + "' order by geboren";
-            // sstmt = "select * from pat5 where
-            // Convert(Month(GEBOREN),SQL_CHAR)='"+daten[1]+"' AND
-            // Convert(DayOfMonth(GEBOREN),SQL_CHAR)= '"+daten[0]+"' ORDER BY GEBOREN";
 
-            try {
-                stmt = GBriefe.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            } catch (SQLException e) {
+            try(
+            Statement stmt= GBriefe.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            ResultSet rs = stmt.executeQuery(sstmt);
+                    )
+            {
 
-                e.printStackTrace();
-            }
-            try {
-                // {"Anrede","Vorn.
-                // Nachn.","Briefanrede","Strasse","Ort","Geboren","Alter","Pat-Nr.","Text"};
-                rs = stmt.executeQuery(sstmt);
                 GBriefe.thisFrame.setCursor(new Cursor(Cursor.WAIT_CURSOR));
                 Vector xvec = new Vector();
                 int anzahl = 0;
@@ -319,26 +274,8 @@ public class SteuerPanel extends JXPanel implements ActionListener, MouseListene
                 SteuerPanel.thisClass.anzahl.setText("Adressen: " + SteuerPanel.thisClass.insgesamt);
 
             } catch (SQLException ev) {
-                // System.out.println("SQLException: " + ev.getMessage());
-                // System.out.println("SQLState: " + ev.getSQLState());
-                // System.out.println("VendorError: " + ev.getErrorCode());
-            } finally {
-                if (rs != null) {
-                    try {
-                        rs.close();
-                    } catch (SQLException sqlEx) { // ignore }
-                        rs = null;
-                    }
-                }
-                if (stmt != null) {
-                    try {
-                        stmt.close();
-                    } catch (SQLException sqlEx) { // ignore }
-                        stmt = null;
-                    }
-                }
+
             }
-            // return datvec;
         }
 
         private boolean checkPrint(String anamnese) {
@@ -375,8 +312,6 @@ public class SteuerPanel extends JXPanel implements ActionListener, MouseListene
     private String[] testDatum(String xtest) {
 
         String[] vtest = xtest.split("\\.");
-        // System.out.println("Tag = "+vtest[0]);
-        // System.out.println("Monat = "+vtest[1]);
 
         if (vtest[0].substring(0, 1)
                     .equals("0")) {
@@ -386,8 +321,6 @@ public class SteuerPanel extends JXPanel implements ActionListener, MouseListene
                     .equals("0")) {
             vtest[1] = new String(vtest[1].substring(1, 2));
         }
-        // System.out.println("Tag = "+vtest[0]);
-        // System.out.println("Monat = "+vtest[1]);
         return vtest.clone();
     }
 
@@ -398,32 +331,7 @@ public class SteuerPanel extends JXPanel implements ActionListener, MouseListene
             if (((JComponent) arg0.getSource()).getName()
                                                .equals("Geburtstage")) {
                 starteDruck();
-                /*
-                 * int row = jtab.getSelectedRow();
-                 * anzahl.setText("Adr. "+(row+1)+" von "+insgesamt); aktPat = (String)
-                 * jtab.getValueAt(jtab.getSelectedRow(), 7); int alter = new Integer( (String)
-                 * jtab.getValueAt(jtab.getSelectedRow(), 6) ); String datei = ""; String doku1
-                 * = GBriefe.thisClass.vorlagenvz+"GBE"; String sex = ((String)
-                 * jtab.getValueAt(jtab.getSelectedRow(), 0)).substring(0,1);
-                 * if(sex.trim().equals("")){ JOptionPane.showMessageDialog(
-                 * null,"Keine Anrede im Patientenstamm verhanden.\nBrief wird nicht gedruckt!!!"
-                 * ); return; } if(nachtraeglich){ if(alter > 13){ datei = doku1+sex+"N.ott";
-                 * }else{ datei = doku1+"KN.ott"; }
-                 *
-                 * }else{ if(alter > 13){ datei = doku1+sex+"A.ott"; }else{ datei =
-                 * doku1+"KA.ott"; }
-                 *
-                 * } //System.out.println("Alter = "+alter+" / Datei die geladen wird "+datei);
-                 * final String xdatei = datei; new SwingWorker<Void,Void>(){
-                 *
-                 * @Override protected Void doInBackground() throws Exception {
-                 *
-                 * //System.out.println(dtblm.getDataVector().get(jtab.getSelectedRow()));
-                 * OOoPanel.thisClass.dokumentLaden(xdatei,(Vector)dtblm.getDataVector().get(
-                 * jtab.getSelectedRow()),direktPrint.isSelected()); return null; }
-                 *
-                 * }.execute();
-                 */
+
             }
         }
     }
@@ -433,8 +341,6 @@ public class SteuerPanel extends JXPanel implements ActionListener, MouseListene
         anzahl.setText("Adr. " + (row + 1) + " von " + insgesamt);
         aktPat = (String) jtab.getValueAt(jtab.getSelectedRow(), 7);
         int alter = new Integer((String) jtab.getValueAt(jtab.getSelectedRow(), 6));
-        // gebTag.clear();
-        // gebTag = holEinzeldaten(aktPat);
         String datei = "";
         String doku1 = GBriefe.vorlagenvz + "GBE";
         String sex = ((String) jtab.getValueAt(jtab.getSelectedRow(), 0)).substring(0, 1);
@@ -459,15 +365,13 @@ public class SteuerPanel extends JXPanel implements ActionListener, MouseListene
             }
 
         }
-        // System.out.println("Alter = "+alter+" / Datei die geladen wird "+datei);
         final String xdatei = datei;
         new SwingWorker<Void, Void>() {
 
             @Override
             protected Void doInBackground() throws Exception {
 
-                // System.out.println(dtblm.getDataVector().get(jtab.getSelectedRow()));
-                OOoPanel.thisClass.dokumentLaden(xdatei, (Vector) dtblm.getDataVector()
+                oOoPanel.dokumentLaden(xdatei, (Vector) dtblm.getDataVector()
                                                                        .get(jtab.getSelectedRow()),
                         direktPrint.isSelected());
                 return null;
@@ -481,7 +385,6 @@ public class SteuerPanel extends JXPanel implements ActionListener, MouseListene
         int row = jtab.getSelectedRow();
         jtab.setValueAt(new Boolean(true), row, 9);
         jtab.validate();
-        // System.out.println("Es wurde gedruckt");
     }
 
     @Override
@@ -524,6 +427,11 @@ public class SteuerPanel extends JXPanel implements ActionListener, MouseListene
 
     @Override
     public void keyTyped(KeyEvent arg0) {
+
+    }
+
+    public void setOOoPanel(OOoPanel oOoPanel) {
+        this.oOoPanel = oOoPanel;
 
     }
 

@@ -64,6 +64,7 @@ import events.RehaTPEvent;
 import events.RehaTPEventClass;
 import gui.Cursors;
 import hauptFenster.Reha;
+import office.OOService;
 import rehaContainer.RehaTP;
 import systemEinstellungen.SystemConfig;
 
@@ -640,7 +641,7 @@ class DruckFenster extends RehaSmartDialog implements ActionListener {
                                                                   .trim());
                 patname = patname + rez;
 
-                IDocumentService documentService = Reha.officeapplication.getDocumentService();
+                IDocumentService documentService = new OOService().getOfficeapplication().getDocumentService();
                 IDocumentDescriptor docdescript = new DocumentDescriptor();
                 docdescript.setHidden(true);
                 docdescript.setAsTemplate(true);

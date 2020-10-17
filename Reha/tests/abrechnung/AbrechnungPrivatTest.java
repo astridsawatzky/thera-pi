@@ -39,7 +39,8 @@ public class AbrechnungPrivatTest {
 
         new SqlInfo().setConnection(new DatenquellenFactory(aktik).createConnection());
 
-        new OOService().start(libPath, ooPath);
+        OOService.setLibpath(libPath, ooPath);
+
         AktuelleRezepte.tabaktrez = new JXTable();
         Data data1 = new Data(2, "1728", "ER1516", "260", "T");
     //   data = HM0000;

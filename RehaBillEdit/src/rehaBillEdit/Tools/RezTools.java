@@ -3,7 +3,6 @@ package rehaBillEdit.Tools;
 import java.util.Vector;
 
 public class RezTools {
-
     public static String getLangtextFromID(String id, Vector<Vector<String>> vec) {
         try {
             int lang = vec.size(), i;
@@ -16,8 +15,7 @@ public class RezTools {
                        .get(idpos)
                        .equals(id)) {
                     ret = vec.get(i)
-                             .get(0)
-                             .toString();
+                             .get(0);
                     break;
                 }
             }
@@ -39,12 +37,10 @@ public class RezTools {
                    .get(idpos)
                    .equals(id)) {
                 ret = vec.get(i)
-                         .get(3)
-                         .toString();
+                         .get(3);
                 break;
             }
         }
         return ret;
     }
-
 }

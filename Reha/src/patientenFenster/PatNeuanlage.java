@@ -76,7 +76,7 @@ import events.RehaTPEventListener;
 import hauptFenster.Reha;
 import jxTableTools.TableTool;
 import krankenKasse.KassenFormulare;
-import oOorgTools.OOTools;
+import oOorgTools.RehaOOTools;
 import openMaps.CalcKilometer;
 import openMaps.Distance;
 import rechteTools.Rechte;
@@ -1960,8 +1960,8 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener, Action
                     @Override
                     protected Void doInBackground() throws Exception {
                         ArztTools.constructArztHMap(xid);
-                        OOTools.starteStandardFormular(Path.Instance.getProghome() + "vorlagen/" + Reha.getAktIK() + "/"
-                                + formular.get(iformular), null);
+                        RehaOOTools.starteStandardFormular(Path.Instance.getProghome() + "vorlagen/" + Reha.getAktIK() + "/"
+                                + formular.get(iformular), null,Reha.instance);
                         return null;
                     }
                 }.execute();

@@ -1,6 +1,5 @@
 package opRgaf;
 
-import java.awt.Color;
 import java.awt.Component;
 import java.text.NumberFormat;
 import java.util.Locale;
@@ -9,7 +8,6 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
 import opRgaf.rezept.Money;
-import sun.swing.DefaultLookup;
 
 public class MoneyCellRenderer extends DefaultTableCellRenderer {
 

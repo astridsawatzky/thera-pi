@@ -8,28 +8,21 @@ import java.awt.event.ComponentEvent;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.HashMap;
 
 import javax.swing.JLabel;
 
 import org.jdesktop.swingx.JXFrame;
 import org.jdesktop.swingx.JXPanel;
 
-import com.sun.star.uno.Exception;
-
 import ag.ion.bion.officelayer.NativeView;
-import ag.ion.bion.officelayer.application.IApplicationAssistant;
-import ag.ion.bion.officelayer.application.ILazyApplicationInfo;
 import ag.ion.bion.officelayer.application.IOfficeApplication;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
-import ag.ion.bion.officelayer.application.OfficeApplicationRuntime;
 import ag.ion.bion.officelayer.desktop.GlobalCommands;
 import ag.ion.bion.officelayer.desktop.IFrame;
 import ag.ion.bion.officelayer.document.DocumentDescriptor;
@@ -41,7 +34,6 @@ import ag.ion.bion.officelayer.event.IDocumentEvent;
 import ag.ion.bion.officelayer.event.IDocumentListener;
 import ag.ion.bion.officelayer.event.IEvent;
 import ag.ion.bion.officelayer.filter.HTMLFilter;
-import ag.ion.bion.officelayer.internal.application.ApplicationAssistant;
 import ag.ion.bion.officelayer.text.ITextDocument;
 import ag.ion.bion.officelayer.web.IWebDocument;
 
@@ -61,47 +53,22 @@ public class ooPanel {
     final static int ANSICHT_WEB = 1;
     final static int ANSICHT_DOKUMENT = 0;
     public static int ansicht = 0;
-    DokumentListener doclistener = null;
 
     ooPanel(JXPanel jpan) {
         noaPanel = jpan;
         thisClass = this;
         fillNOAPanel();
-        /*
-         * try { //configureOOOFrame(piHelp.officeapplication,officeFrame); } catch
-         * (Throwable e) {
-         *
-         * e.printStackTrace(); }
-         */
 
     }
 
-    /*********************************************************/
     private void fillNOAPanel() {
         if (noaPanel != null) {
             try {
-                if (piHelp.officeapplication == null)
-                    piHelp.officeapplication = startOOO();
 
                 officeFrame = constructOOOFrame(piHelp.officeapplication, noaPanel);
                 DocumentDescriptor d = new DocumentDescriptor();
                 d.setTitle("piHelp- leeres Dokument");
-                // d.setURL(piHelp.tempvz+"dummy.html");
-                // d.setAsTemplate(true);
-                // d.setFilterDefinition(HTMLFilter.FILTER.getFilterDefinition(IDocument.WRITER));
-                //
-                /*
-                 * File f = new File( piHelp.tempvz+"dummy.html" ); byte[] buffer = new byte[
-                 * (int) f.length() ]; InputStream in = new FileInputStream( f ); in.read(
-                 * buffer ); in.close();
-                 */
 
-                // document = (ITextDocument)
-                // piHelp.officeapplication.getDocumentService().loadDocument(officeFrame,in,
-                // d);
-                // document = (ITextDocument)
-                // piHelp.officeapplication.getDocumentService().loadDocument(helpFenster.readFileToOutputStream(piHelp.tempvz+"dummy.html"),
-                // d);
                 document = (ITextDocument) piHelp.officeapplication.getDocumentService()
                                                                    .constructNewDocument(officeFrame, IDocument.WRITER,
                                                                            d);
@@ -109,21 +76,10 @@ public class ooPanel {
                 piHelp.thisClass.jFrame.setExtendedState(JXFrame.MAXIMIZED_BOTH);
                 piHelp.thisClass.jFrame.validate();
 
-                // textDocument = (ITextDocument)document;
-                if (doclistener == null) {
-                    doclistener = new DokumentListener(piHelp.officeapplication);
-                }
-                piHelp.officeapplication.getDesktopService()
-                                        .addDocumentListener(doclistener);
                 officeFrame.disableDispatch(GlobalCommands.CLOSE_DOCUMENT);
                 officeFrame.disableDispatch(GlobalCommands.QUIT_APPLICATION);
                 officeFrame.disableDispatch(GlobalCommands.CLOSE_WINDOW);
                 officeFrame.updateDispatches();
-                /*
-                 * webdocument = (IWebDocument)
-                 * piHelp.officeapplication.getDocumentService().constructNewDocument(
-                 * officeFrame, IDocument.WEB, DocumentDescriptor.DEFAULT);
-                 */
 
                 noaPanel.setVisible(true);
                 piHelp.thisFrame.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
@@ -133,33 +89,8 @@ public class ooPanel {
         }
     }
 
-    /*********************************************************/
-    private IOfficeApplication startOOO() throws Throwable {
-        IApplicationAssistant applicationAssistant = new ApplicationAssistant(piHelp.OfficeNativePfad);
-        // IApplicationAssistant applicationAssistant = new
-        // ApplicationAssistant(System.getProperty("user.dir") + "\\lib");
-        ILazyApplicationInfo[] appInfos = applicationAssistant.getLocalApplications();
-        for (int i = 0; i < appInfos.length; i++) {
-            // System.out.println(appInfos[i]);
-        }
-
-        if (appInfos.length < 1)
-            throw new Throwable("No OpenOffice.org Application found.");
-        HashMap configuration = new HashMap();
-        configuration.put(IOfficeApplication.APPLICATION_HOME_KEY, appInfos[0].getHome());
-        configuration.put(IOfficeApplication.APPLICATION_TYPE_KEY, IOfficeApplication.LOCAL_APPLICATION);
-        IOfficeApplication officeAplication = OfficeApplicationRuntime.getApplication(configuration);
-
-        officeAplication.setConfiguration(configuration);
-        officeAplication.activate();
-        return officeAplication;
-    }
-
     private IFrame constructOOOFrame(IOfficeApplication officeApplication, final Container parent) throws Throwable {
         final NativeView nativeView = new NativeView(piHelp.OfficeNativePfad);
-        if (parent == null) {
-            // System.out.println("nativeView == null");
-        }
         parent.add(nativeView);
         parent.addComponentListener(new ComponentAdapter() {
             @Override
@@ -178,18 +109,8 @@ public class ooPanel {
         return officeFrame;
     }
 
-    
-
-  
-
     public static void schliesseText() {
-        try {
-            piHelp.officeapplication.getDesktopService()
-                                    .removeDocumentListener(thisClass.doclistener);
-        } catch (OfficeApplicationException e) {
 
-            e.printStackTrace();
-        }
         if (ansicht == ANSICHT_WEB) {
             if (webdocument.isOpen()) {
                 webdocument.close();
@@ -205,31 +126,17 @@ public class ooPanel {
         thisClass.fillNOAPanel();
     }
 
-
-
-
-
     /********************************************************/
 
     public static void starteDatei(String datei, boolean alsweb) {
 
-        /************
-         *
-         * Erst hier das Dokument laden
-         *
-         */
-        // ITextDocument document;
+
         String startdatei = datei;
         if (!startdatei.contains(".html")) {
             startdatei = datei + ".html";
         }
 
         try {
-            /*
-             * webdocument = (IWebDocument)
-             * piHelp.officeapplication.getDocumentService().constructNewDocument(
-             * officeFrame, IDocument.WEB,docdescript);
-             */
             try {
 
                 if (alsweb) {
@@ -244,7 +151,6 @@ public class ooPanel {
                     IDocumentDescriptor docdescript = DocumentDescriptor.DEFAULT;
                     docdescript.setURL(datei);
                     docdescript.setFilterDefinition(HTMLFilter.FILTER.getFilterDefinition(IDocument.WRITER));
-                    // System.out.println("***************Datei = *****************"+startdatei);
                     document = (ITextDocument) piHelp.officeapplication.getDocumentService()
                                                                        .loadDocument(officeFrame, startdatei,
                                                                                docdescript);
@@ -255,21 +161,6 @@ public class ooPanel {
                 e.printStackTrace();
             }
 
-            // ITextDocument doc = (ITextDocument) webdocument.getWebDocument();
-            // webdocument.getViewCursorService().getViewCursor().getTextCursorFromStart().insertDocument(
-            // is, new HTMLFilter() );
-            // doc.getViewCursorService().getViewCursor().getTextCursorFromStart().insertDocument(
-            // is, new HTMLFilter() );
-            // doc.reformat();
-            /*
-             * document = (ITextDocument)piHelp.officeapplication.getDocumentService().
-             * constructNewDocument( officeFrame, IDocument.WRITER,
-             * DocumentDescriptor.DEFAULT);
-             * document.getViewCursorService().getViewCursor().getTextCursorFromStart().
-             * insertDocument( is, new HTMLFilter() ); textDocument = (ITextDocument)
-             * document;
-             */
-
         } catch (OfficeApplicationException e) {
 
             e.printStackTrace();
@@ -277,136 +168,41 @@ public class ooPanel {
 
     }
 
-    /**
-     * @throws Exception
-     *******************************************************/
     public static String speichernText(String aktdatei, Boolean neu) {
-        FileOutputStream outputStream = null;
         String datei = null;
         try {
-
-            /*
-             * File tempFile; try { tempFile = File.createTempFile("noatemp" +
-             * System.currentTimeMillis(), "html"); tempFile.deleteOnExit(); outputStream =
-             * new FileOutputStream(tempFile); } catch (IOException e) {
-             *
-             * e.printStackTrace(); }
-             */
 
             datei = new String(aktdatei);
             if (!datei.contains(".html")) {
                 datei = datei + ".html";
             } else {
-                // System.out.println("ooPane - speichernText, Dateiname korrekt ->"+datei);
+
             }
-            // System.out.println("ooPane - exportiere Datei nach ->"+datei);
-            // textDocument.getPersistenceService().export(temppfad+tempname, new
-            // HTMLFilter());
             if (ansicht == ANSICHT_DOKUMENT) {
-                // System.out.println(document.getDocumentType());
                 File f = new File(datei);
-                /*
-                 * try {
-                 *
-                 * ITextDocument textDocument = document; XTextGraphicObjectsSupplier
-                 * graphicObjSupplier = (XTextGraphicObjectsSupplier)
-                 * UnoRuntime.queryInterface(XTextGraphicObjectsSupplier.class,
-                 * textDocument.getXTextDocument()); XNameAccess nameAccess =
-                 * graphicObjSupplier.getGraphicObjects(); String[] names =
-                 * nameAccess.getElementNames(); for (int i = 0; i < names.length; i++) { Any
-                 * xImageAny; xImageAny = (Any) nameAccess.getByName(names[i]); Object
-                 * xImageObject = xImageAny.getObject(); XTextContent xImage = (XTextContent)
-                 * xImageObject; XServiceInfo xInfo = (XServiceInfo)
-                 * UnoRuntime.queryInterface(XServiceInfo.class, xImage); if
-                 * (xInfo.supportsService("com.sun.star.text.TextGraphicObject")) { XPropertySet
-                 * xPropSet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class,
-                 * xImage); String name =
-                 * xPropSet.getPropertyValue("LinkDisplayName").toString(); String graphicURL =
-                 * xPropSet.getPropertyValue("GraphicURL").toString(); //only ones that are not
-                 * embedded if (graphicURL.indexOf("vnd.sun.") == -1) { XMultiServiceFactory
-                 * multiServiceFactory = (XMultiServiceFactory)
-                 * UnoRuntime.queryInterface(XMultiServiceFactory.class,
-                 * textDocument.getXTextDocument()); XNameContainer xBitmapContainer =
-                 * (XNameContainer) UnoRuntime.queryInterface(XNameContainer.class,
-                 * multiServiceFactory.createInstance("com.sun.star.drawing.BitmapTable")); if
-                 * (!xBitmapContainer.hasByName(name)) { xBitmapContainer.insertByName(name,
-                 * graphicURL); String newGraphicURL =
-                 * xBitmapContainer.getByName(name).toString();
-                 * xPropSet.setPropertyValue("GraphicURL", newGraphicURL); } } } } } catch
-                 * (NoSuchElementException e) { e.printStackTrace(); } catch
-                 * (WrappedTargetException e) { e.printStackTrace(); } catch
-                 * (UnknownPropertyException e) { e.printStackTrace(); } catch (Exception e) {
-                 * e.printStackTrace(); }
-                 */
 
                 if (f.exists()) {
-                    // System.out.println("IDcument - Datei wird nur gespeichert");
-                    // document.getPersistenceService().export(datei, new HTMLFilter());
                     document.getPersistenceService()
                             .store();
                     Thread.sleep(100);
                 } else {
-                    // System.out.println("IDcument - Datei wird exportiert");
                     document.getPersistenceService()
                             .export(datei, new HTMLFilter());
                     Thread.sleep(100);
                 }
 
-                // document.getPersistenceService().store(datei);
-                // document.getPersistenceService().export(datei+".html", new HTMLFilter());
-                // document.getPersistenceService().export(datei+"#", new HTMLFilter());
             } else {
                 File f = new File(datei);
-                /*
-                 * try {
-                 *
-                 * IWebDocument textDocument = webdocument; XTextGraphicObjectsSupplier
-                 * graphicObjSupplier = (XTextGraphicObjectsSupplier)
-                 * UnoRuntime.queryInterface(XTextGraphicObjectsSupplier.class,
-                 * textDocument.getWebDocument()); XNameAccess nameAccess =
-                 * graphicObjSupplier.getGraphicObjects(); String[] names =
-                 * nameAccess.getElementNames(); for (int i = 0; i < names.length; i++) { Any
-                 * xImageAny; xImageAny = (Any) nameAccess.getByName(names[i]); Object
-                 * xImageObject = xImageAny.getObject(); XTextContent xImage = (XTextContent)
-                 * xImageObject; XServiceInfo xInfo = (XServiceInfo)
-                 * UnoRuntime.queryInterface(XServiceInfo.class, xImage); if
-                 * (xInfo.supportsService("com.sun.star.text.TextGraphicObject")) { XPropertySet
-                 * xPropSet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class,
-                 * xImage); String name =
-                 * xPropSet.getPropertyValue("LinkDisplayName").toString(); String graphicURL =
-                 * xPropSet.getPropertyValue("GraphicURL").toString(); //only ones that are not
-                 * embedded if (graphicURL.indexOf("vnd.sun.") == -1) { XMultiServiceFactory
-                 * multiServiceFactory = (XMultiServiceFactory)
-                 * UnoRuntime.queryInterface(XMultiServiceFactory.class,
-                 * textDocument.getWebDocument()); XNameContainer xBitmapContainer =
-                 * (XNameContainer) UnoRuntime.queryInterface(XNameContainer.class,
-                 * multiServiceFactory.createInstance("com.sun.star.drawing.BitmapTable")); if
-                 * (!xBitmapContainer.hasByName(name)) { xBitmapContainer.insertByName(name,
-                 * graphicURL); String newGraphicURL =
-                 * xBitmapContainer.getByName(name).toString();
-                 * xPropSet.setPropertyValue("GraphicURL", newGraphicURL); } } } } } catch
-                 * (NoSuchElementException e) { e.printStackTrace(); } catch
-                 * (WrappedTargetException e) { e.printStackTrace(); } catch
-                 * (UnknownPropertyException e) { e.printStackTrace(); } catch (Exception e) {
-                 * e.printStackTrace(); }
-                 *
-                 */
                 if (f.exists()) {
-                    // System.out.println("IWeb - Datei wird nur gespeichert");
                     webdocument.getPersistenceService()
                                .store();
                     Thread.sleep(100);
-                    // webdocument.getPersistenceService().export(datei, new HTMLFilter());
                 } else {
-                    // System.out.println("IWeb - Datei wird exportiert");
                     webdocument.getPersistenceService()
                                .export(datei, new HTMLFilter());
                     Thread.sleep(100);
                 }
 
-                // webdocument.getPersistenceService().export(datei+".html", new HTMLFilter());
-                // webdocument.getPersistenceService().export(datei+".export", new
-                // HTMLFilter());
             }
 
         } catch (DocumentException e) {
@@ -421,7 +217,6 @@ public class ooPanel {
 
     /***********************************************/
     public static void extrahiereBilder(String url) {
-        // System.out.println("Beginn extrahiereBilder aus "+url);
         helpFenster.thisClass.bilder.clear();
         BufferedReader infile = null;
         BufferedWriter outfile = null;
@@ -495,15 +290,12 @@ public class ooPanel {
                 sret = new String(nurBild.substring(ergebnis + 1));
                 String salt = meinweb.substring(istart, iende);
                 ssret = new String(meinweb.replaceAll(salt, sret));
-                // sret = new String(nurBild);
                 helpFenster.thisClass.bilder.add(sret.replaceAll("%20", " "));
             } else {
-                // String salt = meinweb.substring(istart,iende);
                 sret = nurBild;
                 ssret = new String(meinweb);
                 helpFenster.thisClass.bilder.add(nurBild.replaceAll("%20", " "));
             }
-            // System.out.println("Gefunden "+sret);
             aktuell = new Integer(iende);
         }
 
@@ -517,47 +309,21 @@ class testObVorhanden {
     String svorhanden = null;
 
     public boolean init(String svorhanden) {
-        boolean ret = true;
-        Statement stmtx = null;
-        ResultSet rsx = null;
-        // System.out.println("In holeGruppen");
-        try {
-            stmtx = piHelp.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-
-        } catch (SQLException e) {
-
-            e.printStackTrace();
-        }
-        try {
-            rsx = stmtx.executeQuery("select count(*) from htitel where titel=" + svorhanden);
+        try (Statement stmtx = piHelp.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+                ResultSet rsx = stmtx.executeQuery("select count(*) from htitel where titel=" + svorhanden);) {
             rsx.next();
             if (rsx.getInt(1) <= 0) {
-                ret = false;
+                return false;
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        if (rsx != null) {
-            try {
-                rsx.close();
-            } catch (SQLException sqlEx) { // ignore }
-                rsx = null;
-            }
-        }
-
-        try {
-            stmtx.close();
-        } catch (SQLException sqlEx) { // ignore }
-            stmtx = null;
-        }
-        return ret;
+        return true;
     }
 }
 
 class DokumentListener implements IDocumentListener {
 
-    public DokumentListener(IOfficeApplication officeAplication) {
-    }
 
     @Override
     public void onAlphaCharInput(IDocumentEvent arg0) {

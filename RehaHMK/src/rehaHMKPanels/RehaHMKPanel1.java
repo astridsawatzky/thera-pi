@@ -48,6 +48,7 @@ import rehaHMK.Tools.IndiKey;
 import rehaHMK.Tools.JXHMKTreeTableNode;
 import chrriis.dj.nativeswing.swtimpl.components.JWebBrowser;
 import environment.Path;
+import rehaHMK.CompoundPainters;
 import rehaHMK.RehaHMK;
 import rehaHMK.RehaHMKTab;
 
@@ -104,7 +105,7 @@ public class RehaHMKPanel1 extends JXPanel {
         eltern = xeltern;
         activateListener();
 
-        this.setBackgroundPainter(RehaHMK.cp);
+        this.setBackgroundPainter(CompoundPainters.CP);
         setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
 
         tpane = new JTabbedPane();
@@ -116,7 +117,7 @@ public class RehaHMKPanel1 extends JXPanel {
         searchpan.setLayout(new BorderLayout());
         searchpan.add(getContent(), BorderLayout.CENTER);
         searchpan.add(getDiszis(), BorderLayout.EAST);
-        searchpan.setBackgroundPainter(RehaHMK.cp);
+        searchpan.setBackgroundPainter(CompoundPainters.CP);
         /*
          * icons.put("browser",new
          * ImageIcon(RehaHMK.progHome+"icons/internet-web-browser.png"));
@@ -133,16 +134,13 @@ public class RehaHMKPanel1 extends JXPanel {
             @Override
             protected Void doInBackground() throws Exception {
                 try {
-                    while (!RehaHMK.DbOk) {
-                        Thread.sleep(25);
-                    }
+
                     fuelleCombos(0);
                     ready = true;
                     SwingUtilities.invokeLater(new Runnable() {
                         @Override
                         public void run() {
                             htmlPane.setText(getPiLogo());
-                            // "http://www.heilmittelkatalog.de/tl_files/hmk/"+"physio/index.htm"
                             webBrowser.navigate(RehaHMK.hmkURL + "physio/index.htm");
                         }
                     });

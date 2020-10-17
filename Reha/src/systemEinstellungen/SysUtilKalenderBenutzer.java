@@ -50,6 +50,7 @@ import hauptFenster.Reha;
 import mandant.IK;
 import mitarbeiter.Mitarbeiter;
 import mitarbeiter.MitarbeiterDto;
+import office.OOService;
 import opRgaf.CommonTools.DateTimeFormatters;
 import terminKalender.KollegenListe;
 
@@ -660,7 +661,7 @@ class SysUtilKalenderBenutzer extends JXPanel {
             public void run() {
                 IDocumentService documentService = null;
                 try {
-                    documentService = Reha.officeapplication.getDocumentService();
+                    documentService = new OOService().getOfficeapplication().getDocumentService();
 
                     ITextDocument textDocument = (ITextDocument) documentService.constructNewDocument(IDocument.WRITER,
                             DocumentDescriptor.DEFAULT);

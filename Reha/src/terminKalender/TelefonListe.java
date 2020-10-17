@@ -24,8 +24,8 @@ import ag.ion.bion.officelayer.text.ITextDocument;
 import ag.ion.bion.officelayer.text.ITextTable;
 import ag.ion.bion.officelayer.text.TextException;
 import ag.ion.noa.NOAException;
-import hauptFenster.Reha;
-import oOorgTools.OOTools;
+import office.OOService;
+import office.OOTools;
 
 /*******************************************************************************************************/
 class TelefonListe {
@@ -124,7 +124,7 @@ class TelefonListe {
         if ((lang = dvec.size()) > 0) {
             IDocumentService documentService = null;
             try {
-                documentService = Reha.officeapplication.getDocumentService();
+                documentService = new OOService().getOfficeapplication().getDocumentService();
             } catch (OfficeApplicationException e) {
                 e.printStackTrace();
             }

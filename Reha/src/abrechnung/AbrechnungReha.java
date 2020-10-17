@@ -51,7 +51,8 @@ import events.PatStammEventClass;
 import gui.Cursors;
 import hauptFenster.AktiveFenster;
 import hauptFenster.Reha;
-import oOorgTools.OOTools;
+import office.OOService;
+import office.OOTools;
 import patientenFenster.KassenAuswahl;
 import rehaInternalFrame.JRehaabrechnungInternal;
 import stammDatenTools.PatTools;
@@ -1161,7 +1162,7 @@ public class AbrechnungReha extends JXPanel {
     public synchronized void starteDokument(String url, String drucker) {
         IDocumentService documentService = null;
         try {
-            documentService = Reha.officeapplication.getDocumentService();
+            documentService = new OOService().getOfficeapplication().getDocumentService();
         } catch (OfficeApplicationException e) {
             e.printStackTrace();
         }

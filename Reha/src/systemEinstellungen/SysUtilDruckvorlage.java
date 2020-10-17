@@ -54,11 +54,12 @@ import environment.Path;
 import gui.Cursors;
 import hauptFenster.Reha;
 import hilfsFenster.EmailText;
+import office.OOService;
 
 public class SysUtilDruckvorlage extends JXPanel implements KeyListener, ActionListener, FocusListener {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 1L;
     JButton knopf0 = null;
@@ -511,7 +512,7 @@ public class SysUtilDruckvorlage extends JXPanel implements KeyListener, ActionL
 
     /*
      * private void speichernKonfig(){
-     * 
+     *
      * AnzahlTerminTabellen = Integer.valueOf(RWJedeIni.leseIniDatei(iniName,
      * "TerminListe1", "AnzahlTabellen")); AnzahlSpaltenProTabellen =
      * Integer.valueOf(RWJedeIni.leseIniDatei(iniName, "TerminListe1",
@@ -579,7 +580,7 @@ public class SysUtilDruckvorlage extends JXPanel implements KeyListener, ActionL
         // String url = urlx.replaceAll("/", "\\\\");
         //// System.out.println("Url = -------------->"+url);
         try {
-            documentService = Reha.officeapplication.getDocumentService();
+            documentService = new OOService().getOfficeapplication().getDocumentService();
         } catch (OfficeApplicationException e) {
             e.printStackTrace();
         }
@@ -697,7 +698,7 @@ public class SysUtilDruckvorlage extends JXPanel implements KeyListener, ActionL
         IDocumentService documentService = null;
 
         try {
-            documentService = Reha.officeapplication.getDocumentService();
+            documentService = new OOService().getOfficeapplication().getDocumentService();
         } catch (OfficeApplicationException e) {
 
             e.printStackTrace();
@@ -781,13 +782,13 @@ public class SysUtilDruckvorlage extends JXPanel implements KeyListener, ActionL
              * searchDescriptor = new SearchDescriptor(patplatzhalter); //SearchDescriptor
              * searchDescriptor = new SearchDescriptor("^Name^");
              * searchDescriptor.setIsCaseSensitive(true); //Suche durchf�hren
-             * 
-             * 
+             *
+             *
              * searchResult = textDocument.getSearchService().findFirst(searchDescriptor);
              * if(!searchResult.isEmpty()) { //Ergebnis seletieren ITextRange[] textRanges =
              * searchResult.getTextRanges(); try { textDocument.setSelection(new
              * TextRangeSelection(textRanges[0])); } catch (NOAException e) {
-             * 
+             *
              * JOptionPane.showMessageDialog(null,
              * "Druckvorlage und aktuelle Definition passen nicht zusammen");
              * e.printStackTrace(); thisClass.setCursor(Reha.instance.normalCursor); }
@@ -801,7 +802,7 @@ public class SysUtilDruckvorlage extends JXPanel implements KeyListener, ActionL
              * bookmarkService.getBookmark("^Name^"); if(bookmark != null){ String name =
              * bookmark.getName(); bookmark.setText(patname); try {
              * textDocument.getTextFieldService().refresh(); } catch (TextException e) {
-             * 
+             *
              * e.printStackTrace(); } }
              */
             ITextFieldService textFieldService = textDocument.getTextFieldService();
@@ -907,7 +908,7 @@ public class SysUtilDruckvorlage extends JXPanel implements KeyListener, ActionL
                      * if(!searchResult.isEmpty()) { ITextRange[] textRanges =
                      * searchResult.getTextRanges(); try { textDocument.setSelection(new
                      * TextRangeSelection(textRanges[0])); } catch (NOAException e) {
-                     * 
+                     *
                      * JOptionPane.showMessageDialog(null,
                      * "Druckvorlage und aktuelle Definition passen nicht zusammen");
                      * e.printStackTrace(); thisClass.setCursor(Reha.instance.normalCursor); }

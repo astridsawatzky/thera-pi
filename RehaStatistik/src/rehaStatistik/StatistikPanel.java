@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.Vector;
 
 import javax.swing.JButton;
@@ -35,9 +36,8 @@ import com.sun.star.uno.UnoRuntime;
 
 import CommonTools.ButtonTools;
 import CommonTools.DatFunk;
-import CommonTools.OOTools;
 import CommonTools.SqlInfo;
-import rehaStatistik.Tools.SystemPreislisten;
+import ag.ion.bion.officelayer.application.IOfficeApplication;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import ag.ion.bion.officelayer.document.DocumentDescriptor;
 import ag.ion.bion.officelayer.document.IDocument;
@@ -45,6 +45,8 @@ import ag.ion.bion.officelayer.document.IDocumentDescriptor;
 import ag.ion.bion.officelayer.document.IDocumentService;
 import ag.ion.bion.officelayer.spreadsheet.ISpreadsheetDocument;
 import ag.ion.noa.NOAException;
+import office.OOTools;
+import rehaStatistik.Tools.SystemPreislisten;
 
 public class StatistikPanel extends JXPanel implements ListSelectionListener, ActionListener {
 
@@ -91,9 +93,11 @@ public class StatistikPanel extends JXPanel implements ListSelectionListener, Ac
     Vector<Integer> rehaTage = new Vector<Integer>();
     Vector<Vector<String>> unklareFaelle = new Vector<Vector<String>>();
     String[] ktraegerArt = { "BFA", "LVA", "KNP", "AOK", "IKK", "BKK", "LKK", "BKN", "DAK", "PRI", "BGE", "ORTHO" };
+    private Optional<IOfficeApplication> officeapplication;
 
-    public StatistikPanel() {
+    public StatistikPanel(Optional<IOfficeApplication> officeapplication) {
         super();
+        this.officeapplication = officeapplication;
         setPreferredSize(new Dimension(500, 500));
         add(getContent(), BorderLayout.CENTER);
         validate();
@@ -409,10 +413,10 @@ public class StatistikPanel extends JXPanel implements ListSelectionListener, Ac
     }
 
     /**********
-     * 
-     * 
+     *
+     *
      * LVA-Quartalsstatistik
-     * 
+     *
      */
     private void doQuartalStatistik() {
         dlgRet = -1;
@@ -532,12 +536,12 @@ public class StatistikPanel extends JXPanel implements ListSelectionListener, Ac
     }
 
     /***********
-     * 
-     * 
-     * 
+     *
+     *
+     *
      * LVA / BfA Wochenstatistik
-     * 
-     * 
+     *
+     *
      *************/
     private void doWochenStatistik() {
 
@@ -626,13 +630,7 @@ public class StatistikPanel extends JXPanel implements ListSelectionListener, Ac
                                                    .clone());
                 continue;
             }
-            /*
-             * System.out.println(SqlInfo.holePatFeld("n_name",
-             * "pat_intern='"+rehavec.get(i).get(1)+"'"));
-             * System.out.println(SqlInfo.holePatFeld("v_name",
-             * "pat_intern='"+rehavec.get(i).get(1)+"'"));
-             * System.out.println("Bereits absolvierte Reha-Tage = "+isttage+" Tage");
-             */
+
         }
         starteCalcLvaWoche();
         status1.setText("starte Tabellenkalkulation");
@@ -763,25 +761,26 @@ public class StatistikPanel extends JXPanel implements ListSelectionListener, Ac
         return einzelwerte[0];
     }
 
-    /************************************************/
     private void starteCalc() throws OfficeApplicationException, NOAException, NoSuchElementException,
             WrappedTargetException, UnknownPropertyException, PropertyVetoException, IllegalArgumentException {
-        if (!RehaStatistik.officeapplication.isActive()) {
-            RehaStatistik.starteOfficeApplication();
+        if (officeapplication.isPresent()) {
+
+            IOfficeApplication officeapplication = RehaStatistik.officeapplication.get();
+            IDocumentService documentService = officeapplication.getDocumentService();
+            IDocumentDescriptor docdescript = new DocumentDescriptor();
+            docdescript.setHidden(true);
+            docdescript.setAsTemplate(true);
+            document = documentService.constructNewDocument(IDocument.CALC, docdescript);
+            spreadsheetDocument = (ISpreadsheetDocument) document;
+            OOTools.setzePapierFormatCalc(spreadsheetDocument, 21000, 29700);
+            OOTools.setzeRaenderCalc(spreadsheetDocument, 1000, 1000, 1000, 1000);
+            XSpreadsheets spreadsheets = spreadsheetDocument.getSpreadsheetDocument()
+                                                            .getSheets();
+            String sheetName = "Tabelle1";
+            XSpreadsheet spreadsheet1 = UnoRuntime.queryInterface(XSpreadsheet.class,
+                    spreadsheets.getByName(sheetName));
+            cellCursor = spreadsheet1.createCursor();
         }
-        IDocumentService documentService = RehaStatistik.officeapplication.getDocumentService();
-        IDocumentDescriptor docdescript = new DocumentDescriptor();
-        docdescript.setHidden(true);
-        docdescript.setAsTemplate(true);
-        document = documentService.constructNewDocument(IDocument.CALC, docdescript);
-        spreadsheetDocument = (ISpreadsheetDocument) document;
-        OOTools.setzePapierFormatCalc(spreadsheetDocument, 21000, 29700);
-        OOTools.setzeRaenderCalc(spreadsheetDocument, 1000, 1000, 1000, 1000);
-        XSpreadsheets spreadsheets = spreadsheetDocument.getSpreadsheetDocument()
-                                                        .getSheets();
-        String sheetName = "Tabelle1";
-        XSpreadsheet spreadsheet1 = UnoRuntime.queryInterface(XSpreadsheet.class, spreadsheets.getByName(sheetName));
-        cellCursor = spreadsheet1.createCursor();
     }
 
     /************************************************/

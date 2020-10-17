@@ -27,7 +27,7 @@ import CommonTools.SqlInfo;
 public class RehaKassenbuchPanel extends JXPanel {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = -5639305640753853306L;
 
@@ -83,25 +83,7 @@ public class RehaKassenbuchPanel extends JXPanel {
         JScrollPane jscr = JCompTools.getTransparentScrollPane(kbvorhanden);
         jscr.validate();
         jpan.add(jscr, cc.xywh(4, 4, 1, 8, CellConstraints.DEFAULT, CellConstraints.FILL));
-        new SwingWorker<Void, Void>() {
-            @Override
-            protected Void doInBackground() throws Exception {
-                long zeit = System.currentTimeMillis();
-                while (!RehaKassenbuch.DbOk) {
-                    Thread.sleep(50);
-                    if (System.currentTimeMillis() - zeit > 10000) {
-                        break;
-                    }
-                }
-                if (RehaKassenbuch.DbOk) {
-                    doKBErmitteln();
-                } else {
-                    System.exit(0);
-                }
-                return null;
-            }
 
-        }.execute();
         buts[0] = ButtonTools.macheButton("löschen", "deletetable", al);
         jpan.add(buts[0], cc.xy(4, 13));
 

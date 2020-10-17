@@ -79,8 +79,9 @@ import ag.ion.noa.search.ISearchResult;
 import ag.ion.noa.search.SearchDescriptor;
 import gui.Cursors;
 import hauptFenster.Reha;
-import oOorgTools.OOTools;
-import systemEinstellungen.SystemConfig;
+import oOorgTools.RehaOOTools;
+import office.OOService;
+import office.OOTools;
 
 public class ArztBausteine extends JDialog implements WindowListener {
 
@@ -327,7 +328,7 @@ public class ArztBausteine extends JDialog implements WindowListener {
 
     /*
      * private void doActionTest(String action){ if(action.equals("tabellenklick")){
-     * 
+     *
      * } }
      */
     private void holeIdUndText() {
@@ -351,17 +352,17 @@ public class ArztBausteine extends JDialog implements WindowListener {
     /*
      * private JTabbedPane getTabs(){ UIManager.put("TabbedPane.tabsOpaque",
      * Boolean.FALSE); UIManager.put("TabbedPane.contentOpaque", Boolean.FALSE);
-     * 
+     *
      * tab = new JTabbedPane(); try{ tab.setUI(new WindowsTabbedPaneUI());
      * }catch(Exception ex){ }
-     * 
+     *
      * tab.addTab("Bausteine abrufen", getTabPage1());
      * tab.addTab("Bausteine bearbeiten", new JXPanel());
      * tab.addTab("Bausteine testen", new JXPanel());
-     * 
+     *
      * UIManager.put("TabbedPane.tabsOpaque", Boolean.TRUE);
      * UIManager.put("TabbedPane.contentOpaque", Boolean.TRUE);
-     * 
+     *
      * return tab; }
      */
     private JXPanel getTabPage1() {
@@ -409,7 +410,7 @@ public class ArztBausteine extends JDialog implements WindowListener {
         jscr.validate();
         /*
          * new SwingWorker<Void,Void>(){
-         * 
+         *
          * @Override protected Void doInBackground() throws Exception {
          * fuelleTabelle(""); return null; } }.execute();
          */
@@ -543,10 +544,10 @@ public class ArztBausteine extends JDialog implements WindowListener {
     private void fillNOAPanel() {
         if (noaPanel != null) {
             try {
-                officeFrame = constructOOOFrame(Reha.officeapplication, noaPanel);
+                officeFrame = constructOOOFrame(new OOService().getOfficeapplication(), noaPanel);
                 // DocumentDescriptor desc = DocumentDescriptor.DEFAULT;
                 // desc.setReadOnly(true);
-                document = (ITextDocument) Reha.officeapplication.getDocumentService()
+                document = (ITextDocument) new OOService().getOfficeapplication().getDocumentService()
                                                                  .constructNewDocument(officeFrame, IDocument.WRITER,
                                                                          DocumentDescriptor.DEFAULT);
                 SwingUtilities.invokeLater(new Runnable() {
@@ -563,8 +564,7 @@ public class ArztBausteine extends JDialog implements WindowListener {
                 });
 
                 OOTools.setzePapierFormat(document, Integer.valueOf(25199), Integer.valueOf(19299));
-                OOTools.setzeRaender(document, Integer.valueOf(1000), Integer.valueOf(1000), Integer.valueOf(1000),
-                        Integer.valueOf(1000));
+                OOTools.setzeRaender(document, Integer.valueOf(1000), Integer.valueOf(1000), Integer.valueOf(1000), Integer.valueOf(1000));
                 hideAllElements();
                 nativeView.validate();
 
@@ -581,7 +581,7 @@ public class ArztBausteine extends JDialog implements WindowListener {
     }
 
     private IFrame constructOOOFrame(IOfficeApplication officeApplication, final Container parent) throws Throwable {
-        nativeView = new NativeView(SystemConfig.OpenOfficeNativePfad);
+        nativeView = new NativeView(OOService.OpenOfficeNativePfad);
         parent.add(nativeView);
         parent.addComponentListener(new ComponentAdapter() {
             @Override

@@ -83,7 +83,7 @@ import hmrCheck.HMRCheck;
 import jxTableTools.MyTableStringDatePicker;
 import jxTableTools.TableTool;
 import krankenKasse.KassenFormulare;
-import oOorgTools.OOTools;
+import oOorgTools.RehaOOTools;
 import patientenFenster.KeinRezept;
 import patientenFenster.RezNeuanlage;
 import patientenFenster.RezTest;
@@ -267,8 +267,8 @@ public class AktuelleRezepte extends JXPanel implements ListSelectionListener, T
                     @Override
                     protected Void doInBackground() throws Exception {
                         RezTools.constructRawHMap();
-                        OOTools.starteStandardFormular(Path.Instance.getProghome() + "vorlagen/" + Reha.getAktIK() + "/"
-                                + formular.get(iformular), null);
+                        RehaOOTools.starteStandardFormular(Path.Instance.getProghome() + "vorlagen/" + Reha.getAktIK() + "/"
+                                + formular.get(iformular), null,Reha.instance);
                         return null;
                     }
                 }.execute();
@@ -2708,8 +2708,8 @@ public class AktuelleRezepte extends JXPanel implements ListSelectionListener, T
         SystemConfig.hmAdrRDaten.put("<Bnr>", SystemConfig.hmAdrRDaten.get("<Rnummer>"));
         SystemConfig.hmAdrRDaten.put("<Buser>", Reha.aktUser);
         SystemConfig.hmAdrRDaten.put("<Rpatid>", Reha.instance.patpanel.vecaktrez.get(0));
-        OOTools.starteBacrodeFormular(Path.Instance.getProghome() + "vorlagen/" + Reha.getAktIK() + "/" + url,
-                SystemConfig.rezBarcodeDrucker);
+        RehaOOTools.starteBacrodeFormular(Path.Instance.getProghome() + "vorlagen/" + Reha.getAktIK() + "/" + url,
+                SystemConfig.rezBarcodeDrucker,Reha.instance);
 
     }
 

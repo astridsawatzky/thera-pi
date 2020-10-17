@@ -7,6 +7,8 @@ import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
+import org.ini4j.Ini;
+
 import ag.ion.bion.officelayer.application.ILazyApplicationInfo;
 import ag.ion.bion.officelayer.application.IOfficeApplication;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
@@ -18,7 +20,27 @@ import ag.ion.bion.officelayer.event.VetoTerminateListener;
 import ag.ion.bion.officelayer.runtime.IOfficeProgressMonitor;
 
 public class OOService {
-    private final static CountDownLatch latch = new CountDownLatch(1);
+    private static final CountDownLatch latch = new CountDownLatch(1);
+
+
+    public static String OpenOfficeNativePfad;
+    public static String OpenOfficePfad;
+
+    public static void setLibpath(String libpath, String ooPath) {
+        OpenOfficeNativePfad = libpath;
+        OpenOfficePfad = ooPath;
+    }
+
+    public OOService() {
+        if (OpenOfficeNativePfad == null || OpenOfficePfad == null) {
+            throw new IllegalStateException("lib and path not set");
+        }
+    }
+
+    public OOService(Ini officeIni) {
+        OpenOfficePfad = officeIni.get("OpenOffice.org", "OfficePfad");
+        OpenOfficeNativePfad = officeIni.get("OpenOffice.org", "OfficeNativePfad");
+    }
 
     private static IOfficeApplication officeapplication;
 
@@ -32,10 +54,9 @@ public class OOService {
         return officeapplication;
     }
 
-    public IOfficeApplication start(String libPath, String ooPath)
-            throws OfficeApplicationException, FileNotFoundException {
-        Map<String, Object> config = loadConfiguration(libPath, ooPath);
-        System.setProperty(IOfficeApplication.NOA_NATIVE_LIB_PATH, libPath);
+    public IOfficeApplication start() throws OfficeApplicationException, FileNotFoundException {
+        Map<String, Object> config = loadConfiguration(OpenOfficeNativePfad, OpenOfficePfad);
+        System.setProperty(IOfficeApplication.NOA_NATIVE_LIB_PATH, OpenOfficeNativePfad);
         officeapplication = activate(config);
         System.out.println("activation complete");
         return officeapplication;
@@ -48,7 +69,6 @@ public class OOService {
             officeapplication2.activate(new OOServiceMonitor());
             officeapplication2.getDesktopService()
                               .addTerminateListener(new VetoTerminateListenerExtension());
-
         } catch (NullPointerException | OfficeApplicationException e) {
             e.printStackTrace();
         }
@@ -76,23 +96,22 @@ public class OOService {
                 isLibreOffice = true;
             }
         }
-        Map<String, Object> config = new HashMap<String, Object>();
+        Map<String, Object> config = new HashMap<>();
         config.put(IOfficeApplication.APPLICATION_HOME_KEY, ooPath);
         config.put(IOfficeApplication.APPLICATION_TYPE_KEY, IOfficeApplication.LOCAL_APPLICATION);
         if (isLibreOffice) {
             config.put(IOfficeApplication.APPLICATION_ARGUMENTS_KEY, new String[] { "--nodefault", "--nologo",
                     "--nofirststartwizard", "--nocrashreport", "--norestore" });
-
         } else {
             config.put(IOfficeApplication.APPLICATION_ARGUMENTS_KEY,
                     new String[] { "-nodefault", "-nologo", "-nofirststartwizard", "-nocrashreport", "-norestore" });
-
         }
         return config;
     }
 
-    private final class VetoTerminateListenerExtension extends VetoTerminateListener {
 
+
+    private final class VetoTerminateListenerExtension extends VetoTerminateListener {
         @Override
         public void queryTermination(ITerminateEvent terminateEvent) {
             super.queryTermination(terminateEvent);
@@ -100,9 +119,7 @@ public class OOService {
             try {
                 docs = getOfficeapplication().getDocumentService()
                                              .getCurrentDocuments();
-            } catch (DocumentException e) {
-                e.printStackTrace();
-            } catch (OfficeApplicationException e) {
+            } catch (DocumentException | OfficeApplicationException e) {
                 e.printStackTrace();
             }
             if (docs.length == 1) {
@@ -132,7 +149,7 @@ public class OOService {
 
         @Override
         public void done() {
-            OOService.latch.countDown();
+            latch.countDown();
         }
 
         @Override

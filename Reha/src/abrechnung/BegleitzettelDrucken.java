@@ -13,7 +13,8 @@ import ag.ion.bion.officelayer.text.ITextField;
 import ag.ion.bion.officelayer.text.ITextFieldService;
 import ag.ion.bion.officelayer.text.TextException;
 import hauptFenster.Reha;
-import oOorgTools.OOTools;
+import office.OOService;
+import office.OOTools;
 import systemEinstellungen.SystemConfig;
 
 public class BegleitzettelDrucken {
@@ -83,7 +84,7 @@ public class BegleitzettelDrucken {
     private void starteDokument(String url) throws Exception {
         IDocumentService documentService = null;
 
-        documentService = Reha.officeapplication.getDocumentService();
+        documentService = new OOService().getOfficeapplication().getDocumentService();
 
         IDocumentDescriptor docdescript = new DocumentDescriptor();
         docdescript.setHidden(true);

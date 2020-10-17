@@ -5,7 +5,6 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 
 public class ButtonTools {
-
     public static JButton macheButton(String titel, String cmd, ActionListener al) {
         JButton but = new JButton(titel);
         but.setName(cmd);
@@ -13,5 +12,4 @@ public class ButtonTools {
         but.addActionListener(al);
         return but;
     }
-
 }

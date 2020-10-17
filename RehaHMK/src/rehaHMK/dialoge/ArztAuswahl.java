@@ -36,12 +36,13 @@ import CommonTools.Colors;
 import CommonTools.JCompTools;
 import CommonTools.JRtaTextField;
 import CommonTools.SqlInfo;
+import rehaHMK.CompoundPainters;
 import rehaHMK.RehaHMK;
 
 public class ArztAuswahl extends RehaSmartDialog {
     /**
-    	 * 
-    	 */
+         *
+         */
     private static final long serialVersionUID = -3341922213135473923L;
     public JFormattedTextField tf = null;
     String suchkrit = "";
@@ -91,7 +92,7 @@ public class ArztAuswahl extends RehaSmartDialog {
         // CompoundPainter(mp));;;
         grundPanel = new JXPanel(new BorderLayout());
 
-        grundPanel.setBackgroundPainter(RehaHMK.cparzt);
+        grundPanel.setBackgroundPainter(CompoundPainters.CP_ARZT);
         content = getAuswahl();
         grundPanel.add(content, BorderLayout.CENTER);
         getSmartTitledPanel().setContentContainer(grundPanel);
@@ -425,7 +426,7 @@ public class ArztAuswahl extends RehaSmartDialog {
     /************************************************************/
     class ArztWahlAction extends AbstractAction {
         /**
-         * 
+         *
          */
         private static final long serialVersionUID = -6371294487538741375L;
 
@@ -496,7 +497,7 @@ public class ArztAuswahl extends RehaSmartDialog {
 
 class MyArztWahlModel extends DefaultTableModel {
     /**
-    * 
+    *
     */
     private static final long serialVersionUID = 1L;
 

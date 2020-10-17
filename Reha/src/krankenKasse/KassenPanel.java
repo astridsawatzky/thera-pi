@@ -77,7 +77,7 @@ import events.RehaTPEvent;
 import events.RehaTPEventClass;
 import gui.Cursors;
 import hauptFenster.Reha;
-import oOorgTools.OOTools;
+import oOorgTools.RehaOOTools;
 import rehaInternalFrame.JKasseInternal;
 import stammDatenTools.KasseTools;
 import systemEinstellungen.SystemConfig;
@@ -380,12 +380,12 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener, Tabl
      * //System.out.println("nächster gefunden bei "+itreffer+" // suchestarten = "
      * +suchestarten); suchestarten = itreffer+1;
      * //JOptionPane.showMessageDialog(null,"Treffer bei "+itreffer);
-     * 
+     *
      * }else{ if(suchestarten > 0){ JOptionPane.showMessageDialog(
      * null,"Keine weitere Übereinstimmung mit Suchkriterium"); }else{
      * JOptionPane.showMessageDialog(null,"Keine Übereinstimmung mit Suchkriterium"
      * ); }
-     * 
+     *
      * } suchen.requestFocus(); }
      */
     private JXPanel getEdits() {
@@ -761,8 +761,8 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener, Tabl
                     @Override
                     protected Void doInBackground() throws Exception {
                         try {
-                            OOTools.starteStandardFormular(Path.Instance.getProghome() + "vorlagen/" + Reha.getAktIK()
-                                    + "/" + formular.get(iformular), null);
+                            RehaOOTools.starteStandardFormular(Path.Instance.getProghome() + "vorlagen/" + Reha.getAktIK()
+                                    + "/" + formular.get(iformular), null,Reha.instance);
                         } catch (Exception ex) {
                             ex.printStackTrace();
                         }
@@ -864,25 +864,25 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener, Tabl
     /*
      * private void ladeSchreiben(String url){ IDocumentService documentService =
      * null;;
-     * 
+     *
      * try { documentService = Reha.officeapplication.getDocumentService(); } catch
      * (OfficeApplicationException e) {
-     * 
+     *
      * e.printStackTrace(); } IDocumentDescriptor docdescript = new
      * DocumentDescriptor(); docdescript.setHidden(false);
      * docdescript.setAsTemplate(true); IDocument document = null; //ITextTable[]
      * tbl = null; try { document = documentService.loadDocument(url,docdescript); }
      * catch (NOAException e) {
-     * 
+     *
      * e.printStackTrace(); } ITextDocument textDocument = (ITextDocument)document;
      * ITextFieldService textFieldService = textDocument.getTextFieldService();
      * ITextField[] placeholders = null; try { placeholders =
      * textFieldService.getPlaceholderFields(); } catch (TextException e) {
-     * 
+     *
      * e.printStackTrace(); } for (int i = 0; i < placeholders.length; i++) {
-     * 
+     *
      * String placeholderDisplayText = placeholders[i].getDisplayText();
-     * 
+     *
      * } }
      */
     public void holeAktKasse(String id) {
@@ -918,7 +918,7 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener, Tabl
          * buf.append("ik_physika='"+ikdaten+"', ");
          * buf.append("ik_nutzer='"+iknutzer+"', ");
          * buf.append("ik_papier='"+ikpapier+"', ");
-         * 
+         *
          */
         if (kassentbl.getRowCount() <= 0) {
             JOptionPane.showMessageDialog(null, "Keine Kasse für 302-er Test vorhanden");
@@ -1432,16 +1432,16 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener, Tabl
     /*****************************************************/
     /*
      * class KassenListSelectionHandler implements KassenSelectionListener {
-     * 
+     *
      * public void valueChanged(ListSelectionEvent e) { ListSelectionModel lsm =
      * (ListSelectionModel)e.getSource(); boolean isAdjusting =
      * e.getValueIsAdjusting(); if(isAdjusting){ return; } if
      * (lsm.isSelectionEmpty()) {
-     * 
+     *
      * } else { int minIndex = lsm.getMinSelectionIndex(); int maxIndex =
      * lsm.getMaxSelectionIndex(); for (int i = minIndex; i <= maxIndex; i++) { if
      * (lsm.isSelectedIndex(i)) { x break; } } }
-     * 
+     *
      * } }
      */
 

@@ -1,6 +1,5 @@
 package rehaBillEdit;
 
-import java.awt.Cursor;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.sql.Connection;
@@ -28,48 +27,30 @@ import ag.ion.bion.officelayer.event.VetoTerminateListener;
 import crypt.Verschluesseln;
 
 public class RehaBillEdit implements WindowListener {
-
-    /**
-     * @param args
-     */
-    /**
-     * @param args
-     */
-    public static boolean DbOk;
-    JFrame jFrame;
-    public static JFrame thisFrame = null;
+    private static boolean DbOk;
+    private JFrame jFrame;
+    public static JFrame thisFrame;
     public Connection conn;
     public static RehaBillEdit thisClass;
 
-    public static IOfficeApplication officeapplication;
+    static IOfficeApplication officeapplication;
 
-    public String dieseMaschine = null;
-    /*
-     * public static String dbIpAndName = null; public static String dbUser = null;
-     * public static String dbPassword = null;
-     *
-     *
-     */
-    public final Cursor wartenCursor = new Cursor(Cursor.WAIT_CURSOR);
-    public final Cursor normalCursor = new Cursor(Cursor.DEFAULT_CURSOR);
+                private static String dbIpAndName = "jdbc:mysql://192.168.2.2:3306/rtadaten";
+    private static String dbUser = "rtauser";
+    private static String dbPassword = "rtacurie";
+    private static String officeProgrammPfad = "C:/Programme/OpenOffice.org 3";
+    private static String officeNativePfad = "C:/RehaVerwaltung/Libraries/lib/openofficeorg/";
+    static String progHome = "C:/RehaVerwaltung/";
+    static String aktIK = "510841109";
+    static String hmRechnungPrivat = "C:/RehaVerwaltung/vorlagen/HMRechnungPrivatKopie.ott";
 
-    public static String dbIpAndName = "jdbc:mysql://192.168.2.2:3306/rtadaten";
-    public static String dbUser = "rtauser";
-    public static String dbPassword = "rtacurie";
-    public static String officeProgrammPfad = "C:/Programme/OpenOffice.org 3";
-    public static String officeNativePfad = "C:/RehaVerwaltung/Libraries/lib/openofficeorg/";
-    public static String progHome = "C:/RehaVerwaltung/";
-    public static String aktIK = "510841109";
-    public static String hmRechnungPrivat = "C:/RehaVerwaltung/vorlagen/HMRechnungPrivatKopie.ott";
-    public static String hmRechnungKasse = "C:/RehaVerwaltung/vorlagen/HMRechnungPrivatKopie.ott";
-    public static String rhRechnungPrivat = "C:/RehaVerwaltung/vorlagen/HMRechnungPrivatKopie.ott";
-    public static String rhRechnungKasse = "C:/RehaVerwaltung/vorlagen/HMRechnungPrivatKopie.ott";
+        static String rhRechnungKasse = "C:/RehaVerwaltung/vorlagen/HMRechnungPrivatKopie.ott";
 
-    public static HashMap<String, String> hmAbrechnung = new HashMap<String, String>();
-    public static HashMap<String, String> hmFirmenDaten = null;
-    public static HashMap<String, String> hmAdrPDaten = new HashMap<String, String>();
+    static HashMap<String, String> hmAbrechnung = new HashMap<>();
+    static HashMap<String, String> hmFirmenDaten;
+    public static HashMap<String, String> hmAdrPDaten = new HashMap<>();
 
-    public static boolean testcase = false;
+    public static boolean testcase;
 
     public static void main(String[] args) {
         RehaBillEdit application = new RehaBillEdit();
@@ -87,9 +68,9 @@ public class RehaBillEdit implements WindowListener {
                     Verschluesseln man = Verschluesseln.getInstance();
                     decrypted = man.decrypt(pw);
                 } else {
-                    decrypted = new String("");
+                    decrypted = "";
                 }
-                dbPassword = decrypted.toString();
+                dbPassword = decrypted;
                 inif = new INIFile(args[0] + "ini/" + args[1] + "/fremdprog.ini");
                 officeProgrammPfad = inif.getStringProperty("OpenOffice.org", "OfficePfad");
                 officeNativePfad = inif.getStringProperty("OpenOffice.org", "OfficeNativePfad");
@@ -102,17 +83,14 @@ public class RehaBillEdit implements WindowListener {
                 rhRechnungKasse = inif.getStringProperty("RehaDRVRechnung", "RehaDRVformular");
                 progHome = args[0];
                 aktIK = args[1];
-                AbrechnungParameter(progHome);
-                FirmenDaten(progHome);
-            } else {
-                AbrechnungParameter(progHome);
-                FirmenDaten(progHome);
             }
+            AbrechnungParameter(progHome);
+            FirmenDaten(progHome);
 
             final RehaBillEdit xapplication = application;
             new SwingWorker<Void, Void>() {
                 @Override
-                protected Void doInBackground() throws java.lang.Exception {
+                protected Void doInBackground() throws Exception {
                     xapplication.starteDB();
                     long zeit = System.currentTimeMillis();
                     while (!DbOk) {
@@ -129,7 +107,7 @@ public class RehaBillEdit implements WindowListener {
                         JOptionPane.showMessageDialog(null,
                                 "Datenbank konnte nicht geöffnet werden!\nReha-Statistik kann nicht gestartet werden");
                     }
-                    RehaBillEdit.starteOfficeApplication();
+                    starteOfficeApplication();
                     return null;
                 }
 
@@ -140,21 +118,12 @@ public class RehaBillEdit implements WindowListener {
                     "Keine Datenbankparameter übergeben!\nReha-Statistik kann nicht gestartet werden");
             System.exit(0);
         }
-
     }
-
-    /********************/
 
     public JFrame getJFrame() {
         try {
             UIManager.setLookAndFeel("com.jgoodies.looks.plastic.PlasticXPLookAndFeel");
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (UnsupportedLookAndFeelException e) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
             e.printStackTrace();
         }
         thisClass = this;
@@ -172,37 +141,19 @@ public class RehaBillEdit implements WindowListener {
         return jFrame;
     }
 
-    /********************/
-
     public RehaBillEdit getInstance() {
         thisClass = this;
         return this;
     }
 
-    /*******************/
-
-    public void starteDB() {
+    private void starteDB() {
         DatenbankStarten dbstart = new DatenbankStarten();
         dbstart.run();
     }
 
-    /*******************/
-
-    public static void stoppeDB() {
-        try {
-            RehaBillEdit.thisClass.conn.close();
-            RehaBillEdit.thisClass.conn = null;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**********************************************************
-     *
-     */
-    final class DatenbankStarten implements Runnable {
+        private final class DatenbankStarten implements Runnable {
         private void StarteDB() {
-            final RehaBillEdit obj = RehaBillEdit.thisClass;
+            final RehaBillEdit obj = thisClass;
 
             final String sDB = "SQL";
             if (obj.conn != null) {
@@ -214,47 +165,29 @@ public class RehaBillEdit implements WindowListener {
             try {
                 Class.forName("com.mysql.jdbc.Driver")
                      .newInstance();
-            } catch (InstantiationException e) {
+            } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
                 e.printStackTrace();
                 System.out.println(sDB + "Treiberfehler: " + e.getMessage());
-                RehaBillEdit.DbOk = false;
-                return;
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-                System.out.println(sDB + "Treiberfehler: " + e.getMessage());
-                RehaBillEdit.DbOk = false;
-                return;
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-                System.out.println(sDB + "Treiberfehler: " + e.getMessage());
-                RehaBillEdit.DbOk = false;
+                DbOk = false;
                 return;
             }
             try {
-
                 obj.conn = DriverManager.getConnection(dbIpAndName, dbUser, dbPassword);
-                RehaBillEdit.DbOk = true;
+                DbOk = true;
                 System.out.println("Datenbankkontakt hergestellt");
             } catch (final SQLException ex) {
                 System.out.println("SQLException: " + ex.getMessage());
                 System.out.println("SQLState: " + ex.getSQLState());
                 System.out.println("VendorError: " + ex.getErrorCode());
-                RehaBillEdit.DbOk = false;
-
+                DbOk = false;
             }
-            return;
         }
 
         @Override
         public void run() {
             StarteDB();
         }
-
     }
-
-    /*****************************************************************
-     *
-     */
 
     @Override
     public void windowActivated(WindowEvent arg0) {
@@ -262,9 +195,9 @@ public class RehaBillEdit implements WindowListener {
 
     @Override
     public void windowClosed(WindowEvent arg0) {
-        if (RehaBillEdit.thisClass.conn != null) {
+        if (thisClass.conn != null) {
             try {
-                RehaBillEdit.thisClass.conn.close();
+                thisClass.conn.close();
                 System.out.println("Datenbankverbindung wurde geschlossen");
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -275,9 +208,9 @@ public class RehaBillEdit implements WindowListener {
 
     @Override
     public void windowClosing(WindowEvent arg0) {
-        if (RehaBillEdit.thisClass.conn != null) {
+        if (thisClass.conn != null) {
             try {
-                RehaBillEdit.thisClass.conn.close();
+                thisClass.conn.close();
                 System.out.println("Datenbankverbindung wurde geschlossen");
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -302,7 +235,7 @@ public class RehaBillEdit implements WindowListener {
     public void windowOpened(WindowEvent arg0) {
     }
 
-    public static void FirmenDaten(String proghome) {
+    private static void FirmenDaten(String proghome) {
         String[] stitel = { "Ik", "Ikbezeichnung", "Firma1", "Firma2", "Anrede", "Nachname", "Vorname", "Strasse",
                 "Plz", "Ort", "Telefon", "Telefax", "Email", "Internet", "Bank", "Blz", "Kto", "Steuernummer", "Hrb",
                 "Logodatei", "Zusatz1", "Zusatz2", "Zusatz3", "Zusatz4", "Bundesland" };
@@ -313,7 +246,7 @@ public class RehaBillEdit implements WindowListener {
         }
     }
 
-    public static void AbrechnungParameter(String proghome) {
+    private static void AbrechnungParameter(String proghome) {
         hmAbrechnung.clear();
         /******** Heilmittelabrechnung ********/
         Settings inif = new INIFile(proghome + "ini/" + aktIK + "/abrechnung.ini");
@@ -331,7 +264,7 @@ public class RehaBillEdit implements WindowListener {
         hmAbrechnung.put("hmbgeformular", inif.getStringProperty("HMBGERechnung", "Bformular"));
         hmAbrechnung.put("hmbgedrucker", inif.getStringProperty("HMBGERechnung", "Bdrucker"));
         hmAbrechnung.put("hmbgeexemplare", inif.getStringProperty("HMBGERechnung", "Bexemplare"));
-        /******** Rehaabrechnung ********/
+        /* Rehaabrechnung */
         hmAbrechnung.put("rehagkvformular", inif.getStringProperty("RehaGKVRechnung", "RehaGKVformular"));
         hmAbrechnung.put("rehagkvdrucker", inif.getStringProperty("RehaGKVRechnung", "RehaGKVdrucker"));
         hmAbrechnung.put("rehagkvexemplare", inif.getStringProperty("RehaGKVRechnung", "RehaGKVexemplare"));
@@ -348,16 +281,12 @@ public class RehaBillEdit implements WindowListener {
         hmAbrechnung.put("rehapriik", inif.getStringProperty("RehaPRIRechnung", "RehaPRIik"));
 
         hmAbrechnung.put("hmallinoffice", inif.getStringProperty("GemeinsameParameter", "InOfficeStarten"));
-        String INI_FILE = "";
         if (System.getProperty("os.name")
                   .contains("Windows")) {
-            INI_FILE = proghome + "nebraska_windows.conf";
         } else if (System.getProperty("os.name")
                          .contains("Linux")) {
-            INI_FILE = proghome + "nebraska_linux.conf";
         } else if (System.getProperty("os.name")
                          .contains("String für MaxOSX????")) {
-            INI_FILE = proghome + "nebraska_mac.conf";
         }
         /*
          * org.thera_pi.nebraska.gui.utils.Verschluesseln man =
@@ -379,19 +308,16 @@ public class RehaBillEdit implements WindowListener {
          */
     }
 
-    /***************************/
-
-    public static void starteOfficeApplication() {
-
-        final String OPEN_OFFICE_ORG_PATH = RehaBillEdit.officeProgrammPfad;
+    private static void starteOfficeApplication() {
+        final String OPEN_OFFICE_ORG_PATH = officeProgrammPfad;
 
         try {
             // System.out.println("**********Open-Office wird gestartet***************");
             String path = OPEN_OFFICE_ORG_PATH;
-            Map<String, String> config = new HashMap<String, String>();
+            Map<String, String> config = new HashMap<>();
             config.put(IOfficeApplication.APPLICATION_HOME_KEY, path);
             config.put(IOfficeApplication.APPLICATION_TYPE_KEY, IOfficeApplication.LOCAL_APPLICATION);
-            System.setProperty(IOfficeApplication.NOA_NATIVE_LIB_PATH, RehaBillEdit.officeNativePfad);
+            System.setProperty(IOfficeApplication.NOA_NATIVE_LIB_PATH, officeNativePfad);
             officeapplication = OfficeApplicationRuntime.getApplication(config);
             officeapplication.activate();
             officeapplication.getDesktopService()
@@ -406,9 +332,7 @@ public class RehaBillEdit implements WindowListener {
                                              docs[0].close();
                                              // System.out.println("Letztes Dokument wurde geschlossen");
                                          }
-                                     } catch (DocumentException e) {
-                                         e.printStackTrace();
-                                     } catch (OfficeApplicationException e) {
+                                     } catch (DocumentException | OfficeApplicationException e) {
                                          e.printStackTrace();
                                      }
                                  }
@@ -417,5 +341,4 @@ public class RehaBillEdit implements WindowListener {
             e.printStackTrace();
         }
     }
-
 }

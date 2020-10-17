@@ -61,6 +61,7 @@ import com.sun.star.uno.Exception;
 
 import CommonTools.Colors;
 import CommonTools.JRtaTextField;
+import CommonTools.Monitor;
 import CommonTools.RehaEvent;
 import CommonTools.RehaEventClass;
 import CommonTools.RehaEventListener;
@@ -70,7 +71,6 @@ import CommonTools.ini.INITool;
 import CommonTools.ini.Settings;
 import abrechnung.AbrechnungGKV;
 import abrechnung.AbrechnungReha;
-import ag.ion.bion.officelayer.application.IOfficeApplication;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import anmeldungUmsatz.Anmeldungen;
 import anmeldungUmsatz.Umsaetze;
@@ -110,7 +110,7 @@ import urlaubBeteiligung.Beteiligung;
 import urlaubBeteiligung.Urlaub;
 import verkauf.VerkaufTab;
 
-public class Reha implements RehaEventListener {
+public class Reha implements RehaEventListener , Monitor{
 
     public PatientHauptPanel patpanel = null;
     public EBerichtPanel eberichtpanel = null;
@@ -194,8 +194,6 @@ public class Reha implements RehaEventListener {
     public boolean KollegenOk = false;
     public static String aktLookAndFeel = "";
     public static SystemConfig sysConf = null;
-    public static IOfficeApplication officeapplication;
-
     public static BarCodeScanner barcodeScanner = null;
 
     public static CompoundPainter[] RehaPainter = { null, null, null, null, null };
@@ -347,15 +345,13 @@ public class Reha implements RehaEventListener {
     public void startWithMandantSet() {
 
         logger.info("Thera-Pi Version: " + new Version().number());
-        logger.info("Java Version:     " +System.getProperty("java.version"));
+        logger.info("Java Version:     " + System.getProperty("java.version"));
         aktIK = mandant().ikDigitString();
         aktMandant = mandant().name();
         Feature.init(mandant);
         DueUpdates du = new DueUpdates(new DatenquellenFactory(aktIK));
         du.init();
         du.execute();
-
-
 
         String iniPath = Path.Instance.getProghome() + "ini/" + mandant().ikDigitString() + "/";
 
@@ -417,9 +413,6 @@ public class Reha implements RehaEventListener {
 
         sysConf.HauptFenster();
         sysConf.openoffice();
-
-
-
 
         sysConf.DatenBank();
         sysConf.phoneservice();
@@ -907,7 +900,8 @@ public class Reha implements RehaEventListener {
                     if (!RehaIOServer.rehaMailIsActive) {
                         nachrichtenInBearbeitung = true;
                         /**************/
-                        if ((!Reha.aktUser.equals("")) && (checkForMails()) && (Reha.officeapplication != null)) {
+                        if ((!Reha.aktUser.equals("")) && (checkForMails())
+                                && (new OOService().getOfficeapplication() != null)) {
                             nachrichtenRegeln();
                         }
                         /*************/
@@ -1788,9 +1782,9 @@ public class Reha implements RehaEventListener {
 
     public static void starteOfficeApplication() {
         try {
-            new OOService().start(SystemConfig.OpenOfficeNativePfad, SystemConfig.OpenOfficePfad);
+            OOService.setLibpath(OOService.OpenOfficeNativePfad, OOService.OpenOfficePfad);
+            new OOService().start();
 
-            officeapplication = new OOService().getOfficeapplication();
             Reha.instance.Rehaprogress.setIndeterminate(false);
         } catch (OfficeApplicationException | FileNotFoundException e) {
             e.printStackTrace();
@@ -2235,19 +2229,20 @@ public class Reha implements RehaEventListener {
         Vector<String> feldNamen = SqlInfo.holeFeldNamen(tableName, true, Arrays.asList(new String[] { "id" }));
         int nbOfFields = feldNamen.size();
         if (!(feldNamen.contains("pauschale")) && (nbOfFields == 72)) {
-            boolean retVal = SqlInfo.sqlAusfuehren("ALTER TABLE " + tableName + " ADD COLUMN PAUSCHALE enum('T','F') NOT NULL DEFAULT 'F'");
+            boolean retVal = SqlInfo.sqlAusfuehren(
+                    "ALTER TABLE " + tableName + " ADD COLUMN PAUSCHALE enum('T','F') NOT NULL DEFAULT 'F'");
             if (retVal) {
                 String meldung = "Die Tabelle " + tableName + "\n"
                         + "wurde erfolgreich um das Feld 'PAUSCHALE' ergänzt.";
                 logger.info(meldung.replace("\n", " "));
                 SwingUtilities.invokeLater(new Runnable() {
                     String txt = meldung;
+
                     @Override
                     public void run() {
                         JOptionPane.showMessageDialog(null, txt);
                     }
                 });
-
 
             }
         } else {
@@ -2256,8 +2251,8 @@ public class Reha implements RehaEventListener {
     }
 
     static void testeVoTables() {
-        testeVoTableStruc ("lza");
-        testeVoTableStruc ("verordn");
+        testeVoTableStruc("lza");
+        testeVoTableStruc("verordn");
     }
 
     ActionListener actionListener = new MenuActionListener(this);
@@ -2348,6 +2343,18 @@ public class Reha implements RehaEventListener {
 
     public Mandant mandant() {
         return mandant;
+    }
+
+    @Override
+    public void statusChange(Object status) {
+        if(status.equals(Monitor.START)) {
+            Reha.getThisFrame()
+            .setCursor(Cursors.wartenCursor);
+        } else if (status.equals(Monitor.STOP)) {
+            Reha.getThisFrame()
+            .setCursor(Cursors.normalCursor);
+        }
+
     }
 
 }

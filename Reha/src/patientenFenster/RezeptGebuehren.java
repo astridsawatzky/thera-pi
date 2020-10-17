@@ -53,7 +53,8 @@ import errorMail.ErrorMail;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
 import hauptFenster.Reha;
-import oOorgTools.OOTools;
+import office.OOService;
+import office.OOTools;
 import systemEinstellungen.SystemConfig;
 
 public class RezeptGebuehren extends RehaSmartDialog implements ActionListener {
@@ -237,7 +238,7 @@ public class RezeptGebuehren extends RehaSmartDialog implements ActionListener {
 
     /****************************************************/
     public synchronized void rezGebDrucken() {
-        if (!Reha.officeapplication.isActive()) {
+        if (!new OOService().getOfficeapplication().isActive()) {
             Reha.starteOfficeApplication();
             try {
                 Thread.sleep(100);
@@ -259,7 +260,7 @@ public class RezeptGebuehren extends RehaSmartDialog implements ActionListener {
             IDocumentService documentService = null;
 
             try {
-                documentService = Reha.officeapplication.getDocumentService();
+                documentService = new OOService().getOfficeapplication().getDocumentService();
             } catch (OfficeApplicationException e) {
                 e.printStackTrace();
             } catch (Exception ex) {

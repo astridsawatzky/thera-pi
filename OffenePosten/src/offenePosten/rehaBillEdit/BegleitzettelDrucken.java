@@ -4,7 +4,6 @@ import java.util.HashMap;
 
 import javax.swing.JOptionPane;
 
-import CommonTools.OOTools;
 import ag.ion.bion.officelayer.document.DocumentDescriptor;
 import ag.ion.bion.officelayer.document.IDocument;
 import ag.ion.bion.officelayer.document.IDocumentDescriptor;
@@ -15,6 +14,7 @@ import ag.ion.bion.officelayer.text.ITextFieldService;
 import ag.ion.bion.officelayer.text.TextException;
 import offenePosten.OffenePosten;
 import office.OOService;
+import office.OOTools;
 
 public class BegleitzettelDrucken {
     ITextDocument textDocument = null;
@@ -57,7 +57,7 @@ public class BegleitzettelDrucken {
         IDocumentService documentService = null;
 
         documentService = new OOService().getOfficeapplication().getDocumentService();
-        
+
         IDocumentDescriptor docdescript = new DocumentDescriptor();
         docdescript.setHidden(true);
         docdescript.setAsTemplate(true);

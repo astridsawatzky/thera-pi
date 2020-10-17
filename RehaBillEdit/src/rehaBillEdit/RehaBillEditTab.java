@@ -7,31 +7,23 @@ import javax.swing.JTabbedPane;
 
 import org.jdesktop.swingx.JXHeader;
 import org.jdesktop.swingx.JXPanel;
-import org.jdesktop.swingx.JXTitledPanel;
 
 import com.jgoodies.looks.windows.WindowsTabbedPaneUI;
 
-public class RehaBillEditTab extends JXPanel {
-
-    /**
-     * 
-     */
+class RehaBillEditTab extends JXPanel {
     private static final long serialVersionUID = -7580783032048353314L;
-    /*
-     * private Vector<String> vectitel = new Vector<String>(); private
+    /**
+     * Private Vector<String> vectitel = new Vector<String>(); private
      * Vector<String> vecdescript = new Vector<String>(); private Vector<ImageIcon>
-     * vecimg = new Vector<ImageIcon>();
+     * vecimg = new Vector<ImageIcon>();.
      */
-    JTabbedPane billEditTab = null;
-    public JXTitledPanel jxTitel;
-    public JXHeader jxh;
+    private JTabbedPane billEditTab;
 
-    RehaBillPanel editPanel = null;
+    private JXHeader jxh;
 
-    RehaBillPanel billPanel = null;
+        private RehaBillPanel billPanel;
 
     public RehaBillEditTab() {
-        super();
         setLayout(new BorderLayout());
         billEditTab = new JTabbedPane();
         billEditTab.setUI(new WindowsTabbedPaneUI());
@@ -47,7 +39,5 @@ public class RehaBillEditTab extends JXPanel {
         jxh.validate();
         billEditTab.validate();
         validate();
-
     }
-
 }

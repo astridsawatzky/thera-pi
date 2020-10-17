@@ -43,7 +43,7 @@ import events.RehaTPEventClass;
 import hauptFenster.Reha;
 import hauptFenster.SuchenDialog;
 import krankenKasse.KassenFormulare;
-import oOorgTools.OOTools;
+import oOorgTools.RehaOOTools;
 import patientenFenster.PatNeuanlage;
 import rechteTools.Rechte;
 import socketClients.SMSClient;
@@ -475,9 +475,9 @@ public class PatientHauptLogic {
                             iformular = Integer.valueOf(formularid.getText());
                             if (iformular >= 0) {
                                 String sdatei = formular.get(iformular);
-                                OOTools.starteStandardFormular(
+                                RehaOOTools.starteStandardFormular(
                                         Path.Instance.getProghome() + "vorlagen/" + Reha.getAktIK() + "/" + sdatei,
-                                        null);
+                                        null,Reha.instance);
                             }
                         }
                         return null;
@@ -861,7 +861,7 @@ public class PatientHauptLogic {
             /*
              * //auf offene RGR-Prüfen new Thread(){ public void run(){ new
              * SwingWorker<Void,Void>(){
-             * 
+             *
              * @Override protected Void doInBackground() throws Exception { try{
              * patientHauptPanel.holeWichtigeInfos(xpatint,""); }catch(Exception ex){
              * ex.printStackTrace(); } return null; } }.execute(); } }.start();
@@ -904,7 +904,7 @@ public class PatientHauptLogic {
          * if(evt.getDetails()[0].equals("#KORRIGIEREN")){ if(this.neuDlgOffen){return;}
          * final String feld = (String)evt.getDetails()[1]; new
          * SwingWorker<Void,Void>(){
-         * 
+         *
          * @Override protected Void doInBackground() throws Exception {
          * ////System.out.println("Korrigieren->"+evx.getSource()); editFeld(feld);
          * return null; } }.execute(); }

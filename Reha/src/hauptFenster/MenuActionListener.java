@@ -185,6 +185,9 @@ final class MenuActionListener implements ActionListener {
                 return;
             }
             if (!RehaIOServer.rehaSqlIsActive) {
+
+
+
                 new LadeProg(Path.Instance.getProghome() + "RehaSql.jar" + " " + Path.Instance.getProghome() + " "
                         + Reha.getAktIK() + " " + String.valueOf(Integer.toString(Reha.xport))
                         + (!Rechte.hatRecht(Rechte.BenutzerSuper_user, false) ? " readonly" : " full"));

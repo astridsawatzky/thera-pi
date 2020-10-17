@@ -1,19 +1,13 @@
 package rehaBillEdit.Tools;
 
 import java.awt.Component;
-import java.text.DecimalFormat;
 
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
 public class DoubleTableCellRenderer extends DefaultTableCellRenderer
-
 {
-    /**
-     * 
-     */
     private static final long serialVersionUID = -1029644753226393604L;
-    DecimalFormat dform = new DecimalFormat("####0.00");
 
     @Override
     public Component getTableCellRendererComponent(final JTable table, final Object value, boolean isSelected,

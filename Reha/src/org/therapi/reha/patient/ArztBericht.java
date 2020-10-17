@@ -53,7 +53,7 @@ import events.RehaTPEvent;
 import events.RehaTPEventClass;
 import gui.Cursors;
 import hauptFenster.Reha;
-import oOorgTools.OOTools;
+import oOorgTools.RehaOOTools;
 import patientenFenster.ArztAuswahl;
 import stammDatenTools.RezTools;
 import systemEinstellungen.SystemConfig;
@@ -1069,7 +1069,7 @@ public class ArztBericht extends RehaSmartDialog implements ActionListener {
 
                 }
             }
-            OOTools.starteTherapieBericht(SystemConfig.thberichtdatei);
+            RehaOOTools.starteTherapieBericht(SystemConfig.thberichtdatei);
         } catch (Exception ex) {
             ex.printStackTrace();
         }

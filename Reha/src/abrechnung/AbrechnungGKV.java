@@ -64,6 +64,7 @@ import com.jgoodies.forms.layout.FormLayout;
 import com.mysql.jdbc.PreparedStatement;
 
 import CommonTools.DatFunk;
+import CommonTools.ExUndHop;
 import CommonTools.JCompTools;
 import CommonTools.JRtaCheckBox;
 import CommonTools.JRtaComboBox;
@@ -82,6 +83,7 @@ import hauptFenster.AktiveFenster;
 import hauptFenster.Reha;
 import hauptFenster.UIFSplitPane;
 import mandant.IK;
+import office.OOService;
 import rehaInternalFrame.JAbrechnungInternal;
 import stammDatenTools.RezTools;
 import suchen.PatMitAbgebrochenenVOs;
@@ -1035,10 +1037,10 @@ TreeSelectionListener treeSelectionListener = new TreeSelectionListener() {
     public void starteAbrechnung() {
         try {
             hmKostentraeger.clear();
-            if (!Reha.officeapplication.isActive()) {
+            if (!new OOService().getOfficeapplication().isActive()) {
                 try {
                     Reha.starteOfficeApplication();
-                    if (!Reha.officeapplication.isActive()) {
+                    if (!new OOService().getOfficeapplication().isActive()) {
                         doDlgAbort();
                         JOptionPane.showMessageDialog(null,
                                 "Das OpenOffice-System reagiert nicht korrekt!\nAbrechnung wird nicht gestartet");
@@ -1192,13 +1194,13 @@ TreeSelectionListener treeSelectionListener = new TreeSelectionListener() {
             /*********** hier erst die Nummer erzeugen **************/
             aktRechnung = Integer.toString(SqlInfo.erzeugeNummer("rnr"));
             if (abrechnungsModus.equals(ABR_MODE_302)) {
-                aktEsol = StringTools.fuelleMitZeichen(Integer.toString(SqlInfo.erzeugeNummerMitMax("esol", 999)), "0",
+                aktEsol = StringTools.fuelleMitZeichen(Integer.toString(ExUndHop.erzeugeNummerMitMax("esol", 999)), "0",
                         true, 3);
             }
             /************************************************/
             hmKostentraeger.put("aktesol", String.valueOf(aktEsol));
             /************************************************/
-            aktDfue = StringTools.fuelleMitZeichen(Integer.toString(SqlInfo.erzeugeNummerMitMax("dfue", 99999)), "0",
+            aktDfue = StringTools.fuelleMitZeichen(Integer.toString(ExUndHop.erzeugeNummerMitMax("dfue", 99999)), "0",
                     true, 5);
             if (aktRechnung.equals("-1")) {
                 Reha.instance.progressStarten(false);

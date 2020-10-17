@@ -15,20 +15,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Vector;
 
-import javax.swing.BorderFactory;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JEditorPane;
-import javax.swing.JLabel;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JPopupMenu;
-import javax.swing.JScrollPane;
-import javax.swing.JTree;
-import javax.swing.ListSelectionModel;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
@@ -57,24 +44,24 @@ import CommonTools.SqlInfo;
 import CommonTools.StringTools;
 import CommonTools.ini.INIFile;
 import CommonTools.ini.Settings;
-import reha301.Tools.OOTools;
-import reha301.Tools.RezTools;
-import reha301.Tools.SystemPreislisten;
-import reha301.Tools.WartenAufDB;
 import ag.ion.bion.officelayer.text.ITextDocument;
 import ag.ion.bion.officelayer.text.TextException;
-import reha301.dialoge.ArztAuswahl;
-import reha301.dialoge.KassenAuswahl;
 import io.RehaIOMessages;
+import office.OOTools;
 import reha301.Dta301Model;
 import reha301.Reha301;
 import reha301.Reha301Tab;
 import reha301.SocketClient;
+import reha301.Tools.RezTools;
+import reha301.Tools.SystemPreislisten;
+import reha301.Tools.WartenAufDB;
+import reha301.dialoge.ArztAuswahl;
+import reha301.dialoge.KassenAuswahl;
 
 public class Reha301Auswerten extends JXPanel {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 1L;
     Reha301Tab eltern = null;
@@ -564,35 +551,6 @@ public class Reha301Auswerten extends JXPanel {
                         "select edifact from dta301 where id='" + dta301mod.getDtaID() + "' LIMIT 1"));
     }
 
-    private void doNachrichtDirektDrucken() {
-
-    }
-
-    private void doNachrichtEmail() {
-
-    }
-
-    private void doPatUntersuchen(int row, Point pos) {
-        String[] teilen = tab.getValueAt(row, 4)
-                             .toString()
-                             .split("#");
-        String cmd = "select * from pat5 where n_name='" + teilen[1] + "' and v_name='" + teilen[2] + "' and "
-                + "geboren='" + tab.getValueAt(row, 10)
-                                   .toString()
-                + "'";
-        //// System.out.println(tab.getValueAt(row,10));
-        Vector<Vector<String>> patvec = SqlInfo.holeFelder(cmd);
-
-        if (patvec.size() <= 0) {
-            JOptionPane.showMessageDialog(null, "Patient nicht in Datenbank vorhanden");
-        } else {
-            doPatientenWahl(tab.getValueAt(row, 11)
-                               .toString(),
-                    pos);
-        }
-
-    }
-
     private void doPatientenWahl(String id, Point pos) {
         Reha301PatAuswahl patwahl = new Reha301PatAuswahl(this, id);
         patwahl.setModal(true);
@@ -959,7 +917,7 @@ public class Reha301Auswerten extends JXPanel {
     /********************************************************/
     class MyTableModel extends DefaultTableModel {
         /**
-        * 
+        *
         */
         private static final long serialVersionUID = 1L;
 
@@ -1467,7 +1425,7 @@ public class Reha301Auswerten extends JXPanel {
 
                         /*
                          * Später wieder einschalten
-                         * 
+                         *
                          */
                         String cmd = "insert into berhist set pat_intern='" + dta301mod.getPatIntern() + "', "
                                 + "berichtid='" + Integer.toString(berichtid) + "', " + "berichttyp='DRV E-Bericht', "
@@ -1664,7 +1622,7 @@ public class Reha301Auswerten extends JXPanel {
     /************************************************************/
     private static class JXTreeNode extends DefaultMutableTreeNode {
         /**
-         * 
+         *
          */
         private static final long serialVersionUID = 2195590211796817012L;
 
@@ -1682,10 +1640,6 @@ public class Reha301Auswerten extends JXPanel {
         /*
          * public boolean isEnabled() { return enabled; }
          */
-
-        public KnotenObjekt getObject() {
-            return knotenObjekt;
-        }
     }
 
     /***************************************/
@@ -1711,7 +1665,7 @@ public class Reha301Auswerten extends JXPanel {
     /*************************************/
     private class MyRenderer extends DefaultTreeCellRenderer {
         /**
-         * 
+         *
          */
         private static final long serialVersionUID = 2333990367290526356L;
         Icon fertigIcon;

@@ -3,23 +3,17 @@ package therapiHilfe;
 import java.awt.BorderLayout;
 import java.awt.Cursor;
 import java.awt.Toolkit;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
-import java.awt.event.ContainerEvent;
-import java.awt.event.ContainerListener;
+import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.awt.event.WindowStateListener;
+import java.io.FileNotFoundException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Properties;
 
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
@@ -33,15 +27,15 @@ import CommonTools.ini.INIFile;
 import CommonTools.ini.Settings;
 import ag.ion.bion.officelayer.application.IOfficeApplication;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
-import ag.ion.bion.officelayer.application.OfficeApplicationRuntime;
 import ag.ion.bion.officelayer.document.DocumentException;
 import ag.ion.bion.officelayer.document.IDocument;
 import ag.ion.bion.officelayer.event.ITerminateEvent;
 import ag.ion.bion.officelayer.event.VetoTerminateListener;
 import environment.Path;
 import logging.Logging;
+import office.OOService;
 
-public class piHelp implements WindowListener, WindowStateListener, ComponentListener, ContainerListener {
+public class piHelp  {
     public static String proghome;
     public static String dbtreiber;
     public static String dblogin;
@@ -129,10 +123,7 @@ public class piHelp implements WindowListener, WindowStateListener, ComponentLis
             thisFrame = jFrame;
             jFrame.setTitle("pi-Hilfe - Generator");
             jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            jFrame.addWindowListener(this);
-            jFrame.addWindowStateListener(this);
-            jFrame.addComponentListener(this);
-            jFrame.addContainerListener(this);
+            jFrame.addWindowListener(wl);
             jFrame.setLayout(new BorderLayout());
             hf = new helpFenster();
             jFrame.setContentPane(hf);
@@ -141,7 +132,6 @@ public class piHelp implements WindowListener, WindowStateListener, ComponentLis
             db.StarteDB();
 
             jFrame.setSize(800, 600);
-            // jFrame.setExtendedState(JXFrame.MAXIMIZED_BOTH);
 
             SwingUtilities.invokeLater(new Runnable() {
                 @Override
@@ -155,129 +145,51 @@ public class piHelp implements WindowListener, WindowStateListener, ComponentLis
         return jFrame;
     }
 
-    @Override
-    public void windowActivated(WindowEvent arg0) {
+    WindowListener wl = new WindowAdapter() {
 
-    }
 
-    @Override
-    public void windowClosed(WindowEvent arg0) {
-    }
 
-    @Override
-    public void windowClosing(WindowEvent arg0) {
 
-        try {
-            piHelp.conn.close();
-            // System.out.println("MySQL - geschlossen");
-        } catch (SQLException e) {
+        @Override
+        public void windowClosing(WindowEvent arg0) {
 
-            e.printStackTrace();
-        }
-        if (ooPanel.webdocument != null) {
             try {
-                if (ooPanel.webdocument.isOpen()) {
-                    ooPanel.webdocument.close();
+                piHelp.conn.close();
+            } catch (SQLException e) {
+
+                e.printStackTrace();
+            }
+            if (ooPanel.webdocument != null) {
+                try {
+                    if (ooPanel.webdocument.isOpen()) {
+                        ooPanel.webdocument.close();
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    System.exit(1);
                 }
-            } catch (Exception ex) {
-                ex.printStackTrace();
-                System.exit(1);
+
+            }
+            if (ooPanel.document != null) {
+                try {
+                    ooPanel.document.close();
+                } catch (com.sun.star.lang.DisposedException dex) {
+                    System.exit(1);
+                }
             }
 
-            // System.out.println("OOWeb Dokument - geschlossen");
-        }
-        if (ooPanel.document != null) {
-            try {
-                ooPanel.document.close();
-            } catch (com.sun.star.lang.DisposedException dex) {
-                System.exit(1);
-            }
-            // System.out.println("OOWriter Dokument - geschlossen");
         }
 
-        /*
-         * try { piHelp.officeapplication.deactivate();
-         * //System.out.println("OpenOffice deaktiviert"); } catch
-         * (OfficeApplicationException e) {
-         *
-         * e.printStackTrace(); }
-         */
-        // System.out.println("Programm Exit(0)");
-
-    }
-
-    @Override
-    public void windowDeactivated(WindowEvent arg0) {
-
-    }
-
-    @Override
-    public void windowDeiconified(WindowEvent arg0) {
-
-    }
-
-    @Override
-    public void windowIconified(WindowEvent arg0) {
-
-    }
-
-    @Override
-    public void windowOpened(WindowEvent arg0) {
-
-    }
-
-    @Override
-    public void windowStateChanged(WindowEvent arg0) {
-
-    }
-
-    @Override
-    public void componentHidden(ComponentEvent arg0) {
-
-    }
-
-    @Override
-    public void componentMoved(ComponentEvent arg0) {
-
-    }
-
-    @Override
-    public void componentResized(ComponentEvent arg0) {
-
-    }
-
-    @Override
-    public void componentShown(ComponentEvent arg0) {
-
-    }
-
-    @Override
-    public void componentAdded(ContainerEvent arg0) {
-
-    }
-
-    @Override
-    public void componentRemoved(ContainerEvent arg0) {
-
-    }
+    };
 
     public static void starteOfficeApplication() {
 
-        final String OPEN_OFFICE_ORG_PATH = piHelp.OpenOfficePfad;
-        // final String OPEN_OFFICE_ORG_PATH = "C:\\Programme\\OpenOffice.org 2.3";
         try {
-            // System.out.println(piHelp.OpenOfficePfad);
-            // System.out.println(piHelp.OfficeNativePfad);
-            String path = OPEN_OFFICE_ORG_PATH;
-            Map<String, String> config = new HashMap<String, String>();
-            config.put(IOfficeApplication.APPLICATION_HOME_KEY, path);
-            config.put(IOfficeApplication.APPLICATION_TYPE_KEY, IOfficeApplication.LOCAL_APPLICATION);
-            config.put(IOfficeApplication.APPLICATION_HOST_KEY, "localhost");
-            // config.put(IOfficeApplication.APPLICATION_TYPE_KEY,
-            // IOfficeApplication.LOCAL_APPLICATION);
-            System.setProperty(IOfficeApplication.NOA_NATIVE_LIB_PATH, piHelp.OfficeNativePfad);
-            officeapplication = OfficeApplicationRuntime.getApplication(config);
-            officeapplication.activate();
+
+            OOService.setLibpath(OfficeNativePfad, OpenOfficePfad);
+            officeapplication = new OOService().start();
+
+
             officeapplication.getDesktopService()
                              .addTerminateListener(new VetoTerminateListener() {
                                  @Override
@@ -288,7 +200,6 @@ public class piHelp implements WindowListener, WindowStateListener, ComponentLis
                                                                              .getCurrentDocuments();
                                          if (docs.length == 1) {
                                              docs[0].close();
-                                             //// System.out.println("Letztes Dokument wurde geschlossen");
                                          }
                                      } catch (DocumentException e) {
                                          e.printStackTrace();
@@ -298,12 +209,7 @@ public class piHelp implements WindowListener, WindowStateListener, ComponentLis
                                  }
                              });
 
-            // IFrame frame =
-            // Reha.officeapplication.getDesktopService().constructNewOfficeFrame();
-            // System.out.println("Open-Office wurde gestartet");
-            // System.out.println("Open-Office-Typ:
-            // "+officeapplication.getApplicationType());
-        } catch (OfficeApplicationException e) {
+        } catch (OfficeApplicationException | FileNotFoundException e) {
 
             e.printStackTrace();
         }
@@ -315,7 +221,6 @@ final class DatenbankStarten implements Runnable {
 
     void StarteDB() {
 
-        /********************/
         try {
             Class.forName("de.root1.jpmdbc.Driver");
         } catch (final Exception e) {
@@ -333,35 +238,12 @@ final class DatenbankStarten implements Runnable {
             piHelp.conn = DriverManager.getConnection("jdbc:jpmdbc:http://www.thera-pi.org/jpmdbc.php?db336243054",
                     connProperties);
 
-            // Date zeit = new Date();
-            // String stx = "Insert into eingeloggt set comp='"+"Preis-Listen
-            // "+java.net.InetAddress.getLocalHost()+": import"+"',
-            // zeit='"+zeit.toString()+"', einaus='ein';";
-            // sqlAusfuehren(stx);
-
         } catch (final SQLException ex) {
-            // System.out.println("SQLException-1: " + ex.getMessage());
-            // System.out.println("SQLState-1: " + ex.getSQLState());
-            // System.out.println("VendorError-1: " + ex.getErrorCode());
             JOptionPane.showMessageDialog(null,
                     "Fehler: Datenbankkontakt zum Preislisten-Server konnte nicht hergestellt werden.");
             return;
         }
-        return;
 
-        /********************/
-        /*
-         * if (obj.conn != null){ try{ obj.conn.close();} catch(final SQLException e){}
-         * } try{ Class.forName(piHelp.dbtreiber).newInstance(); piHelp.DbOk = true; }
-         * catch ( final Exception e ){ //System.out.println(sDB+"Treiberfehler: " +
-         * e.getMessage()); piHelp.DbOk = false; return ; } try { piHelp.conn =
-         * (Connection) DriverManager.getConnection(piHelp.dblogin,
-         * piHelp.dbuser,piHelp.dbpassword); } catch (final SQLException ex) {
-         * //System.out.println("SQLException: " + ex.getMessage());
-         * //System.out.println("SQLState: " + ex.getSQLState());
-         * //System.out.println("VendorError: " + ex.getErrorCode()); piHelp.DbOk =
-         * false; return; } //System.out.println("MySql - gestartet"); return;
-         */
     }
 
     @Override
@@ -371,68 +253,38 @@ final class DatenbankStarten implements Runnable {
 }
 
 final class WorkerGruppen extends SwingWorker<Void, Void> {
-    JComboBox jcom;
-
-
-
 
     @Override
     protected Void doInBackground() throws Exception {
         String[] combInhalt = holeGruppen();
-        // ActionListener[] al = helpFenster.gruppenbox.getActionListeners();
         if (helpFenster.gruppenbox.getItemCount() > 0) {
-            // helpFenster.gruppenbox.removeActionListener(al[0]);
             helpFenster.gruppenbox.removeAllItems();
         }
-        // System.out.println("elemente = "+combInhalt.length);
         for (int i = 0; i < combInhalt.length; i++) {
             helpFenster.gruppenbox.addItem(new String(combInhalt[i]));
         }
-        // helpFenster.gruppenbox.addActionListener(al[0]);
-        // System.out.println("WorkerThread beendet");
         return null;
 
     }
 
-    /************************/
     private String[] holeGruppen() {
-        Statement stmtx = null;
-        ResultSet rsx = null;
-        String[] comboInhalt = null;
-        // System.out.println("In holeGruppen");
-        try {
-            stmtx = piHelp.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+        String[] comboInhalt;
+        try (Statement stmtx = piHelp.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+                ResultSet rsCount = stmtx.executeQuery("select count(*) from hgroup");
+                ResultSet hgruppen = stmtx.executeQuery("select gruppe from hgroup order by reihenfolge");
 
-        } catch (SQLException e) {
-
-            e.printStackTrace();
-        }
-        try {
-            rsx = stmtx.executeQuery("select count(*) from hgroup");
-            rsx.next();
-            // System.out.println("Insgesamt Gruppen = "+rsx.getInt(1));
-            comboInhalt = new String[rsx.getInt(1)];
-            rsx = stmtx.executeQuery("select gruppe from hgroup order by reihenfolge");
+        ) {
+            rsCount.next();
+            comboInhalt = new String[rsCount.getInt(1)];
             int i = 0;
-            while (rsx.next()) {
-                comboInhalt[i] = rsx.getString(1);
+            while (hgruppen.next()) {
+                comboInhalt[i] = hgruppen.getString(1);
                 i++;
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            comboInhalt = new String[0];
         }
-        if (rsx != null) {
-            try {
-                rsx.close();
-            } catch (SQLException sqlEx) { // ignore }
-                rsx = null;
-            }
-        }
-        try {
-            stmtx.close();
-        } catch (SQLException sqlEx) { // ignore }
-            stmtx = null;
-        }
-        return comboInhalt.clone();
+
+        return comboInhalt;
     }
 }

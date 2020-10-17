@@ -40,18 +40,7 @@ import com.sun.star.text.XTextFieldsSupplier;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.util.XRefreshable;
 
-import CommonTools.DatFunk;
-import CommonTools.DblCellEditor;
-import CommonTools.DoubleTableCellRenderer;
-import CommonTools.JCompTools;
-import CommonTools.JRtaCheckBox;
-import CommonTools.JRtaRadioButton;
-import CommonTools.JRtaTextField;
-import CommonTools.MitteRenderer;
-import CommonTools.OOTools;
-import CommonTools.OpCommon;
-import CommonTools.SqlInfo;
-import CommonTools.TableTool;
+import CommonTools.*;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import ag.ion.bion.officelayer.document.DocumentDescriptor;
 import ag.ion.bion.officelayer.document.IDocument;
@@ -64,6 +53,7 @@ import ag.ion.bion.officelayer.text.TextException;
 import ag.ion.noa.NOAException;
 import ag.ion.noa.internal.printing.PrintProperties;
 import office.OOService;
+import office.OOTools;
 
 public class OffenepostenMahnungen extends JXPanel {
 

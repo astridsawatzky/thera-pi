@@ -24,8 +24,8 @@ import ag.ion.bion.officelayer.text.ITextTableCellProperties;
 import ag.ion.bion.officelayer.text.TextException;
 import ag.ion.noa.NOAException;
 import ag.ion.noa.internal.printing.PrintProperties;
-import hauptFenster.Reha;
-import oOorgTools.OOTools;
+import office.OOService;
+import office.OOTools;
 import stammDatenTools.RezTools;
 import systemEinstellungen.SystemConfig;
 
@@ -288,7 +288,7 @@ public class AbrechnungDrucken {
 
     public void starteDokument(String url) throws Exception {
         IDocumentService documentService = null;
-        documentService = Reha.officeapplication.getDocumentService();
+        documentService = new OOService().getOfficeapplication().getDocumentService();
         IDocumentDescriptor docdescript = new DocumentDescriptor();
         docdescript.setHidden(true);
         docdescript.setAsTemplate(true);

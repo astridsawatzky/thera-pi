@@ -19,6 +19,7 @@ import org.thera_pi.nebraska.crypto.NebraskaKeystore;
 import org.thera_pi.nebraska.crypto.NebraskaNotInitializedException;
 
 import CommonTools.DatFunk;
+import CommonTools.ExUndHop;
 import CommonTools.SqlInfo;
 import CommonTools.StringTools;
 import emailHandling.EmailSendenExtern;
@@ -99,7 +100,7 @@ public class RVMeldung301 {
                 + DatFunk.sHeute()
                          .substring(0, 2);
         UHRZEIT4 = getEdiTimeString(false);
-        LFDNUMMER = StringTools.fuelleMitZeichen(Integer.toString(SqlInfo.erzeugeNummerMitMax("dfue", 99999)), "0",
+        LFDNUMMER = StringTools.fuelleMitZeichen(Integer.toString(ExUndHop.erzeugeNummerMitMax("dfue", 99999)), "0",
                 true, 5);
         buf301Header.setLength(0);
         buf301Header.trimToSize();
@@ -741,7 +742,7 @@ public class RVMeldung301 {
         gesamtbuf.append(buf301Header.toString());
         gesamtbuf.append(buf301Body.toString());
         gesamtbuf.append(buf301Footer.toString());
-        intAktEREH = SqlInfo.erzeugeNummerMitMax("esol", 999);
+        intAktEREH = ExUndHop.erzeugeNummerMitMax("esol", 999);
         strAktEREH = "0" + StringTools.fuelleMitZeichen(Integer.toString(intAktEREH), "0", true, 3);
 
         /*
@@ -1248,7 +1249,7 @@ public class RVMeldung301 {
         gesamtbuf.append(buf301Header.toString());
         gesamtbuf.append(buf301Body.toString());
         gesamtbuf.append(buf301Footer.toString());
-        intAktEREH = SqlInfo.erzeugeNummerMitMax("esol", 999);
+        intAktEREH = ExUndHop.erzeugeNummerMitMax("esol", 999);
         strAktEREH = "0" + StringTools.fuelleMitZeichen(Integer.toString(intAktEREH), "0", true, 3);
         epanel.abrDlg.setzeLabel("E-Bericht verschlüsseln");
         if (doKeyStoreAktion(true)) {
@@ -1500,7 +1501,7 @@ public class RVMeldung301 {
         // String strAktEREH = null;
         // long originalSize = -1;
         // long decodedSize = -1;
-        intAktEREH = SqlInfo.erzeugeNummerMitMax("esol", 999);
+        intAktEREH = ExUndHop.erzeugeNummerMitMax("esol", 999);
         strAktEREH = "0" + StringTools.fuelleMitZeichen(Integer.toString(intAktEREH), "0", true, 3);
 
         if (doKeyStoreAktion(true)) {
@@ -1807,7 +1808,7 @@ public class RVMeldung301 {
         gesamtbuf.append(buf301Header.toString());
         gesamtbuf.append(buf301Body.toString());
         gesamtbuf.append(buf301Footer.toString());
-        intAktEREH = SqlInfo.erzeugeNummerMitMax("esol", 999);
+        intAktEREH = ExUndHop.erzeugeNummerMitMax("esol", 999);
         strAktEREH = "0" + StringTools.fuelleMitZeichen(Integer.toString(intAktEREH), "0", true, 3);
         anzahlUnhs++;
         if (doKeyStoreAktion(true)) {
@@ -1967,7 +1968,7 @@ public class RVMeldung301 {
         gesamtbuf.append(buf301Header.toString());
         gesamtbuf.append(buf301Body.toString());
         gesamtbuf.append(buf301Footer.toString());
-        intAktEREH = SqlInfo.erzeugeNummerMitMax("esol", 999);
+        intAktEREH = ExUndHop.erzeugeNummerMitMax("esol", 999);
         strAktEREH = "0" + StringTools.fuelleMitZeichen(Integer.toString(intAktEREH), "0", true, 3);
         anzahlUnhs++;
         if (doKeyStoreAktion(true)) {
@@ -2136,7 +2137,7 @@ public class RVMeldung301 {
         gesamtbuf.append(buf301Header.toString());
         gesamtbuf.append(buf301Body.toString());
         gesamtbuf.append(buf301Footer.toString());
-        intAktEREH = SqlInfo.erzeugeNummerMitMax("esol", 999);
+        intAktEREH = ExUndHop.erzeugeNummerMitMax("esol", 999);
         strAktEREH = "0" + StringTools.fuelleMitZeichen(Integer.toString(intAktEREH), "0", true, 3);
 
         /************** Zusätzliche Fahrgeldrechnung erstellen *************/
@@ -2343,7 +2344,7 @@ public class RVMeldung301 {
         gesamtbuf.append(buf301Header.toString());
         gesamtbuf.append(buf301Body.toString());
         gesamtbuf.append(buf301Footer.toString());
-        intAktEREH = SqlInfo.erzeugeNummerMitMax("esol", 999);
+        intAktEREH = ExUndHop.erzeugeNummerMitMax("esol", 999);
         strAktEREH = "0" + StringTools.fuelleMitZeichen(Integer.toString(intAktEREH), "0", true, 3);
 
         if (doKeyStoreAktion(true)) {

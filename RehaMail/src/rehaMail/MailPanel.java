@@ -32,20 +32,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
 
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JFileChooser;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JPopupMenu;
-import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
-import javax.swing.JToolBar;
-import javax.swing.ListSelectionModel;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
@@ -60,28 +47,15 @@ import org.jdesktop.swingx.JXTable;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
-import CommonTools.ButtonTools;
-import CommonTools.DatFunk;
-import CommonTools.DateTableCellEditor;
-import CommonTools.DateTableCellRenderer;
-import CommonTools.DblCellEditor;
-import CommonTools.DoubleTableCellRenderer;
-import CommonTools.IconListRenderer;
-import CommonTools.IntTableCellEditor;
-import CommonTools.IntTableCellRenderer;
-import CommonTools.JCompTools;
-import CommonTools.JRtaTextField;
-import CommonTools.MitteRenderer;
-import CommonTools.ReaderStart;
-import CommonTools.SqlInfo;
-import rehaMail.Tools.OOTools;
+import CommonTools.*;
+import office.OOTools;
 import rehaMail.Tools.Rechte;
 import rehaMail.Tools.ToolsDialog;
 import rehaMail.Tools.UIFSplitPane;
 
 public class MailPanel extends JXPanel implements TableModelListener, KeyListener {
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = -4946342165531610888L;
     /********** für die Tabelle **************/
@@ -399,7 +373,7 @@ public class MailPanel extends JXPanel implements TableModelListener, KeyListene
      * ImageIcon(RehaMail.progHome+"icons/application-exit.png").getImage().
      * getScaledInstance(26,26, Image.SCALE_SMOOTH); attachmentIco[4] = new
      * ImageIcon(ico);
-     * 
+     *
      * }
      */
     private JToolBar getToolbar() {
@@ -744,20 +718,20 @@ public class MailPanel extends JXPanel implements TableModelListener, KeyListene
     /*
      * protected void loescheBilder(){ ITextDocument textDocument =
      * (ITextDocument)document;
-     * 
-     * 
+     *
+     *
      * XTextGraphicObjectsSupplier graphicObjSupplier =
      * (XTextGraphicObjectsSupplier)
      * UnoRuntime.queryInterface(XTextGraphicObjectsSupplier.class,
      * textDocument.getXTextDocument()); XNameAccess nameAccess =
      * graphicObjSupplier.getGraphicObjects();
-     * 
+     *
      * String[] names = nameAccess.getElementNames(); try{ for(int i = 0; i <
      * names.length;i++){ Any xImageAny = (Any) nameAccess.getByName(names[i]);
      * Object xImageObject = xImageAny.getObject(); XTextContent xImage =
      * (XTextContent) xImageObject; xImage.dispose(); } }catch(Exception ex){
      * ex.printStackTrace(); }
-     * 
+     *
      * }
      */
     /*
@@ -767,59 +741,59 @@ public class MailPanel extends JXPanel implements TableModelListener, KeyListene
      * getParagraphs(); for(int i = 0; i < paragraphs.length; i++) { XTextContent
      * textContent = paragraphs[i].getXTextContent();
      * textContent.getAnchor().setString(""); textContent.dispose(); }
-     * 
+     *
      * } catch (TextException e) { e.printStackTrace(); }
-     * 
+     *
      * }
      */
     /*
      * protected void resolveControls(XText xDocText) { try {
-     * 
-     * 
+     *
+     *
      * XEnumerationAccess xParaAccess = (XEnumerationAccess)
      * UnoRuntime.queryInterface( XEnumerationAccess.class, xDocText ); XEnumeration
      * xParaEnum = xParaAccess.createEnumeration();
-     * 
-     * 
+     *
+     *
      * XTextCursor xTextCursor = xDocText.createTextCursor();
      * xTextCursor.gotoStart(false);
-     * 
-     * 
+     *
+     *
      * XParagraphCursor xParagraphCursor = (XParagraphCursor)
      * UnoRuntime.queryInterface( XParagraphCursor.class, xTextCursor );
-     * 
+     *
      * while ( xParaEnum.hasMoreElements() ) {
-     * 
+     *
      * xParaEnum.nextElement(); // This line edited 11/21/2003, after original post.
-     * 
+     *
      * if (xParagraphCursor.isStartOfParagraph() &
      * xParagraphCursor.isEndOfParagraph() ) {
-     * 
+     *
      * } else { xParagraphCursor.gotoEndOfParagraph(true); //select the current
      * paragraph. System.out.println("xTextCursor.getString()=" +
      * xTextCursor.getString());
-     * 
+     *
      * // Access to frames, graphic objects, embedded objects or // shapes that are
      * anchored at or as character. // Allows access to the collections of all
      * content types. XContentEnumerationAccess xContentAccess =
      * (XContentEnumerationAccess) UnoRuntime.queryInterface(
      * XContentEnumerationAccess.class, xParagraphCursor );
-     * 
+     *
      * XEnumeration xContentEnum =
      * xContentAccess.createContentEnumeration("com.sun.star.text.TextContent");
-     * 
+     *
      * while ( xContentEnum.hasMoreElements() ) { // Found a TextContent, my text
      * box. XTextContent xTextContent = (XTextContent) UnoRuntime.queryInterface(
      * XTextContent.class, xContentEnum.nextElement() );
-     * 
+     *
      * // The box's anchor will allow me to insert text after I remove the box.
      * XTextRange xTextRange = xTextContent.getAnchor();
-     * 
+     *
      * // Get the DefaultText of the text box here. // ??? How to do this ???
-     * 
+     *
      * // Removes the form text box from the document. XText xText =
      * xTextCursor.getText(); xText.removeTextContent(xTextContent);
-     * 
+     *
      * // Now insert some text in its place. xText.insertString(xTextRange,
      * "InsertedText42", false); } } xParagraphCursor.gotoNextParagraph(false); } }
      * catch ( Exception e ) { e.printStackTrace( System.out ); } }
@@ -854,7 +828,7 @@ public class MailPanel extends JXPanel implements TableModelListener, KeyListene
 
     class EinTableModel extends DefaultTableModel {
         /**
-        * 
+        *
         */
         private static final long serialVersionUID = 1L;
 
@@ -1071,16 +1045,16 @@ public class MailPanel extends JXPanel implements TableModelListener, KeyListene
      * hideElements(LayoutManager.URL_STATUSBAR);
      * hideElements(LayoutManager.URL_TOOLBAR_STANDARDBAR);
      * hideElements(LayoutManager.URL_TOOLBAR);
-     * 
-     * 
+     *
+     *
      * //Tools.OOTools.setzePapierFormat(document, new Integer(25199), new
      * Integer(19299)); Tools.OOTools.setzeRaender(document, new Integer(1000), new
      * Integer(1000),new Integer(1000),new Integer(1000));
-     * 
-     * 
+     *
+     *
      * //nativeView.validate(); try { document.zoom(DocumentZoomType.BY_VALUE,
      * (short)80); } catch (DocumentException e) { e.printStackTrace(); }
-     * 
+     *
      * catch (Throwable throwable) { noaPanel.add(new
      * JLabel("<html>Ein Fehler ist aufgetreten:<br>" +
      * throwable.getMessage()+"</html>")); } } }
@@ -1093,7 +1067,7 @@ public class MailPanel extends JXPanel implements TableModelListener, KeyListene
      * componentResized(ComponentEvent e) { refreshSize();
      * nativeView.setPreferredSize(new Dimension(parent.getWidth() - 5,
      * parent.getHeight() - 5)); parent.getLayout().layoutContainer(parent); } });
-     * 
+     *
      * nativeView.setPreferredSize(new Dimension(parent.getWidth() - 5,
      * parent.getHeight() - 5)); parent.getLayout().layoutContainer(parent);
      * officeFrame =
@@ -1107,7 +1081,7 @@ public class MailPanel extends JXPanel implements TableModelListener, KeyListene
      * (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, element);
      * xps.setPropertyValue("Persistent", new Boolean(false));
      * xLayoutManager.hideElement(url); } }
-     * 
+     *
      * public final void refreshSize() { noaPanel.setPreferredSize(new
      * Dimension(noaPanel.getWidth() , noaPanel.getHeight()- 5)); final Container
      * parent = noaPanel.getParent(); if (parent instanceof JComponent) {
@@ -1115,29 +1089,29 @@ public class MailPanel extends JXPanel implements TableModelListener, KeyListene
      * SwingUtilities.getWindowAncestor(nativeView.getParent().getParent()); if
      * (window1 != null) { window1.validate(); }
      * noaPanel.getLayout().layoutContainer(noaPanel);
-     * 
+     *
      * }
-     * 
+     *
      * static void copy(ITextDocument sourceDoc, ITextDocument targetDoc) throws
      * Exception {
-     * 
+     *
      * XController xController_sourceDoc =
      * sourceDoc.getXTextDocument().getCurrentController(); XController
      * xController_targetDoc = targetDoc.getXTextDocument().getCurrentController();
-     * 
+     *
      * XTransferableSupplier xTransferableSupplier_sourceDoc =
      * (XTransferableSupplier)
      * UnoRuntime.queryInterface(XTransferableSupplier.class,
      * xController_sourceDoc);
-     * 
+     *
      * XTransferable xTransferable =
      * xTransferableSupplier_sourceDoc.getTransferable();
-     * 
+     *
      * XTransferableSupplier xTransferableSupplier_targetDoc =
      * (XTransferableSupplier)
      * UnoRuntime.queryInterface(XTransferableSupplier.class,
      * xController_targetDoc);
-     * 
+     *
      * xTransferableSupplier_targetDoc.insertTransferable(xTransferable); }
      */
     /************************************************/

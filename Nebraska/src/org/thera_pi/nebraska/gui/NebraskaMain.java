@@ -53,7 +53,7 @@ public class NebraskaMain {
                 e.printStackTrace();
             }
         }
-        progHome = System.getProperty("user.dir");
+        progHome = Path.Instance.getProghome();
         String INI_FILE = "";
 
         if (Path.Instance.isWindows()) {
@@ -99,7 +99,7 @@ public class NebraskaMain {
                     dummy.add(ini.getStringProperty("KeyStores", "KeyStoreAlias" + Integer.toString(i + 1)));
                     dummy.add(
                             man.decrypt(ini.getStringProperty("KeyStores", "KeyStoreKeyPw" + Integer.toString(i + 1))));
-                    keyStoreParameter.add( dummy);
+                    keyStoreParameter.add(dummy);
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -109,7 +109,6 @@ public class NebraskaMain {
             }
             OPENOFFICE_HOME = ini.getStringProperty("Pfade", "OPENOFFICE_HOME");
             OPENOFFICE_JARS = ini.getStringProperty("Pfade", "OPENOFFICE_JARS");
-            // ini.save();
         } else {
             try {
                 Settings ini = new INIFile(INI_FILE);
@@ -134,7 +133,7 @@ public class NebraskaMain {
                     dummy.add(ini.getStringProperty("KeyStores", "KeyStoreAlias" + Integer.toString(i + 1)));
                     dummy.add(
                             man.decrypt(ini.getStringProperty("KeyStores", "KeyStoreKeyPw" + Integer.toString(i + 1))));
-                    keyStoreParameter.add( dummy);
+                    keyStoreParameter.add(dummy);
                 }
                 if (speichern) {
                     ini.save();
@@ -172,7 +171,7 @@ public class NebraskaMain {
         jf.setVisible(true);
 
         starteOfficeApplication();
-        //new Constants();    // Werte scheinen unbenutzt
+        // new Constants(); // Werte scheinen unbenutzt
         return jf;
     }
 

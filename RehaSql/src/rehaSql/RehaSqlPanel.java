@@ -16,15 +16,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Vector;
 
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.ListSelectionModel;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
@@ -55,11 +47,9 @@ import CommonTools.DblCellEditor;
 import CommonTools.DoubleTableCellRenderer;
 import CommonTools.JCompTools;
 import CommonTools.JRtaComboBox;
-import CommonTools.OOTools;
 import CommonTools.SqlInfo;
 import CommonTools.ini.INITool;
 import CommonTools.ini.Settings;
-import rehaSql.RehaIO.SocketClient;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import ag.ion.bion.officelayer.document.DocumentDescriptor;
 import ag.ion.bion.officelayer.document.IDocument;
@@ -68,11 +58,13 @@ import ag.ion.bion.officelayer.document.IDocumentService;
 import ag.ion.bion.officelayer.spreadsheet.ISpreadsheetDocument;
 import ag.ion.noa.NOAException;
 import io.RehaIOMessages;
+import office.OOTools;
+import rehaSql.RehaIO.SocketClient;
 
 public class RehaSqlPanel extends JXPanel implements ListSelectionListener, TableModelListener {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = -5545910505665721828L;
 
@@ -342,7 +334,39 @@ public class RehaSqlPanel extends JXPanel implements ListSelectionListener, Tabl
         JXPanel jpan = new JXPanel();
         jpan.setOpaque(false);
         jpan.setLayout(lay);
-        jpan.add(buts[0] = ButtonTools.macheButton("Export in OO-Calc", "exportcalc", al), cc.xy(6, 2));
+        JButton ooCalcButton = ButtonTools.macheButton("Export in OO-Calc", "exportcalc", new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(RehaSql.officeapplication.isPresent()) {
+
+                    try {
+                        starteExport();
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+
+
+                } else {
+                    SwingUtilities.invokeLater(new Runnable() {
+
+                        @Override
+                        public void run() {
+
+                            JOptionPane.showMessageDialog(RehaSqlPanel.this, "Office steht nicht zur Verfügung. \nÜberprüfen Sie die Office Systemeinstellung","Das ist jetzt echt doof!" ,JOptionPane.ERROR_MESSAGE);
+
+                        }
+                    });
+                }
+
+
+            }
+        });
+
+
+buts[0] = ooCalcButton;
+        jpan.add(ooCalcButton, cc.xy(6, 2));
+
         chbstatement = new JRtaComboBox();
         chbstatement.setActionCommand("statementliste");
 
@@ -373,13 +397,12 @@ public class RehaSqlPanel extends JXPanel implements ListSelectionListener, Tabl
         try {
             String iniFile = (RehaSql.isReadOnly() ? "sqlmodulro.ini" : "sqlmodul.ini");
             Settings inif = INITool.openIni(RehaSql.progHome + "ini/" + RehaSql.aktIK + "/", iniFile);
-            Vector<String> vecstmts = new Vector<String>();
             int anzahl = inif.getIntegerProperty("SqlStatements", "StatementsAnzahl");
             for (int i = 0; i < anzahl; i++) {
-                vecstmts.clear();
+                Vector<String> vecstmts = new Vector<String>();
                 vecstmts.add(inif.getStringProperty("SqlStatements", "StatementTitel" + (i + 1)));
                 vecstmts.add(inif.getStringProperty("SqlStatements", "Statement" + (i + 1)));
-                vecStatements.add(((Vector<String>) vecstmts.clone()));
+                vecStatements.add((vecstmts));
             }
             chbstatement.setDataVectorWithStartElement(vecStatements, 0, 1, "./.");
             chbstatement.setSelectedItem("./.");
@@ -471,13 +494,7 @@ public class RehaSqlPanel extends JXPanel implements ListSelectionListener, Tabl
                         ex.printStackTrace();
                     }
                 }
-                if (cmd.equals("exportcalc")) {
-                    try {
-                        starteExport();
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                }
+
                 if (cmd.equals("statementliste")) {
                     try {
                         if (chbstatement.getSelectedIndex() <= 0) {
@@ -1033,7 +1050,7 @@ public class RehaSqlPanel extends JXPanel implements ListSelectionListener, Tabl
 
     class SqlTableModel extends DefaultTableModel {
         /**
-        * 
+        *
         */
         private static final long serialVersionUID = 1L;
 
@@ -1139,10 +1156,11 @@ public class RehaSqlPanel extends JXPanel implements ListSelectionListener, Tabl
 
     private void starteCalc() throws OfficeApplicationException, NOAException, NoSuchElementException,
             WrappedTargetException, UnknownPropertyException, PropertyVetoException, IllegalArgumentException {
-        if (!RehaSql.officeapplication.isActive()) {
-            RehaSql.starteOfficeApplication();
-        }
-        IDocumentService documentService = RehaSql.officeapplication.getDocumentService();
+
+        if(RehaSql.officeapplication.isPresent()) {
+
+
+        IDocumentService documentService = RehaSql.officeapplication.get().getDocumentService();
         IDocumentDescriptor docdescript = new DocumentDescriptor();
 
         docdescript.setAsTemplate(true);
@@ -1155,5 +1173,5 @@ public class RehaSqlPanel extends JXPanel implements ListSelectionListener, Tabl
                                                         .getSheets();
         XSpreadsheet spreadsheet1 = UnoRuntime.queryInterface(XSpreadsheet.class, spreadsheets.getByName(sheetName));
         cellCursor = spreadsheet1.createCursor();
-    }
+    }}
 }

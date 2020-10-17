@@ -18,10 +18,10 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Optional;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
@@ -33,13 +33,8 @@ import org.jdesktop.swingx.JXPanel;
 import CommonTools.ini.INIFile;
 import CommonTools.ini.Settings;
 import ag.ion.bion.officelayer.application.IOfficeApplication;
-import ag.ion.bion.officelayer.application.OfficeApplicationException;
-import ag.ion.bion.officelayer.application.OfficeApplicationRuntime;
-import ag.ion.bion.officelayer.document.DocumentException;
-import ag.ion.bion.officelayer.document.IDocument;
-import ag.ion.bion.officelayer.event.ITerminateEvent;
-import ag.ion.bion.officelayer.event.VetoTerminateListener;
 import logging.Logging;
+import office.OOTools;
 import sql.DatenquellenFactory;
 
 public class GBriefe implements WindowStateListener, WindowListener, ComponentListener, ContainerListener {
@@ -60,9 +55,7 @@ public class GBriefe implements WindowStateListener, WindowListener, ComponentLi
     public JXFrame jFrame = null;
 
     public static boolean DbOk;
-    public static String OpenOfficePfad;
-    public static String OfficeNativePfad;
-    public static IOfficeApplication officeapplication;
+    public static Optional<IOfficeApplication> officeapplication;
     public static boolean warten = true;
     public JXPanel contpan = null;
 
@@ -74,9 +67,11 @@ public class GBriefe implements WindowStateListener, WindowListener, ComponentLi
     public static void main(String[] args) throws SQLException {
         new Logging("gbriefe");
 
+
+
+
         String ikZiffern=args[1];
         conn= new DatenquellenFactory(ikZiffern).createConnection();
-        GBriefe application = new GBriefe();
         String proghome = environment.Path.Instance.getProghome();
         try {
             UIManager.setLookAndFeel("com.jgoodies.looks.plastic.PlasticXPLookAndFeel");
@@ -119,41 +114,26 @@ public class GBriefe implements WindowStateListener, WindowListener, ComponentLi
             e2.printStackTrace();
         }
 
-        // System.out.println("starte RehaxSwing");
-        int i = 0;
-        while (warten && i < 50) {
-            try {
-                Thread.sleep(100);
-                // System.out.println("In warten");
-                i++;
-            } catch (InterruptedException e) {
 
-                e.printStackTrace();
-            }
-        }
 
         if (args.length > 0 || testcase) {
             System.out.println("Programmverzeichnis = " + proghome);
-            inif = new INIFile(args[0] + "ini/" + args[1] + "/rehajava.ini");
 
 
 
-            tempvz = args[0] + "temp/" + args[1] + "/"; // new String(inif.getStringProperty("GBriefe", "TempVZ"));
-            vorlagenvz = args[0] + "vorlagen/" + args[1] + "/"; // new String(inif.getStringProperty("GBriefe",
-                                                                // "VorlagenVZ"));
-            inif = new INIFile(args[0] + "ini/" + args[1] + "/rehajava.ini");
-            OpenOfficePfad = inif.getStringProperty("OpenOffice.org", "OfficePfad");
-            OfficeNativePfad = inif.getStringProperty("OpenOffice.org", "OfficeNativePfad");
-            aktIK = args[1];
+            tempvz = args[0] + "temp/" + args[1] + "/";
+            vorlagenvz = args[0] + "vorlagen/" + args[1] + "/";
+
+
+             aktIK = args[1];
+          officeapplication =  OOTools.initOffice(args[0], aktIK);
+
+
         } else {
-            System.out.println("Programmverzeichnis = " + proghome);
-            inif = new INIFile(proghome + "ini/gbriefe.ini");
 
-            tempvz = new String(inif.getStringProperty("GBriefe", "TempVZ"));
-            vorlagenvz = new String(inif.getStringProperty("GBriefe", "VorlagenVZ"));
-            OpenOfficePfad = new String(inif.getStringProperty("GBriefe", "OOPfad"));
-            OfficeNativePfad = new String(inif.getStringProperty("GBriefe", "OONative"));
-            aktIK = "unbekannt";
+                JOptionPane.showMessageDialog(null,
+                        "Keine Datenbankparameter übergeben!\nReha-Sql kann nicht gestartet werden");
+                return;
         }
 
         SwingUtilities.invokeLater(new Runnable() {
@@ -186,22 +166,21 @@ public class GBriefe implements WindowStateListener, WindowListener, ComponentLi
             jFrame.addContainerListener(this);
             jFrame.setLayout(new BorderLayout());
             contpan = new JXPanel(new BorderLayout());
-            contpan.add(new SteuerPanel(), BorderLayout.NORTH);
-            starteOfficeApplication();
+            SteuerPanel steuerPanel = new SteuerPanel();
+            contpan.add(steuerPanel, BorderLayout.NORTH);
+
+
             JPanel jpan = new JPanel(new GridLayout());
-            // jpan.validate();
-            // jpan.setVisible(true);
 
             contpan.add(jpan, BorderLayout.CENTER);
             jFrame.setContentPane(contpan);
             jFrame.setExtendedState(JXFrame.MAXIMIZED_BOTH);
             jFrame.validate();
             jFrame.pack();
-            new OOoPanel(jpan);
+            steuerPanel.setOOoPanel(new OOoPanel(jpan));
 
 
             jFrame.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-            // jFrame.setExtendedState(JXFrame.MAXIMIZED_BOTH);
 
             SwingUtilities.invokeLater(new Runnable() {
                 @Override
@@ -314,60 +293,13 @@ public class GBriefe implements WindowStateListener, WindowListener, ComponentLi
 
     }
 
-    public static void starteOfficeApplication() {
 
-        final String OPEN_OFFICE_ORG_PATH = GBriefe.OpenOfficePfad;
-        // final String OPEN_OFFICE_ORG_PATH = "C:\\Programme\\OpenOffice.org 2.3";
-        try {
-            System.out.println(GBriefe.OpenOfficePfad);
-            System.out.println(GBriefe.OfficeNativePfad);
-            String path = OPEN_OFFICE_ORG_PATH;
-
-            Map<String, String> config = new HashMap<String, String>();
-            config.put(IOfficeApplication.APPLICATION_HOME_KEY, path);
-            config.put(IOfficeApplication.APPLICATION_TYPE_KEY, IOfficeApplication.LOCAL_APPLICATION);
-            config.put(IOfficeApplication.APPLICATION_HOST_KEY, "localhost");
-            // config.put(IOfficeApplication.APPLICATION_TYPE_KEY,
-            // IOfficeApplication.LOCAL_APPLICATION);
-            System.setProperty(IOfficeApplication.NOA_NATIVE_LIB_PATH, GBriefe.OfficeNativePfad);
-            officeapplication = OfficeApplicationRuntime.getApplication(config);
-            officeapplication.activate();
-            // IFrame frame =
-            // Reha.officeapplication.getDesktopService().constructNewOfficeFrame();
-            System.out.println("Open-Office wurde gestartet");
-            System.out.println("Open-Office-Typ: " + officeapplication.getApplicationType());
-            officeapplication.getDesktopService()
-                             .addTerminateListener(new VetoTerminateListener() {
-                                 @Override
-                                 public void queryTermination(ITerminateEvent terminateEvent) {
-                                     super.queryTermination(terminateEvent);
-                                     try {
-                                         IDocument[] docs = officeapplication.getDocumentService()
-                                                                             .getCurrentDocuments();
-                                         if (docs.length == 1) {
-                                             docs[0].close();
-                                             // System.out.println("Letztes Dokument wurde geschlossen");
-                                         }
-                                     } catch (DocumentException e) {
-                                         e.printStackTrace();
-                                         // Reha.instance.messageLabel = new JLabel("OO.org nicht Verf�gbar!!!");
-                                     } catch (OfficeApplicationException e) {
-                                         e.printStackTrace();
-                                         // Reha.instance.messageLabel = new JLabel("OO.org nicht Verf�gbar!!!");
-                                     }
-                                 }
-                             });
-
-        } catch (OfficeApplicationException e) {
-
-            e.printStackTrace();
-        }
-    }
 
 }
 
 
 class SocketClient {
+
     String stand = "";
     Socket server = null;
 
@@ -381,8 +313,6 @@ class SocketClient {
             serverStarten();
         } catch (IOException e) {
 
-            String mes = new String(e.toString());
-            // JOptionPane.showMessageDialog(null, mes);
         }
     }
 
@@ -439,7 +369,6 @@ class RehaSockServer {
             int byteStream;
             String test = "";
             while ((byteStream = input.read()) > -1) {
-                // System.out.println("******byteStream Erhalten****** "+byteStream );
                 char b = (char) byteStream;
 
                 sb.append(b);
@@ -465,11 +394,6 @@ class RehaSockServer {
                 System.out.println("INITENDE-angekommen");
                 GBriefe.warten = false;
                 break;
-            } else {
-                /*
-                 * SetzeLabel slb = new SetzeLabel(); slb.init(new String(new String(xtest)));
-                 * slb.execute();
-                 */
             }
             byte[] schreib = "ok".getBytes();
             output.write(schreib);
@@ -489,4 +413,3 @@ class RehaSockServer {
         return;
     }
 }
-/*******************************************/

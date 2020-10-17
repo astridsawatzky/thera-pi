@@ -77,7 +77,7 @@ import CommonTools.JRtaTextField;
 import CommonTools.MitteRenderer;
 import CommonTools.ReaderStart;
 import CommonTools.SqlInfo;
-import rehaMail.Tools.OOTools;
+import office.OOTools;
 import rehaMail.Tools.ToolsDialog;
 import rehaMail.Tools.UIFSplitPane;
 
@@ -1045,10 +1045,10 @@ public class ToDoPanel extends JXPanel implements TableModelListener, KeyListene
                                    .endsWith(".ODT")
                         || komplett.toUpperCase()
                                    .endsWith(".ODT")) {
-                    rehaMail.Tools.OOTools.starteWriterMitDatei(komplett.replace("//", "/"));
+                    office.OOTools.starteWriterMitDatei(komplett.replace("//", "/"));
                 } else if (komplett.toUpperCase()
                                    .endsWith(".ODS")) {
-                    rehaMail.Tools.OOTools.starteCalcMitDatei(komplett);
+                    office.OOTools.starteCalcMitDatei(komplett);
                 }
             } else {
                 String[] indatei = dateiDialog(attachmentFileName.get(RehaMail.toolsDlgRueckgabe));

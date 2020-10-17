@@ -6,45 +6,16 @@ import java.awt.Cursor;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
-import java.awt.event.ContainerEvent;
-import java.awt.event.ContainerListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Vector;
 
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JFileChooser;
-import javax.swing.JFormattedTextField;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JProgressBar;
-import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
-import javax.swing.ListSelectionModel;
+import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 
 import org.jdesktop.swingworker.SwingWorker;
@@ -61,13 +32,13 @@ import CommonTools.DatFunk;
 import ftpTools.FTPTools;
 import wartenFenster.WartenFenster;
 
-public class helpFenster extends JXPanel implements TableModelListener, ComponentListener, KeyListener,
-        ContainerListener, ActionListener, PropertyChangeListener {
+public class helpFenster extends JXPanel implements
+         ActionListener {
     UIFSplitPane splitOU = null;
     UIFSplitPane splitORL = null;
     JXPanel obenLinks = null;
     JXPanel obenRechts = null;
-    public static JComboBox gruppenbox;
+    public static JComboBox<String> gruppenbox;
     boolean neuertext = false;
     JFormattedTextField stitel = null;
     String tempname = null;
@@ -94,9 +65,6 @@ public class helpFenster extends JXPanel implements TableModelListener, Componen
 
     helpFenster() {
         super();
-        this.addComponentListener(this);
-        this.addKeyListener(this);
-        this.addContainerListener(this);
         this.setLayout(new BorderLayout());
         this.add(grundFlaeche(), BorderLayout.CENTER);
         thisClass = this;
@@ -173,9 +141,6 @@ public class helpFenster extends JXPanel implements TableModelListener, Componen
 
         chkweb = new JCheckBox("SWEB?");
         chkweb.setOpaque(false);
-        /*
-         * jpan.add(chkweb,cc.xy(4,8));
-         */
 
         buts[2] = new JButton("HilfeText abholen");
         buts[2].setActionCommand("abholentext");
@@ -183,16 +148,6 @@ public class helpFenster extends JXPanel implements TableModelListener, Componen
         buts[2].addActionListener(this);
         buts[2].add(chkweb);
         jpan.add(buts[2], cc.xyw(2, 8, 3));
-
-        /*
-         * buts[5] = new JButton("HilfeText abholen (im OO-SWeb starten)");
-         * buts[5].setActionCommand("abholenweb"); buts[5].addActionListener(this);
-         * jpan.add(buts[5],cc.xyw(2,10,3));
-         */
-        /*
-         * chkweb = new JCheckBox("als Webdokument öffnen"); chkweb.setOpaque(false);
-         * jpan.add(chkweb,cc.xy(4,8));
-         */
 
         buts[3] = new JButton("Aktion abbrechen");
         buts[3].setActionCommand("abbrechen");
@@ -218,8 +173,6 @@ public class helpFenster extends JXPanel implements TableModelListener, Componen
     }
 
     private JScrollPane getScrollOR() {
-        // FormLayout lay = new
-        // FormLayout("20dlu,100dlu,10dlu,300dlu,10dlu","10dlu,p,10dlu,80dlu,10dlu,p,10dlu");
         FormLayout lay = new FormLayout("20dlu,100dlu,200dlu,right:max(100dlu;p),10dlu",
                 "10dlu,p,2dlu,80dlu:g,10dlu,p,10dlu");
         CellConstraints cc = new CellConstraints();
@@ -232,7 +185,6 @@ public class helpFenster extends JXPanel implements TableModelListener, Componen
         themenDtblm = new MyDefaultTableModel();
         String[] column = { "Titel", "HTML-Datei", "letzte Änderung", "ID" };
         themenDtblm.setColumnIdentifiers(column);
-        themenDtblm.addTableModelListener(this);
 
         tblThemen = new JXTable(themenDtblm);
         tblThemen.setDoubleBuffered(true);
@@ -255,7 +207,6 @@ public class helpFenster extends JXPanel implements TableModelListener, Componen
         listSelectionModel.addListSelectionListener(new SharedListSelectionHandler());
         tblThemen.setSelectionModel(listSelectionModel);
 
-        // tblThemen.addPropertyChangeListener(this);
         JScrollPane themenScroll = new JScrollPane();
         themenScroll.setViewportView(tblThemen);
         jpan.add(themenScroll, cc.xyw(2, 4, 3));
@@ -295,50 +246,11 @@ public class helpFenster extends JXPanel implements TableModelListener, Componen
         tblThemen.validate();
     }
 
-    @Override
-    public void componentHidden(ComponentEvent e) {
 
-    }
 
-    @Override
-    public void componentMoved(ComponentEvent e) {
 
-    }
 
-    @Override
-    public void componentResized(ComponentEvent e) {
 
-    }
-
-    @Override
-    public void componentShown(ComponentEvent e) {
-
-    }
-
-    @Override
-    public void keyPressed(KeyEvent arg0) {
-
-    }
-
-    @Override
-    public void keyReleased(KeyEvent arg0) {
-
-    }
-
-    @Override
-    public void keyTyped(KeyEvent arg0) {
-
-    }
-
-    @Override
-    public void componentAdded(ContainerEvent arg0) {
-
-    }
-
-    @Override
-    public void componentRemoved(ContainerEvent arg0) {
-
-    }
 
     @Override
     public void actionPerformed(ActionEvent arg0) {
@@ -485,7 +397,6 @@ public class helpFenster extends JXPanel implements TableModelListener, Componen
         tblThemen.setEnabled(true);
         helpFenster.thisClass.stitel.setText((String) tblThemen.getValueAt(tblThemen.getSelectedRow(), 0));
 
-//        stitel.setText("");
         stitel.setEnabled(false);
     }
 
@@ -542,8 +453,6 @@ public class helpFenster extends JXPanel implements TableModelListener, Componen
     }
 
     private static boolean inTransaktion() {
-        // System.out.println("ftpfertig = "+thisClass.ftpfertig);
-        // System.out.println("sqlfertig = "+thisClass.sqlfertig);
         try {
             if (thisClass.ftpfertig && thisClass.sqlfertig) {
                 return false;
@@ -559,64 +468,6 @@ public class helpFenster extends JXPanel implements TableModelListener, Componen
     private static void statusFensterSchliessen() {
         thisClass.wf.dispose();
         thisClass.wf = null;
-    }
-
-    private void holeDateien() {
-        FTPTools ftpt = new FTPTools();
-        Vector<String> ar = new Vector<String>();
-        ar = FTPTools.getInstance()
-                     .holeDatNamen();
-        jprogress.setStringPainted(true);
-        for (int i = 0; i < ar.size(); i += 3) {
-            // System.out.println("****Obere
-            // Funktion*********"+piHelp.tempvz+ar.get(i)+"**************");
-            lblstand.setText("Hole Datei:" + ar.get(i));
-            ftpt.holeDatei(ar.get(i), ar.get(i), new Long(ar.get(i + 2)), jprogress);
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-
-                e.printStackTrace();
-            }
-        }
-
-        Vector<String> arbild = new Vector<String>();
-        arbild = FTPTools.getInstance()
-                         .holeDatNamen();
-        // System.out.println(arbild);
-        for (int i = 0; i < arbild.size(); i += 3) {
-            // System.out.println("*************"+piHelp.tempvz+arbild.get(i)+"**************");
-            File f = new File(piHelp.tempvz + arbild.get(i));
-            if (f.exists()) {
-                lblstand.setText("Datei existiert bereits:" + arbild.get(i));
-            } else {
-                lblstand.setText("Hole Datei:" + arbild.get(i));
-                ftpt.holeDatei(arbild.get(i), arbild.get(i), new Long(0), jprogress);
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException e) {
-
-                    e.printStackTrace();
-                }
-            }
-        }
-        /*
-         * //System.out.
-         * println("Und jetzt schreiben***************************************************"
-         * ); for(int i = 0; i < arbild.size();i+= 3){
-         * //System.out.println("Hole Datei -> "+arbild.get(i));
-         * //System.out.println("Hole Grösse -> "+arbild.get(i+2));
-         * lblstand.setText("Schreibe Datei:"+arbild.get(i)); ret =
-         * ftpt.schreibeDatei(arbild.get(i), arbild.get(i), new
-         * Long(arbild.get(i+2)),jprogress); try { Thread.sleep(100); } catch
-         * (InterruptedException e) {
-         *
-         * e.printStackTrace(); } }
-         */
-        ftpt = null;
-        jprogress.setValue(0);
-        jprogress.repaint();
-
     }
 
     private void speichern() {
@@ -1001,50 +852,25 @@ public class helpFenster extends JXPanel implements TableModelListener, Componen
 
     }
 
-    /***********************************************/
 
-    @Override
-    public void tableChanged(TableModelEvent arg0) {
-
-        //// System.out.println(arg0);
-
-    }
-
-    @Override
-    public void propertyChange(PropertyChangeEvent arg0) {
-
-        if (arg0.getSource() instanceof JXTable) {
-            //// System.out.println(arg0);
-        }
-    }
 
     class SharedListSelectionHandler implements ListSelectionListener {
         @Override
         public void valueChanged(ListSelectionEvent e) {
             ListSelectionModel lsm = (ListSelectionModel) e.getSource();
 
-            /*
-             * output.append("Event for indexes " + firstIndex + " - " + lastIndex +
-             * "; isAdjusting is " + isAdjusting + "; selected indexes:");
-             */
 
-            if (lsm.isSelectionEmpty()) {
-                // output.append(" <none>");
-            } else {
+            if (!lsm.isSelectionEmpty()) {
 
-                // Find out which indexes are selected.
                 int minIndex = lsm.getMinSelectionIndex();
 
                 int maxIndex = lsm.getMaxSelectionIndex();
                 for (int i = minIndex; i <= maxIndex; i++) {
                     if (lsm.isSelectedIndex(i)) {
                         helpFenster.thisClass.stitel.setText((String) helpFenster.thisClass.tblThemen.getValueAt(i, 0));
-                        // output.append(" " + i);
                     }
                 }
             }
-            // output.append(newline);
-            // output.setCaretPosition(output.getDocument().getLength());
         }
 
     }
@@ -1162,40 +988,22 @@ public class helpFenster extends JXPanel implements TableModelListener, Componen
 
 }
 
-/**************************************/
 
 class MyDefaultTableModel extends DefaultTableModel {
-    /**
-    *
-    */
     private static final long serialVersionUID = 1L;
 
     @Override
     public Class getColumnClass(int columnIndex) {
-        if (columnIndex == 0) {
             return String.class;
-        }
-        /* if(columnIndex==1){return JLabel.class;} */
-        else {
-            return String.class;
-        }
-        // return (columnIndex == 0) ? Boolean.class : String.class;
     }
 
     @Override
     public boolean isCellEditable(int row, int col) {
-        // Note that the data/cell address is constant,
-        // no matter where the cell appears onscreen.
-        /*
-         * if (col == 0){ return true; }else if(col == 6){ return true; }else if(col ==
-         * 7){ return true; }else if(col == 11){ return true; } else{ return false; }
-         */
         return false;
     }
 
 }
 
-/**************************************/
 final class WorkerTitel extends SwingWorker<Void, Void> {
     String gruppe;
 
@@ -1208,24 +1016,20 @@ final class WorkerTitel extends SwingWorker<Void, Void> {
     @Override
     protected Void doInBackground() throws Exception {
         Vector combInhalt = holeGruppen();
-        // System.out.println("Titel-Elemente = "+combInhalt.size());
 
         helpFenster.thisClass.setzeTitelTabelle((Vector) combInhalt.clone());
         if (combInhalt.size() > 0) {
             helpFenster.thisClass.tblThemen.setRowSelectionInterval(0, 0);
         }
-        // System.out.println("WorkerThread beendet");
         return null;
 
     }
 
-    /************************/
     private Vector holeGruppen() {
         Statement stmtx = null;
         ResultSet rsx = null;
         Vector comboInhalt = null;
         Vector gesamtVec = null;
-        // System.out.println("In holeTitel");
         try {
             stmtx = piHelp.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
 
@@ -1251,23 +1055,21 @@ final class WorkerTitel extends SwingWorker<Void, Void> {
         if (rsx != null) {
             try {
                 rsx.close();
-            } catch (SQLException sqlEx) { // ignore }
+            } catch (SQLException sqlEx) {
                 rsx = null;
             }
         }
         try {
             stmtx.close();
-        } catch (SQLException sqlEx) { // ignore }
+        } catch (SQLException sqlEx) {
             stmtx = null;
         }
-        // System.out.println("Insgesamt Elemente = "+comboInhalt.size());
         return (Vector) gesamtVec.clone();
 
     }
 
 }
 
-/***************************************************************************/
 
 
 
@@ -1276,7 +1078,6 @@ final class HtmlHolen extends SwingWorker<Void, Void> {
 
     public void init(int id) {
         this.id = id;
-        // System.out.println("Abgeholt wird die ID -> "+this.id);
         helpFenster.thisClass.bilder.clear();
         execute();
     }
@@ -1300,22 +1101,17 @@ final class HtmlHolen extends SwingWorker<Void, Void> {
             while (rsx.next()) {
                 helpFenster.absolutDatei = rsx.getString("datei");
                 helpFenster.hilfeDatei = piHelp.tempvz + rsx.getString("datei");
-                // In OO die Datei erzeugen---->
                 if (rsx.getBytes("inhalt").length <= 10) {
-                    // System.out.println("Erzeuge neue HTML-Datei aus dummy.html");
                     new copyFile(piHelp.tempvz + "dummy.html", helpFenster.hilfeDatei);
-                    // new copyFile(helpFenster.hilfeDatei,helpFenster.hilfeDatei+".html");
 
                 } else {
                     WartenFenster.setStand("Erzeuge HTML-Datei");
                     helpFenster.erzeugeAusByteArray(rsx.getBytes("inhalt"), helpFenster.hilfeDatei,
                             helpFenster.thisClass.chkweb.isSelected());
-                    //// System.out.println(new String(rsx.getBytes("inhalt")));
                 }
                 if (helpFenster.thisClass.bilder.size() > 0) {
                     FTPTools ftpt = new FTPTools();
                     for (int i = 0; i < helpFenster.thisClass.bilder.size(); i++) {
-                        // System.out.println("Dateinamen->"+helpFenster.thisClass.bilder.get(i));
                         File f = new File(piHelp.tempvz + helpFenster.thisClass.bilder.get(i));
                         if (f.exists()) {
                             WartenFenster.setStand("Bereits vorhanden: " + (i + 1) + " von "
@@ -1342,13 +1138,10 @@ final class HtmlHolen extends SwingWorker<Void, Void> {
                     helpFenster.thisClass.lblstand.setText("FTP-Status: warten...");
 
                 }
-                // Die Datei umbenennen---->
                 String falt = helpFenster.hilfeDatei + ".html";
                 String fneu = helpFenster.hilfeDatei.substring(0, falt.length() - 5);
                 new File(fneu).delete();
                 new File(falt).renameTo(new File(fneu));
-                // System.out.println("Alter Dateiname = "+falt);
-                // System.out.println("Neuer Dateiname = "+fneu);
                 ooPanel.starteDatei(fneu, helpFenster.thisClass.chkweb.isSelected());
 
             }
@@ -1361,13 +1154,13 @@ final class HtmlHolen extends SwingWorker<Void, Void> {
         if (rsx != null) {
             try {
                 rsx.close();
-            } catch (SQLException sqlEx) { // ignore }
+            } catch (SQLException sqlEx) {
                 rsx = null;
             }
         }
         try {
             stmtx.close();
-        } catch (SQLException sqlEx) { // ignore }
+        } catch (SQLException sqlEx) {
             stmtx = null;
         }
         return null;

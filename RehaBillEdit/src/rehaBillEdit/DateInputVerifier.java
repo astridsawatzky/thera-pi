@@ -18,11 +18,8 @@ import javax.swing.border.Border;
 
 import rehaBillEdit.Tools.IntegerTools;
 
-public class DateInputVerifier extends InputVerifier {
-    JFormattedTextField input;
-
+class DateInputVerifier extends InputVerifier {
     public DateInputVerifier(JFormattedTextField tf) {
-        this.input = tf;
     }
 
     @Override
@@ -30,15 +27,15 @@ public class DateInputVerifier extends InputVerifier {
         //// System.out.println("Input getText = "+((JRtaTextField)input).getText());
         //// System.out.println("L�nge des Inputs =
         //// "+((JRtaTextField)input).getText().length());
-        return this.isAlowedDate((JFormattedTextField) input);
+        return isAlowedDate((JFormattedTextField) input);
     }
 
-    private Character placeholder = null;
+    private Character placeholder;
 
     /**
      * Set an Empty Character for delete the Input. If Empty Character is null, a
      * valid value need to input.
-     * 
+     *
      * @param c Character
      */
     public void setPlaceholder(final Character c) {
@@ -47,25 +44,24 @@ public class DateInputVerifier extends InputVerifier {
 
     /**
      * Return the char for delete the input or null if delete not allowed.
-     * 
+     *
      * @return Character
      */
     public Character getPlaceHolder() {
         return this.placeholder;
     }
 
-    protected boolean isAlowedDate(final JFormattedTextField input) {
-        if (input.getText()
-                 .equals("  .  .    ")) {
+    private boolean isAlowedDate(final JFormattedTextField input) {
+        if ("  .  .    ".equals(input.getText())) {
             return true;
         }
         String inhalt = input.getText();
         //// System.out.println("In verify / input = "+input.getText());
-        final DateFormat sdf = this.getDateFormat();
+        final DateFormat sdf = getDateFormat();
         try {
             String teil = inhalt.substring(6)
                                 .trim();
-            if (teil.length() == 0) {
+            if (teil.isEmpty()) {
                 input.setText("  .  .    ");
                 return true;
             }
@@ -83,15 +79,11 @@ public class DateInputVerifier extends InputVerifier {
                 input.setText(jahrtausend);
                 //// System.out.println("Datum = "+jahrtausend);
             }
-            if (inhalt.length() >= 8) {
-                //// System.out.println("L�nge des Strings = "+input.getText().length());
-                if (inhalt.substring(6, 7)
-                          .equals("0")) {
-                    String korrekt = inhalt.substring(0, 6);
-                    korrekt = korrekt + "20" + inhalt.substring(6, 8);
-                    input.setText(korrekt);
-                    //// System.out.println("korrigiertes Datum = "+korrekt);
-                }
+            if (inhalt.length() >= 8 && "0".equals(inhalt.substring(6, 7))) {
+               String korrekt = inhalt.substring(0, 6);
+               korrekt = korrekt + "20" + inhalt.substring(6, 8);
+               input.setText(korrekt);
+               //// System.out.println("korrigiertes Datum = "+korrekt);
             }
             final Date d = sdf.parse(input.getText());
             SwingUtilities.invokeLater(new Runnable() {
@@ -102,9 +94,7 @@ public class DateInputVerifier extends InputVerifier {
             });
             return true;
         } catch (final ParseException notValidOrDelete) {
-
             /*
-             * 
              * if (((DateInputVerifier) input).getPlaceHolder() != null) { String
              * noMaskValue = null; if (Locale.getDefault ().getLanguage ().equals
              * (Locale.GERMANY.getLanguage ())) {
@@ -123,7 +113,7 @@ public class DateInputVerifier extends InputVerifier {
         }
     }
 
-    protected DateFormat getDateFormat() {
+    private DateFormat getDateFormat() {
         if (Locale.getDefault()
                   .getLanguage()
                   .equals(Locale.GERMANY.getLanguage())) {

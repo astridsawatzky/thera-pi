@@ -3,144 +3,119 @@ package rehaKassenbuch;
 import java.awt.Cursor;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.io.FileNotFoundException;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Optional;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
-
-import org.jdesktop.swingworker.SwingWorker;
 
 import CommonTools.SqlInfo;
 import CommonTools.ini.INIFile;
 import CommonTools.ini.Settings;
 import ag.ion.bion.officelayer.application.IOfficeApplication;
-import ag.ion.bion.officelayer.application.OfficeApplicationException;
-import crypt.Verschluesseln;
-import logging.Logging;
-import office.OOService;
+import ch.qos.logback.classic.util.ContextInitializer;
+import gui.LaF;
+import office.OOTools;
 import sql.DatenquellenFactory;
+import uk.org.lidalia.sysoutslf4j.context.SysOutOverSLF4J;
 
 public class RehaKassenbuch implements WindowListener {
 
-    /**
-     * @param args
-     */
-    /**
-     * @param args
-     */
-    public static boolean DbOk;
+    public boolean DbOk;
     JFrame jFrame;
     public static JFrame thisFrame = null;
     public Connection conn;
     public static RehaKassenbuch thisClass;
 
-    public static IOfficeApplication officeapplication;
+    public static Optional<IOfficeApplication> officeapplication;
 
     public String dieseMaschine = null;
 
     public final Cursor wartenCursor = new Cursor(Cursor.WAIT_CURSOR);
     public final Cursor normalCursor = new Cursor(Cursor.DEFAULT_CURSOR);
 
+    public static String progHome;
+    public static String aktIK;
 
-    public static String officeProgrammPfad = "C:/Programme/OpenOffice.org 3";
-    public static String officeNativePfad = "C:/RehaVerwaltung/Libraries/lib/openofficeorg/";
-    public static String progHome ;
-    public static String aktIK ;
-    /*
-     * public static String hmRechnungPrivat =
-     * "C:/RehaVerwaltung/vorlagen/HMRechnungPrivatKopie.ott"; public static String
-     * hmRechnungKasse = "C:/RehaVerwaltung/vorlagen/HMRechnungPrivatKopie.ott";
-     * public static String rhRechnungPrivat =
-     * "C:/RehaVerwaltung/vorlagen/HMRechnungPrivatKopie.ott"; public static String
-     * rhRechnungKasse = "C:/RehaVerwaltung/vorlagen/HMRechnungPrivatKopie.ott";
-     */
-    public static boolean testcase = false;
     public boolean isLibreOffice;
 
     public SqlInfo sqlInfo;
 
-    public static void main(String[] args) {
-        new Logging("kasse");
-        RehaKassenbuch application = new RehaKassenbuch();
-        application.getInstance();
-        application.sqlInfo = new SqlInfo();
+    public static void main(String[] args) throws InterruptedException, ExecutionException, TimeoutException {
 
-        if (args.length > 0 || testcase) {
-            if (!testcase) {
-                System.out.println("hole daten aus INI-Datei " + args[0]);
-                Settings inif = new INIFile(args[0] + "ini/" + args[1] + "/rehajava.ini");
+        System.setProperty(ContextInitializer.CONFIG_FILE_PROPERTY, "./logs/conf/kasse.xml");
 
-                officeProgrammPfad = inif.getStringProperty("OpenOffice.org", "OfficePfad");
-                officeNativePfad = inif.getStringProperty("OpenOffice.org", "OfficeNativePfad");
-                progHome = args[0];
-                aktIK = args[1];
-            }
+        SysOutOverSLF4J.sendSystemOutAndErrToSLF4J();
 
-            final RehaKassenbuch xapplication = application;
-            new SwingWorker<Void, Void>() {
-                @Override
-                protected Void doInBackground() throws java.lang.Exception {
-                    xapplication.starteDB();
-                    long zeit = System.currentTimeMillis();
-                    while (!DbOk) {
-                        try {
-                            Thread.sleep(20);
-                            if (System.currentTimeMillis() - zeit > 10000) {
-                                JOptionPane.showMessageDialog(null,
-                                        "Datenbank konnte nicht geöffnet werden!\nTimeout nach 10 Sekunden Wartezeit!\nReha-Kassenbuch kann nicht gestartet werden");
-                                break;
-                                // System.exit(0);
-                            }
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    if (!DbOk) {
-
-                        JOptionPane.showMessageDialog(null,
-                                "Datenbank konnte nicht geöffnet werden!\nReha-Kassenbuch wird beendet");
-                        System.exit(0);
-
-                    }
-                    RehaKassenbuch.starteOfficeApplication();
-                    return null;
-                }
-
-            }.execute();
-            application.getJFrame();
-        } else {
+        if (args.length <= 0 && !false) {
             JOptionPane.showMessageDialog(null,
                     "Keine Datenbankparameter übergeben!\nReha-Kassenbuch kann nicht gestartet werden");
-            System.exit(0);
+            return;
         }
+
+        progHome = args[0];
+        aktIK = args[1];
+
+    final    RehaKassenbuch application = new RehaKassenbuch();
+        application.getInstance();
+        application.sqlInfo = new SqlInfo();
+        officeapplication = OOTools.initOffice(progHome, aktIK);
+        System.out.println("hole daten aus INI-Datei " + progHome);
+
+        ExecutorService laufbursche = Executors.newFixedThreadPool(2);
+        Future<Boolean> dbstartErfolgreich = laufbursche.submit(new Callable<Boolean>() {
+
+            @Override
+            public Boolean call() throws Exception {
+                try {
+
+                    application.conn = new DatenquellenFactory(aktIK).createConnection();
+                    application.sqlInfo.setConnection(RehaKassenbuch.thisClass.conn);
+                    System.out.println("Datenbankkontakt hergestellt");
+                    return true;
+                } catch (final SQLException ex) {
+                    System.out.println("SQLException: " + ex.getMessage());
+                    System.out.println("SQLState: " + ex.getSQLState());
+                    System.out.println("VendorError: " + ex.getErrorCode());
+                    return false;
+
+                }
+
+            }
+        });
+        
+        
+        if (dbstartErfolgreich.get(30, TimeUnit.SECONDS)) {
+            application. DbOk = true;
+        } else {
+            JOptionPane.showMessageDialog(null,
+
+                    "Datenbank konnte nicht geöffnet werden!\nTimeout nach 10 Sekunden Wartezeit!\nReha-Kassenbuch kann nicht gestartet werden");
+            return;
+        }
+        application.getJFrame();
 
     }
 
-    /********************/
 
     public JFrame getJFrame() {
-        try {
-            UIManager.setLookAndFeel("com.jgoodies.looks.plastic.PlasticXPLookAndFeel");
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (UnsupportedLookAndFeelException e) {
-            e.printStackTrace();
-        }
+
+        LaF.setPlastic();
+
         thisClass = this;
         jFrame = new JFrame();
         sqlInfo.setFrame(jFrame);
         jFrame.addWindowListener(this);
         jFrame.setSize(1000, 500);
-        jFrame.setTitle("Thera-Pi  Kassenbuch erstellen / bearbeiten  [IK: " + aktIK + "] " );
+        jFrame.setTitle("Thera-Pi  Kassenbuch erstellen / bearbeiten  [IK: " + aktIK + "] ");
         jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         jFrame.setLocationRelativeTo(null);
         RehaKassenbuchTab kbtab = new RehaKassenbuchTab();
@@ -160,83 +135,6 @@ public class RehaKassenbuch implements WindowListener {
     }
 
     /*******************/
-
-    public void starteDB() {
-        new Thread() {
-            @Override
-            public void run() {
-                DatenbankStarten dbstart = new DatenbankStarten();
-                dbstart.run();
-            }
-        }.start();
-    }
-
-    /*******************/
-
-    public static void stoppeDB() {
-        try {
-            RehaKassenbuch.thisClass.conn.close();
-            RehaKassenbuch.thisClass.conn = null;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**********************************************************
-     *
-     */
-    final class DatenbankStarten implements Runnable {
-        private void StarteDB() {
-            final RehaKassenbuch obj = RehaKassenbuch.thisClass;
-
-            final String sDB = "SQL";
-            if (obj.conn != null) {
-                try {
-                    obj.conn.close();
-                } catch (final SQLException e) {
-                }
-            }
-            try {
-                Class.forName("com.mysql.jdbc.Driver")
-                     .newInstance();
-            } catch (InstantiationException e) {
-                e.printStackTrace();
-                System.out.println(sDB + "Treiberfehler: " + e.getMessage());
-                RehaKassenbuch.DbOk = false;
-                return;
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-                System.out.println(sDB + "Treiberfehler: " + e.getMessage());
-                RehaKassenbuch.DbOk = false;
-                return;
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-                System.out.println(sDB + "Treiberfehler: " + e.getMessage());
-                RehaKassenbuch.DbOk = false;
-                return;
-            }
-            try {
-
-                obj.conn = new DatenquellenFactory(aktIK).createConnection();
-                sqlInfo.setConnection(obj.conn);
-                RehaKassenbuch.DbOk = true;
-                System.out.println("Datenbankkontakt hergestellt");
-            } catch (final SQLException ex) {
-                System.out.println("SQLException: " + ex.getMessage());
-                System.out.println("SQLState: " + ex.getSQLState());
-                System.out.println("VendorError: " + ex.getErrorCode());
-                RehaKassenbuch.DbOk = false;
-
-            }
-            return;
-        }
-
-        @Override
-        public void run() {
-            StarteDB();
-        }
-
-    }
 
 
 
@@ -284,20 +182,6 @@ public class RehaKassenbuch implements WindowListener {
 
     @Override
     public void windowOpened(WindowEvent arg0) {
-    }
-
-    /***************************/
-
-    public static void starteOfficeApplication() {
-        try {
-        	new OOService().start( RehaKassenbuch.officeNativePfad, RehaKassenbuch.officeProgrammPfad);
-            officeapplication = new OOService().getOfficeapplication();
-        } catch (OfficeApplicationException e1) {
-            e1.printStackTrace();
-        } catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
     }
 
 }

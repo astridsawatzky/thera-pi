@@ -21,17 +21,7 @@ import java.util.Date;
 import java.util.EventObject;
 import java.util.Vector;
 
-import javax.swing.DefaultCellEditor;
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
-import javax.swing.JScrollPane;
-import javax.swing.ListSelectionModel;
+import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
@@ -65,7 +55,7 @@ import ag.ion.bion.officelayer.spreadsheet.ISpreadsheetDocument;
 public class RehaUrlaubPanel extends JXPanel implements TableModelListener {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = -5795688684244627970L;
 
@@ -607,9 +597,9 @@ public class RehaUrlaubPanel extends JXPanel implements TableModelListener {
     }
 
     /*********
-     * 
-     * 
-     * 
+     *
+     *
+     *
      * @author admin
      *
      */
@@ -693,7 +683,7 @@ public class RehaUrlaubPanel extends JXPanel implements TableModelListener {
 
     class MyOffenePostenTableModel extends DefaultTableModel {
         /**
-        * 
+        *
         */
         private static final long serialVersionUID = 1L;
 
@@ -755,11 +745,11 @@ public class RehaUrlaubPanel extends JXPanel implements TableModelListener {
     }
 
     /***************
-     * 
-     * 
-     * 
-     * 
-     * 
+     *
+     *
+     *
+     *
+     *
      */
 
     private void holeKalUser() {
@@ -909,9 +899,9 @@ public class RehaUrlaubPanel extends JXPanel implements TableModelListener {
     }
 
     /******************
-     * 
-     * 
-     * 
+     *
+     *
+     *
      */
     private void doSucheUserDaten(String jahr, String kalzeile) {
         tabmod.setRowCount(0);
@@ -1385,7 +1375,6 @@ public class RehaUrlaubPanel extends JXPanel implements TableModelListener {
     }
 
     public String holeTagDatum(int row, int plustage) {
-        String ret = "";
         String erster = tabmod.getValueAt(row, 1)
                               .toString()
                               .split("-")[0];
@@ -1433,7 +1422,7 @@ public class RehaUrlaubPanel extends JXPanel implements TableModelListener {
     /********************************************************************/
     class MyComboBoxRenderer extends BasicComboBoxRenderer {
         /**
-        * 
+        *
         */
         private static final long serialVersionUID = 1L;
 

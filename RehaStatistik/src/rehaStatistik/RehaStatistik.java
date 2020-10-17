@@ -3,9 +3,9 @@ package rehaStatistik;
 import java.awt.Cursor;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.io.FileNotFoundException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Optional;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -19,9 +19,9 @@ import CommonTools.ini.INIFile;
 import CommonTools.ini.Settings;
 import rehaStatistik.Tools.SystemPreislisten;
 import ag.ion.bion.officelayer.application.IOfficeApplication;
-import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import logging.Logging;
 import office.OOService;
+import office.OOTools;
 import sql.DatenquellenFactory;
 
 public class RehaStatistik implements WindowListener {
@@ -35,7 +35,7 @@ public class RehaStatistik implements WindowListener {
     public Connection conn;
     public static RehaStatistik thisClass;
 
-    public static IOfficeApplication officeapplication;
+    public static Optional<IOfficeApplication> officeapplication;
 
     public String dieseMaschine = null;
 
@@ -43,8 +43,6 @@ public class RehaStatistik implements WindowListener {
     public final Cursor normalCursor = new Cursor(Cursor.DEFAULT_CURSOR);
 
 
-    public static String officeProgrammPfad = "C:/Programme/OpenOffice.org 3";
-    public static String officeNativePfad = "C:/RehaVerwaltung/Libraries/lib/openofficeorg/";
 
     public static String proghome = "C:/RehaVerwaltung/";
     public static String aktIK;
@@ -53,56 +51,48 @@ public class RehaStatistik implements WindowListener {
     public SqlInfo sqlInfo;
 
     public static void main(String[] args) {
+
         new Logging("statistik");
         RehaStatistik application = new RehaStatistik();
         application.getInstance();
         application.getInstance().sqlInfo = new SqlInfo();
         if (args.length > 0 || testcase) {
-            if (!testcase) {
-                System.out.println("hole daten aus INI-Datei " + args[0]);
-                proghome = args[0];
-                aktIK = args[1];
-                Settings inif = new INIFile(args[0] + "ini/" + args[1] + "/rehajava.ini");
 
-                officeProgrammPfad = inif.getStringProperty("OpenOffice.org", "OfficePfad");
-                officeNativePfad = inif.getStringProperty("OpenOffice.org", "OfficeNativePfad");
+
+         officeapplication = OOTools.initOffice(proghome, aktIK);
+
+        System.out.println("hole daten aus INI-Datei " + proghome);
+        }
+
+        final RehaStatistik xapplication = application;
+        new SwingWorker<Void, Void>() {
+            @Override
+            protected Void doInBackground() throws java.lang.Exception {
+                xapplication.starteDB();
+                long zeit = System.currentTimeMillis();
+                while (!DbOk) {
+                    try {
+                        Thread.sleep(20);
+                        if (System.currentTimeMillis() - zeit > 10000) {
+                            System.exit(0);
+                        }
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (!DbOk) {
+                    JOptionPane.showMessageDialog(null,
+                            "Datenbank konnte nicht geöffnet werden!\nReha-Statistik kann nicht gestartet werden");
+                    System.exit(0);
+                }
+                SystemPreislisten.ladePreise("Reha");
+                // System.out.println(SystemPreislisten.hmPreise.get("Reha"));
+                // System.out.println(SystemPreislisten.hmPreisGruppen.get("Reha"));
+                return null;
             }
 
-            final RehaStatistik xapplication = application;
-            new SwingWorker<Void, Void>() {
-                @Override
-                protected Void doInBackground() throws java.lang.Exception {
-                    xapplication.starteDB();
-                    long zeit = System.currentTimeMillis();
-                    while (!DbOk) {
-                        try {
-                            Thread.sleep(20);
-                            if (System.currentTimeMillis() - zeit > 10000) {
-                                System.exit(0);
-                            }
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    if (!DbOk) {
-                        JOptionPane.showMessageDialog(null,
-                                "Datenbank konnte nicht geöffnet werden!\nReha-Statistik kann nicht gestartet werden");
-                        System.exit(0);
-                    }
-                    RehaStatistik.starteOfficeApplication();
-                    SystemPreislisten.ladePreise("Reha");
-                    // System.out.println(SystemPreislisten.hmPreise.get("Reha"));
-                    // System.out.println(SystemPreislisten.hmPreisGruppen.get("Reha"));
-                    return null;
-                }
-
-            }.execute();
-            application.getJFrame();
-        } else {
-            JOptionPane.showMessageDialog(null,
-                    "Keine Datenbankparameter übergeben!\nReha-Statistik kann nicht gestartet werden");
-            System.exit(0);
-        }
+        }.execute();
+        application.getJFrame();
 
     }
 
@@ -129,7 +119,7 @@ public class RehaStatistik implements WindowListener {
         jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         jFrame.setLocationRelativeTo(null);
         jFrame.getContentPane()
-              .add(new StatistikPanel());
+              .add(new StatistikPanel(RehaStatistik.officeapplication));
         jFrame.setVisible(true);
         thisFrame = jFrame;
         return jFrame;
@@ -243,21 +233,7 @@ public class RehaStatistik implements WindowListener {
     public void windowOpened(WindowEvent arg0) {
     }
 
-    /***************************/
 
-    public static void starteOfficeApplication() {
-        try {
-        new OOService().start(officeNativePfad, officeProgrammPfad);
-            officeapplication = new OOService().getOfficeapplication();
-            System.out.println("OpenOffice ist gestartet und Active =" + officeapplication.isActive());
-        } catch (OfficeApplicationException e1) {
-            e1.printStackTrace();
-        }
-       
-         catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-    }
+
 
 }

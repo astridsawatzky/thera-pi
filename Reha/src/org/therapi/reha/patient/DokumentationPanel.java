@@ -103,7 +103,9 @@ import geraeteInit.ScannerUtil;
 import gui.Cursors;
 import hauptFenster.Reha;
 import jxTableTools.TableTool;
-import oOorgTools.OOTools;
+import oOorgTools.RehaOOTools;
+import office.OOService;
+import office.OOTools;
 import patientenFenster.KeinRezept;
 import patientenFenster.MyAccessory;
 import rechteTools.Rechte;
@@ -636,16 +638,17 @@ public class DokumentationPanel extends JXPanel
                     try {
                         if (xdatei.toLowerCase()
                                   .endsWith("odt")) {
-                            ITextDocument itext = new OOTools().starteWriterMitDatei(xdatei);
+                            ITextDocument itext = OOTools.starteWriterMitDatei(xdatei);
                             itext.addDocumentListener(
-                                    new ChangeDokumentOoListener(Reha.officeapplication, xdatei, xid, getInstance()));
+                                    new ChangeDokumentOoListener(new OOService().getOfficeapplication(), xdatei, xid, getInstance()));
 
-              
+
                         } else if (xdatei.toLowerCase()
                                          .endsWith("ods")) {
-                            ISpreadsheetDocument ispread = new OOTools().starteCalcMitDatei(xdatei);
+                            RehaOOTools r = new RehaOOTools();
+                            ISpreadsheetDocument ispread = OOTools.starteCalcMitDatei(xdatei);
                             ispread.addDocumentListener(
-                                    new ChangeDokumentOoListener(Reha.officeapplication, xdatei, xid, getInstance()));
+                                    new ChangeDokumentOoListener(new OOService().getOfficeapplication(), xdatei, xid, getInstance()));
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -2224,8 +2227,8 @@ public class DokumentationPanel extends JXPanel
 
             try {
                 FileTools.copyFile(new File(src), new File(dest), 8192, true);
-                ITextDocument itext = new OOTools().starteWriterMitDatei(dest);
-                itext.addDocumentListener(new NewDokumentOOListener(Reha.officeapplication, dest, "", this));
+                ITextDocument itext = OOTools.starteWriterMitDatei(dest);
+                itext.addDocumentListener(new NewDokumentOOListener(new OOService().getOfficeapplication(), dest, "", this));
             } catch (IOException e) {
                 e.printStackTrace();
                 JOptionPane.showMessageDialog(null, "Fehler kann neues WriterDokument nicht erzeugen");
@@ -2236,8 +2239,9 @@ public class DokumentationPanel extends JXPanel
 
             try {
                 FileTools.copyFile(new File(src), new File(dest), 8192, true);
-                ISpreadsheetDocument ispread = new OOTools().starteCalcMitDatei(dest);
-                ispread.addDocumentListener(new NewDokumentOOListener(Reha.officeapplication, dest, "", this));
+                RehaOOTools r = new RehaOOTools();
+                ISpreadsheetDocument ispread = OOTools.starteCalcMitDatei(dest);
+                ispread.addDocumentListener(new NewDokumentOOListener(new OOService().getOfficeapplication(), dest, "", this));
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -2251,9 +2255,9 @@ public class DokumentationPanel extends JXPanel
                     + Reha.instance.patpanel.aktPatID + testName(value) + ".odt";
             try {
                 FileTools.copyFile(new File(src), new File(dest), 8192, true);
-                ITextDocument itext = new OOTools().starteWriterMitDatei(dest);
-                OOTools.erstzeNurPlatzhalter(itext);
-                itext.addDocumentListener(new NewDokumentOOListener(Reha.officeapplication, dest, "", this));
+                ITextDocument itext = OOTools.starteWriterMitDatei(dest);
+                RehaOOTools.erstzeNurPlatzhalter(itext,Reha.instance);
+                itext.addDocumentListener(new NewDokumentOOListener(new OOService().getOfficeapplication(), dest, "", this));
             } catch (IOException e) {
                 e.printStackTrace();
                 JOptionPane.showMessageDialog(null, "Fehler kann neues WriterDokument nicht erzeugen");
@@ -2266,8 +2270,9 @@ public class DokumentationPanel extends JXPanel
                     + Reha.instance.patpanel.aktPatID + testName(value) + ".ods";
             try {
                 FileTools.copyFile(new File(src), new File(dest), 8192, true);
-                ISpreadsheetDocument ispread = new OOTools().starteCalcMitDatei(dest);
-                ispread.addDocumentListener(new NewDokumentOOListener(Reha.officeapplication, dest, "", this));
+                RehaOOTools r = new RehaOOTools();
+                ISpreadsheetDocument ispread = OOTools.starteCalcMitDatei(dest);
+                ispread.addDocumentListener(new NewDokumentOOListener(new OOService().getOfficeapplication(), dest, "", this));
 
             } catch (IOException e) {
                 e.printStackTrace();

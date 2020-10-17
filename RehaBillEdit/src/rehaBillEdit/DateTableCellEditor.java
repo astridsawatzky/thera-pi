@@ -2,14 +2,9 @@ package rehaBillEdit;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.text.NumberFormat;
-import java.text.ParseException;
-import java.util.Locale;
-import java.util.logging.Logger;
 
 import javax.swing.AbstractAction;
 import javax.swing.DefaultCellEditor;
@@ -17,24 +12,15 @@ import javax.swing.JFormattedTextField;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.KeyStroke;
-import javax.swing.SwingUtilities;
-import javax.swing.text.MaskFormatter;
 
 import CommonTools.DatFunk;
 
-public class DateTableCellEditor extends DefaultCellEditor implements KeyListener {
-
-    /**
-     * 
-     */
+class DateTableCellEditor extends DefaultCellEditor implements KeyListener {
     private static final long serialVersionUID = -2165072750853498692L;
 
-    JFormattedTextField ftf;
+    private JFormattedTextField ftf;
 
-    NumberFormat integerFormat;
-    // private boolean DEBUG = false;
-
-    public DateTableCellEditor() {
+        public DateTableCellEditor() {
         super(new JFormattedTextField());
         ftf = (JFormattedTextField) getComponent();
         ftf.setDocument(new DateFieldDocument(ftf, false));
@@ -51,9 +37,6 @@ public class DateTableCellEditor extends DefaultCellEditor implements KeyListene
 
         ftf.getActionMap()
            .put("check", new AbstractAction() {
-               /**
-                * 
-                */
                private static final long serialVersionUID = 5552202939398900769L;
 
                @Override
@@ -82,9 +65,6 @@ public class DateTableCellEditor extends DefaultCellEditor implements KeyListene
            });
         ftf.getActionMap()
            .put("escape", new AbstractAction() {
-               /**
-                * 
-                */
                private static final long serialVersionUID = -4211848212093072907L;
 
                @Override
@@ -94,39 +74,14 @@ public class DateTableCellEditor extends DefaultCellEditor implements KeyListene
                    ftf.postActionEvent(); // stop editing
                }
            });
-
     }
 
-    protected MaskFormatter getDateMask() {
-        MaskFormatter formatter = null;
-        try {
-            if (Locale.getDefault()
-                      .getLanguage()
-                      .equals(Locale.GERMANY.getLanguage())) {
-                //// System.out.println("Formatter - Locale = Germany");
-                formatter = new MaskFormatter("##.##.####");
-            } else {
-                formatter = new MaskFormatter("####-##-##");
-            }
-            if (this.getPlaceHolder() != null) {
-                formatter.setPlaceholderCharacter(this.getPlaceHolder());
-            }
-        } catch (final ParseException ignored) {
-            Logger.getLogger(this.getClass()
-                                 .getName())
-                  .throwing(this.getClass()
-                                .getName(),
-                          "getDateMask", ignored);
-        }
-        return formatter;
-    }
-
-    private Character placeholder = null;
+        private Character placeholder;
 
     /**
      * Set an Empty Character for delete the Input. If Empty Character is null, a
      * valid value need to input.
-     * 
+     *
      * @param c Character
      */
     public void setPlaceholder(final Character c) {
@@ -135,7 +90,7 @@ public class DateTableCellEditor extends DefaultCellEditor implements KeyListene
 
     /**
      * Return the char for delete the input or null if delete not allowed.
-     * 
+     *
      * @return Character
      */
     public Character getPlaceHolder() {
@@ -146,16 +101,14 @@ public class DateTableCellEditor extends DefaultCellEditor implements KeyListene
         boolean ret = true;
         String jahr = txf.getText()
                          .substring(6);
-        if (jahr.length() == 4) {
-            if (jahr.subSequence(0, 1)
-                    .equals("0")) {
-                return false;
-            }
-        }
+        if (jahr.length() == 4 && jahr.subSequence(0, 1)
+                .equals("0")) {
+            return false;
+         }
         return ret;
     }
 
-    // Override to invoke setValue on the formatted text field.
+    /** Override to invoke setValue on the formatted text field. */
     @Override
     public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
         JFormattedTextField ftf = (JFormattedTextField) super.getTableCellEditorComponent(table, value, isSelected, row,
@@ -164,21 +117,18 @@ public class DateTableCellEditor extends DefaultCellEditor implements KeyListene
         String insstr = "  .  .    ";
         if (value == null) {
             insstr = "  .  .    ";
-            ftf.setText(insstr);
         } else if (value.toString()
                         .trim()
                         .equals("")) {
             insstr = "  .  .    ";
-            ftf.setText(insstr);
         } else {
             try {
                 insstr = DatFunk.sDatInDeutsch(value.toString());
             } catch (Exception ex) {
                 insstr = "  .  .    ";
             }
-
-            ftf.setText(insstr);
         }
+        ftf.setText(insstr);
         ftf.requestFocus();
         ftf.setCaretColor(Color.BLACK);
         ftf.requestFocus();
@@ -192,7 +142,7 @@ public class DateTableCellEditor extends DefaultCellEditor implements KeyListene
         return ftf;
     }
 
-    // Override to ensure that the value remains an Integer.
+    /** Override to ensure that the value remains an Integer. */
     @Override
     public Object getCellEditorValue() {
         JFormattedTextField ftf = (JFormattedTextField) getComponent();
@@ -209,38 +159,35 @@ public class DateTableCellEditor extends DefaultCellEditor implements KeyListene
          */
     }
 
-    // Override to check whether the edit is valid,
-    // setting the value if it is and complaining if
-    // it isn't. If it's OK for the editor to go
-    // away, we need to invoke the superclass's version
-    // of this method so that everything gets cleaned up.
+    /**
+     * Override to check whether the edit is valid,
+     * setting the value if it is and complaining if
+     * it isn't. If it's OK for the editor to go
+     * away, we need to invoke the superclass's version
+     * of this method so that everything gets cleaned up.
+     */
     @Override
     public boolean stopCellEditing() {
         JFormattedTextField ftf = (JFormattedTextField) getComponent();
         //// System.out.println("Verify in stopCell =
         //// "+ftf.getInputVerifier().verify(ftf));
-        if ((!ftf.getInputVerifier()
+        if (((!ftf.getInputVerifier()
                  .verify(ftf))
                 || (ftf.getText()
                        .trim()
                        .length() == 7)
                 || (ftf.getText()
                        .trim()
-                       .length() == 9)) {
-            //// System.out.println("stopCellEditing "+ftf.getText());
-            ftf.setText("  .  .    ");
-            ftf.setCaretPosition(0);
-            return false;
-        }
-        if (!testeDatum(ftf)) {
-            ftf.setText("  .  .    ");
-            ftf.setCaretPosition(0);
-            return false;
-        }
+                       .length() == 9)) || !testeDatum(ftf)) {
+         //// System.out.println("stopCellEditing "+ftf.getText());
+         ftf.setText("  .  .    ");
+         ftf.setCaretPosition(0);
+         return false;
+      }
         /*
          * if (ftf.isEditValid()) { try { ftf.commitEdit(); } catch
          * (java.text.ParseException exc) { }
-         * 
+         *
          * } else { //text is invalid
          * //System.out.println("Verify = "+ftf.getInputVerifier().verify(ftf));
          * //System.out.println("Ung�ltige Eingabe ---------> "+ftf.getText()); if
@@ -267,36 +214,7 @@ public class DateTableCellEditor extends DefaultCellEditor implements KeyListene
     }
 
     @Override
-    public void cancelCellEditing() {
-        super.cancelCellEditing();
-    }
-
-    /**
-     * Lets the user know that the text they entered is bad. Returns true if the
-     * user elects to revert to the last good value. Otherwise, returns false,
-     * indicating that the user wants to continue editing.
-     */
-    protected boolean userSaysRevert() {
-        Toolkit.getDefaultToolkit()
-               .beep();
-        ftf.selectAll();
-        Object[] options = { "Edit", "Revert" };
-        int answer = JOptionPane.showOptionDialog(SwingUtilities.getWindowAncestor(ftf),
-                "The value must be an integer between " + "10" + " and " + "200" + ".\n"
-                        + "You can either continue editing " + "or revert to the last valid value.",
-                "Invalid Text Entered", JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE, null, options,
-                options[1]);
-
-        if (answer == 1) { // Revert!
-            ftf.setValue(ftf.getValue());
-            return true;
-        }
-        return false;
-    }
-
-    @Override
     public void keyPressed(KeyEvent arg0) {
-
         //// System.out.println("in DateTableCellEditor "+arg0.getKeyCode());
         if (arg0.getKeyCode() == KeyEvent.VK_DELETE) {
             ((JFormattedTextField) arg0.getSource()).setText("  .  .    ");
@@ -310,12 +228,9 @@ public class DateTableCellEditor extends DefaultCellEditor implements KeyListene
 
     @Override
     public void keyReleased(KeyEvent arg0) {
-
     }
 
     @Override
     public void keyTyped(KeyEvent arg0) {
-
     }
-
 }

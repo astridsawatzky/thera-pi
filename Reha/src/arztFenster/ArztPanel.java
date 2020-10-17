@@ -61,7 +61,7 @@ import events.RehaTPEvent;
 import events.RehaTPEventClass;
 import hauptFenster.Reha;
 import krankenKasse.KassenFormulare;
-import oOorgTools.OOTools;
+import oOorgTools.RehaOOTools;
 import rehaInternalFrame.JArztInternal;
 import stammDatenTools.ArztTools;
 import systemEinstellungen.SystemConfig;
@@ -655,8 +655,8 @@ public class ArztPanel extends JXPanel implements PropertyChangeListener, TableM
                     protected Void doInBackground() throws Exception {
                         try {
                             ArztTools.constructArztHMap(xid);
-                            OOTools.starteStandardFormular(Path.Instance.getProghome() + "vorlagen/" + Reha.getAktIK()
-                                    + "/" + formular.get(iformular), null);
+                            RehaOOTools.starteStandardFormular(Path.Instance.getProghome() + "vorlagen/" + Reha.getAktIK()
+                                    + "/" + formular.get(iformular), null,Reha.instance);
                         } catch (Exception ex) {
                             JOptionPane.showMessageDialog(null, "Fehler beim Bezug der Arztadresse");
                         }

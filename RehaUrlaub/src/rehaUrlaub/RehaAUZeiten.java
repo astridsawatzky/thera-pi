@@ -31,7 +31,6 @@ import com.sun.star.uno.UnoRuntime;
 
 import CommonTools.DatFunk;
 import CommonTools.JRtaTextField;
-import CommonTools.OOTools;
 import CommonTools.SqlInfo;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import ag.ion.bion.officelayer.document.DocumentDescriptor;
@@ -40,6 +39,7 @@ import ag.ion.bion.officelayer.document.IDocumentDescriptor;
 import ag.ion.bion.officelayer.document.IDocumentService;
 import ag.ion.bion.officelayer.spreadsheet.ISpreadsheetDocument;
 import ag.ion.noa.NOAException;
+import office.OOTools;
 
 public class RehaAUZeiten extends JXPanel {
 
@@ -266,9 +266,7 @@ public class RehaAUZeiten extends JXPanel {
 
     private void starteCalc() throws OfficeApplicationException, NOAException, NoSuchElementException,
             WrappedTargetException, UnknownPropertyException, PropertyVetoException, IllegalArgumentException {
-        if (!RehaUrlaub.officeapplication.isActive()) {
-            RehaUrlaub.starteOfficeApplication();
-        }
+
         IDocumentService documentService = RehaUrlaub.officeapplication.getDocumentService();
         IDocumentDescriptor docdescript = new DocumentDescriptor();
         // docdescript.setHidden(true);

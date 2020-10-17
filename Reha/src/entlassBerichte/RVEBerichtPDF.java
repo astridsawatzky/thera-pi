@@ -49,7 +49,7 @@ import events.RehaTPEvent;
 import events.RehaTPEventClass;
 import gui.Cursors;
 import hauptFenster.Reha;
-import oOorgTools.OOTools;
+import oOorgTools.RehaOOTools;
 import stammDatenTools.ArztTools;
 import systemEinstellungen.SystemConfig;
 import systemTools.ReaderStart;
@@ -242,9 +242,9 @@ public class RVEBerichtPDF {
                         baout.flush();
                         baout.close();
                         //// System.out.println("Bytes available = "+is.available());
-                        ITextDocument doc = OOTools.starteGKVBericht(
+                        ITextDocument doc = RehaOOTools.starteGKVBericht(
                                 Path.Instance.getProghome() + "vorlagen/" + Reha.getAktIK() + "/GKVArztbericht2.ott",
-                                "");
+                                "",Reha.instance);
                         Thread.sleep(100);
                         // doc.getViewCursorService().getViewCursor().getTextCursorFromStart().insertDocument(
                         // is, RTFFilter.FILTER );
@@ -1897,7 +1897,7 @@ public class RVEBerichtPDF {
          * new Thread(){ public void run(){ try { Runtime.getRuntime().exec(xcmd);
          * //System.out.println(xcmd); Reha.instance.progressStarten(false); } catch
          * (IOException e) {
-         * 
+         *
          * e.printStackTrace(); } } }.start();
          */
 

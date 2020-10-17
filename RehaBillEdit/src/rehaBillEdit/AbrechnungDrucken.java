@@ -20,32 +20,27 @@ import ag.ion.bion.officelayer.text.ITextTable;
 import ag.ion.bion.officelayer.text.ITextTableCell;
 import ag.ion.bion.officelayer.text.ITextTableCellProperties;
 import ag.ion.bion.officelayer.text.TextException;
+import office.OOTools;
 
-public class AbrechnungDrucken {
-    int aktuellePosition = 0;
-    ITextTable textTable = null;
-    ITextTable textEndbetrag = null;
-    ITextDocument textDocument = null;
-    int positionen;
-    String rechnungNummer;
-    String papierIK;
-    DecimalFormat dfx = new DecimalFormat("0.00");
-    int zugabe = 0;
-    BigDecimal rechnungsBetrag = new BigDecimal(Double.valueOf("0.00"));
-    BigDecimal rechnungsGesamt = new BigDecimal(Double.valueOf("0.00"));
-    BigDecimal rechnungsRezgeb = new BigDecimal(Double.valueOf("0.00"));
-    HashMap<String, String> hmAdresse = new HashMap<String, String>();
-    // AbrechnungGKV eltern = null;
-    int anzahlRezepte = 0;
+class AbrechnungDrucken {
+    private int aktuellePosition;
+    private ITextTable textTable;
+    private ITextTable textEndbetrag;
+    private ITextDocument textDocument;
+    private int positionen;
 
-    public AbrechnungDrucken(/* AbrechnungGKV eltern, */String url) throws Exception {
+    private DecimalFormat dfx = new DecimalFormat("0.00");
+
+    private BigDecimal rechnungsBetrag = new BigDecimal(Double.valueOf("0.00"));
+    private BigDecimal rechnungsGesamt = new BigDecimal(Double.valueOf("0.00"));
+    private BigDecimal rechnungsRezgeb = new BigDecimal(Double.valueOf("0.00"));
+    private HashMap<String, String> hmAdresse = new HashMap<>();
+    AbrechnungDrucken(/* AbrechnungGKV eltern, */String url) throws Exception {
         // this.eltern = eltern;
         starteDokument(url);
     }
 
-    public void setIKundRnr(String papierIk, String rnr, HashMap<String, String> hmap) {
-        this.papierIK = papierIk;
-        this.rechnungNummer = rnr;
+    void setIKundRnr(String papierIk, String rnr, HashMap<String, String> hmap) {
         this.hmAdresse = hmap;
         try {
             setRechnungsBetrag();
@@ -58,25 +53,21 @@ public class AbrechnungDrucken {
             JOptionPane.showMessageDialog(null, "Fehler im Rechnungsdruck, Fehler = TextException");
             e.printStackTrace();
         }
-
     }
 
-    /********************/
-
-    public void setDaten(String nameVorname, String status, String rezNr, Vector<String> posvec,
+    void setDaten(String nameVorname, String status, String rezNr, Vector<String> posvec,
             Vector<BigDecimal> anzahlvec, Vector<BigDecimal> anzahltagevec, Vector<BigDecimal> einzelpreis,
             Vector<BigDecimal> gesamtpreis, Vector<BigDecimal> zuzahlung, boolean mitPauschale) throws Exception {
         BigDecimal netto;
         positionen = posvec.size();
         int anz;
-        anzahlRezepte++;
         String dummy;
-        BigDecimal gesamtPreise = new BigDecimal(Double.valueOf("0.00"));
-        BigDecimal gesamtZuzahlung = new BigDecimal(Double.valueOf("0.00"));
-        BigDecimal gesamtNetto = new BigDecimal(Double.valueOf("0.00"));
+        BigDecimal gesamtPreise = new BigDecimal("0.00");
+        BigDecimal gesamtZuzahlung = new BigDecimal("0.00");
+        BigDecimal gesamtNetto = new BigDecimal("0.00");
 
         textTable.addRow(positionen + 2);
-        ITextTableCell[] tcells = null;
+        ITextTableCell[] tcells;
 
         tcells = textTable.getRow(aktuellePosition + 1)
                           .getCells();
@@ -91,39 +82,39 @@ public class AbrechnungDrucken {
                  .setText(status + " - " + rezNr);
         int i;
         for (i = 0; i < positionen; i++) {
-            textTable.getCell(1, aktuellePosition + (i + 2))
+            textTable.getCell(1, aktuellePosition + i + 2)
                      .getTextService()
                      .getText()
                      .setText(posvec.get(i));
             anz = Double.valueOf(anzahlvec.get(i)
                                           .doubleValue())
                         .intValue();
-            textTable.getCell(2, aktuellePosition + (i + 2))
+            textTable.getCell(2, aktuellePosition + i + 2)
                      .getTextService()
                      .getText()
                      .setText(Integer.toString(anz));
-            textTable.getCell(3, aktuellePosition + (i + 2))
+            textTable.getCell(3, aktuellePosition + i + 2)
                      .getTextService()
                      .getText()
                      .setText(dfx.format(einzelpreis.get(i)
                                                     .doubleValue()));
-            textTable.getCell(4, aktuellePosition + (i + 2))
+            textTable.getCell(4, aktuellePosition + i + 2)
                      .getTextService()
                      .getText()
                      .setText(dfx.format(gesamtpreis.get(i)
                                                     .doubleValue()));
-            textTable.getCell(5, aktuellePosition + (i + 2))
+            textTable.getCell(5, aktuellePosition + i + 2)
                      .getTextService()
                      .getText()
                      .setText(dfx.format(zuzahlung.get(i)
                                                   .doubleValue()));
             netto = gesamtpreis.get(i)
                                .subtract(zuzahlung.get(i));
-            textTable.getCell(6, aktuellePosition + (i + 2))
+            textTable.getCell(6, aktuellePosition + i + 2)
                      .getTextService()
                      .getText()
                      .setText(dfx.format(netto.doubleValue()));
-            tcells = textTable.getRow(aktuellePosition + (i + 2))
+            tcells = textTable.getRow(aktuellePosition + i + 2)
                               .getCells();
             setPositionenCells(false, tcells);
             gesamtPreise = gesamtPreise.add(gesamtpreis.get(i));
@@ -137,30 +128,28 @@ public class AbrechnungDrucken {
         rechnungsRezgeb = rechnungsRezgeb.add(gesamtZuzahlung);
         rechnungsGesamt = rechnungsGesamt.add(gesamtPreise);
         rechnungsBetrag = rechnungsBetrag.add(gesamtNetto);
-        /****************/
-        tcells = textTable.getRow(aktuellePosition + (i + 2))
+        tcells = textTable.getRow(aktuellePosition + i + 2)
                           .getCells();
         setPositionenCells(true, tcells);
         dummy = dfx.format(gesamtPreise.doubleValue());
-        textTable.getCell(4, aktuellePosition + (i + 2))
+        textTable.getCell(4, aktuellePosition + i + 2)
                  .getTextService()
                  .getText()
                  .setText(dummy);
         dummy = dfx.format(gesamtZuzahlung.doubleValue());
-        textTable.getCell(5, aktuellePosition + (i + 2))
+        textTable.getCell(5, aktuellePosition + i + 2)
                  .getTextService()
                  .getText()
                  .setText(dummy);
         dummy = dfx.format(gesamtNetto.doubleValue());
-        textTable.getCell(6, aktuellePosition + (i + 2))
+        textTable.getCell(6, aktuellePosition + i + 2)
                  .getTextService()
                  .getText()
                  .setText(dummy);
-        /****************/
-        aktuellePosition += (positionen + 2);
+        aktuellePosition += positionen + 2;
     }
 
-    public void setRechnungsBetrag() throws TextException {
+    private void setRechnungsBetrag() throws TextException {
         textEndbetrag.getCell(2, 0)
                      .getTextService()
                      .getText()
@@ -188,36 +177,23 @@ public class AbrechnungDrucken {
                       .setFontSize(8.f);
             tcells[i2].getCharacterProperties()
                       .setFontUnderline(false);
-            if (italicAndBold) {
-                tcells[i2].getCharacterProperties()
-                          .setFontItalic(true);
-                tcells[i2].getCharacterProperties()
-                          .setFontBold(true);
-            } else {
-                tcells[i2].getCharacterProperties()
-                          .setFontItalic(false);
-                tcells[i2].getCharacterProperties()
-                          .setFontBold(false);
-            }
+            tcells[i2].getCharacterProperties()
+                      .setFontItalic(italicAndBold);
+            tcells[i2].getCharacterProperties()
+                      .setFontBold(italicAndBold);
         }
-
     }
 
-    public void druckeRechnung(int anzahl) {
-
-    }
-
-    public void starteDokument(String url) throws Exception {
-        IDocumentService documentService = null;
+        private void starteDokument(String url) throws Exception {
+        IDocumentService documentService;
         documentService = RehaBillEdit.officeapplication.getDocumentService();
         IDocumentDescriptor docdescript = new DocumentDescriptor();
         docdescript.setHidden(true);
         docdescript.setAsTemplate(true);
-        IDocument document = null;
+        IDocument document;
         document = documentService.loadDocument(url, docdescript);
-        /**********************/
         textDocument = (ITextDocument) document;
-        rehaBillEdit.Tools.OOTools.druckerSetzen(textDocument, RehaBillEdit.hmAbrechnung.get("hmgkvrechnungdrucker"));
+        OOTools.druckerSetzen(textDocument, RehaBillEdit.hmAbrechnung.get("hmgkvrechnungdrucker"));
         textTable = textDocument.getTextTableService()
                                 .getTextTable("Tabelle1");
         textEndbetrag = textDocument.getTextTableService()
@@ -233,34 +209,28 @@ public class AbrechnungDrucken {
             e.printStackTrace();
         }
         for (int i = 0; i < placeholders.length; i++) {
-            if (placeholders[i].getDisplayText()
-                               .toLowerCase()
-                               .equals("<gkv1>")) {
+            if ("<gkv1>".equals(placeholders[i].getDisplayText()
+                               .toLowerCase())) {
                 placeholders[i].getTextRange()
                                .setText(hmAdresse.get("<gkv1>"));
-            } else if (placeholders[i].getDisplayText()
-                                      .toLowerCase()
-                                      .equals("<gkv2>")) {
+            } else if ("<gkv2>".equals(placeholders[i].getDisplayText()
+                                      .toLowerCase())) {
                 placeholders[i].getTextRange()
                                .setText(hmAdresse.get("<gkv2>"));
-            } else if (placeholders[i].getDisplayText()
-                                      .toLowerCase()
-                                      .equals("<gkv3>")) {
+            } else if ("<gkv3>".equals(placeholders[i].getDisplayText()
+                                      .toLowerCase())) {
                 placeholders[i].getTextRange()
                                .setText(hmAdresse.get("<gkv3>"));
-            } else if (placeholders[i].getDisplayText()
-                                      .toLowerCase()
-                                      .equals("<gkv4>")) {
+            } else if ("<gkv4>".equals(placeholders[i].getDisplayText()
+                                      .toLowerCase())) {
                 placeholders[i].getTextRange()
                                .setText(hmAdresse.get("<gkv4>"));
-            } else if (placeholders[i].getDisplayText()
-                                      .toLowerCase()
-                                      .equals("<gkv5>")) {
+            } else if ("<gkv5>".equals(placeholders[i].getDisplayText()
+                                      .toLowerCase())) {
                 placeholders[i].getTextRange()
                                .setText(hmAdresse.get("<gkv5>"));
-            } else if (placeholders[i].getDisplayText()
-                                      .toLowerCase()
-                                      .equals("<gkv6>")) {
+            } else if ("<gkv6>".equals(placeholders[i].getDisplayText()
+                                      .toLowerCase())) {
                 placeholders[i].getTextRange()
                                .setText(hmAdresse.get("<gkv6>"));
             }

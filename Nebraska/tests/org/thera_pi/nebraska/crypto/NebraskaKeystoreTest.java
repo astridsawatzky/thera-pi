@@ -34,8 +34,8 @@ public class NebraskaKeystoreTest {
                 institutionName, personName);
     }
 
-    @Ignore
     @Test
+    @Ignore
     public void testGenerateKeyPair()
             throws NebraskaCryptoException, NebraskaFileException, NebraskaNotInitializedException {
         assertFalse(nebraskaKeystore.hasPrivateKey());
@@ -60,11 +60,10 @@ public class NebraskaKeystoreTest {
         requestStream.close();
 
         assertTrue(requestFile.exists());
-//        assertEquals("", md5Hash.toString());
     }
 
-    @Ignore
     @Test
+    @Ignore
     public void testGetPublicKeyMD5()
             throws NebraskaCryptoException, NebraskaFileException, NebraskaNotInitializedException {
         assertFalse(nebraskaKeystore.hasPrivateKey());

@@ -49,8 +49,9 @@ import ag.ion.bion.officelayer.text.IViewCursor;
 import ag.ion.noa.frame.ILayoutManager;
 import environment.Path;
 import hauptFenster.Reha;
-import oOorgTools.OOTools;
-import systemEinstellungen.SystemConfig;
+import oOorgTools.RehaOOTools;
+import office.OOService;
+import office.OOTools;
 
 public class Eb3 implements RehaEventListener {
     RehaEventClass rEvent = null;
@@ -81,7 +82,7 @@ public class Eb3 implements RehaEventListener {
         pan.setBorder(BorderFactory.createEmptyBorder(0, 0, 3, 0));
         pan.setVisible(true);
         pan.setName("ooNativePanel");
-        if (!Reha.officeapplication.isActive()) {
+        if (!new OOService().getOfficeapplication().isActive()) {
             Reha.starteOfficeApplication();
         }
         new SwingWorker<Void, Void>() {
@@ -125,8 +126,8 @@ public class Eb3 implements RehaEventListener {
                         try {
                             pdfok = false;
 
-                            eltern.officeFrame = constructOOOFrame(Reha.officeapplication, pan);
-                            configureOOOFrame(Reha.officeapplication, eltern.officeFrame);
+                            eltern.officeFrame = constructOOOFrame(new OOService().getOfficeapplication(), pan);
+                            configureOOOFrame(new OOService().getOfficeapplication(), eltern.officeFrame);
                             DocumentDescriptor d = new DocumentDescriptor();
                             d.setTitle("Entlassbericht");
                             // Sofern es sich um eine Berichtsneuanlage handelt
@@ -134,10 +135,10 @@ public class Eb3 implements RehaEventListener {
                                 // wenn noch kein frame erstellt wurde und der outbuffe leer ist;
 
                                 // System.out.println("Neuanlage Bericht -> constructNewDocument");
-                                if (!Reha.officeapplication.isActive()) {
+                                if (!new OOService().getOfficeapplication().isActive()) {
                                     Reha.starteOfficeApplication();
                                 }
-                                eltern.document = (ITextDocument) Reha.officeapplication.getDocumentService()
+                                eltern.document = (ITextDocument) new OOService().getOfficeapplication().getDocumentService()
                                                                                         .constructNewDocument(
                                                                                                 eltern.officeFrame,
                                                                                                 IDocument.WRITER, d);
@@ -156,8 +157,7 @@ public class Eb3 implements RehaEventListener {
 
                                 OOTools.setzePapierFormat(eltern.document, Integer.valueOf(25199),
                                         Integer.valueOf(19299));
-                                OOTools.setzeRaender(eltern.document, Integer.valueOf(1000), Integer.valueOf(1000),
-                                        Integer.valueOf(1000), Integer.valueOf(1000));
+                                OOTools.setzeRaender(eltern.document, Integer.valueOf(1000), Integer.valueOf(1000), Integer.valueOf(1000), Integer.valueOf(1000));
                                 framegetrennt = false;
                                 eltern.meldeInitOk(2);
                                 SwingUtilities.invokeLater(new Runnable() {
@@ -170,7 +170,7 @@ public class Eb3 implements RehaEventListener {
                                 });
                                 eltern.document.setModified(false);
                             } else {
-                                if (!Reha.officeapplication.isActive()) {
+                                if (!new OOService().getOfficeapplication().isActive()) {
                                     // System.out.println("Aktiviere Office...");
                                     Reha.starteOfficeApplication();
                                     Thread.sleep(100);
@@ -189,7 +189,7 @@ public class Eb3 implements RehaEventListener {
                                                 descript.setTitle("OpenOffice.org Bericht");
                                                 // descript.setFilterDefinition(RTFFilter.FILTER.getFilterDefinition(IDocument.WRITER));
                                                 try {
-                                                    eltern.document = (ITextDocument) Reha.officeapplication.getDocumentService()
+                                                    eltern.document = (ITextDocument) new OOService().getOfficeapplication().getDocumentService()
                                                                                                             .loadDocument(
                                                                                                                     eltern.officeFrame,
                                                                                                                     ins,
@@ -224,7 +224,7 @@ public class Eb3 implements RehaEventListener {
                                                     });
                                                 } catch (Exception ex) {
                                                     Reha.starteOfficeApplication();
-                                                    eltern.document = (ITextDocument) Reha.officeapplication.getDocumentService()
+                                                    eltern.document = (ITextDocument) new OOService().getOfficeapplication().getDocumentService()
                                                                                                             .loadDocument(
                                                                                                                     eltern.officeFrame,
                                                                                                                     ins,
@@ -248,7 +248,7 @@ public class Eb3 implements RehaEventListener {
                                             } else {
                                                 DocumentDescriptor descript = new DocumentDescriptor();
                                                 descript.setTitle("OpenOffice.org Bericht");
-                                                eltern.document = (ITextDocument) Reha.officeapplication.getDocumentService()
+                                                eltern.document = (ITextDocument) new OOService().getOfficeapplication().getDocumentService()
                                                                                                         .constructNewDocument(
                                                                                                                 eltern.officeFrame,
                                                                                                                 IDocument.WRITER,
@@ -256,9 +256,7 @@ public class Eb3 implements RehaEventListener {
 
                                                 OOTools.setzePapierFormat(eltern.document, Integer.valueOf(25199),
                                                         Integer.valueOf(19299));
-                                                OOTools.setzeRaender(eltern.document, Integer.valueOf(1000),
-                                                        Integer.valueOf(1000), Integer.valueOf(1000),
-                                                        Integer.valueOf(1000));
+                                                OOTools.setzeRaender(eltern.document, Integer.valueOf(1000), Integer.valueOf(1000), Integer.valueOf(1000), Integer.valueOf(1000));
                                                 framegetrennt = false;
                                                 eltern.meldeInitOk(2);
                                                 eltern.document.setModified(false);
@@ -307,8 +305,7 @@ public class Eb3 implements RehaEventListener {
                                         // = "+getStatus());
                                         OOTools.setzePapierFormat(eltern.document, Integer.valueOf(25199),
                                                 Integer.valueOf(19299));
-                                        OOTools.setzeRaender(eltern.document, Integer.valueOf(1000),
-                                                Integer.valueOf(1000), Integer.valueOf(1000), Integer.valueOf(1000));
+                                        OOTools.setzeRaender(eltern.document, Integer.valueOf(1000), Integer.valueOf(1000), Integer.valueOf(1000), Integer.valueOf(1000));
                                         framegetrennt = false;
                                         eltern.meldeInitOk(2);
                                         pan.setSize(pan.getWidth() + 1, pan.getHeight());
@@ -346,7 +343,7 @@ public class Eb3 implements RehaEventListener {
 
         // final NativeView nativeView = new
         // NativeView(SystemConfig.OpenOfficeNativePfad);
-        nativeView = new NativeView(SystemConfig.OpenOfficeNativePfad);
+        nativeView = new NativeView(OOService.OpenOfficeNativePfad);
 
         if (nativeView == null) {
             //// System.out.println("nativeView == null");

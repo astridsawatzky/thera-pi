@@ -6,7 +6,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -39,13 +38,6 @@ import com.jgoodies.forms.layout.FormLayout;
 
 import CommonTools.DatFunk;
 import CommonTools.JRtaTextField;
-import rehaBillEdit.Tools.ButtonTools;
-import rehaBillEdit.Tools.JCompTools;
-import rehaBillEdit.Tools.JRtaCheckBox;
-import rehaBillEdit.Tools.PatTools;
-import rehaBillEdit.Tools.RezTools;
-import rehaBillEdit.Tools.SqlInfo;
-import rehaBillEdit.Tools.TableTool;
 import ag.ion.bion.officelayer.document.DocumentDescriptor;
 import ag.ion.bion.officelayer.document.IDocument;
 import ag.ion.bion.officelayer.document.IDocumentDescriptor;
@@ -55,61 +47,57 @@ import ag.ion.bion.officelayer.text.ITextField;
 import ag.ion.bion.officelayer.text.ITextFieldService;
 import ag.ion.bion.officelayer.text.ITextTable;
 import ag.ion.bion.officelayer.text.TextException;
+import rehaBillEdit.Tools.ButtonTools;
+import rehaBillEdit.Tools.JCompTools;
+import rehaBillEdit.Tools.JRtaCheckBox;
+import rehaBillEdit.Tools.PatTools;
+import rehaBillEdit.Tools.RezTools;
+import rehaBillEdit.Tools.SqlInfo;
+import rehaBillEdit.Tools.TableTool;
 
-public class RehaBillPanel extends JXPanel implements ListSelectionListener, ActionListener, TableModelListener {
-
-    /**
-     *
-     */
+class RehaBillPanel extends JXPanel implements ListSelectionListener, ActionListener, TableModelListener {
     private static final long serialVersionUID = -5545910505665721828L;
 
-    RehaBillEditTab elternTab = null;
-    JXPanel content = null;
-    JRtaTextField[] tfs = { null, null, null, null, null, null, null, null };
-    JRtaCheckBox originalChb = null;
+    private JXPanel content;
+    private JRtaTextField[] tfs = { null, null, null, null, null, null, null, null };
+    private JRtaCheckBox originalChb;
 
-    KeyListener kl = null;
-    ActionListener al = null;
+    private ActionListener al;
 
-    MyOffenePostenTableModel tabmod = null;
-    JXTable tab = null;
+    private MyOffenePostenTableModel tabmod;
+    private JXTable tab;
 
-    DecimalFormat dcf = new DecimalFormat("###0.00");
+    private DecimalFormat dcf = new DecimalFormat("###0.00");
 
-    Vector<Vector<String>> feldNamen = null;
+    private Vector<Vector<String>> feldNamen;
 
-    JLabel rnummerAlt = null;
-    JLabel rbetragAlt = null;
-    JLabel rbetragNeu = null;
-    JLabel rdatumAlt = null;
-    Double ibetragNeu = Double.parseDouble("0.00");
-    int originalPositionen = -1;
-    BigDecimal rechnungGesamt = null;
-    JButton[] buts = { null, null, null, null };
+    private JLabel rnummerAlt;
+    private JLabel rbetragAlt;
+    private JLabel rbetragNeu;
 
-    Vector<String> originalPos = new Vector<String>();
-    Vector<Integer> originalAnzahl = new Vector<Integer>();
-    Vector<Double> einzelPreis = new Vector<Double>();
-    Vector<Double> gesamtPreis = new Vector<Double>();
-    Vector<String> originalId = new Vector<String>();
-    Vector<String> originalLangtext = new Vector<String>();
+    private Double ibetragNeu = Double.parseDouble("0.00");
 
-    HashMap<String, String> hmAdresse = new HashMap<String, String>();
-    boolean is302er = false;
+    private BigDecimal rechnungGesamt;
+    private JButton[] buts = { null, null, null, null };
 
-    ITextTable textTable = null;
-    ITextTable textEndbetrag = null;
-    ITextDocument textDocument = null;
-    int aktuellePosition = 0;
-    int patKilometer = 0;
+    private Vector<String> originalPos = new Vector<>();
+    private Vector<Integer> originalAnzahl = new Vector<>();
+    private Vector<Double> einzelPreis = new Vector<>();
+    private Vector<Double> gesamtPreis = new Vector<>();
+    private Vector<String> originalId = new Vector<>();
+    private Vector<String> originalLangtext = new Vector<>();
 
-    int gkvForm;
+    private HashMap<String, String> hmAdresse = new HashMap<>();
+    private boolean is302er;
 
-    JCheckBox[] check = { null, null };
+    private ITextTable textTable;
+    private ITextTable textEndbetrag;
+    private ITextDocument textDocument;
+    private int aktuellePosition;
+
+        private JCheckBox[] check = { null, null };
 
     public RehaBillPanel(RehaBillEditTab eltern) {
-        super();
-        elternTab = eltern;
         setLayout(new BorderLayout());
         activateActionListener();
         add(getContent(), BorderLayout.CENTER);
@@ -130,7 +118,6 @@ public class RehaBillPanel extends JXPanel implements ListSelectionListener, Act
     }
 
     private JXPanel getEdits() {
-
         // 1 2 3 4 5 6 7
         String xwerte = "5dlu,60dlu,2dlu,100dlu:g,2dlu,25dlu,5dlu";
         // 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27
@@ -195,9 +182,7 @@ public class RehaBillPanel extends JXPanel implements ListSelectionListener, Act
 
             but = ButtonTools.macheButton("Rechnung in OpenOffice starten", "drucken", al);
             jpan.add(but, cc.xyw(4, 18, 3));
-            /*
-             * String rbetragAlt = ""; String rbetragNeu = ""; String rdatumAlt = "";
-             */
+            /* String rbetragAlt = ""; String rbetragNeu = ""; String rdatumAlt = ""; */
 
             lab = new JLabel("R-Nummer:");
             jpan.add(lab, cc.xy(2, 20));
@@ -226,7 +211,6 @@ public class RehaBillPanel extends JXPanel implements ListSelectionListener, Act
     }
 
     private JXPanel getTable() {
-
         String xwerte = "fill:0:grow(1.0)";
         String ywerte = "22dlu,155dlu:g,5dlu,p,5dlu";
 
@@ -235,9 +219,6 @@ public class RehaBillPanel extends JXPanel implements ListSelectionListener, Act
         JXPanel jpan = new JXPanel();
         jpan.setLayout(lay);
 
-        while (!RehaBillEdit.DbOk) {
-
-        }
         tabmod = new MyOffenePostenTableModel();
         feldNamen = SqlInfo.holeFelder("describe faktura");
         // Vector<Vector<String>> felder = SqlInfo.holeFelder("describe faktura");
@@ -313,14 +294,14 @@ public class RehaBillPanel extends JXPanel implements ListSelectionListener, Act
             @Override
             public void actionPerformed(ActionEvent arg0) {
                 String cmd = arg0.getActionCommand();
-                if (cmd.equals("suchen")) {
+                if ("suchen".equals(cmd)) {
                     try {
                         starteSuche();
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
                 }
-                if (cmd.equals("drucken")) {
+                if ("drucken".equals(cmd)) {
                     try {
                         System.out.println("Druck wird gestartet");
                         starteDrucken();
@@ -328,28 +309,28 @@ public class RehaBillPanel extends JXPanel implements ListSelectionListener, Act
                         ex.printStackTrace();
                     }
                 }
-                if (cmd.equals("zeileneu")) {
+                if ("zeileneu".equals(cmd)) {
                     try {
                         doZeileNeu();
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
                 }
-                if (cmd.equals("zeileloeschen")) {
+                if ("zeileloeschen".equals(cmd)) {
                     try {
                         doZeileLoeschen();
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
                 }
-                if (cmd.equals("indbspeichern")) {
+                if ("indbspeichern".equals(cmd)) {
                     try {
                         doInDbSpeichern();
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
                 }
-                if (cmd.equals("abbrechen")) {
+                if ("abbrechen".equals(cmd)) {
                     try {
                         doAbbrechen();
                     } catch (Exception ex) {
@@ -363,7 +344,7 @@ public class RehaBillPanel extends JXPanel implements ListSelectionListener, Act
 
     private void doAbbrechen() {
         for (int i = 0; i < tabmod.getRowCount(); i++) {
-            if (((Integer) tabmod.getValueAt(i, tabmod.getColumnCount() - 1)) == -1) {
+            if ((Integer) tabmod.getValueAt(i, tabmod.getColumnCount() - 1) == -1) {
                 int tabrow = tab.convertRowIndexToView(i);
                 tab.setRowSelectionInterval(tabrow, tabrow);
                 TableTool.loescheRowAusModel(tab, i);
@@ -408,7 +389,6 @@ public class RehaBillPanel extends JXPanel implements ListSelectionListener, Act
                 tabmod.setValueAt(i, tabmod.getRowCount() - 1, 5);
             }
         }
-
     }
 
     private void doZeileNeu() {
@@ -431,7 +411,7 @@ public class RehaBillPanel extends JXPanel implements ListSelectionListener, Act
     private void doInDbSpeichern() {
         String cmd = "";
         for (int i = 0; i < tab.getRowCount(); i++) {
-            if (((Integer) tab.getValueAt(i, tab.getColumnCount() - 1)) < 0) {
+            if ((Integer) tab.getValueAt(i, tab.getColumnCount() - 1) < 0) {
                 cmd = neuFaktura(i);
             } else {
                 cmd = altFaktura(i);
@@ -455,28 +435,32 @@ public class RehaBillPanel extends JXPanel implements ListSelectionListener, Act
         buts[0].setEnabled(true);
         buts[1].setEnabled(true);
         buts[3].setEnabled(false);
-
     }
 
     private String neuFaktura(int row) {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         buf.append("insert into faktura set ");
-        for (int i = 0; i < (feldNamen.size() - 1); i++) {
+        for (int i = 0; i < feldNamen.size() - 1; i++) {
             if (i == 0) {
                 buf.append(feldNamen.get(i)
-                                    .get(0)
-                        + "='" + retWert(row, i) + "'");
+                                    .get(0))
+                       .append("='")
+                       .append(retWert(row, i))
+                       .append("'");
             } else {
-                buf.append(", " + feldNamen.get(i)
-                                           .get(0)
-                        + "='" + retWert(row, i) + "'");
+                buf.append(", ")
+                       .append(feldNamen.get(i)
+                                               .get(0))
+                       .append("='")
+                       .append(retWert(row, i))
+                       .append("'");
             }
         }
         return buf.toString();
     }
 
     private String altFaktura(int row) {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         buf.append("update faktura set ");
         for (int i = 0; i < (feldNamen.size() - 1); i++) {
             if (i == 0) {
@@ -491,14 +475,13 @@ public class RehaBillPanel extends JXPanel implements ListSelectionListener, Act
         }
         buf.append(" where id='" + retWert(row, tabmod.getColumnCount() - 1) + "' LIMIT 1");
         return buf.toString();
-
     }
 
     private String retWert(int row, int col) {
         String value = "";
 
         if (tabmod.getColumnClass(col) == Boolean.class) {
-            value = (tabmod.getValueAt(row, col) == Boolean.FALSE ? "F" : "T");
+            value = tabmod.getValueAt(row, col) == Boolean.FALSE ? "F" : "T";
         } else if (tabmod.getColumnClass(col) == Date.class) {
             if (tabmod.getValueAt(row, col) == null) {
                 value = "1900-01-01";
@@ -526,7 +509,7 @@ public class RehaBillPanel extends JXPanel implements ListSelectionListener, Act
     private void starteSuche() {
         String c = tfs[0].getText()
                          .trim();
-        if (c.equals("")) {
+        if ("".equals(c)) {
             return;
         }
         is302er = SqlInfo.holeEinzelFeld("select r_kasse from rliste where r_nummer='" + c + "' LIMIT 1")
@@ -534,20 +517,18 @@ public class RehaBillPanel extends JXPanel implements ListSelectionListener, Act
         String cmd = "select * from faktura where rnummer='" + c + "' order by id,lfnr";
         try {
             suchen(cmd);
-            bestueckeLabels((tab.getRowCount() > 0));
+            bestueckeLabels(tab.getRowCount() > 0);
             rechneNeu(false);
             if (tab.getRowCount() > 0) {
                 buts[0].setEnabled(true);
                 buts[1].setEnabled(true);
                 buts[2].setEnabled(true);
-                buts[3].setEnabled(false);
             } else {
                 buts[0].setEnabled(false);
                 buts[1].setEnabled(false);
                 buts[2].setEnabled(false);
-                buts[3].setEnabled(false);
             }
-
+            buts[3].setEnabled(false);
         } catch (Exception ex) {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(null, "Fehler in suchen(cmd)");
@@ -560,13 +541,9 @@ public class RehaBillPanel extends JXPanel implements ListSelectionListener, Act
 
     @Override
     public void actionPerformed(ActionEvent arg0) {
-
     }
 
-    class MyOffenePostenTableModel extends DefaultTableModel {
-        /**
-        *
-        */
+    private class MyOffenePostenTableModel extends DefaultTableModel {
         private static final long serialVersionUID = 1L;
 
         @Override
@@ -574,7 +551,6 @@ public class RehaBillPanel extends JXPanel implements ListSelectionListener, Act
             if (feldNamen.get(columnIndex)
                          .get(1)
                          .contains("varchar(")) {
-                return String.class;
             } else if (feldNamen.get(columnIndex)
                                 .get(1)
                                 .contains("enum(")) {
@@ -606,16 +582,11 @@ public class RehaBillPanel extends JXPanel implements ListSelectionListener, Act
                         "Für Abrechnungen nach §302 können lediglich die Adressfelder editiert werden");
                 return false;
             }
-            if (col != 40) {
-                return true;
-            }
-            return false;
+            return col != 40;
         }
-
     }
 
-    class BillListSelectionHandler implements ListSelectionListener {
-
+    private class BillListSelectionHandler implements ListSelectionListener {
         @Override
         public void valueChanged(ListSelectionEvent e) {
             ListSelectionModel lsm = (ListSelectionModel) e.getSource();
@@ -635,7 +606,6 @@ public class RehaBillPanel extends JXPanel implements ListSelectionListener, Act
                     }
                 }
             }
-
         }
     }
 
@@ -649,27 +619,25 @@ public class RehaBillPanel extends JXPanel implements ListSelectionListener, Act
             try {
                 int col = arg0.getColumn();
                 int row = arg0.getFirstRow();
-                String colname = tabmod.getColumnName(col)
+                tabmod.getColumnName(col)
                                        .toString();
-                String value = "";
-                String id = Integer.toString((Integer) tabmod.getValueAt(row, tabmod.getColumnCount() - 1));
+                Integer.toString((Integer) tabmod.getValueAt(row, tabmod.getColumnCount() - 1));
 
                 if (tabmod.getColumnClass(col) == Boolean.class) {
-                    value = (tabmod.getValueAt(row, col) == Boolean.FALSE ? "F" : "T");
+                String    value =(tabmod.getValueAt(row, col) == Boolean.FALSE ? "F" : "T");
                 } else if (tabmod.getColumnClass(col) == Date.class) {
-                    value = tabmod.getValueAt(row, col)
+                    tabmod.getValueAt(row, col)
                                   .toString();
                 } else if (tabmod.getColumnClass(col) == Double.class) {
-                    value = dcf.format(tabmod.getValueAt(row, col))
+                    dcf.format(tabmod.getValueAt(row, col))
                                .replace(",", ".");
                 } else if (tabmod.getColumnClass(col) == Integer.class) {
-                    value = Integer.toString((Integer) tabmod.getValueAt(row, col));
+                    Integer.toString((Integer) tabmod.getValueAt(row, col));
                 } else if (tabmod.getColumnClass(col) == String.class) {
-                    value = tabmod.getValueAt(row, col)
+                    tabmod.getValueAt(row, col)
                                   .toString();
                 }
                 rechneNeu(false);
-
             } catch (Exception ex) {
                 ex.printStackTrace();
                 JOptionPane.showMessageDialog(null, "Fehler in der Dateneingbe");
@@ -682,7 +650,6 @@ public class RehaBillPanel extends JXPanel implements ListSelectionListener, Act
             // System.out.println("ID des zu löschenden Satzes =
             // "+tabmod.getValueAt(arg0.getFirstRow(),tabmod.getColumnCount()-1));
         }
-
     }
 
     private void bestueckeLabels(boolean mitwerten) {
@@ -691,7 +658,7 @@ public class RehaBillPanel extends JXPanel implements ListSelectionListener, Act
                                                                                         .trim()
                     + "' LIMIT 1";
             Vector<Vector<String>> vec = SqlInfo.holeFelder(cmd);
-            if (vec.size() > 0) {
+            if (!vec.isEmpty()) {
                 rbetragAlt.setText(vec.get(0)
                                       .get(1)
                                       .replace(".", ","));
@@ -738,11 +705,9 @@ public class RehaBillPanel extends JXPanel implements ListSelectionListener, Act
             stmt = RehaBillEdit.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
                     ResultSet.CONCUR_UPDATABLE);
         } catch (SQLException e) {
-
             e.printStackTrace();
         }
         try {
-
             rs = stmt.executeQuery(sstmt);
             Vector<Object> vec = new Vector<Object>();
             int durchlauf = 0;
@@ -831,7 +796,6 @@ public class RehaBillPanel extends JXPanel implements ListSelectionListener, Act
                 }
             }
         }
-
     }
 
     private void rechneNeu(boolean inDBschreiben) {
@@ -850,11 +814,11 @@ public class RehaBillPanel extends JXPanel implements ListSelectionListener, Act
 
         for (int i = 0; i < tabmod.getRowCount(); i++) {
             reihePauschale = BigDecimal.valueOf(Double.parseDouble("0.00"));
-            if ((!tabmod.getValueAt(i, 19)
+            if (!tabmod.getValueAt(i, 19)
                         .toString()
                         .trim()
-                        .equals(aktrezept))
-                    && (((Integer) tabmod.getValueAt(i, 5)) == 0)) {
+                        .equals(aktrezept)
+                    && (Integer) tabmod.getValueAt(i, 5) == 0) {
                 reihePauschale = BigDecimal.valueOf((Double) tabmod.getValueAt(i, 20));
                 aktrezept = tabmod.getValueAt(0, 19)
                                   .toString();
@@ -876,7 +840,7 @@ public class RehaBillPanel extends JXPanel implements ListSelectionListener, Act
             tabmod.setValueAt(reiheNetto.doubleValue(), i, 17);
             rechnungPauschale = rechnungPauschale.add(reihePauschale);
             if (inDBschreiben) {
-                cmd = "update faktura set anzahl='" + Integer.toString(reiheAnzahl.intValue()) + "', preis='"
+                cmd = "update faktura set anzahl='" + reiheAnzahl.intValue() + "', preis='"
                         + dcf.format(reiheEinzel)
                              .replace(",", ".")
                         + "', gesamt='" + dcf.format(reiheGesamt)
@@ -917,12 +881,12 @@ public class RehaBillPanel extends JXPanel implements ListSelectionListener, Act
                 JOptionPane.showMessageDialog(null, "Depp - deppader!\n\nRowCount()==0\n");
                 return;
             }
-            String kassenid = Integer.toString(((Integer) tabmod.getValueAt(0, 32)));
+            String kassenid = Integer.toString((Integer) tabmod.getValueAt(0, 32));
             String disziplin = ((String) tabmod.getValueAt(0, 38)).trim()
                                                                   .toLowerCase();
             String pgruppe = SqlInfo.holeEinzelFeld(
                     "select preisgruppe from kass_adr where id='" + kassenid + "' LIMIT 1");
-            if (pgruppe.equals("")) {
+            if ("".equals(pgruppe)) {
                 JOptionPane.showMessageDialog(null, "Kann Preisgruppe nicht ermitteln");
                 return;
             }
@@ -932,12 +896,12 @@ public class RehaBillPanel extends JXPanel implements ListSelectionListener, Act
             String cmd = "select * from " + disziplin.toLowerCase() + "tarif" + preisgruppe;
             System.out.println(cmd);
             Vector<Vector<String>> preisvec = SqlInfo.holeFelder(cmd);
-            if (test.equalsIgnoreCase("Herr") || test.equalsIgnoreCase("Frau")) {
+            if ("Herr".equalsIgnoreCase(test) || "Frau".equalsIgnoreCase(test)) {
                 // es ist eine Rechnung an Privatpersonen
-                macheHashMap("privat", (!disziplin.equals("rh")), preisvec);
+                macheHashMap("privat", !"rh".equals(disziplin), preisvec);
             } else {
                 // es ist eine Rechnung an den Kostenträger
-                macheHashMap("institution", (!disziplin.equals("rh")), preisvec);
+                macheHashMap("institution", !"rh".equals(disziplin), preisvec);
             }
             RehaBillEdit.thisFrame.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         } catch (Exception ex) {
@@ -955,11 +919,10 @@ public class RehaBillPanel extends JXPanel implements ListSelectionListener, Act
             originalLangtext.clear();
             hmAdresse.clear();
             aktuellePosition = 0;
-            if (fuerwen.equals("privat") && heilmittel) {
+            if ("privat".equals(fuerwen) && heilmittel) {
                 System.out.println("privat und heilmittel");
                 doPrivatWiederholungsdruck(preisvec);
-
-            } else if (fuerwen.equals("institution") && heilmittel) {
+            } else if ("institution".equals(fuerwen) && heilmittel) {
                 try {
                     // Jetzt differenzieren zw. Kasse und BG
                     String reznr = ((String) tabmod.getValueAt(0, 19)).trim();
@@ -1005,11 +968,9 @@ public class RehaBillPanel extends JXPanel implements ListSelectionListener, Act
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
-
-            } else if (fuerwen.equals("privat") && (!heilmittel)) {
+            } else if ("privat".equals(fuerwen) && !heilmittel) {
                 System.out.println("in privat und kein heilmittel==reha");
-
-            } else if (fuerwen.equals("institution") && (!heilmittel)) {
+            } else if ("institution".equals(fuerwen) && !heilmittel) {
                 try {
                     System.out.println("in institution und kein heilmittel==reha");
                     System.out.println("in kasse und kein heilmittel");
@@ -1032,8 +993,7 @@ public class RehaBillPanel extends JXPanel implements ListSelectionListener, Act
                         String langtext = RezTools.getLangtextFromID(Integer.toString(id), preisvec)
                                                   .replace("30Min.", "")
                                                   .replace("45Min.", "");
-                        // System.out.println(langtext);
-                        String preis = RezTools.getPreisAktFromID(Integer.toString(id), preisvec);
+                        RezTools.getPreisAktFromID(Integer.toString(id), preisvec);
                         // System.out.println(preis);
                         originalLangtext.add(langtext);
                         originalAnzahl.add(((Integer) tabmod.getValueAt(i, 11)));
@@ -1066,19 +1026,16 @@ public class RehaBillPanel extends JXPanel implements ListSelectionListener, Act
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
             }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-
     }
 
-    /*********************************************************************/
-    public void doPrivatWiederholungsdruck(Vector<Vector<String>> preisvec) {
+    private void doPrivatWiederholungsdruck(Vector<Vector<String>> preisvec) {
         try {
             Vector<String> vec = SqlInfo.holeSatz("pat5", " * ",
-                    "pat_intern='" + ((String) tabmod.getValueAt(0, 31)) + "'", Arrays.asList(new String[] {}));
+                    "pat_intern='" + (String) tabmod.getValueAt(0, 31) + "'", Arrays.asList(new String[] {}));
             PatTools.constructPatHMap(vec);
             hmAdresse.put("<pri1>", ((String) tabmod.getValueAt(0, 0)).trim());
             hmAdresse.put("<pri2>", ((String) tabmod.getValueAt(0, 1)).trim());
@@ -1086,9 +1043,9 @@ public class RehaBillPanel extends JXPanel implements ListSelectionListener, Act
             hmAdresse.put("<pri4>",
                     ((String) tabmod.getValueAt(0, 3)).trim() + " " + ((String) tabmod.getValueAt(0, 4)).trim());
             hmAdresse.put("<pri5>", rnummerAlt.getText());
-            hmAdresse.put("<pri6>", (originalChb.isSelected() ? tfs[6].getText()
+            hmAdresse.put("<pri6>", originalChb.isSelected() ? tfs[6].getText()
                                                                       .trim()
-                    : DatFunk.sHeute()));
+                    : DatFunk.sHeute());
             hmAdresse.put("<pri7>", RehaBillEdit.hmAdrPDaten.get("<Pbanrede>"));
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -1100,8 +1057,7 @@ public class RehaBillPanel extends JXPanel implements ListSelectionListener, Act
                 String langtext = RezTools.getLangtextFromID(Integer.toString(id), preisvec)
                                           .replace("30Min.", "")
                                           .replace("45Min.", "");
-                // System.out.println(langtext);
-                String preis = RezTools.getPreisAktFromID(Integer.toString(id), preisvec);
+                RezTools.getPreisAktFromID(Integer.toString(id), preisvec);
                 // System.out.println(preis);
                 originalLangtext.add(langtext);
                 originalAnzahl.add(((Integer) tabmod.getValueAt(i, 11)));
@@ -1112,7 +1068,6 @@ public class RehaBillPanel extends JXPanel implements ListSelectionListener, Act
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
-
         }
         try {
             System.out.println(RehaBillEdit.hmRechnungPrivat);
@@ -1130,11 +1085,9 @@ public class RehaBillPanel extends JXPanel implements ListSelectionListener, Act
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
-    /*********************************************************************/
-    public void doBGEWiederholungsdruck(Vector<Vector<String>> preisvec) {
+    private void doBGEWiederholungsdruck(Vector<Vector<String>> preisvec) {
         hmAdresse.put("<pri1>", ((String) tabmod.getValueAt(0, 0)).trim());
         hmAdresse.put("<pri2>", ((String) tabmod.getValueAt(0, 1)).trim());
         hmAdresse.put("<pri3>", ((String) tabmod.getValueAt(0, 2)).trim());
@@ -1142,11 +1095,11 @@ public class RehaBillPanel extends JXPanel implements ListSelectionListener, Act
                 ((String) tabmod.getValueAt(0, 3)).trim() + " " + ((String) tabmod.getValueAt(0, 4)).trim());
 
         hmAdresse.put("<pri5>", rnummerAlt.getText());
-        hmAdresse.put("<pri6>", (originalChb.isSelected() ? tfs[6].getText()
+        hmAdresse.put("<pri6>", originalChb.isSelected() ? tfs[6].getText()
                                                                   .trim()
-                : DatFunk.sHeute()));
+                : DatFunk.sHeute());
         Vector<String> vec = SqlInfo.holeSatz("pat5", "n_name,v_name,geboren",
-                "pat_intern='" + ((String) tabmod.getValueAt(0, 31)) + "'", Arrays.asList(new String[] {}));
+                "pat_intern='" + (String) tabmod.getValueAt(0, 31) + "'", Arrays.asList(new String[] {}));
         hmAdresse.put("<pri7>", vec.get(0));
         hmAdresse.put("<pri8>", vec.get(1));
         hmAdresse.put("<pri9>", DatFunk.sDatInDeutsch(vec.get(2)));
@@ -1157,7 +1110,7 @@ public class RehaBillPanel extends JXPanel implements ListSelectionListener, Act
                 String langtext = RezTools.getLangtextFromID(Integer.toString(id), preisvec)
                                           .replace("30Min.", "")
                                           .replace("45Min.", "");
-                String preis = RezTools.getPreisAktFromID(Integer.toString(id), preisvec);
+                RezTools.getPreisAktFromID(Integer.toString(id), preisvec);
                 originalLangtext.add(langtext);
                 originalAnzahl.add(((Integer) tabmod.getValueAt(i, 11)));
                 einzelPreis.add(((Double) tabmod.getValueAt(i, 12)));
@@ -1166,7 +1119,6 @@ public class RehaBillPanel extends JXPanel implements ListSelectionListener, Act
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
-
         }
         try {
             System.out.println(originalAnzahl);
@@ -1188,20 +1140,18 @@ public class RehaBillPanel extends JXPanel implements ListSelectionListener, Act
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
-    /*********************************************************************/
-    public void doBegleitzetteldruck(String xreznr) {
+    private void doBegleitzetteldruck(String xreznr) {
         String aktrezept = "";
         int rezanzahl = 0;
         int lang = tabmod.getRowCount();
         for (int i = 0; i < lang; i++) {
-            if ((!tabmod.getValueAt(i, 19)
+            if (!tabmod.getValueAt(i, 19)
                         .toString()
                         .trim()
-                        .equals(aktrezept))
-                    && (((Integer) tabmod.getValueAt(i, 5)) == 0)) {
+                        .equals(aktrezept)
+                    && ((Integer) tabmod.getValueAt(i, 5)) == 0) {
                 aktrezept = tabmod.getValueAt(i, 19)
                                   .toString()
                                   .trim();
@@ -1214,12 +1164,12 @@ public class RehaBillPanel extends JXPanel implements ListSelectionListener, Act
         hmAdresse.put("<gkv4>",
                 ((String) tabmod.getValueAt(0, 3)).trim() + " " + ((String) tabmod.getValueAt(0, 4)).trim());
         hmAdresse.put("<gkv5>", rnummerAlt.getText());
-        hmAdresse.put("<gkv12>", (originalChb.isSelected() ? tfs[6].getText()
+        hmAdresse.put("<gkv12>", originalChb.isSelected() ? tfs[6].getText()
                                                                    .trim()
-                : DatFunk.sHeute()));
+                : DatFunk.sHeute());
 
         String ik_kostent = SqlInfo.holeEinzelFeld("select ik_kostent from kass_adr where id ='"
-                + Integer.toString((Integer) tabmod.getValueAt(0, 32)) + "' LIMIT 1");
+                + (Integer) tabmod.getValueAt(0, 32) + "' LIMIT 1");
         String name_kostent = SqlInfo.holeEinzelFeld(
                 "select name1 from ktraeger where ikkasse ='" + ik_kostent + "' LIMIT 1");
         name_kostent = name_kostent + "\n"
@@ -1232,23 +1182,20 @@ public class RehaBillPanel extends JXPanel implements ListSelectionListener, Act
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
-    /*********************************************************************/
-    public void doGKVWiederholungsdruck(String xreznr) {
-
-        String namenvornamen = "";
-        String status = "";
-        boolean mitpauschale = false;
+    private void doGKVWiederholungsdruck(String xreznr) {
+        String namenvornamen;
+        String status;
+        boolean mitpauschale;
         int lang = tabmod.getRowCount();
 
-        Vector<String> position = new Vector<String>();
-        Vector<BigDecimal> anzahl = new Vector<BigDecimal>();
-        Vector<BigDecimal> preis = new Vector<BigDecimal>();
-        Vector<BigDecimal> einzelpreis = new Vector<BigDecimal>();
-        Vector<BigDecimal> rezgeb = new Vector<BigDecimal>();
-        Vector<BigDecimal> abrtage = new Vector<BigDecimal>();
+        Vector<String> position = new Vector<>();
+        Vector<BigDecimal> anzahl = new Vector<>();
+        Vector<BigDecimal> preis = new Vector<>();
+        Vector<BigDecimal> einzelpreis = new Vector<>();
+        Vector<BigDecimal> rezgeb = new Vector<>();
+        Vector<BigDecimal> abrtage = new Vector<>();
         String dummy;
         hmAdresse.put("<gkv1>", ((String) tabmod.getValueAt(0, 0)).trim());
         hmAdresse.put("<gkv2>", ((String) tabmod.getValueAt(0, 1)).trim());
@@ -1256,9 +1203,9 @@ public class RehaBillPanel extends JXPanel implements ListSelectionListener, Act
         hmAdresse.put("<gkv4>",
                 ((String) tabmod.getValueAt(0, 3)).trim() + " " + ((String) tabmod.getValueAt(0, 4)).trim());
         hmAdresse.put("<gkv5>", rnummerAlt.getText());
-        hmAdresse.put("<gkv6>", (originalChb.isSelected() ? tfs[6].getText()
+        hmAdresse.put("<gkv6>", originalChb.isSelected() ? tfs[6].getText()
                                                                   .trim()
-                : DatFunk.sHeute()));
+                : DatFunk.sHeute());
         AbrechnungDrucken druckKopie = null;
         try {
             druckKopie = new AbrechnungDrucken(RehaBillEdit.progHome + "vorlagen/" + RehaBillEdit.aktIK + "/"
@@ -1274,7 +1221,7 @@ public class RehaBillPanel extends JXPanel implements ListSelectionListener, Act
         status = String.valueOf(tabmod.getValueAt(0, 6)
                                       .toString()
                                       .trim());
-        mitpauschale = ((Double) tabmod.getValueAt(0, 20) > 0. ? true : false);
+        mitpauschale = (Double) tabmod.getValueAt(0, 20) > 0. ? true : false;
 
         for (int i = 0; i < lang; i++) {
             if (!tabmod.getValueAt(i, 19)
@@ -1302,7 +1249,7 @@ public class RehaBillPanel extends JXPanel implements ListSelectionListener, Act
                 dummy = String.valueOf(tabmod.getValueAt(i, 7)
                                              .toString()
                                              .trim());
-                if (!dummy.equals("")) {
+                if (!"".equals(dummy)) {
                     namenvornamen = String.valueOf(dummy);
                 }
                 status = String.valueOf(tabmod.getValueAt(i, 6)
@@ -1311,7 +1258,7 @@ public class RehaBillPanel extends JXPanel implements ListSelectionListener, Act
                 aktrezept = String.valueOf(tabmod.getValueAt(i, 19)
                                                  .toString()
                                                  .trim());
-                mitpauschale = ((Double) tabmod.getValueAt(i, 20) > 0. ? true : false);
+                mitpauschale = (Double) tabmod.getValueAt(i, 20) > 0. ? true : false;
                 if (i == (lang - 1)) {
                     try {
                         druckKopie.setDaten(namenvornamen, status, aktrezept, position, anzahl, abrtage, einzelpreis,
@@ -1322,7 +1269,6 @@ public class RehaBillPanel extends JXPanel implements ListSelectionListener, Act
                     }
                 }
             } else if (i == (lang - 1)) {
-
                 anzahl.add(BigDecimal.valueOf(Double.valueOf(Integer.toString((Integer) tabmod.getValueAt(i, 11)))));
                 position.add(String.valueOf(tabmod.getValueAt(i, 9)));
                 einzelpreis.add(BigDecimal.valueOf((Double) tabmod.getValueAt(i, 12)));
@@ -1357,7 +1303,7 @@ public class RehaBillPanel extends JXPanel implements ListSelectionListener, Act
                 dummy = String.valueOf(tabmod.getValueAt(i, 7)
                                              .toString()
                                              .trim());
-                if (!dummy.equals("")) {
+                if (!"".equals(dummy)) {
                     namenvornamen = String.valueOf(dummy);
                 }
                 status = String.valueOf(tabmod.getValueAt(i, 6)
@@ -1366,22 +1312,20 @@ public class RehaBillPanel extends JXPanel implements ListSelectionListener, Act
                 aktrezept = String.valueOf(tabmod.getValueAt(i, 19)
                                                  .toString()
                                                  .trim());
-                mitpauschale = ((Double) tabmod.getValueAt(0, 20) > 0. ? true : false);
+                mitpauschale = (Double) tabmod.getValueAt(0, 20) > 0. ? true : false;
             }
         }
         druckKopie.setIKundRnr(RehaBillEdit.aktIK, rnummerAlt.getText(), hmAdresse);
     }
 
-    /*********************************************************************/
-    public void starteDokument(String url) throws Exception {
-        IDocumentService documentService = null;
+    private void starteDokument(String url) throws Exception {
+        IDocumentService documentService;
         documentService = RehaBillEdit.officeapplication.getDocumentService();
         IDocumentDescriptor docdescript = new DocumentDescriptor();
         docdescript.setHidden(true);
         docdescript.setAsTemplate(true);
-        IDocument document = null;
+        IDocument document;
         document = documentService.loadDocument(url, docdescript);
-        /**********************/
         textDocument = (ITextDocument) document;
         textTable = textDocument.getTextTableService()
                                 .getTextTable("Tabelle1");
@@ -1398,39 +1342,32 @@ public class RehaBillPanel extends JXPanel implements ListSelectionListener, Act
             e.printStackTrace();
         }
         for (int i = 0; i < placeholders.length; i++) {
-            if (placeholders[i].getDisplayText()
-                               .toLowerCase()
-                               .equals("<pri1>")) {
+            if ("<pri1>".equals(placeholders[i].getDisplayText()
+                               .toLowerCase())) {
                 placeholders[i].getTextRange()
                                .setText(hmAdresse.get("<pri1>"));
-            } else if (placeholders[i].getDisplayText()
-                                      .toLowerCase()
-                                      .equals("<pri2>")) {
+            } else if ("<pri2>".equals(placeholders[i].getDisplayText()
+                                      .toLowerCase())) {
                 placeholders[i].getTextRange()
                                .setText(hmAdresse.get("<pri2>"));
-            } else if (placeholders[i].getDisplayText()
-                                      .toLowerCase()
-                                      .equals("<pri3>")) {
+            } else if ("<pri3>".equals(placeholders[i].getDisplayText()
+                                      .toLowerCase())) {
                 placeholders[i].getTextRange()
                                .setText(hmAdresse.get("<pri3>"));
-            } else if (placeholders[i].getDisplayText()
-                                      .toLowerCase()
-                                      .equals("<pri4>")) {
+            } else if ("<pri4>".equals(placeholders[i].getDisplayText()
+                                      .toLowerCase())) {
                 placeholders[i].getTextRange()
                                .setText(hmAdresse.get("<pri4>"));
-            } else if (placeholders[i].getDisplayText()
-                                      .toLowerCase()
-                                      .equals("<pri5>")) {
+            } else if ("<pri5>".equals(placeholders[i].getDisplayText()
+                                      .toLowerCase())) {
                 placeholders[i].getTextRange()
                                .setText(hmAdresse.get("<pri5>"));
-            } else if (placeholders[i].getDisplayText()
-                                      .toLowerCase()
-                                      .equals("<pri6>")) {
+            } else if ("<pri6>".equals(placeholders[i].getDisplayText()
+                                      .toLowerCase())) {
                 placeholders[i].getTextRange()
                                .setText(hmAdresse.get("<pri6>"));
             }
         }
-
     }
 
     private void starteErsetzenPrivat() {
@@ -1442,44 +1379,36 @@ public class RehaBillPanel extends JXPanel implements ListSelectionListener, Act
             e.printStackTrace();
         }
         for (int i = 0; i < placeholders.length; i++) {
-            if (placeholders[i].getDisplayText()
-                               .toLowerCase()
-                               .equals("<pri1>")) {
+            if ("<pri1>".equals(placeholders[i].getDisplayText()
+                               .toLowerCase())) {
                 placeholders[i].getTextRange()
                                .setText(hmAdresse.get("<pri1>"));
-            } else if (placeholders[i].getDisplayText()
-                                      .toLowerCase()
-                                      .equals("<pri2>")) {
+            } else if ("<pri2>".equals(placeholders[i].getDisplayText()
+                                      .toLowerCase())) {
                 placeholders[i].getTextRange()
                                .setText(hmAdresse.get("<pri2>"));
-            } else if (placeholders[i].getDisplayText()
-                                      .toLowerCase()
-                                      .equals("<pri3>")) {
+            } else if ("<pri3>".equals(placeholders[i].getDisplayText()
+                                      .toLowerCase())) {
                 placeholders[i].getTextRange()
                                .setText(hmAdresse.get("<pri3>"));
-            } else if (placeholders[i].getDisplayText()
-                                      .toLowerCase()
-                                      .equals("<pri4>")) {
+            } else if ("<pri4>".equals(placeholders[i].getDisplayText()
+                                      .toLowerCase())) {
                 placeholders[i].getTextRange()
                                .setText(hmAdresse.get("<pri4>"));
-            } else if (placeholders[i].getDisplayText()
-                                      .toLowerCase()
-                                      .equals("<pri5>")) {
+            } else if ("<pri5>".equals(placeholders[i].getDisplayText()
+                                      .toLowerCase())) {
                 placeholders[i].getTextRange()
                                .setText(hmAdresse.get("<pri5>"));
-            } else if (placeholders[i].getDisplayText()
-                                      .toLowerCase()
-                                      .equals("<pri6>")) {
+            } else if ("<pri6>".equals(placeholders[i].getDisplayText()
+                                      .toLowerCase())) {
                 placeholders[i].getTextRange()
                                .setText(hmAdresse.get("<pri6>"));
-            } else if (placeholders[i].getDisplayText()
-                                      .toLowerCase()
-                                      .equals("<pri7>")) {
+            } else if ("<pri7>".equals(placeholders[i].getDisplayText()
+                                      .toLowerCase())) {
                 placeholders[i].getTextRange()
                                .setText(hmAdresse.get("<pri7>"));
             }
         }
-
     }
 
     private void starteErsetzenBG() {
@@ -1537,9 +1466,7 @@ public class RehaBillPanel extends JXPanel implements ListSelectionListener, Act
                 placeholders[i].getTextRange()
                                .setText(hmAdresse.get("<pri9>"));
             }
-
         }
-
     }
 
     private void startePositionen() throws TextException {
@@ -1581,16 +1508,14 @@ public class RehaBillPanel extends JXPanel implements ListSelectionListener, Act
                      .getTextService()
                      .getText()
                      .setText(dcf.format(rechnungGesamt.doubleValue()) + " EUR");
-
     }
 
-    class FormWahl extends JDialog {
-        JButton[] but = { null, null };
+    private class FormWahl extends JDialog {
+        private JButton[] but = { null, null };
 
-        // JCheckBox[] check = {null,null};
+        /** JCheckBox[] check = {null,null};. */
         FormWahl() {
-            super();
-            this.setContentPane(getContent());
+            setContentPane(getContent());
         }
 
         private JXPanel getContent() {

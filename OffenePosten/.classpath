@@ -39,5 +39,6 @@
 			<attribute name="test" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry combineaccessrules="false" kind="src" path="/office"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -19,16 +19,18 @@ import ag.ion.bion.officelayer.text.ITextDocument;
 import ag.ion.bion.officelayer.text.ITextTable;
 import ag.ion.bion.officelayer.text.TextException;
 import ag.ion.noa.NOAException;
-import oOorgTools.OOTools;
+import oOorgTools.RehaOOTools;
+import office.OOService;
+import office.OOTools;
 
 public class F2RettungsAnker {
     public F2RettungsAnker() throws TextException {
         IDocumentService documentService = null;
         try {
-            if (!Reha.officeapplication.isActive()) {
+            if (!new OOService().getOfficeapplication().isActive()) {
                 Reha.starteOfficeApplication();
             }
-            documentService = Reha.officeapplication.getDocumentService();
+            documentService = new OOService().getOfficeapplication().getDocumentService();
         } catch (OfficeApplicationException e) {
             e.printStackTrace();
         }

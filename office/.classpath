@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="lib" path="/Libraries/lib/openofficeorg/ag.ion.noa_2.2.3.jar"/>
+	<classpathentry kind="lib" path="/Libraries/lib/openofficeorg/unoil.jar"/>
+	<classpathentry kind="lib" path="/Libraries/lib/openofficeorg/ridl.jar"/>
+	<classpathentry kind="lib" path="/Libraries/lib/ini/ini4j-0.5.4.jar"/>
+	<classpathentry kind="lib" path="/Libraries/lib/logging/slf4j-api-1.7.25.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

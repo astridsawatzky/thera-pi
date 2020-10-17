@@ -27,7 +27,6 @@ import com.jgoodies.forms.layout.FormLayout;
 
 import CommonTools.DatFunk;
 import CommonTools.JRtaTextField;
-import CommonTools.OOTools;
 import CommonTools.RgVkPrSelect;
 import CommonTools.RgVkPr_IfCallBack;
 import CommonTools.SqlInfo;
@@ -46,13 +45,15 @@ import ag.ion.noa.internal.printing.PrintProperties;
 import ag.ion.noa.printing.IPrinter;
 import environment.Path;
 import hauptFenster.Reha;
+import office.OOService;
+import office.OOTools;
 import rehaInternalFrame.JBarkassenInternal;
 import systemTools.ButtonTools;
 
 public class Barkasse extends JXPanel implements RgVkPr_IfCallBack {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = -720717301520114866L;
     JXPanel content = null;
@@ -393,10 +394,10 @@ public class Barkasse extends JXPanel implements RgVkPr_IfCallBack {
     private void starteOO() throws OfficeApplicationException, NOAException, TextException, DocumentException {
         IDocumentService documentService = null;
         String url = null;
-        if (!Reha.officeapplication.isActive()) {
+        if (!new OOService().getOfficeapplication().isActive()) {
             Reha.starteOfficeApplication();
         }
-        documentService = Reha.officeapplication.getDocumentService();
+        documentService = new OOService().getOfficeapplication().getDocumentService();
         IDocument document = null;
 
         DocumentDescriptor docdescript = new DocumentDescriptor();

@@ -46,7 +46,9 @@ import environment.Path;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
 import hauptFenster.Reha;
-import oOorgTools.OOTools;
+import oOorgTools.RehaOOTools;
+import office.OOService;
+import office.OOTools;
 import systemEinstellungen.SystemConfig;
 import uk.co.mmscomputing.device.scanner.Scanner;
 import uk.co.mmscomputing.device.scanner.ScannerIOException;
@@ -341,7 +343,7 @@ public class ScannerUtil extends RehaSmartDialog implements ActionListener {
         IDocumentService documentService = null;
         // System.out.println("Starte Datei -> "+url);
         try {
-            documentService = Reha.officeapplication.getDocumentService();
+            documentService = new OOService().getOfficeapplication().getDocumentService();
         } catch (OfficeApplicationException e) {
             e.printStackTrace();
         }

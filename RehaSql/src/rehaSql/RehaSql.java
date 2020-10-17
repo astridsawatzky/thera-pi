@@ -1,17 +1,15 @@
 package rehaSql;
 
-import static CommonTools.StringLiterals.C_PROGRAMME_OPEN_OFFICE_ORG_3;
 import static CommonTools.StringLiterals.C_REHA_VERWALTUNG;
-import static CommonTools.StringLiterals.C_REHA_VERWALTUNG_LIBRARIES_LIB_OPENOFFICEORG;
 import static CommonTools.StringLiterals.RTA_IK;
 
 import java.awt.Toolkit;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Optional;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -19,32 +17,32 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import org.jdesktop.swingworker.SwingWorker;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import CommonTools.SqlInfo;
-import CommonTools.ini.INIFile;
 import CommonTools.ini.INITool;
 import CommonTools.ini.Settings;
 import rehaSql.RehaIO.RehaReverseServer;
 import rehaSql.RehaIO.SocketClient;
 import ag.ion.bion.officelayer.application.IOfficeApplication;
-import ag.ion.bion.officelayer.application.OfficeApplicationException;
+import ch.qos.logback.classic.util.ContextInitializer;
 import io.RehaIOMessages;
-import logging.Logging;
-import office.OOService;
+import office.OOTools;
+import rehaSql.RehaIO.RehaReverseServer;
+import rehaSql.RehaIO.SocketClient;
 import sql.DatenquellenFactory;
+import uk.org.lidalia.sysoutslf4j.context.SysOutOverSLF4J;
 
 public class RehaSql implements WindowListener {
-
+    private static final Logger LOGGER = LoggerFactory.getLogger(RehaSql.class);
     public static boolean DbOk;
     public static JFrame thisFrame = null;
     public Connection conn;
     static RehaSql thisClass;
 
-    public static IOfficeApplication officeapplication;
+    public static Optional<IOfficeApplication> officeapplication;
 
-
-    private static String officeProgrammPfad = C_PROGRAMME_OPEN_OFFICE_ORG_3;
-    private static String officeNativePfad = C_REHA_VERWALTUNG_LIBRARIES_LIB_OPENOFFICEORG;
     static String progHome = C_REHA_VERWALTUNG;
     static String aktIK = RTA_IK;
 
@@ -55,6 +53,9 @@ public class RehaSql implements WindowListener {
     static boolean hasEditRights = true;
 
     public static void main(String[] args) {
+        System.setProperty(ContextInitializer.CONFIG_FILE_PROPERTY, "./logs/conf/rehasql.xml");
+        SysOutOverSLF4J.sendSystemOutAndErrToSLF4J();
+
         boolean argumentsGiven = args.length > 0;
         if (!argumentsGiven) {
             JOptionPane.showMessageDialog(null,
@@ -75,26 +76,19 @@ public class RehaSql implements WindowListener {
 
         }
 
-        new Logging("rehasql");
-
         RehaSql application = new RehaSql();
         application.getInstance();
         application.getInstance().sqlInfo = new SqlInfo();
 
-
-
-            start(path, aktik, application);
-
+        start(path, aktik, application);
 
     }
 
     private static void start(final String path, final String aktik, RehaSql application) {
         System.out.println("hole daten aus INI-Datei " + path);
 
-        Settings inif = new INIFile(path + "ini/" + aktik + "/rehajava.ini");
+        officeapplication = OOTools.initOffice(path, aktik);
 
-        officeProgrammPfad = inif.getStringProperty("OpenOffice.org", "OfficePfad");
-        officeNativePfad = inif.getStringProperty("OpenOffice.org", "OfficeNativePfad");
         progHome = path;
         aktIK = aktik;
         INITool.init(progHome + "ini/" + aktIK + "/");
@@ -119,13 +113,14 @@ public class RehaSql implements WindowListener {
                     JOptionPane.showMessageDialog(null,
                             "Datenbank konnte nicht geöffnet werden!\nReha-Sql kann nicht gestartet werden");
                 }
-                RehaSql.starteOfficeApplication();
                 return null;
             }
 
         }.execute();
         application.getJFrame();
     }
+
+
 
     /********************/
 
@@ -318,15 +313,7 @@ public class RehaSql implements WindowListener {
 
     /***************************/
 
-    public static void starteOfficeApplication() {
-        try {
-        	new OOService().start(officeNativePfad, officeProgrammPfad);
-            officeapplication = new OOService().getOfficeapplication();
-            System.out.println("OpenOffice ist gestartet und Active =" + officeapplication.isActive());
-        } catch (OfficeApplicationException | FileNotFoundException e1) {
-            e1.printStackTrace();
-        }
-    }
+
 
     static boolean isReadOnly() {
         return !hasEditRights;

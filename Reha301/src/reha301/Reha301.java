@@ -373,7 +373,7 @@ public class Reha301 implements WindowListener {
     public static void starteOfficeApplication() {
 
         try {
-        	new OOService().start(Reha301.officeNativePfad, Reha301.officeProgrammPfad);
+        	new OOService().start();
         	
             officeapplication = new OOService().getOfficeapplication();
             System.out.println("OpenOffice ist gestartet und Active =" + officeapplication.isActive());
