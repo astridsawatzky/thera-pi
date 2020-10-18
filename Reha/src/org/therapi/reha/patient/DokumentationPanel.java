@@ -19,6 +19,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -1001,14 +1004,14 @@ public class DokumentationPanel extends JXPanel
                                 .endsWith(".ods"))) {
                 try {
                     Reha.instance.patpanel.dokumentation.setCursor(Cursors.wartenCursor);
-                    FileTools.copyFile(new File(bildpfad),
-                            new File(SystemConfig.hmVerzeichnisse.get("Temp") + "/" + bild[0]), 4096 * 4, true);
-                    File f = new File(SystemConfig.hmVerzeichnisse.get("Temp") + "/" + bild[0]);
+                    String dest = SystemConfig.hmVerzeichnisse.get("Temp") + "/" + bild[0];
+                    Files.copy(Paths.get(  bildpfad), Paths.get(dest), StandardCopyOption.REPLACE_EXISTING);
+                    File f = new File(dest);
                     if (f.exists()) {
                         int dokuid = SqlInfo.erzeugeNummer("doku");
-                        int pat_int = Integer.valueOf(Reha.instance.patpanel.aktPatID); // Integer.valueOf(annika.getText().trim());
+                        int pat_int = Integer.valueOf(Reha.instance.patpanel.aktPatID);
 
-                        speichernOoDocs(dokuid, pat_int, SystemConfig.hmVerzeichnisse.get("Temp") + "/" + bild[0],
+                        speichernOoDocs(dokuid, pat_int, dest,
                                 (bildpfad.toLowerCase()
                                          .endsWith(".odt") ? 1 : 2),
                                 new String[] { DatFunk.sDatInSQL(DatFunk.sHeute()), bild[0], Reha.aktUser, "" }, true);
@@ -1034,8 +1037,6 @@ public class DokumentationPanel extends JXPanel
     private void ladeJpeg() {
         String[] bild = oeffneBild(new String[] { "jpg", "xxx", "xxx" }, true);
         if (bild.length > 0) {
-            // System.out.println(bild[0]);
-            // System.out.println(bild[1].replaceAll("\\\\", "/"));
             String bildpfad = bild[1].replaceAll("\\\\", "/");
             if (!bildpfad.toLowerCase()
                          .endsWith(".jpg")) {
@@ -1046,16 +1047,11 @@ public class DokumentationPanel extends JXPanel
                 this.setzeDokuPanelAufNull(false);
             }
 
-            // BufferedImage img = null;
             try {
                 setCursor(Cursors.wartenCursor);
                 commonName = Long.toString(System.currentTimeMillis());
                 String fname = "scan" + commonName + ".jpg";
                 Image img2 = null;
-                /*
-                 * img = ImageIO.read(new File( bildpfad)); img.flush(); Image img2 = null; img2
-                 * = img.getScaledInstance(50, 65, Image.SCALE_FAST); img.flush(); img = null;
-                 */
                 try {
                     img2 = Toolkit.getDefaultToolkit()
                                   .getImage(bildpfad)
@@ -1065,26 +1061,18 @@ public class DokumentationPanel extends JXPanel
                     mediaTracker.waitForID(0);
                 } catch (Exception ie) {
                 }
+                java.nio.file.Path src = Paths.get(bildpfad);
+                java.nio.file.Path dest = Paths.get(SystemConfig.hmVerzeichnisse.get("Temp") + "/" + fname);
 
-                FileTools.copyFile(new File(bildpfad), new File(SystemConfig.hmVerzeichnisse.get("Temp") + "/" + fname),
-                        4096 * 5, false);
+                Files.copy(src, dest);
 
-                // final String pfad = bild[1];
-                /*
-                 * new Thread(){ public void run(){
-                 */
                 quelle = "bildgeladen";
-                // vecBilderAktion.add("jpggeladen");
                 aktion = "bildgeladen";
                 zeigeBilder(img2, SystemConfig.hmVerzeichnisse.get("Temp") + "/" + fname, commonName);
-                /*
-                 * } }.start();
-                 */
                 img2 = null;
                 Runtime r = Runtime.getRuntime();
                 r.gc();
                 r.freeMemory();
-                // System.out.println("Freier Speicher "+freeMem);
                 setCursor(Cursors.normalCursor);
 
             } catch (IOException e) {
@@ -1095,8 +1083,6 @@ public class DokumentationPanel extends JXPanel
                 setCursor(Cursors.normalCursor);
                 String cmd = "Die Bilder sind (zusammen) zu groß für Arbeitsspeicher.\nSpeichern Sie jedes Bild einzeln als Dokumentation";
                 JOptionPane.showMessageDialog(null, cmd);
-                // System.err.println("Bild zu gro� f�r Arbeitsspeicher.\nSpeichern Sie nur
-                // dieses Bild in einer eigenen Dokumentation");
             }
         }
     }
@@ -2186,9 +2172,9 @@ public class DokumentationPanel extends JXPanel
             dest = Path.Instance.getProghome() + "temp/" + Reha.getAktIK() + "/" + value + ".odt";
 
             try {
-                FileTools.copyFile(new File(src), new File(dest), 8192, true);
+                Files.copy(Paths.get(src), Paths.get(dest), StandardCopyOption.REPLACE_EXISTING);
                 ITextDocument itext = OOTools.starteWriterMitDatei(dest);
-                itext.addDocumentListener(new NewDokumentOOListener(new OOService().getOfficeapplication(), dest, "", this));
+                itext.addDocumentListener(new NewDokumentOOListener(new OOService().getOfficeapplication(), dest, this));
             } catch (IOException e) {
                 e.printStackTrace();
                 JOptionPane.showMessageDialog(null, "Fehler kann neues WriterDokument nicht erzeugen");
@@ -2198,9 +2184,9 @@ public class DokumentationPanel extends JXPanel
             dest = Path.Instance.getProghome() + "temp/" + Reha.getAktIK() + "/" + value + ".ods";
 
             try {
-                FileTools.copyFile(new File(src), new File(dest), 8192, true);
+                Files.copy(Paths.get(src), Paths.get(dest), StandardCopyOption.REPLACE_EXISTING);
                 ISpreadsheetDocument ispread = OOTools.starteCalcMitDatei(dest);
-                ispread.addDocumentListener(new NewDokumentOOListener(new OOService().getOfficeapplication(), dest, "", this));
+                ispread.addDocumentListener(new NewDokumentOOListener(new OOService().getOfficeapplication(), dest, this));
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -2213,10 +2199,10 @@ public class DokumentationPanel extends JXPanel
             dest = Path.Instance.getProghome() + "temp/" + Reha.getAktIK() + "/" + value + "-"
                     + Reha.instance.patpanel.aktPatID + testName(value) + ".odt";
             try {
-                FileTools.copyFile(new File(src), new File(dest), 8192, true);
+                Files.copy(Paths.get(src), Paths.get(dest), StandardCopyOption.REPLACE_EXISTING);
                 ITextDocument itext = OOTools.starteWriterMitDatei(dest);
                 RehaOOTools.erstzeNurPlatzhalter(itext,Reha.instance);
-                itext.addDocumentListener(new NewDokumentOOListener(new OOService().getOfficeapplication(), dest, "", this));
+                itext.addDocumentListener(new NewDokumentOOListener(new OOService().getOfficeapplication(), dest, this));
             } catch (IOException e) {
                 e.printStackTrace();
                 JOptionPane.showMessageDialog(null, "Fehler kann neues WriterDokument nicht erzeugen");
@@ -2228,9 +2214,10 @@ public class DokumentationPanel extends JXPanel
             dest = Path.Instance.getProghome() + "temp/" + Reha.getAktIK() + "/" + value + "-"
                     + Reha.instance.patpanel.aktPatID + testName(value) + ".ods";
             try {
-                FileTools.copyFile(new File(src), new File(dest), 8192, true);
+
+                Files.copy(Paths.get(src), Paths.get(dest), StandardCopyOption.REPLACE_EXISTING);
                 ISpreadsheetDocument ispread = OOTools.starteCalcMitDatei(dest);
-                ispread.addDocumentListener(new NewDokumentOOListener(new OOService().getOfficeapplication(), dest, "", this));
+                ispread.addDocumentListener(new NewDokumentOOListener(new OOService().getOfficeapplication(), dest, this));
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -2291,33 +2278,14 @@ public class DokumentationPanel extends JXPanel
             throws Exception {
         Statement stmt = null;
         PreparedStatement ps = null;
-        // boolean ret = false;
-        // int bilder = 0;
-        // FileInputStream fis = null;
-        // piTool.app.conn.setAutoCommit(true);
         try {
             stmt = Reha.instance.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            // Dokumentation.speichernOoDocs(Integer.valueOf(id), -1, file, -1, null,
-            // false);
             if (neu) {
                 String select = "Insert into doku1 set dokuid = ? , datum = ?, dokutitel = ?,"
                         + "benutzer = ?, pat_intern = ?, format = ?,"
                         + "dokutext = ?, dokublob = ? , groesse = ? , datei = ?";
                 ps = (PreparedStatement) Reha.instance.conn.prepareStatement(select);
-                /*
-                 *
-                 * ps.setBytes(1, //dokuid - integer ps.setBytes(2, //datum - date
-                 * ps.setBytes(3, //dokutitel - longtext ps.setBytes(4, //benutzer - zeichen
-                 * ps.setBytes(5, //pat_intern - integer ps.setBytes(6, //format - integer
-                 * ps.setBytes(7, //dokutext - longtext ps.setBytes(8, //dokublob - longblog
-                 * /bin�r ps.setBytes(9, //groesse - longtext ps.setBytes(10, //datei - longblog
-                 * /bin�r
-                 *
-                 * new String[]
-                 * {datFunk.sDatInSQL(datFunk.sHeute()),"Eingescannte Papierdokumentation",Reha.
-                 * aktUser,""},
-                 */
-                // System.out.println("Setze InputStream "+dateiname);
+
                 ps.setInt(1, dokuid);
                 ps.setString(2, DatFunk.sDatInSQL(DatFunk.sHeute()));
                 ps.setString(3, dateiname.substring(dateiname.replace("\\", "/")
@@ -2338,21 +2306,14 @@ public class DokumentationPanel extends JXPanel
                                                               .lastIndexOf("/")
                         + 1));
                 ps.execute();
-                // System.out.println("OOOrg-Doku wurde gespeichert");
-                // String id = SqlInfo.holeEinzelFeld("select id from doku1 where
-                // dokuid='"+dokuid+"' LIMIT 1");
-                //// System.out.println("ID der neuen Doku ist "+id);
+
                 holeDokus(Reha.instance.patpanel.patDaten.get(29)
                                                          .trim(),
                         "");
 
             } else {
-                // int dokuid,int pat_intern, String dateiname,int format,String[] str,boolean
-                // neu
-                // Dokumentation.speichernOoDocs(Integer.valueOf(id), -1, file, -1, null,
-                // false);
+
                 String select = "update doku1 set dokublob = ?, groesse = ?, datum = ? " + " where id = ?";
-                // System.out.println("Prepared statement: "+select);
                 ps = (PreparedStatement) Reha.instance.conn.prepareStatement(select);
                 File f = new File(dateiname);
                 byte[] b = FileTools.File2ByteArray(f);
@@ -2362,12 +2323,6 @@ public class DokumentationPanel extends JXPanel
                 ps.setString(4, Integer.valueOf(dokuid)
                                        .toString());
                 ps.execute();
-                // System.out.println("Fertig mit execute");
-                // System.out.println("Größe des Datenstroms="+b.length+" Bytes");
-                // System.out.println("Datei = "+f.getAbsolutePath());
-                // System.out.println("dokuid = "+Integer.toString(dokuid));
-                // System.out.println("Dateigröße = "+b.length+" Bytes");
-                // System.out.println("Datum = "+DatFunk.sDatInSQL(DatFunk.sHeute()));
                 f.delete();
                 Reha.instance.patpanel.dokumentation.setCursor(Cursors.normalCursor);
             }
@@ -2383,7 +2338,7 @@ public class DokumentationPanel extends JXPanel
                 try {
                     stmt.close();
                     stmt = null;
-                } catch (SQLException sqlEx) { // ignore }
+                } catch (SQLException sqlEx) {
                     stmt = null;
                 }
             }
@@ -2424,9 +2379,9 @@ public class DokumentationPanel extends JXPanel
             icons.put("Scanner einstellungen", SystemConfig.hmSysIcons.get("scanner"));
             icons.put("Photo von DigiCam holen", SystemConfig.hmSysIcons.get("camera"));
             icons.put("Office-Dokument aufnehmen", SystemConfig.hmSysIcons.get("openoffice26"));
-            icons.put("PDF-Dokument aufnehmen", pdfplus /* SystemConfig.hmSysIcons.get("pdf") */);
-            icons.put("Neue OO-Writer-Doku erstellen", oowriterplus/* SystemConfig.hmSysIcons.get("ooowriter") */);
-            icons.put("Neue OO-Calc-Doku erstellen", oocalcplus/* SystemConfig.hmSysIcons.get("ooocalc") */);
+            icons.put("PDF-Dokument aufnehmen", pdfplus );
+            icons.put("Neue OO-Writer-Doku erstellen", oowriterplus);
+            icons.put("Neue OO-Calc-Doku erstellen", oocalcplus);
             int owndoku = SystemConfig.vOwnDokuTemplate.size();
             for (int i = 0; i < owndoku; i++) {
                 if (SystemConfig.vOwnDokuTemplate.get(i)
@@ -2437,7 +2392,7 @@ public class DokumentationPanel extends JXPanel
                                                         .contains(".ots")) {
                     icons.put(SystemConfig.vOwnDokuTemplate.get(i)
                                                            .get(0),
-                            oocalcplus/* SystemConfig.hmSysIcons.get("ooocalc") */);
+                            oocalcplus);
 
                 } else if (SystemConfig.vOwnDokuTemplate.get(i)
                                                         .get(1)
@@ -2447,7 +2402,7 @@ public class DokumentationPanel extends JXPanel
                                                         .contains(".ott")) {
                     icons.put(SystemConfig.vOwnDokuTemplate.get(i)
                                                            .get(0),
-                            oowriterplus/* SystemConfig.hmSysIcons.get("ooocalc") */);
+                            oowriterplus);
                 }
 
             }
@@ -2463,13 +2418,7 @@ public class DokumentationPanel extends JXPanel
                 }
             }
             JList list = new JList(obj2);
-            // create a list with some test data
-            /*
-             * JList list = new JList( new Object[] {"Scanner einstellungen",
-             * "Photo von DigiCam holen", "Office-Dokument aufnehmen",
-             * "PDF-Dokument aufnehmen", "Neue OO-Writer-Doku erstellen",
-             * "Neue OO-Calc-Doku erstellen"});
-             */
+
             list.setCellRenderer(new IconListRenderer(icons));
             Reha.toolsDlgRueckgabe = -1;
 
@@ -2515,7 +2464,7 @@ public class DokumentationPanel extends JXPanel
                     keinAtiverPatient();
                     tDlg = null;
                     return;
-                } // 0 = Writer
+                }
                 if (!Rechte.hatRecht(Rechte.Doku_ooorg, true)) {
                     return;
                 }
@@ -2526,7 +2475,7 @@ public class DokumentationPanel extends JXPanel
                     keinAtiverPatient();
                     tDlg = null;
                     return;
-                } // 0 = Calc
+                }
                 if (!Rechte.hatRecht(Rechte.Doku_ooorg, true)) {
                     return;
                 }
@@ -2537,7 +2486,7 @@ public class DokumentationPanel extends JXPanel
                     keinAtiverPatient();
                     tDlg = null;
                     return;
-                } // 0 = Calc
+                }
                 if (!Rechte.hatRecht(Rechte.Doku_ooorg, true)) {
                     return;
                 }
@@ -2553,7 +2502,6 @@ public class DokumentationPanel extends JXPanel
             }
 
             tDlg = null;
-            //// System.out.println("Rückgabewert = "+tDlg.rueckgabe);
         }
 
         private void keinAtiverPatient() {
@@ -2567,9 +2515,6 @@ public class DokumentationPanel extends JXPanel
 /*************************************/
 
 class MyDoku2TableModel extends DefaultTableModel {
-    /**
-    *
-    */
     private static final long serialVersionUID = 1L;
 
     @Override
@@ -2579,23 +2524,20 @@ class MyDoku2TableModel extends DefaultTableModel {
         } else {
             return String.class;
         }
-        // return (columnIndex == 0) ? Boolean.class : String.class;
     }
 
     @Override
     public boolean isCellEditable(int row, int col) {
-        // Note that the data/cell address is constant,
-        // no matter where the cell appears onscreen.
-
-        if (col == 0) {
+        switch (col) {
+        case 0:
             return true;
-        } else if (col == 3) {
+        case 3:
             return true;
-        } else if (col == 7) {
+        case 7:
             return true;
-        } else if (col == 11) {
+        case 11:
             return true;
-        } else {
+        default:
             return false;
         }
     }
@@ -2603,36 +2545,25 @@ class MyDoku2TableModel extends DefaultTableModel {
 }
 
 class MyDokuTermTableModel extends DefaultTableModel {
-    /**
-    *
-    */
     private static final long serialVersionUID = 1L;
 
     @Override
     public Class<?> getColumnClass(int columnIndex) {
-        if (columnIndex == 0) {
             return String.class;
-        }
-        /* else if(columnIndex==1){return JLabel.class;} */
-        else {
-            return String.class;
-        }
-        // return (columnIndex == 0) ? Boolean.class : String.class;
     }
 
     @Override
     public boolean isCellEditable(int row, int col) {
-        // Note that the data/cell address is constant,
-        // no matter where the cell appears onscreen.
-        if (col == 0) {
+        switch (col) {
+        case 0:
             return true;
-        } else if (col == 1) {
+        case 1:
             return true;
-        } else if (col == 2) {
+        case 2:
             return true;
-        } else if (col == 11) {
+        case 11:
             return true;
-        } else {
+        default:
             return false;
         }
     }

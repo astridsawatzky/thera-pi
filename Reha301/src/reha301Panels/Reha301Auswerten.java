@@ -13,6 +13,9 @@ import java.awt.event.MouseListener;
 import java.awt.geom.Point2D;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.Vector;
 
 import javax.swing.*;
@@ -46,6 +49,7 @@ import CommonTools.ini.INIFile;
 import CommonTools.ini.Settings;
 import ag.ion.bion.officelayer.text.ITextDocument;
 import ag.ion.bion.officelayer.text.TextException;
+import environment.Path;
 import io.RehaIOMessages;
 import office.OOTools;
 import reha301.Dta301Model;
@@ -1494,11 +1498,9 @@ public class Reha301Auswerten extends JXPanel {
     }
 
     private void doNachrichtVerschieben(String datei) {
-        // JOptionPane.showMessageDialog(null,"Gesuchte Dateien = "+datei);
         String datnamen = datei.substring(0, datei.length() - 4);
         String nurdat = datei.substring(datei.indexOf("/") + 1);
         nurdat = nurdat.substring(0, nurdat.indexOf("."));
-        //// System.out.println("Der Reine Dateinamen = "+nurdat);
         int anfrage = JOptionPane.showConfirmDialog(null,
                 "Sollen die Datei --> " + datnamen + " <-- jetzt in den Ordner 'erledigt' verschoben werden?",
                 "Achtung wichtige Benutzeranfrage", JOptionPane.YES_NO_OPTION);
@@ -1509,16 +1511,13 @@ public class Reha301Auswerten extends JXPanel {
         Reha301.thisFrame.setCursor(new Cursor(Cursor.WAIT_CURSOR));
         File[] files = dir.listFiles();
         for (int i = 0; i < files.length; i++) {
-            //// System.out.println("name="+files[i].getName());
-            //// System.out.println("pfad="+files[i].getPath());
             if (files[i].getName()
                         .startsWith(nurdat)) {
                 try {
-                    //// System.out.println("Kopiere "+files[i].getPath().replace("\\", "/")+"
-                    //// nach\n"+Reha301.inbox+"erledigt/"+files[i].getName()+"\n");
-                    FileTools.copyFile(new File(files[i].getPath()
-                                                        .replace("\\", "/")),
-                            new File(Reha301.inbox + "erledigt/" + files[i].getName()), 1024 * 8, true);
+                    java.nio.file.Path src =  Paths.get (files[i].getPath()
+                                                        .replace("\\", "/"));
+                    java.nio.file.Path dest = Paths.get(Reha301.inbox + "erledigt/" + files[i].getName());
+                    Files.copy(src, dest, StandardCopyOption.REPLACE_EXISTING);
 
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -1527,8 +1526,6 @@ public class Reha301Auswerten extends JXPanel {
         }
 
         try {
-            //// System.out.println("3. Lösche Dateien: "+Reha301.inbox+datnamen);
-            // FileTools.delFileWithPraefix(new File(Reha301.inbox), datnamen);
             FileTools.delFileWithPraefix(new File(Reha301.inbox), nurdat);
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -1555,22 +1552,7 @@ public class Reha301Auswerten extends JXPanel {
         Reha301.thisFrame.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
     }
 
-    public void doNurZumTesten(Vector<Object> vecobj) {
-        // System.out.println("Eintritt in die Testroutine");
-        for (int i = 0; i < vecobj.size(); i++) {
-            if (vecobj.get(i) instanceof Object[]) {
-                for (int o = 0; o < ((Object[]) vecobj.get(i)).length; o++) {
-                    // System.out.println("Object["+Integer.toString(o)+"] =
-                    // "+((Object[])vecobj.get(i))[o] );
-                }
-            } else {
-                String[] titel = { "", "Patient=", "Kostenträger=", "Diagnose=", "Fallart=", "Eilfall=", "Preisgruppe=",
-                        "Diagnosegruppe=" };
-                //// System.out.println(Integer.toString(i)+" - "+titel[i]+vecobj.get(i));
-            }
 
-        }
-    }
 
     private String[] kassenAuswahl(String[] suchenach) {
         String[] ret = { "", "", "" };

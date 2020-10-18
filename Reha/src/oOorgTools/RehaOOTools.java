@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.Vector;
 
@@ -33,21 +33,17 @@ import office.OOTools;
 import systemEinstellungen.SystemConfig;
 
 public class RehaOOTools {
-
-
-
-    /**************************************************************************************/
     public static void starteStandardFormular(String url, String drucker, Monitor monitor) {
         new SwingWorker<Void, Void>() {
             @Override
-            protected Void doInBackground() throws java.lang.Exception {
+            protected Void doInBackground() throws Exception {
                 starts(monitor);
                 return null;
             }
 
         }.execute();
         IDocumentService documentService = null;
-        ITextDocument textDocument = null;
+        ITextDocument textDocument;
 
         OOService ooService = new OOService();
         if (!ooService.getOfficeapplication()
@@ -55,14 +51,12 @@ public class RehaOOTools {
             try {
                 ooService.start();
             } catch (FileNotFoundException | OfficeApplicationException e) {
-
                 e.printStackTrace();
             }
         }
         try {
             documentService = ooService.getOfficeapplication()
                                        .getDocumentService();
-
         } catch (OfficeApplicationException e) {
             e.printStackTrace();
         }
@@ -75,12 +69,10 @@ public class RehaOOTools {
         try {
             document = documentService.loadDocument(url, docdescript);
         } catch (NOAException e) {
-
             e.printStackTrace();
         }
         textDocument = (ITextDocument) document;
 
-        /**********************/
         if (drucker != null) {
             String druckerName = null;
             try {
@@ -88,7 +80,6 @@ public class RehaOOTools {
                                           .getActivePrinter()
                                           .getName();
             } catch (NOAException e) {
-
                 e.printStackTrace();
             }
             IPrinter iprint = null;
@@ -107,13 +98,11 @@ public class RehaOOTools {
                 }
             }
         }
-        /**********************/
         ITextFieldService textFieldService = textDocument.getTextFieldService();
 
         ITextField[] placeholders = null;
         try {
             placeholders = textFieldService.getPlaceholderFields();
-
         } catch (TextException e) {
             e.printStackTrace();
         }
@@ -131,19 +120,17 @@ public class RehaOOTools {
                     System.out.println("Insgesamt Placeholderanzahl = " + placeholders.length);
                 }
 
-                /*****************/
                 Set<?> entries = SystemConfig.hmAdrPDaten.entrySet();
                 Iterator<?> it = entries.iterator();
                 while (it.hasNext()) {
-                    Map.Entry<?, ?> entry = (Map.Entry<?, ?>) it.next();
+                    Entry<?, ?> entry = (Entry<?, ?>) it.next();
                     if (entry.getKey()
                              .toString()
                              .toLowerCase()
                              .equals(placeholderDisplayText)) {
-                        if (entry.getValue()
-                                 .toString()
-                                 .trim()
-                                 .equals("")) {
+                        if ("".equals(entry.getValue()
+                                           .toString()
+                                           .trim())) {
                             placeholders[i].getTextRange()
                                            .setText("\b");
                         } else {
@@ -155,58 +142,51 @@ public class RehaOOTools {
                         break;
                     }
                 }
-                /*****************/
                 entries = SystemConfig.hmAdrKDaten.entrySet();
                 it = entries.iterator();
-                while (it.hasNext() && (!schonersetzt)) {
-                    Map.Entry<?, ?> entry = (Map.Entry<?, ?>) it.next();
+                while (it.hasNext() && !schonersetzt) {
+                    Entry<?, ?> entry = (Entry<?, ?>) it.next();
                     if (((String) entry.getKey()).toLowerCase()
                                                  .equals(placeholderDisplayText)) {
-                        if (((String) entry.getValue()).trim()
-                                                       .equals("")) {
+                        if ("".equals(((String) entry.getValue()).trim())) {
                             OOTools.loescheLeerenPlatzhalter(textDocument, placeholders[i]);
                         } else {
                             placeholders[i].getTextRange()
-                                           .setText(((String) entry.getValue()));
+                                           .setText((String) entry.getValue());
                         }
                         schonersetzt = true;
                         break;
                     }
                 }
-                /*****************/
                 entries = SystemConfig.hmAdrADaten.entrySet();
                 it = entries.iterator();
-                while (it.hasNext() && (!schonersetzt)) {
-                    Map.Entry<?, ?> entry = (Map.Entry<?, ?>) it.next();
+                while (it.hasNext() && !schonersetzt) {
+                    Entry<?, ?> entry = (Entry<?, ?>) it.next();
                     if (((String) entry.getKey()).toLowerCase()
                                                  .equals(placeholderDisplayText)) {
-                        if (((String) entry.getValue()).trim()
-                                                       .equals("")) {
+                        if ("".equals(((String) entry.getValue()).trim())) {
                             OOTools.loescheLeerenPlatzhalter(textDocument, placeholders[i]);
                         } else {
                             placeholders[i].getTextRange()
-                                           .setText(((String) entry.getValue()));
+                                           .setText((String) entry.getValue());
                         }
                         schonersetzt = true;
                         break;
                     }
                 }
-                /*****************/
                 entries = SystemConfig.hmAdrRDaten.entrySet();
                 it = entries.iterator();
-                while (it.hasNext() && (!schonersetzt)) {
-                    Map.Entry<?, ?> entry = (Map.Entry<?, ?>) it.next();
+                while (it.hasNext() && !schonersetzt) {
+                    Entry<?, ?> entry = (Entry<?, ?>) it.next();
                     if (((String) entry.getKey()).toLowerCase()
                                                  .equals(placeholderDisplayText)) {
-
-                        if (((String) entry.getValue()).trim()
-                                                       .equals("")) {
+                        if ("".equals(((String) entry.getValue()).trim())) {
                             placeholders[i].getTextRange()
                                            .setText("");
                             OOTools.loescheLeerenPlatzhalter(textDocument, placeholders[i]);
                         } else {
                             placeholders[i].getTextRange()
-                                           .setText(((String) entry.getValue()));
+                                           .setText((String) entry.getValue());
                         }
                         schonersetzt = true;
                         break;
@@ -215,9 +195,8 @@ public class RehaOOTools {
                 if (!schonersetzt) {
                     OOTools.loescheLeerenPlatzhalter(textDocument, placeholders[i]);
                 }
-                /*****************/
             }
-        } catch (java.lang.IllegalArgumentException ex) {
+        } catch (IllegalArgumentException ex) {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(null, "Fehler in der Dokumentvorlage");
             if (document != null) {
@@ -238,7 +217,7 @@ public class RehaOOTools {
 
         try {
             OOTools.refreshTextFields(textDocument.getXTextDocument());
-        } catch (java.lang.Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -260,123 +239,95 @@ public class RehaOOTools {
             }
 
         });
-
     }
 
-    /**************************************************************************************/
     public static void erstzeNurPlatzhalter(ITextDocument textDocument, Monitor monitor) {
-        /**********************/
         ITextFieldService textFieldService = textDocument.getTextFieldService();
 
-        ITextField[] placeholders = null;
-        try {
-            placeholders = textFieldService.getPlaceholderFields();
 
-        } catch (TextException e) {
-            e.printStackTrace();
-        }
-
-        String placeholderDisplayText = "";
         try {
-            for (int i = 0; i < placeholders.length; i++) {
+            ITextField[] placeholders = textFieldService.getPlaceholderFields();
+            for (ITextField placeholder : placeholders) {
                 boolean schonersetzt = false;
-                try {
-                    placeholderDisplayText = placeholders[i].getDisplayText()
-                                                            .toLowerCase();
-                } catch (com.sun.star.uno.RuntimeException ex) {
-                    // System.out.println("************catch()*******************");
-                    ex.printStackTrace();
-                    System.out.println("Fehler bei Placehoder " + i);
-                    System.out.println("Insgesamt Placeholderanzahl = " + placeholders.length);
-                }
 
-                /*****************/
-                Set<?> entries = SystemConfig.hmAdrPDaten.entrySet();
-                Iterator<?> it = entries.iterator();
-                while (it.hasNext()) {
-                    Map.Entry<?, ?> entry = (Map.Entry<?, ?>) it.next();
+                String placeholderDisplayText = placeholder.getDisplayText() ;
+
+                HashMap<String, String> hmAdrPDaten = SystemConfig.hmAdrPDaten;
+
+
+                Set<Entry<String, String>> entries = hmAdrPDaten.entrySet();
+                for (Entry<String, String> entry : entries) {
                     if (entry.getKey()
-                             .toString()
-                             .toLowerCase()
-                             .equals(placeholderDisplayText)) {
-                        if (entry.getValue()
-                                 .toString()
-                                 .trim()
-                                 .equals("")) {
-                            placeholders[i].getTextRange()
+
+                             .equalsIgnoreCase(placeholderDisplayText)) {
+                        if ("".equals(entry.getValue()
+
+                                           .trim())) {
+                            placeholder.getTextRange()
                                            .setText("\b");
                         } else {
-                            placeholders[i].getTextRange()
-                                           .setText(entry.getValue()
-                                                         .toString());
+                            placeholder.getTextRange()
+                                           .setText(entry.getValue());
                         }
                         schonersetzt = true;
                         break;
                     }
                 }
-                /*****************/
-                entries = SystemConfig.hmAdrKDaten.entrySet();
-                it = entries.iterator();
-                while (it.hasNext() && (!schonersetzt)) {
-                    Map.Entry<?, ?> entry = (Map.Entry<?, ?>) it.next();
-                    if (((String) entry.getKey()).toLowerCase()
-                                                 .equals(placeholderDisplayText)) {
-                        if (((String) entry.getValue()).trim()
-                                                       .equals("")) {
-                            OOTools.loescheLeerenPlatzhalter(textDocument, placeholders[i]);
+                Set<Entry<String, String>> entries1 = SystemConfig.hmAdrKDaten.entrySet();
+                Iterator<Entry<String, String>> it1 = entries1.iterator();
+                while (it1.hasNext() && !schonersetzt) {
+                    Entry<String, String> entry = it1.next();
+                    if (entry.getKey()
+                             .equalsIgnoreCase(placeholderDisplayText)) {
+                        if ("".equals(((String) entry.getValue()).trim())) {
+                            OOTools.loescheLeerenPlatzhalter(textDocument, placeholder);
                         } else {
-                            placeholders[i].getTextRange()
-                                           .setText(((String) entry.getValue()));
+                            placeholder.getTextRange()
+                                           .setText((String) entry.getValue());
                         }
                         schonersetzt = true;
                         break;
                     }
                 }
-                /*****************/
-                entries = SystemConfig.hmAdrADaten.entrySet();
-                it = entries.iterator();
-                while (it.hasNext() && (!schonersetzt)) {
-                    Map.Entry<?, ?> entry = (Map.Entry<?, ?>) it.next();
-                    if (((String) entry.getKey()).toLowerCase()
-                                                 .equals(placeholderDisplayText)) {
-                        if (((String) entry.getValue()).trim()
-                                                       .equals("")) {
-                            OOTools.loescheLeerenPlatzhalter(textDocument, placeholders[i]);
+                entries1 = SystemConfig.hmAdrADaten.entrySet();
+                it1 = entries1.iterator();
+                while (it1.hasNext() && !schonersetzt) {
+                    Entry<String, String> entry = it1.next();
+                    if (entry.getKey()
+                             .equalsIgnoreCase(placeholderDisplayText)) {
+                        if ("".equals(((String) entry.getValue()).trim())) {
+                            OOTools.loescheLeerenPlatzhalter(textDocument, placeholder);
                         } else {
-                            placeholders[i].getTextRange()
-                                           .setText(((String) entry.getValue()));
+                            placeholder.getTextRange()
+                                           .setText((String) entry.getValue());
                         }
                         schonersetzt = true;
                         break;
                     }
                 }
-                /*****************/
-                entries = SystemConfig.hmAdrRDaten.entrySet();
-                it = entries.iterator();
-                while (it.hasNext() && (!schonersetzt)) {
-                    Map.Entry<?, ?> entry = (Map.Entry<?, ?>) it.next();
-                    if (((String) entry.getKey()).toLowerCase()
-                                                 .equals(placeholderDisplayText)) {
-
-                        if (((String) entry.getValue()).trim()
-                                                       .equals("")) {
-                            placeholders[i].getTextRange()
+                entries1 = SystemConfig.hmAdrRDaten.entrySet();
+                it1 = entries1.iterator();
+                while (it1.hasNext() && !schonersetzt) {
+                    Entry<String, String> entry = it1.next();
+                    if (entry.getKey()
+                             .equalsIgnoreCase(placeholderDisplayText)) {
+                        if ("".equals(((String) entry.getValue()).trim())) {
+                            placeholder.getTextRange()
                                            .setText("");
-                            OOTools.loescheLeerenPlatzhalter(textDocument, placeholders[i]);
+                            OOTools.loescheLeerenPlatzhalter(textDocument, placeholder);
                         } else {
-                            placeholders[i].getTextRange()
-                                           .setText(((String) entry.getValue()));
+                            placeholder.getTextRange()
+                                           .setText((String) entry.getValue());
                         }
                         schonersetzt = true;
                         break;
                     }
                 }
                 if (!schonersetzt) {
-                    OOTools.loescheLeerenPlatzhalter(textDocument, placeholders[i]);
+                    OOTools.loescheLeerenPlatzhalter(textDocument, placeholder);
                 }
-                /*****************/
             }
-        } catch (java.lang.IllegalArgumentException ex) {
+        } catch (IllegalArgumentException | TextException ex) {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(null, "Fehler in der Dokumentvorlage");
             textDocument.close();
@@ -391,7 +342,6 @@ public class RehaOOTools {
             return;
         }
 
-        /*****/
         OOTools.sucheNachPlatzhalter(textDocument);
 
         IViewCursor viewCursor = textDocument.getViewCursorService()
@@ -412,29 +362,24 @@ public class RehaOOTools {
             }
 
         });
-
     }
 
-    /**************************************************************************************/
     public static synchronized void starteRGKopie(String url, String drucker, Monitor monitor) {
         IDocumentService documentService = null;
-        ITextDocument textDocument = null;
+        ITextDocument textDocument;
         stopps(monitor);
 
         if (!new OOService().getOfficeapplication()
                             .isActive()) {
             try {
                 new OOService().start();
-
             } catch (OfficeApplicationException | FileNotFoundException e) {
             }
         }
         try {
             documentService = new OOService().getOfficeapplication()
                                              .getDocumentService();
-
         } catch (OfficeApplicationException e) {
-
             e.printStackTrace();
         }
         IDocumentDescriptor docdescript = new DocumentDescriptor();
@@ -445,11 +390,9 @@ public class RehaOOTools {
         try {
             document = documentService.loadDocument(url, docdescript);
         } catch (NOAException e) {
-
             e.printStackTrace();
         }
         textDocument = (ITextDocument) document;
-        /**********************/
         if (drucker != null) {
             String druckerName = null;
             try {
@@ -457,7 +400,6 @@ public class RehaOOTools {
                                           .getActivePrinter()
                                           .getName();
             } catch (NOAException e) {
-
                 e.printStackTrace();
             }
             // Wenn nicht gleich wie in der INI angegeben -> Drucker wechseln
@@ -467,25 +409,21 @@ public class RehaOOTools {
                     iprint = textDocument.getPrintService()
                                          .createPrinter(drucker);
                 } catch (NOAException e) {
-
                     e.printStackTrace();
                 }
                 try {
                     textDocument.getPrintService()
                                 .setActivePrinter(iprint);
                 } catch (NOAException e) {
-
                     e.printStackTrace();
                 }
             }
         }
-        /**********************/
         ITextFieldService textFieldService = textDocument.getTextFieldService();
         ITextField[] placeholders = null;
         try {
             placeholders = textFieldService.getPlaceholderFields();
         } catch (TextException e) {
-
             e.printStackTrace();
         }
         String placeholderDisplayText = "";
@@ -502,19 +440,17 @@ public class RehaOOTools {
                     ex.printStackTrace();
                 }
 
-                /*****************/
                 Set<?> entries = SystemConfig.hmAdrPDaten.entrySet();
                 Iterator<?> it = entries.iterator();
                 while (it.hasNext()) {
-                    Map.Entry<?, ?> entry = (Map.Entry<?, ?>) it.next();
+                    Entry<?, ?> entry = (Entry<?, ?>) it.next();
                     if (entry.getKey()
                              .toString()
                              .toLowerCase()
                              .equals(placeholderDisplayText)) {
-                        if (entry.getValue()
-                                 .toString()
-                                 .trim()
-                                 .equals("")) {
+                        if ("".equals(entry.getValue()
+                                           .toString()
+                                           .trim())) {
                             placeholders[i].getTextRange()
                                            .setText("\b");
                             // OOTools.loescheLeerenPlatzhalter(textDocument, placeholders[i]);
@@ -529,18 +465,17 @@ public class RehaOOTools {
                 }
                 entries = SystemConfig.hmRgkDaten.entrySet();
                 it = entries.iterator();
-                while (it.hasNext() && (!schonersetzt)) {
-                    Map.Entry<?, ?> entry = (Map.Entry<?, ?>) it.next();
+                while (it.hasNext() && !schonersetzt) {
+                    Entry<?, ?> entry = (Entry<?, ?>) it.next();
                     if (((String) entry.getKey()).toLowerCase()
                                                  .equals(placeholderDisplayText)) {
-                        if (((String) entry.getValue()).trim()
-                                                       .equals("")) {
+                        if ("".equals(((String) entry.getValue()).trim())) {
                             placeholders[i].getTextRange()
                                            .setText("");
                             OOTools.loescheLeerenPlatzhalter(textDocument, placeholders[i]);
                         } else {
                             placeholders[i].getTextRange()
-                                           .setText(((String) entry.getValue()));
+                                           .setText((String) entry.getValue());
                         }
                         schonersetzt = true;
                         break;
@@ -549,9 +484,8 @@ public class RehaOOTools {
                 if (!schonersetzt) {
                     OOTools.loescheLeerenPlatzhalter(textDocument, placeholders[i]);
                 }
-                /*****************/
             }
-        } catch (java.lang.IllegalArgumentException ex) {
+        } catch (IllegalArgumentException ex) {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(null, "Fehler in der Dokumentvorlage");
             if (document != null) {
@@ -585,12 +519,9 @@ public class RehaOOTools {
                              .setFocus();
             }
         });
-
     }
 
-    /*******************************************************************************************/
     public static synchronized void starteBacrodeFormular(String url, String drucker, Monitor monitor) {
-
         // hidden external dependencies
         String rezBarcodeDrucker = SystemConfig.rezBarcodeDrucker;
         HashMap<String, String> hmAdrPDaten = SystemConfig.hmAdrPDaten;
@@ -615,16 +546,13 @@ public class RehaOOTools {
             try {
                 ooService.start();
             } catch (FileNotFoundException | OfficeApplicationException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
         }
         try {
             documentService = ooService.getOfficeapplication()
                                        .getDocumentService();
-
         } catch (OfficeApplicationException e) {
-
             e.printStackTrace();
         }
         IDocumentDescriptor docdescript = new DocumentDescriptor();
@@ -638,9 +566,7 @@ public class RehaOOTools {
             e.printStackTrace();
         }
         ITextDocument textDocument = (ITextDocument) document;
-        /**********************/
         OOTools.druckerSetzen(textDocument, rezBarcodeDrucker);
-        /**********************/
         ITextFieldService textFieldService = textDocument.getTextFieldService();
         ITextField[] placeholders = null;
         try {
@@ -658,80 +584,71 @@ public class RehaOOTools {
                 ex.printStackTrace();
             }
 
-            /*****************/
-
             Set<?> entries = hmAdrPDaten.entrySet();
             Iterator<?> it = entries.iterator();
             while (it.hasNext()) {
-                Map.Entry<?, ?> entry = (Map.Entry<?, ?>) it.next();
+                Entry<?, ?> entry = (Entry<?, ?>) it.next();
                 if (((String) entry.getKey()).toLowerCase()
                                              .equals(placeholderDisplayText)) {
-                    if (((String) entry.getValue()).trim()
-                                                   .equals("")) {
+                    if ("".equals(((String) entry.getValue()).trim())) {
                         placeholders[i].getTextRange()
                                        .setText("\b");
                     } else {
                         placeholders[i].getTextRange()
-                                       .setText(((String) entry.getValue()));
+                                       .setText((String) entry.getValue());
                     }
                     schonersetzt = true;
                     break;
                 }
             }
-            /*****************/
             entries = hmAdrKDaten.entrySet();
             it = entries.iterator();
-            while (it.hasNext() && (!schonersetzt)) {
-                Map.Entry<?, ?> entry = (Map.Entry<?, ?>) it.next();
+            while (it.hasNext() && !schonersetzt) {
+                Entry<?, ?> entry = (Entry<?, ?>) it.next();
                 if (((String) entry.getKey()).toLowerCase()
                                              .equals(placeholderDisplayText)) {
-                    if (((String) entry.getValue()).trim()
-                                                   .equals("")) {
+                    if ("".equals(((String) entry.getValue()).trim())) {
                         OOTools.loescheLeerenPlatzhalter(textDocument, placeholders[i]);
                     } else {
                         placeholders[i].getTextRange()
-                                       .setText(((String) entry.getValue()));
+                                       .setText((String) entry.getValue());
                     }
                     schonersetzt = true;
                     break;
                 }
             }
-            /*****************/
 
             entries = hmAdrADaten.entrySet();
             it = entries.iterator();
-            while (it.hasNext() && (!schonersetzt)) {
-                Map.Entry<?, ?> entry = (Map.Entry<?, ?>) it.next();
+            while (it.hasNext() && !schonersetzt) {
+                Entry<?, ?> entry = (Entry<?, ?>) it.next();
                 if (((String) entry.getKey()).toLowerCase()
                                              .equals(placeholderDisplayText)) {
-                    if (((String) entry.getValue()).trim()
-                                                   .equals("")) {
+                    if ("".equals(((String) entry.getValue()).trim())) {
                         // placeholders[i].getTextRange().setText("\b");
                         OOTools.loescheLeerenPlatzhalter(textDocument, placeholders[i]);
                     } else {
                         placeholders[i].getTextRange()
-                                       .setText(((String) entry.getValue()));
+                                       .setText((String) entry.getValue());
                     }
                     schonersetzt = true;
                     break;
                 }
             }
-            /*****************/
 
             entries = hmAdrRDaten.entrySet();
             it = entries.iterator();
-            while (it.hasNext() && (!schonersetzt)) {
-                Map.Entry<?, ?> entry = (Map.Entry<?, ?>) it.next();
+            while (it.hasNext() && !schonersetzt) {
+                Entry<?, ?> entry = (Entry<?, ?>) it.next();
                 if (((String) entry.getKey()).toLowerCase()
                                              .equals(placeholderDisplayText)) {
-                    if (((String) entry.getValue()).trim()
-                                                   .equals("")) {
+                    if ("".equals(((String) entry.getValue()).trim())) {
                         placeholders[i].getTextRange()
                                        .setText("");
                         OOTools.loescheLeerenPlatzhalter(textDocument, placeholders[i]);
                     } else {
                         placeholders[i].getTextRange()
-                                       .setText(((String) entry.getValue()));
+                                       .setText((String) entry.getValue());
                     }
                     schonersetzt = true;
                     break;
@@ -740,7 +657,6 @@ public class RehaOOTools {
             if (!schonersetzt) {
                 OOTools.loescheLeerenPlatzhalter(textDocument, placeholders[i]);
             }
-            /*****************/
         }
         stopps(monitor);
         IViewCursor viewCursor = textDocument.getViewCursorService()
@@ -759,7 +675,7 @@ public class RehaOOTools {
             final ITextDocument xdoc = textDocument;
             new SwingWorker<Void, Void>() {
                 @Override
-                protected Void doInBackground() throws java.lang.Exception {
+                protected Void doInBackground() throws Exception {
                     try {
                         // textDocument.print();
                         xdoc.print();
@@ -767,10 +683,7 @@ public class RehaOOTools {
                         // textDocument.close();
                         xdoc.close();
                         Thread.sleep(100);
-                    } catch (DocumentException e) {
-                        e.printStackTrace();
-                    } catch (InterruptedException e) {
-
+                    } catch (DocumentException | InterruptedException e) {
                         e.printStackTrace();
                     }
                     return null;
@@ -779,17 +692,14 @@ public class RehaOOTools {
         }
     }
 
-    /*******************************************************************************************/
-
     public static void starteTaxierung(String url, HashMap<String, String> taxWerte, Monitor monitor)
             throws OfficeApplicationException, NOAException, TextException {
-        IDocumentService documentService = null;
+        IDocumentService documentService;
         starts(monitor);
         if (!new OOService().getOfficeapplication()
                             .isActive()) {
             try {
                 new OOService().start();
-
             } catch (OfficeApplicationException | FileNotFoundException e) {
             }
         }
@@ -800,18 +710,15 @@ public class RehaOOTools {
         IDocumentDescriptor docdescript = new DocumentDescriptor();
         docdescript.setHidden(true);
         docdescript.setAsTemplate(true);
-        IDocument document = null;
+        IDocument document;
 
         document = documentService.loadDocument(url, docdescript);
         ITextDocument textDocument = (ITextDocument) document;
-        /**********************/
-        if (SystemConfig.hmAbrechnung.get("hmusePrinterFromTemplate")
-                                     .equals("0")) {
+        if ("0".equals(SystemConfig.hmAbrechnung.get("hmusePrinterFromTemplate"))) {
             OOTools.druckerSetzen(textDocument, SystemConfig.hmAbrechnung.get("hmgkvtaxierdrucker"));
         }
-        /**********************/
         ITextFieldService textFieldService = textDocument.getTextFieldService();
-        ITextField[] placeholders = null;
+        ITextField[] placeholders;
 
         placeholders = textFieldService.getPlaceholderFields();
         String placeholderDisplayText = "";
@@ -823,24 +730,17 @@ public class RehaOOTools {
             Set<?> entries = taxWerte.entrySet();
             Iterator<?> it = entries.iterator();
             while (it.hasNext()) {
-                Map.Entry<?, ?> entry = (Map.Entry<?, ?>) it.next();
+                Entry<?, ?> entry = (Entry<?, ?>) it.next();
                 if (((String) entry.getKey()).toLowerCase()
                                              .equals(placeholderDisplayText)) {
-                    try {
-
-                    } catch (com.sun.star.uno.RuntimeException ex) {
-                        ex.printStackTrace();
-                        // System.out.println("Fehler bei "+placeholderDisplayText);
-                    }
                     placeholders[i].getTextRange()
-                                   .setText(((String) entry.getValue()));
+                                   .setText((String) entry.getValue());
 
                     break;
                 }
             }
         }
-        if (SystemConfig.hmAbrechnung.get("hmallinoffice")
-                                     .equals("1")) {
+        if ("1".equals(SystemConfig.hmAbrechnung.get("hmallinoffice"))) {
             textDocument.getFrame()
                         .getXFrame()
                         .getContainerWindow()
@@ -849,41 +749,35 @@ public class RehaOOTools {
             final ITextDocument xdoc = textDocument;
             new SwingWorker<Void, Void>() {
                 @Override
-                protected Void doInBackground() throws java.lang.Exception {
+                protected Void doInBackground() throws Exception {
                     try {
                         xdoc.print();
                         Thread.sleep(50);
                         xdoc.close();
                         Thread.sleep(100);
-
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                     return null;
                 }
             }.execute();
-
         }
     }
 
     private static void starts(Monitor monitor) {
         monitor.statusChange(Monitor.START);
-
     }
 
     private static void stopps(Monitor monitor) {
         monitor.statusChange(Monitor.STOP);
-
     }
 
     public static void starteTherapieBericht(String url) {
-
         IDocumentService documentService = null;
         if (!new OOService().getOfficeapplication()
                             .isActive()) {
             try {
                 new OOService().start();
-
             } catch (OfficeApplicationException | FileNotFoundException e) {
             }
         }
@@ -917,7 +811,6 @@ public class RehaOOTools {
         try {
             placeholders = textFieldService.getPlaceholderFields();
         } catch (TextException e) {
-
             e.printStackTrace();
         }
         try {
@@ -926,7 +819,7 @@ public class RehaOOTools {
             e.printStackTrace();
         }
         try {
-            Vector<String> docPlatzhalter = new Vector<String>();
+            Vector<String> docPlatzhalter = new Vector<>();
             int i;
             int anzahlph = placeholders.length;
 
@@ -939,16 +832,14 @@ public class RehaOOTools {
                         + placeholders[i].getDisplayText()
                                          .substring(2)
                                          .toLowerCase());
-
             }
 
             String wert;
             for (i = 0; i < anzahlph; i++) {
                 if (SystemConfig.hmAdrBDaten.get(docPlatzhalter.get(i)) != null) {
                     wert = SystemConfig.hmAdrBDaten.get(docPlatzhalter.get(i));
-                    wert = (wert == null ? "" : wert);
-                    if (wert.trim()
-                            .equals("")) {
+                    wert = wert == null ? "" : wert;
+                    if ("".equals(wert.trim())) {
                         OOTools.loescheLeerenPlatzhalter(textDocument, placeholders[i]);
                     } else {
                         placeholders[i].getTextRange()
@@ -956,7 +847,6 @@ public class RehaOOTools {
                     }
                 }
             }
-
         } catch (NullPointerException ex) {
             ex.printStackTrace();
         }
@@ -978,7 +868,6 @@ public class RehaOOTools {
                              .setFocus();
             }
         });
-
     }
 
     public static synchronized ITextDocument starteGKVBericht(String url, String drucker, Monitor monitor) {
@@ -988,7 +877,6 @@ public class RehaOOTools {
             documentService = new OOService().getOfficeapplication()
                                              .getDocumentService();
         } catch (OfficeApplicationException e) {
-
             e.printStackTrace();
         }
         IDocumentDescriptor docdescript = new DocumentDescriptor();
@@ -998,11 +886,9 @@ public class RehaOOTools {
         try {
             document = documentService.loadDocument(url, docdescript);
         } catch (NOAException e) {
-
             e.printStackTrace();
         }
         ITextDocument textDocument = (ITextDocument) document;
-        /**********************/
         if (drucker != null) {
             String druckerName = null;
             try {
@@ -1010,7 +896,6 @@ public class RehaOOTools {
                                           .getActivePrinter()
                                           .getName();
             } catch (NOAException e) {
-
                 e.printStackTrace();
             }
             // Wenn nicht gleich wie in der INI angegeben -> Drucker wechseln
@@ -1020,25 +905,21 @@ public class RehaOOTools {
                     iprint = textDocument.getPrintService()
                                          .createPrinter(drucker);
                 } catch (NOAException e) {
-
                     e.printStackTrace();
                 }
                 try {
                     textDocument.getPrintService()
                                 .setActivePrinter(iprint);
                 } catch (NOAException e) {
-
                     e.printStackTrace();
                 }
             }
         }
-        /**********************/
         ITextFieldService textFieldService = textDocument.getTextFieldService();
         ITextField[] placeholders = null;
         try {
             placeholders = textFieldService.getPlaceholderFields();
         } catch (TextException e) {
-
             e.printStackTrace();
         }
         String placeholderDisplayText = "";
@@ -1051,57 +932,51 @@ public class RehaOOTools {
                 ex.printStackTrace();
             }
 
-            /*****************/
             Set<?> entries = SystemConfig.hmAdrPDaten.entrySet();
             Iterator<?> it = entries.iterator();
             while (it.hasNext()) {
-                Map.Entry<?, ?> entry = (Map.Entry<?, ?>) it.next();
+                Entry<?, ?> entry = (Entry<?, ?>) it.next();
                 if (((String) entry.getKey()).toLowerCase()
                                              .equals(placeholderDisplayText)) {
-                    if (((String) entry.getValue()).trim()
-                                                   .equals("")) {
+                    if ("".equals(((String) entry.getValue()).trim())) {
                         placeholders[i].getTextRange()
                                        .setText("\b");
                     } else {
                         placeholders[i].getTextRange()
-                                       .setText(((String) entry.getValue()));
+                                       .setText((String) entry.getValue());
                     }
                     schonersetzt = true;
                     break;
                 }
             }
-            /*****************/
             entries = SystemConfig.hmAdrKDaten.entrySet();
             it = entries.iterator();
-            while (it.hasNext() && (!schonersetzt)) {
-                Map.Entry<?, ?> entry = (Map.Entry<?, ?>) it.next();
+            while (it.hasNext() && !schonersetzt) {
+                Entry<?, ?> entry = (Entry<?, ?>) it.next();
                 if (((String) entry.getKey()).toLowerCase()
                                              .equals(placeholderDisplayText)) {
-                    if (((String) entry.getValue()).trim()
-                                                   .equals("")) {
+                    if ("".equals(((String) entry.getValue()).trim())) {
                         OOTools.loescheLeerenPlatzhalter(textDocument, placeholders[i]);
                     } else {
                         placeholders[i].getTextRange()
-                                       .setText(((String) entry.getValue()));
+                                       .setText((String) entry.getValue());
                     }
                     schonersetzt = true;
                     break;
                 }
             }
-            /*****************/
             entries = SystemConfig.hmAdrADaten.entrySet();
             it = entries.iterator();
-            while (it.hasNext() && (!schonersetzt)) {
-                Map.Entry<?, ?> entry = (Map.Entry<?, ?>) it.next();
+            while (it.hasNext() && !schonersetzt) {
+                Entry<?, ?> entry = (Entry<?, ?>) it.next();
                 if (((String) entry.getKey()).toLowerCase()
                                              .equals(placeholderDisplayText)) {
-                    if (((String) entry.getValue()).trim()
-                                                   .equals("")) {
+                    if ("".equals(((String) entry.getValue()).trim())) {
                         // placeholders[i].getTextRange().setText("\b");
                         OOTools.loescheLeerenPlatzhalter(textDocument, placeholders[i]);
                     } else {
                         placeholders[i].getTextRange()
-                                       .setText(((String) entry.getValue()));
+                                       .setText((String) entry.getValue());
                     }
                     // placeholders[i].getTextRange().setText(((String)entry.getValue()));
                     schonersetzt = true;
@@ -1109,28 +984,24 @@ public class RehaOOTools {
                 }
             }
 
-            /*****************/
-
             entries = SystemConfig.hmEBerichtDaten.entrySet();
             it = entries.iterator();
-            while (it.hasNext() && (!schonersetzt)) {
-                Map.Entry<?, ?> entry = (Map.Entry<?, ?>) it.next();
+            while (it.hasNext() && !schonersetzt) {
+                Entry<?, ?> entry = (Entry<?, ?>) it.next();
                 if (((String) entry.getKey()).toLowerCase()
                                              .equals(placeholderDisplayText)) {
-                    if (((String) entry.getValue()).trim()
-                                                   .equals("")) {
+                    if ("".equals(((String) entry.getValue()).trim())) {
                         OOTools.loescheLeerenPlatzhalter(textDocument, placeholders[i]);
                     } else {
                         placeholders[i].getTextRange()
-                                       .setText(((String) entry.getValue()));
+                                       .setText((String) entry.getValue());
                     }
                     schonersetzt = true;
                     break;
                 }
             }
 
-            if ((!schonersetzt) && (!placeholders[i].getDisplayText()
-                                                    .equalsIgnoreCase("<bblock1>"))) {
+            if (!schonersetzt && !"<bblock1>".equalsIgnoreCase(placeholders[i].getDisplayText())) {
                 OOTools.loescheLeerenPlatzhalter(textDocument, placeholders[i]);
             }
         }
@@ -1141,7 +1012,7 @@ public class RehaOOTools {
     public static synchronized void ooOrgAnmelden(Monitor monitor) {
         new SwingWorker<Void, Void>() {
             @Override
-            protected Void doInBackground() throws java.lang.Exception {
+            protected Void doInBackground() throws Exception {
                 IDocumentDescriptor docdescript = new DocumentDescriptor();
                 docdescript.setHidden(true);
                 IDocument document = null;
@@ -1152,7 +1023,6 @@ public class RehaOOTools {
                                         .isActive()) {
                         try {
                             new OOService().start();
-
                         } catch (OfficeApplicationException | FileNotFoundException e) {
                         }
                     }
@@ -1166,10 +1036,7 @@ public class RehaOOTools {
                     stopps(monitor);
                     Reha.instance.messageLabel.setForeground(Color.BLACK);
                     Reha.instance.messageLabel.setText("OpenOffice.org: Init o.k.");
-                } catch (OfficeApplicationException exception) {
-                    Reha.instance.messageLabel.setText("OO.org: nicht Verfügbar");
-                    exception.printStackTrace();
-                } catch (NOAException exception) {
+                } catch (OfficeApplicationException | NOAException exception) {
                     Reha.instance.messageLabel.setText("OO.org: nicht Verfügbar");
                     exception.printStackTrace();
                 }
@@ -1180,5 +1047,4 @@ public class RehaOOTools {
 
         }.execute();
     }
-
 }

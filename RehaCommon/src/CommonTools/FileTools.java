@@ -6,8 +6,8 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 
 public class FileTools {
     public static void deleteAllFiles(File dir) {
@@ -20,8 +20,6 @@ public class FileTools {
             }
         }
     }
-
-    
 
     public static boolean delFileWithSuffixAndPraefix(File dir, String xpraefix, String xsuffix) {
         final String suffix = xsuffix;
@@ -63,9 +61,9 @@ public class FileTools {
         return (files.length == 0 || !ok ? false : true);
     }
 
-    
-
     public static byte[] File2ByteArray(File file) throws Exception {
+
+
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         FileInputStream fileInputStream = new FileInputStream(file);
 
@@ -81,7 +79,12 @@ public class FileTools {
     }
 
     public static void ByteArray2File(byte[] xdata, String fileout) {
+
+
         try {
+
+
+
             // Byte Array laden
             byte[] data = xdata;
             // Zu erzeugende Datei angeben
@@ -96,57 +99,6 @@ public class FileTools {
             e.printStackTrace();
         }
     }
-
-    public static void copyFile(File src, File dest, int bufSize, boolean force) throws IOException {
-        if (dest.exists()) {
-            if (force) {
-                dest.delete();
-            } else {
-                throw new IOException("Kann existierende Datei nicht üerschreiben: " + dest.getName());
-            }
-        }
-        byte[] buffer = new byte[bufSize];
-        int read = 0;
-        InputStream in = null;
-        OutputStream out = null;
-        try {
-            in = new FileInputStream(src);
-            out = new FileOutputStream(dest);
-            while (true) {
-                read = in.read(buffer);
-                if (read == -1) {
-                    // -1 bedeutet EOF
-                    break;
-                }
-                out.write(buffer, 0, read);
-            }
-        } finally {
-            // Sicherstellen, dass die Streams auch
-            // bei einem throw geschlossen werden.
-            // Falls in null ist, ist out auch null!
-            if (in != null) {
-                // Falls tats�chlich in.close() und out.close()
-                // Exceptions werfen, die jenige von 'out' geworfen wird.
-                try {
-                    out.flush();
-                    in.close();
-                    out.close();
-                } catch (Exception ex) {
-
-                }
-
-                finally {
-                    if (out != null) {
-                        out.close();
-                    }
-                }
-            }
-        }
-    }
-
-    
-
-    
 
     public static String testeString(String webstring, String fundstelle, String sbeginn, String sende) {
         int aktuell = 0;
