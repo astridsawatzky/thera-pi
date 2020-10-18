@@ -5,7 +5,7 @@ dist
 dist-tests
 target
 
-build.xml
+#build.xml
 !Build/build.xml
 
 sig.jar

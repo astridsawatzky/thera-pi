@@ -56,6 +56,7 @@
     <ant dir="${dir.smartcard}" target="${build.target}" />
     <ant dir="${dir.office}" target="${build.target}" />
     <ant dir="${dir.reha.common}" target="${build.target}" />
+    <ant dir="${dir.hmr}" target="${build.target}" />
 
     <ant dir="${dir.therapi.database}" target="${build.target}" />
     <ant dir="${dir.nebraska}" target="${build.target}" />

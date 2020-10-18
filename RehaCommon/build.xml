@@ -37,7 +37,8 @@
     <property name="TheraPiHilfe.location" value="../TheraPiHilfe"/>
     <property name="TheraPiUpdates.location" value="../TheraPiUpdates"/>
     <property name="datenbank.location" value="../datenbank"/>
-    <property name="junit.output.dir" value="bin-tests"/>
+    <property name="hmr.location" value="../hmr"/>
+    <property name="junit.output.dir" value="junit"/>
     <property name="debuglevel" value="source,lines,vars"/>
     <property name="target" value="1.8"/>
     <property name="source" value="1.8"/>
@@ -172,6 +173,8 @@
         <ant antfile="build.xml" dir="${TheraPiUpdates.location}" inheritAll="false" target="build"/>
         <ant antfile="build.xml" dir="${datenbank.location}" inheritAll="false" target="clean"/>
         <ant antfile="build.xml" dir="${datenbank.location}" inheritAll="false" target="build"/>
+        <ant antfile="build.xml" dir="${hmr.location}" inheritAll="false" target="clean"/>
+        <ant antfile="build.xml" dir="${hmr.location}" inheritAll="false" target="build"/>
     </target>
     <target name="ArztDtoTest.loadeachArzt">
         <mkdir dir="${junit.output.dir}"/>
