@@ -5,7 +5,6 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.MouseInfo;
 import java.awt.Point;
-import java.awt.PointerInfo;
 import java.awt.Toolkit;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
@@ -122,7 +121,7 @@ public class AktuelleRezepte extends JXPanel implements ListSelectionListener, T
     public String[] indlogo = null;
     public String[] indpodo = null;
     public RezeptDaten rezDatenPanel = null;
-    public JButton[] aktrbut = { null, null, null, null, null, null, null, null, null };
+
     public boolean suchePatUeberRez = false;
     public String rezAngezeigt = "";
     public static boolean inRezeptDaten = false;
@@ -144,8 +143,25 @@ public class AktuelleRezepte extends JXPanel implements ListSelectionListener, T
     InfoDialogTerminInfo infoDlg = null;
     String sRezNumNeu = "";
     private Connection connection;
+    private JButton neuButton;
+    private JButton editButton;
+    private JButton deleteButton;
+    private JButton printButton;
+    private JButton arztBerichtButton;
+
+
+    private JButton rezeptGebuehrkassierenBtn = new JButton();
+    private JButton rezeptgebuehrrechnungerstellenBtn = new JButton();
+    private JButton barcodeaufsrezeptdruckenBtn = new JButton();
+    private JButton ausfallrechnungerstellenBtn = new JButton();
+    private JButton rezeptAbschliessenBtn = new JButton();
+    private JButton privatrechnungerstellenBtn = new JButton();
+    private JButton behandlungstageinclipboardBtn = new JButton();
+    private JButton rezeptinhistorietransferierenBtn = new JButton();
+    private JButton do301FallSteuerungBtn = new JButton();
 
     public AktuelleRezepte(PatientHauptPanel eltern, Connection connection) {
+
         this.connection = connection;
 
         setOpaque(false);
@@ -247,12 +263,66 @@ public class AktuelleRezepte extends JXPanel implements ListSelectionListener, T
 
     }
 
+    private void ausfallrechnungerstellen() {
+        if (Rechte.hatRecht(Rechte.Rezept_ausfallrechnung, true)) {
+            ausfallRechnung();
+        }
+    }
+
+    private void rezeptinhistorietransferieren() {
+        if (Rechte.hatRecht(Rechte.Sonstiges_rezepttransfer, true)) {
+            int anfrage = JOptionPane.showConfirmDialog(null,
+                    "Das ausgewählte Rezept wirklich in die Historie transferieren?",
+                    "Achtung wichtige Benutzeranfrage", JOptionPane.YES_NO_OPTION);
+            if (anfrage == JOptionPane.YES_OPTION) {
+                doUebertrag();
+            }
+        }
+    }
+
+    private void privatrechnungerstellen() {
+        if (Rechte.hatRecht(Rechte.Rezept_privatrechnung, true)) {
+            try {
+                fuelleTage();
+                privatRechnung();
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null, ex.getMessage());
+            }
+        }
+    }
+
+    private void rezeptgebuehrrechnungerstellen() {
+        if (Rechte.hatRecht(Rechte.Rezept_gebuehren, true)) {
+            doRezeptgebuehrRechnung(MouseInfo.getPointerInfo()
+                                             .getLocation());
+        }
+    }
+
+    private void barcodeaufsrezeptdrucken() {
+        if (Rechte.hatRecht(Rechte.Rezept_gebuehren, true)) {
+            new SwingWorker<Void, Void>() {
+                @Override
+                protected Void doInBackground() throws Exception {
+                    doBarcode();
+                    return null;
+                }
+            }.execute();
+        }
+    }
+
+    private void rezeptgebuehrenkassieren() {
+        if (Rechte.hatRecht(Rechte.Rezept_gebuehren, true)) {
+            RezTools.constructRawHMap();
+            rezeptGebuehr();
+        }
+    }
+
     public void formulareAuswerten() {
         int row = tabaktrez.getSelectedRow();
         if (row >= 0) {
             iformular = -1;
             KassenFormulare kf = new KassenFormulare(Reha.getThisFrame(), titel, formularid);
-            Point pt = aktrbut[8].getLocationOnScreen();
+            Point pt = printButton.getLocationOnScreen();
             kf.setLocation(pt.x - 100, pt.y + 32);
             kf.setModal(true);
             kf.setVisible(true);
@@ -267,8 +337,8 @@ public class AktuelleRezepte extends JXPanel implements ListSelectionListener, T
                     @Override
                     protected Void doInBackground() throws Exception {
                         RezTools.constructRawHMap();
-                        RehaOOTools.starteStandardFormular(Path.Instance.getProghome() + "vorlagen/" + Reha.getAktIK() + "/"
-                                + formular.get(iformular), null,Reha.instance);
+                        RehaOOTools.starteStandardFormular(Path.Instance.getProghome() + "vorlagen/" + Reha.getAktIK()
+                                + "/" + formular.get(iformular), null, Reha.instance);
                         return null;
                     }
                 }.execute();
@@ -282,34 +352,60 @@ public class AktuelleRezepte extends JXPanel implements ListSelectionListener, T
 
     public void setzeRezeptPanelAufNull(boolean aufnull) {
         if (aufnull) {
+
             if (aktPanel.equals("vollPanel")) {
                 wechselPanel.remove(vollPanel);
                 wechselPanel.add(leerPanel);
                 aktPanel = "leerPanel";
-                aktrbut[0].setEnabled(true);
-                for (int i = 1; i < 9; i++) {
-                    try {
-                        aktrbut[i].setEnabled(false);
-                    } catch (Exception ex) {
-                    }
-                }
-            } else {
-                aktrbut[0].setEnabled(true);
+                disableAllButtons();
             }
-
+            neuButton.setEnabled(true);
         } else {
             if (aktPanel.equals("leerPanel")) {
                 wechselPanel.remove(leerPanel);
                 wechselPanel.add(vollPanel);
                 aktPanel = "vollPanel";
-                for (int i = 0; i < 9; i++) {
-                    try {
-                        aktrbut[i].setEnabled(true);
-                    } catch (Exception ex) {
-                    }
-                }
+                enableAllButtons();
             }
         }
+    }
+
+    private void disableAllButtons() {
+        neuButton.setEnabled(false);
+        editButton.setEnabled(false);
+        deleteButton.setEnabled(false);
+        arztBerichtButton.setEnabled(false);
+        printButton.setEnabled(false);
+        rezeptGebuehrkassierenBtn.setEnabled(false);
+
+        rezeptgebuehrrechnungerstellenBtn.setEnabled(false);
+        barcodeaufsrezeptdruckenBtn.setEnabled(false);
+        ausfallrechnungerstellenBtn.setEnabled(false);
+        rezeptAbschliessenBtn.setEnabled(false);
+        privatrechnungerstellenBtn.setEnabled(false);
+        behandlungstageinclipboardBtn.setEnabled(false);
+        rezeptinhistorietransferierenBtn.setEnabled(false);
+        do301FallSteuerungBtn.setEnabled(false);
+
+    }
+
+    private void enableAllButtons() {
+        neuButton.setEnabled(true);
+        editButton.setEnabled(true);
+        deleteButton.setEnabled(true);
+        arztBerichtButton.setEnabled(true);
+        printButton.setEnabled(true);
+        rezeptGebuehrkassierenBtn.setEnabled(true);
+
+        rezeptgebuehrrechnungerstellenBtn.setEnabled(true);
+        barcodeaufsrezeptdruckenBtn.setEnabled(true);
+        ausfallrechnungerstellenBtn.setEnabled(true);
+        rezeptAbschliessenBtn.setEnabled(true);
+        privatrechnungerstellenBtn.setEnabled(true);
+        behandlungstageinclipboardBtn.setEnabled(true);
+        rezeptinhistorietransferierenBtn.setEnabled(true);
+        do301FallSteuerungBtn.setEnabled(true);
+
     }
 
     public JXPanel getDatenpanel() {
@@ -331,58 +427,93 @@ public class AktuelleRezepte extends JXPanel implements ListSelectionListener, T
         jtb.setBorder(null);
         jtb.setOpaque(false);
 
-        aktrbut[0] = new JButton();
-        aktrbut[0].setIcon(SystemConfig.hmSysIcons.get("neu"));
-        aktrbut[0].setToolTipText("<html>neues Rezept anlegen<br><br>"
+        neuButton = new JButton();
+        neuButton.setIcon(SystemConfig.hmSysIcons.get("neu"));
+        neuButton.setToolTipText("<html>neues Rezept anlegen<br><br>"
                 + "Halten sie gleichzeitig Die Taste <b><font color='#0000ff'>Shift</font></b> gedrückt,<br>"
                 + "wird das aktuell unterlegte bzw. <font color='#0000ff'>aktive Rezept</font> das Patienten kopiert!<br><br>"
                 + "Halten sie gleichzeitig Die Taste <b><font color='#0000ff'>Strg</font></b> gedrückt,"
                 + "<br>wird <font color='#0000ff'>das jüngste Rezept</font> das Patienten kopiert!<br><br></html>");
-        aktrbut[0].setActionCommand("rezneu");
-        aktrbut[0].addActionListener(this);
-        jtb.add(aktrbut[0]);
-        aktrbut[1] = new JButton();
-        aktrbut[1].setIcon(SystemConfig.hmSysIcons.get("edit"));
-        aktrbut[1].setToolTipText("aktuelles Rezept ändern/editieren");
-        aktrbut[1].setActionCommand("rezedit");
-        aktrbut[1].addActionListener(this);
-        jtb.add(aktrbut[1]);
-        aktrbut[2] = new JButton();
-        aktrbut[2].setIcon(SystemConfig.hmSysIcons.get("delete"));
-        aktrbut[2].setToolTipText("aktuelles Rezept löschen");
-        aktrbut[2].setActionCommand("rezdelete");
-        aktrbut[2].addActionListener(this);
-        jtb.add(aktrbut[2]);
+        neuButton.setActionCommand("rezneu");
+        neuButton.addActionListener(this);
+        jtb.add(neuButton);
+        editButton = new JButton();
+        editButton.setIcon(SystemConfig.hmSysIcons.get("edit"));
+        editButton.setToolTipText("aktuelles Rezept ändern/editieren");
+        editButton.setActionCommand("rezedit");
+        editButton.addActionListener(this);
+        jtb.add(editButton);
+        deleteButton = new JButton();
+        deleteButton.setIcon(SystemConfig.hmSysIcons.get("delete"));
+        deleteButton.setToolTipText("aktuelles Rezept löschen");
+        deleteButton.setActionCommand("rezdelete");
+        deleteButton.addActionListener(this);
+        jtb.add(deleteButton);
         jtb.addSeparator(new Dimension(30, 0));
 
-        aktrbut[8] = new JButton();
-        aktrbut[8].setIcon(SystemConfig.hmSysIcons.get("print"));
-        aktrbut[8].setToolTipText("Rezeptbezogenen Brief/Formular erstellen");
-        aktrbut[8].setActionCommand("rezeptbrief");
-        aktrbut[8].addActionListener(this);
-        jtb.add(aktrbut[8]);
+        printButton = new JButton();
+        printButton.setIcon(SystemConfig.hmSysIcons.get("print"));
+        printButton.setToolTipText("Rezeptbezogenen Brief/Formular erstellen");
+        printButton.setActionCommand("rezeptbrief");
+        printButton.addActionListener(this);
+        jtb.add(printButton);
 
-        aktrbut[7] = new JButton();
-        aktrbut[7].setIcon(SystemConfig.hmSysIcons.get("arztbericht"));
-        aktrbut[7].setToolTipText("Arztbericht erstellen/ändern");
-        aktrbut[7].setActionCommand("arztbericht");
-        aktrbut[7].addActionListener(this);
-        jtb.add(aktrbut[7]);
+        arztBerichtButton = new JButton();
+        arztBerichtButton.setIcon(SystemConfig.hmSysIcons.get("arztbericht"));
+        arztBerichtButton.setToolTipText("Arztbericht erstellen/ändern");
+        arztBerichtButton.setActionCommand("arztbericht");
+        arztBerichtButton.addActionListener(this);
+        jtb.add(arztBerichtButton);
+        jtb.addSeparator(new Dimension(30, 0));
         jtb.addSeparator(new Dimension(30, 0));
 
-        aktrbut[3] = new JButton();
-        aktrbut[3].setIcon(SystemConfig.hmSysIcons.get("tools"));
-        aktrbut[3].setToolTipText("Werkzeugkiste für aktuelle Rezepte");
-        aktrbut[3].setActionCommand("werkzeuge");
-        aktrbut[3].addActionListener(this);
-        jtb.add(aktrbut[3]);
 
-        for (int i = 0; i < 9; i++) {
-            try {
-                aktrbut[i].setEnabled(false);
-            } catch (Exception ex) {
-            }
-        }
+        rezeptGebuehrkassierenBtn.addActionListener((e) -> rezeptgebuehrenkassieren());
+        rezeptGebuehrkassierenBtn.setIcon(SystemConfig.hmSysIcons.get("rezeptgebuehr"));
+        rezeptGebuehrkassierenBtn.setToolTipText("Rezeptgeb\u00fchren kassieren");
+        jtb.add(rezeptGebuehrkassierenBtn);
+
+        rezeptgebuehrrechnungerstellenBtn.addActionListener((e) -> rezeptgebuehrrechnungerstellen());
+        rezeptgebuehrrechnungerstellenBtn.setIcon(SystemConfig.hmSysIcons.get("rezeptgebuehrrechnung"));
+        rezeptgebuehrrechnungerstellenBtn.setToolTipText("Rezeptgeb\u00fchr-Rechnung erstellen");
+        jtb.add(rezeptgebuehrrechnungerstellenBtn);
+
+        barcodeaufsrezeptdruckenBtn.addActionListener((e) -> barcodeaufsrezeptdrucken());
+        barcodeaufsrezeptdruckenBtn.setIcon(SystemConfig.hmSysIcons.get("barcode"));
+        barcodeaufsrezeptdruckenBtn.setToolTipText("BarCode auf Rezept drucken");
+        jtb.add(barcodeaufsrezeptdruckenBtn);
+
+        ausfallrechnungerstellenBtn.addActionListener((e) -> ausfallrechnungerstellen());
+        ausfallrechnungerstellenBtn.setIcon(SystemConfig.hmSysIcons.get("ausfallrechnung"));
+        ausfallrechnungerstellenBtn.setToolTipText("Ausfallrechnung drucken");
+        jtb.add(ausfallrechnungerstellenBtn);
+
+        rezeptAbschliessenBtn.addActionListener((e) -> rezeptAbschliessen(connection));
+        rezeptAbschliessenBtn.setIcon(SystemConfig.hmSysIcons.get("statusset"));
+        rezeptAbschliessenBtn.setToolTipText("Rezept ab-/aufschlie\u00dfen");
+        jtb.add(rezeptAbschliessenBtn);
+
+        privatrechnungerstellenBtn.addActionListener((e) -> privatrechnungerstellen());
+        privatrechnungerstellenBtn.setIcon(SystemConfig.hmSysIcons.get("privatrechnung"));
+        privatrechnungerstellenBtn.setToolTipText("Privat-/BG-/Nachsorge-Rechnung erstellen");
+        jtb.add(privatrechnungerstellenBtn);
+
+        behandlungstageinclipboardBtn.addActionListener((e) -> behandlungstageinclipboard());
+        behandlungstageinclipboardBtn.setIcon(SystemConfig.hmSysIcons.get("einzeltage"));
+        behandlungstageinclipboardBtn.setToolTipText("Behandlungstage in Clipboard");
+        jtb.add(behandlungstageinclipboardBtn);
+
+        rezeptinhistorietransferierenBtn.addActionListener((e) -> rezeptinhistorietransferieren());
+        rezeptinhistorietransferierenBtn.setIcon(SystemConfig.hmSysIcons.get("redo"));
+        rezeptinhistorietransferierenBtn.setToolTipText("Transfer in Historie");
+        jtb.add(rezeptinhistorietransferierenBtn);
+
+        do301FallSteuerungBtn.addActionListener((e) -> do301FallSteuerung());
+        do301FallSteuerungBtn.setIcon(SystemConfig.hmSysIcons.get("abrdreieins"));
+        do301FallSteuerungBtn.setToolTipText("\u00a7301 Reha-Fallsteuerung");
+        jtb.add(do301FallSteuerungBtn);
+
+        disableAllButtons();
         return jtb;
     }
 
@@ -1848,7 +1979,7 @@ public class AktuelleRezepte extends JXPanel implements ListSelectionListener, T
                 rezeptAbschliessen(connection);
             }
             if (cmd.equals("werkzeuge")) {
-                new ToolsDlgAktuelleRezepte("", aktrbut[3].getLocationOnScreen(), connection);
+                new ToolsDlgAktuelleRezepte("", getLocationOnScreen(), connection);
             }
             if (cmd.equals("deletebehandlungen")) {
                 doDeleteBehandlungen();
@@ -1998,7 +2129,7 @@ public class AktuelleRezepte extends JXPanel implements ListSelectionListener, T
         new SwingWorker<Void, Void>() {
             @Override
             protected Void doInBackground() throws Exception {
-                AusfallRechnung ausfall = new AusfallRechnung(aktrbut[3].getLocationOnScreen());
+                AusfallRechnung ausfall = new AusfallRechnung(getLocationOnScreen());
                 ausfall.setModal(true);
                 ausfall.toFront();
                 ausfall.setVisible(true);
@@ -2019,7 +2150,7 @@ public class AktuelleRezepte extends JXPanel implements ListSelectionListener, T
             JOptionPane.showMessageDialog(null, "Kein Rezept zum -> kassieren <- ausgewählt");
             return;
         }
-        doRezeptGebuehr(aktrbut[3].getLocationOnScreen());
+        doRezeptGebuehr(getLocationOnScreen());
     }
 
     private void doAbschlussTest(Connection connection) {
@@ -2199,8 +2330,8 @@ public class AktuelleRezepte extends JXPanel implements ListSelectionListener, T
                 }
             }
             if (hmpositionen.size() > 0) {
-                boolean checkok = new HMRCheck(indi,
-                        disziSelect.getIndex(diszi), anzahlen, hmpositionen, Integer.parseInt(preisgruppe) - 1,
+                boolean checkok = new HMRCheck(
+                        indi, disziSelect.getIndex(diszi), anzahlen, hmpositionen, Integer.parseInt(preisgruppe) - 1,
                         SystemPreislisten.hmPreise.get(diszi)
                                                   .get(Integer.parseInt(preisgruppe) - 1),
                         Integer.parseInt(Reha.instance.patpanel.vecaktrez.get(27)),
@@ -2467,7 +2598,7 @@ public class AktuelleRezepte extends JXPanel implements ListSelectionListener, T
                 JOptionPane.showMessageDialog(null, "Fehler in Preisgruppe " + ex.getMessage());
                 ex.printStackTrace();
             }
-            Point pt = aktrbut[3].getLocationOnScreen();
+            Point pt = getLocationOnScreen();
             pt.x = pt.x - 75;
             pt.y = pt.y + 30;
 
@@ -2536,8 +2667,7 @@ public class AktuelleRezepte extends JXPanel implements ListSelectionListener, T
         public Class<?> getColumnClass(int columnIndex) {
             if (columnIndex == 0) {
                 return String.class;
-            }
-            else {
+            } else {
                 return String.class;
             }
         }
@@ -2709,7 +2839,7 @@ public class AktuelleRezepte extends JXPanel implements ListSelectionListener, T
         SystemConfig.hmAdrRDaten.put("<Buser>", Reha.aktUser);
         SystemConfig.hmAdrRDaten.put("<Rpatid>", Reha.instance.patpanel.vecaktrez.get(0));
         RehaOOTools.starteBacrodeFormular(Path.Instance.getProghome() + "vorlagen/" + Reha.getAktIK() + "/" + url,
-                SystemConfig.rezBarcodeDrucker,Reha.instance);
+                SystemConfig.rezBarcodeDrucker, Reha.instance);
 
     }
 
@@ -2792,7 +2922,7 @@ public class AktuelleRezepte extends JXPanel implements ListSelectionListener, T
                     // Rezept-Neuanlage
                     Vector<String> vecKopiervorlage = new Vector<String>();
                     if (strModus.equals("KopiereLetztes")) {
-                        RezeptVorlage vorlage = new RezeptVorlage(aktrbut[0].getLocationOnScreen());
+                        RezeptVorlage vorlage = new RezeptVorlage(neuButton.getLocationOnScreen());
                         if (!vorlage.bHasSelfDisposed) { // wenn es nur eine Disziplin gibt, hat sich der Auswahl-Dialog
                                                          // bereits selbst disposed !
                             vorlage.setModal(true);
@@ -2827,7 +2957,8 @@ public class AktuelleRezepte extends JXPanel implements ListSelectionListener, T
                         }
                     }
 
-                    RezNeuanlage rezNeuAn = new RezNeuanlage((Vector<String>) vecKopiervorlage.clone(), lneu, connection);
+                    RezNeuanlage rezNeuAn = new RezNeuanlage((Vector<String>) vecKopiervorlage.clone(), lneu,
+                            connection);
                     neuRez.getSmartTitledPanel()
                           .setContentContainer(rezNeuAn);
                     if (vecKopiervorlage.size() < 1)
@@ -2840,8 +2971,7 @@ public class AktuelleRezepte extends JXPanel implements ListSelectionListener, T
 
                 } else { // Lemmi Doku: Hier wird ein existierendes Rezept mittels Doppelklick geöffnet:
                     neuRez.getSmartTitledPanel()
-                          .setContentContainer(
-                                  new RezNeuanlage(Reha.instance.patpanel.vecaktrez, lneu, connection));
+                          .setContentContainer(new RezNeuanlage(Reha.instance.patpanel.vecaktrez, lneu, connection));
                     neuRez.getSmartTitledPanel()
                           .setTitle("editieren Rezept ---> " + Reha.instance.patpanel.vecaktrez.get(1));
                 }
@@ -2973,7 +3103,7 @@ public class AktuelleRezepte extends JXPanel implements ListSelectionListener, T
         SystemConfig.hmAdrRDaten.put("<Rtage>", String.valueOf(stage));
     }
 
-    private void doTageDrucken() {
+    private void behandlungstageinclipboard() {
         int akt = tabaktrez.getSelectedRow();
         if (akt < 0) {
             JOptionPane.showMessageDialog(null, "Kein aktuelles Rezept für Übertrag in Clipboard ausgewählt");
@@ -3033,7 +3163,8 @@ public class AktuelleRezepte extends JXPanel implements ListSelectionListener, T
             return;
         } else {
             // vvv Prüfungen aus der Bar-Quittung auch hier !
-            if (currVO.getZzStat().equals(ZZStat.ZUZAHLFREI)) {
+            if (currVO.getZzStat()
+                      .equals(ZZStat.ZUZAHLFREI)) {
                 JOptionPane.showMessageDialog(null, "Zuzahlung nicht erforderlich!");
                 return;
             }
@@ -3069,17 +3200,23 @@ public class AktuelleRezepte extends JXPanel implements ListSelectionListener, T
             if ((hmKurz != null) && hmKurz.length() > 0) {
                 behandl += ((behandl.length() > 0) ? ", " : "") + aktAnzBehandlg + " * " + hmKurz;
 
-                hmRezgeb.put("<rgposition"+ String.valueOf(i) + ">",  SystemConfig.hmAdrRDaten.get("<Rposition"+ String.valueOf(i) +">"));
-                hmRezgeb.put("<rglangtext"+ String.valueOf(i) + ">", SystemConfig.hmAdrRDaten.get("<Rlangtext"+ String.valueOf(i) +">"));
-                hmRezgeb.put("<rganzahl"+ String.valueOf(i) + ">",  SystemConfig.hmAdrRDaten.get("<Ranzahl"+ String.valueOf(i) +">"));
-                hmRezgeb.put("<rgpreis"+ String.valueOf(i) + ">",  SystemConfig.hmAdrRDaten.get("<Rpreis"+ String.valueOf(i) +">"));
-                hmRezgeb.put("<rgproz"+ String.valueOf(i) + ">",  SystemConfig.hmAdrRDaten.get("<Rproz"+ String.valueOf(i) +">"));
-                hmRezgeb.put("<rggesamt"+ String.valueOf(i) + ">",  SystemConfig.hmAdrRDaten.get("<Rgesamt"+ String.valueOf(i) +">"));
+                hmRezgeb.put("<rgposition" + String.valueOf(i) + ">",
+                        SystemConfig.hmAdrRDaten.get("<Rposition" + String.valueOf(i) + ">"));
+                hmRezgeb.put("<rglangtext" + String.valueOf(i) + ">",
+                        SystemConfig.hmAdrRDaten.get("<Rlangtext" + String.valueOf(i) + ">"));
+                hmRezgeb.put("<rganzahl" + String.valueOf(i) + ">",
+                        SystemConfig.hmAdrRDaten.get("<Ranzahl" + String.valueOf(i) + ">"));
+                hmRezgeb.put("<rgpreis" + String.valueOf(i) + ">",
+                        SystemConfig.hmAdrRDaten.get("<Rpreis" + String.valueOf(i) + ">"));
+                hmRezgeb.put("<rgproz" + String.valueOf(i) + ">",
+                        SystemConfig.hmAdrRDaten.get("<Rproz" + String.valueOf(i) + ">"));
+                hmRezgeb.put("<rggesamt" + String.valueOf(i) + ">",
+                        SystemConfig.hmAdrRDaten.get("<Rgesamt" + String.valueOf(i) + ">"));
 
-                hmRezgeb.put("<rglangtext"+ String.valueOf(i+1) + ">", "Rezeptgebühr");
-                hmRezgeb.put("<rganzahl"+ String.valueOf(i+1) + ">",  "1");
-                hmRezgeb.put("<rggesamt"+ String.valueOf(i+1) + ">", SystemConfig.hmAdrRDaten.get("<Rpauschale>"));
-                hmRezgeb.put("<rganzpos>", String.valueOf(i+1));
+                hmRezgeb.put("<rglangtext" + String.valueOf(i + 1) + ">", "Rezeptgebühr");
+                hmRezgeb.put("<rganzahl" + String.valueOf(i + 1) + ">", "1");
+                hmRezgeb.put("<rggesamt" + String.valueOf(i + 1) + ">", SystemConfig.hmAdrRDaten.get("<Rpauschale>"));
+                hmRezgeb.put("<rganzpos>", String.valueOf(i + 1));
             }
         }
 
@@ -3122,7 +3259,7 @@ public class AktuelleRezepte extends JXPanel implements ListSelectionListener, T
 
         RezeptGebuehrRechnung rgeb = new RezeptGebuehrRechnung(Reha.getThisFrame(), "Nachberechnung Rezeptgebühren",
                 rueckgabe, hmRezgeb, buchen, Reha.getThisFrame()
-                                                      .getGlassPane());
+                                                 .getGlassPane());
         rgeb.start();
         rgeb.setSize(new Dimension(250, 300));
         rgeb.setLocation(location.x - 50, location.y - 50);
@@ -3169,45 +3306,21 @@ public class AktuelleRezepte extends JXPanel implements ListSelectionListener, T
             if (Reha.toolsDlgRueckgabe > -1) {
                 if (Reha.toolsDlgRueckgabe == 0) {
                     tDlg = null;
-                    if (!Rechte.hatRecht(Rechte.Rezept_gebuehren, true)) {
-                        return;
-                    }
-                    RezTools.constructRawHMap();
-                    rezeptGebuehr();
+                    rezeptgebuehrenkassieren();
                     return;
-                }
-                // Lemmi 20101218: neuer if Block: Rezeptgebühr-Rechnung aus dem Rezept heraus
-                // erzeugen
-                else if (Reha.toolsDlgRueckgabe == 1) {
+                } else if (Reha.toolsDlgRueckgabe == 1) {
                     tDlg = null;
-                    if (!Rechte.hatRecht(Rechte.Rezept_gebuehren, true)) {
-                        return;
-                    }
-                    PointerInfo info = MouseInfo.getPointerInfo();
-                    Point location = info.getLocation();
-                    doRezeptgebuehrRechnung(location);
+                    rezeptgebuehrrechnungerstellen();
 
                     return;
                 } else if (Reha.toolsDlgRueckgabe == 2) {
                     tDlg = null;
-                    if (!Rechte.hatRecht(Rechte.Rezept_gebuehren, true)) {
-                        return;
-                    }
-                    new SwingWorker<Void, Void>() {
-                        @Override
-                        protected Void doInBackground() throws Exception {
-                            doBarcode();
-                            return null;
-                        }
-                    }.execute();
+                    barcodeaufsrezeptdrucken();
 
                     return;
                 } else if (Reha.toolsDlgRueckgabe == 3) {
                     tDlg = null;
-                    if (!Rechte.hatRecht(Rechte.Rezept_ausfallrechnung, true)) {
-                        return;
-                    }
-                    ausfallRechnung();
+                    ausfallrechnungerstellen();
                     return;
                 } else if (Reha.toolsDlgRueckgabe == 4) {
                     tDlg = null;
@@ -3215,31 +3328,15 @@ public class AktuelleRezepte extends JXPanel implements ListSelectionListener, T
                     return;
                 } else if (Reha.toolsDlgRueckgabe == 5) {
                     tDlg = null;
-                    if (!Rechte.hatRecht(Rechte.Rezept_privatrechnung, true)) {
-                        return;
-                    }
-                    try {
-                        fuelleTage();
-                        privatRechnung();
-                    } catch (Exception ex) {
-                        JOptionPane.showMessageDialog(null, ex.getMessage());
-                    }
+                    privatrechnungerstellen();
                     return;
                 } else if (Reha.toolsDlgRueckgabe == 6) {
                     tDlg = null;
-                    doTageDrucken();
+                    behandlungstageinclipboard();
                     return;
                 } else if (Reha.toolsDlgRueckgabe == 7) {
                     tDlg = null;
-                    if (!Rechte.hatRecht(Rechte.Sonstiges_rezepttransfer, true)) {
-                        return;
-                    }
-                    int anfrage = JOptionPane.showConfirmDialog(null,
-                            "Das ausgewählte Rezept wirklich in die Historie transferieren?",
-                            "Achtung wichtige Benutzeranfrage", JOptionPane.YES_NO_OPTION);
-                    if (anfrage == JOptionPane.YES_OPTION) {
-                        doUebertrag();
-                    }
+                    rezeptinhistorietransferieren();
                     return;
                 } else if (Reha.toolsDlgRueckgabe == 8) {
                     do301FallSteuerung();
@@ -3248,6 +3345,7 @@ public class AktuelleRezepte extends JXPanel implements ListSelectionListener, T
 
             tDlg = null;
         }
+
     }
 
 }

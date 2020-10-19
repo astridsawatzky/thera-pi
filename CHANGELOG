@@ -7,6 +7,8 @@ Datumsformat ist jjjj-mm-tt, also Jahr-Monat-Tag
 ## unveroeffentlicht
 
 - HMR2020 Formulare
+### changed
+- im Panel AktuelleRezepte Werkzeugfenster durch Buttons auf der Leiste ersetzt.
 
 ### fixed
 - BG / Privatrezepte rechnen nur die geleisteten Einheiten ab #230
