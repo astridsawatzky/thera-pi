@@ -322,7 +322,7 @@ class RezeptDaten extends JXPanel implements ActionListener {
     }
 
     private void setzeZuzahlungsbild(int zzbild) {
-        int row = AktuelleRezepte.tabaktrez.getSelectedRow();
+        int row = AktuelleRezepte.tabelleaktrez.getSelectedRow();
         if (row >= 0) {
             if (AktuelleRezepte.dtblm.getValueAt(row, 1) != Reha.instance.patpanel.imgzuzahl[zzbild]) {
                 org.therapi.reha.patient.AktuelleRezepte.setZuzahlImage(zzbild);

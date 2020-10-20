@@ -690,10 +690,10 @@ public class AbrechnungPrivat extends JXDialog {
 
     private void doTabelle() {
         SwingUtilities.invokeLater(() -> {
-            int row = AktuelleRezepte.tabaktrez.getSelectedRow();
+            int row = AktuelleRezepte.tabelleaktrez.getSelectedRow();
             if (row >= 0) {
-                TableTool.loescheRowAusModel(AktuelleRezepte.tabaktrez, row);
-                AktuelleRezepte.tabaktrez.repaint();
+                TableTool.loescheRowAusModel(AktuelleRezepte.tabelleaktrez, row);
+                AktuelleRezepte.tabelleaktrez.repaint();
                 Reha.instance.patpanel.aktRezept.setzeKarteiLasche();
             }
         });

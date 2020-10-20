@@ -655,10 +655,10 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener, Action
                         .getParent()).setVisible(false);
 
         String rez_num = "";
-        if (AktuelleRezepte.tabaktrez.getRowCount() > 0) {
-            int row = AktuelleRezepte.tabaktrez.getSelectedRow();
+        if (AktuelleRezepte.tabelleaktrez.getRowCount() > 0) {
+            int row = AktuelleRezepte.tabelleaktrez.getSelectedRow();
             if (row >= 0) {
-                rez_num = AktuelleRezepte.tabaktrez.getValueAt(row, 0)
+                rez_num = AktuelleRezepte.tabelleaktrez.getValueAt(row, 0)
                                                    .toString()
                                                    .trim();
             }

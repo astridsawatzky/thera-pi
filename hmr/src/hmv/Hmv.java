@@ -41,7 +41,7 @@ public class Hmv {
 
 
     public Patient patient() {
-        return null;
+        return patient;
     }
 
 

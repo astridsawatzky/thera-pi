@@ -160,7 +160,7 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener, Acti
     Vector<Vector<String>> vec_hb = null;
 
     Vector<Vector<String>> vec_kuerzel = new Vector<Vector<String>>();
-    Vector<String> kundid = new Vector<String>();
+
 
     Vector<String> vec_poskuerzel = new Vector<String>();
     Vector<String> vec_pospos = new Vector<String>();
@@ -448,30 +448,24 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener, Acti
                             .size()
                 - 1;
         for (int i = 0; i < preisvec.size(); i++) {
-            kundid.clear();
+             Vector<String> kundid = new Vector<String>();
             kundid.add(preisvec.get(i)
                                .get(1));
             kundid.add(preisvec.get(i)
                                .get(idpos));
-            vec_kuerzel.add((Vector<String>) kundid.clone());
+            vec_kuerzel.add(kundid);
         }
-        Comparator<Vector> comparator = new Comparator<Vector>() {
+        Comparator<Vector<String>> comparator = new Comparator<Vector<String>>() {
 
-            public int compare(String s1, String s2) {
-                String[] strings1 = s1.split("\\s");
-                String[] strings2 = s2.split("\\s");
-                return strings1[strings1.length - 1].compareTo(strings2[strings2.length - 1]);
-            }
 
             @Override
-            public int compare(Vector o1, Vector o2) {
-                String s1 = (String) o1.get(0);
-                String s2 = (String) o2.get(0);
+            public int compare(Vector<String> o1, Vector<String> o2) {
+                String s1 =  o1.get(0);
+                String s2 =  o2.get(0);
                 return s1.compareTo(s2);
             }
         };
         Collections.sort(vec_kuerzel, comparator);
-        ////// System.out.println("Aus Funktion setKuerzelVec="+vec_kuerzel);
         mycomb2.setVector(vec_kuerzel, 0, 1);
 
     }
@@ -995,7 +989,7 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener, Acti
         HashMap<String, String> taxWerte = new HashMap<String, String>();
         JXTTreeTableNode node;
 
-        String km = "";
+       
 
         boolean hb = false;
 
@@ -1076,7 +1070,7 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener, Acti
                 taxWerte.put("<t12>", Integer.toString(wgkmstrecke));
             }
         }
-        taxWerte.put("<t18>", aktRezNum.getText()); // <t17> waere Rechnungsnummer
+        taxWerte.put("<t18>", aktRezNum.getText()); 
 
         try {
             String bcform = SqlInfo.holeEinzelFeld(
@@ -3851,17 +3845,19 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener, Acti
     /************************************************************************/
 
      boolean macheEDIFACT() {
+         if (this.notready) {
+             JOptionPane.showMessageDialog(null,
+                     "Jetzt zeigt man Ihnen in fetter roter Schrift daß ein Preislistenfehler vorliegt,\nund Sie Armleuchter versuchen das Rezept trotzdem abzurechnen.\n\nLassen Sie den Alkohol weg - das schadet Ihnen!");
+             return false;
+         }
+
+
         boolean ret = true;
         double gesamt = 0.00;
         double rez = 0.00;
         double pauschal = (mitPauschale ? 10.00 : 0.00);
         edibuf.setLength(0);
         edibuf.trimToSize();
-        if (this.notready) {
-            JOptionPane.showMessageDialog(null,
-                    "Jetzt zeigt man Ihnen in fetter roter Schrift daß ein Preislistenfehler vorliegt,\nund Sie Armleuchter versuchen das Rezept trotzdem abzurechnen.\n\nLassen Sie den Alkohol weg - das schadet Ihnen!");
-            return false;
-        }
         String test = vec_pat.get(0)
                              .get(6);
         if ((test.trim()
@@ -4020,20 +4016,20 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener, Acti
             edibuf.append(test + plus);
             edibuf.append(ediDatumFromSql(aktRezept.getRezeptDatum()) + plus);
             edibuf.append(zuZahlungsPos + plus);
-            test = aktRezept.getIndiSchluessel();
-            if (test.startsWith("kein Indi")) {
+          String  indikSchl = aktRezept.getIndiSchluessel();
+            if (indikSchl.startsWith("kein Indi")) {
                 JOptionPane.showMessageDialog(null, "Kein Indikationsschlüssel angegeben");
                 return false;
-            } else if (test.equals("k.A.")) {
-                test = "9999";
+            } else if (indikSchl.equals("k.A.")) {
+                indikSchl = "9999";
             }
 
-            edibuf.append(test.replace(" ", "") + plus);
+            edibuf.append(indikSchl.replace(" ", "") + plus);
             /************************************************/
             edibuf.append(voIndex[aktRezept.getRezArt()]);
-            if (AktuelleRezepte.isDentist(test)) {
+            if (AktuelleRezepte.isDentist(indikSchl)) {
                 edibuf.append(plus + "1");
-                System.out.println("Zahnarztverordnung");
+
             }
             edibuf.append(EOL);
         }

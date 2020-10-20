@@ -872,7 +872,7 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
     }
 
     private int getselectedRow() {
-        return Reha.instance.patpanel.aktRezept.tabaktrez.getSelectedRow();
+        return AktuelleRezepte.tabelleaktrez.getSelectedRow();
     }
 
     /**
@@ -883,7 +883,7 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
     private void setRezDatInTable(String datum) {
         int row = getselectedRow();
         if (row >= 0) {
-            AktuelleRezepte.tabaktrez.getModel()
+            AktuelleRezepte.tabelleaktrez.getModel()
                                      .setValueAt(datum, row, 2);
         }
     }
@@ -896,7 +896,7 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
     private void setLastDatInTable(String datum) {
         int row = getselectedRow();
         if (row >= 0) {
-            AktuelleRezepte.tabaktrez.getModel()
+            AktuelleRezepte.tabelleaktrez.getModel()
                                      .setValueAt(datum, row, 4);
         }
     }

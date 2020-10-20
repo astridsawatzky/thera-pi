@@ -18,7 +18,7 @@ public class Version implements Comparable<Version> {
         revision = 12;
     }
 
-    boolean isTestVersion(){
+    public boolean isTestVersion(){
         return IS_TESTVERSION;
     }
 

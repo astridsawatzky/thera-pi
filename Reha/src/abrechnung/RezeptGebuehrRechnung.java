@@ -11,6 +11,8 @@ import java.awt.event.MouseAdapter;
 import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.Vector;
 
@@ -27,6 +29,7 @@ import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.JXTitledPanel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.thera_pi.updater.Version;
 import org.therapi.reha.patient.AktuelleRezepte;
 
 import com.jgoodies.forms.layout.CellConstraints;
@@ -96,7 +99,14 @@ public class RezeptGebuehrRechnung extends JXDialog implements ActionListener, K
             RGRData data = new RGRData(hmRezgeb);
             LOGGER.debug(data.toString());
         } catch (Exception e) {
-            LOGGER.error("couldn't set data for rgr", e);
+            if (new Version().isTestVersion()) {
+                Set<Entry<String, String>> entries = hmRezgeb.entrySet();
+                    for (Entry<String, String> entry : entries) {
+                        LOGGER.error("key:" +entry.getKey() + " value:" +entry.getValue());
+                    }
+
+            }
+            LOGGER.error("couldn't set data for rgr" , e);
         }
 
         this.sollGebuchtwerden = auchbuchen;

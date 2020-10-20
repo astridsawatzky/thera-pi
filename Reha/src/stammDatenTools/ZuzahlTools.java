@@ -124,7 +124,7 @@ public class ZuzahlTools {
                 // 1";
                 // new ExUndHop().setzeStatement(cmd);
                 SqlInfo.aktualisiereSaetze("verordn", "zzstatus='2'", "rez_nr='" + rez_nr + "' LIMIT 1");
-                Reha.instance.patpanel.aktRezept.setzeBild(AktuelleRezepte.tabaktrez.getSelectedRow(), 2);
+                Reha.instance.patpanel.aktRezept.setzeBild(AktuelleRezepte.tabelleaktrez.getSelectedRow(), 2);
                 ret[0] = new Boolean(true);
                 ret[1] = Integer.valueOf(tage.size());
                 ret[2] = Integer.valueOf(erstergroesser - 1);
@@ -142,11 +142,11 @@ public class ZuzahlTools {
                     // JOptionPane.showMessageDialog(null ,"Achtung es sind noch "+(tagex*-1)+" Tage
                     // bis zur Vollj�hrigkeit\n"+
                     // "Unter Umst�nden wechselt der Zuzahlungsstatus im Verlauf dieses Rezeptes");
-                    Reha.instance.patpanel.aktRezept.setzeBild(AktuelleRezepte.tabaktrez.getSelectedRow(), 3);
+                    Reha.instance.patpanel.aktRezept.setzeBild(AktuelleRezepte.tabelleaktrez.getSelectedRow(), 3);
                     SqlInfo.aktualisiereSaetze("verordn", "zzstatus='3'", "rez_nr='" + rez_nr + "' LIMIT 1");
                     ret[4] = Integer.valueOf(3);
                 } else {
-                    Reha.instance.patpanel.aktRezept.setzeBild(AktuelleRezepte.tabaktrez.getSelectedRow(), 0);
+                    Reha.instance.patpanel.aktRezept.setzeBild(AktuelleRezepte.tabelleaktrez.getSelectedRow(), 0);
                     SqlInfo.aktualisiereSaetze("verordn", "zzstatus='0'", "rez_nr='" + rez_nr + "' LIMIT 1");
                     ret[4] = Integer.valueOf(0);
                 }
@@ -156,7 +156,7 @@ public class ZuzahlTools {
 
             }
         } else if (unter18.equals("T") && (aktzzregel.equals("0"))) {
-            Reha.instance.patpanel.aktRezept.setzeBild(AktuelleRezepte.tabaktrez.getSelectedRow(), 0);
+            Reha.instance.patpanel.aktRezept.setzeBild(AktuelleRezepte.tabelleaktrez.getSelectedRow(), 0);
             ret[0] = Boolean.valueOf(false);
             ret[1] = tage.size();
             ret[4] = Integer.valueOf(0);

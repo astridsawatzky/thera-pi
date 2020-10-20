@@ -41,7 +41,7 @@ public class AbrechnungPrivatTest {
 
         OOService.setLibpath(libPath, ooPath);
 
-        AktuelleRezepte.tabaktrez = new JXTable();
+        AktuelleRezepte.tabelleaktrez = new JXTable();
         Data data1 = new Data(2, "1728", "ER1516", "260", "T");
     //   data = HM0000;
         Data data = new Data(10, "1704", "ER1411", "30", "T");
