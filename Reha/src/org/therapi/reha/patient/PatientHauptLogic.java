@@ -42,6 +42,7 @@ import stammDatenTools.KasseTools;
 import stammDatenTools.PatTools;
 import stammDatenTools.ZuzahlTools;
 import systemEinstellungen.SystemConfig;
+import umfeld.Betriebsumfeld;
 
 public class PatientHauptLogic {
 
@@ -446,7 +447,7 @@ public class PatientHauptLogic {
                             if (iformular >= 0) {
                                 String sdatei = formular.get(iformular);
                                 RehaOOTools.starteStandardFormular(
-                                        Path.Instance.getProghome() + "vorlagen/" + Reha.getAktIK() + "/" + sdatei,
+                                        Path.Instance.getProghome() + "vorlagen/" + Betriebsumfeld.getAktIK() + "/" + sdatei,
                                         null,Reha.instance);
                             }
                         }
@@ -464,7 +465,7 @@ public class PatientHauptLogic {
         new SwingWorker<Void, Void>() {
             @Override
             protected Void doInBackground() throws Exception {
-                Settings inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/",
+                Settings inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Betriebsumfeld.getAktIK() + "/",
                         "patient.ini");
                 int forms = inif.getIntegerProperty("Formulare", "PatientFormulareAnzahl");
                 for (int i = 1; i <= forms; i++) {

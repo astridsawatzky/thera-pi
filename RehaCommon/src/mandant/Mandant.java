@@ -6,6 +6,7 @@ public class Mandant {
 
     private IK ik;
     private String name;
+    public final static Mandant nullMandant = new Mandant("000000000", "Übungs-Mandant");
 
     public Mandant(String ik, String name) {
         this.ik = new IK(ik);

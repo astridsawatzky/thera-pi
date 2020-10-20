@@ -28,6 +28,7 @@ import environment.Path;
 import hauptFenster.Reha;
 import systemEinstellungen.SystemConfig;
 import systemTools.IntegerTools;
+import umfeld.Betriebsumfeld;
 
 public class RVMeldung301 {
     static String UNA = "UNA";
@@ -2379,10 +2380,10 @@ public class RVMeldung301 {
             if (frage1 != JOptionPane.YES_OPTION) {
                 return false;
             }
-            String keystore = Path.Instance.getProghome() + "keystore/" + Reha.getAktIK() + "/" + Reha.getAktIK()
+            String keystore = Path.Instance.getProghome() + "keystore/" + Betriebsumfeld.getAktIK() + "/" + Betriebsumfeld.getAktIK()
                     + ".p12";
             NebraskaKeystore store = new NebraskaKeystore(keystore, SystemConfig.hmAbrechnung.get("hmkeystorepw"),
-                    "123456", Reha.getAktIK());
+                    "123456", Betriebsumfeld.getAktIK());
             NebraskaEncryptor encryptor = store.getEncryptor(EMPFAENGERIK);
             String inFile = (SystemConfig.dta301OutBox + (imtest ? "T" : "E") + "REH" + strAktEREH
                     + ".ORG").toLowerCase();

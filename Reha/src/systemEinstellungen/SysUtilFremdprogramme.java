@@ -35,6 +35,7 @@ import environment.Path;
 import gui.Cursors;
 import hauptFenster.Reha;
 import office.OOService;
+import umfeld.Betriebsumfeld;
 
 public class SysUtilFremdprogramme extends JXPanel implements KeyListener, ActionListener {
 
@@ -310,7 +311,7 @@ public class SysUtilFremdprogramme extends JXPanel implements KeyListener, Actio
 
     private void doSpeichern() {
         String wert = "";
-        Settings inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/", "fremdprog.ini");
+        Settings inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Betriebsumfeld.getAktIK() + "/", "fremdprog.ini");
         wert = adobepfad.getText()
                         .trim();
         inif.setStringProperty("FestProg", "FestProgPfad1", wert, null);
@@ -330,7 +331,7 @@ public class SysUtilFremdprogramme extends JXPanel implements KeyListener, Actio
         }
         INITool.saveIni(inif);
 
-        inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/", "rehajava.ini");
+        inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Betriebsumfeld.getAktIK() + "/", "rehajava.ini");
         wert = oopfad.getText()
                      .trim();
         inif.setStringProperty("OpenOffice.org", "OfficePfad", wert, null);

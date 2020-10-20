@@ -56,6 +56,7 @@ import hauptFenster.Reha;
 import office.OOService;
 import office.OOTools;
 import systemEinstellungen.SystemConfig;
+import umfeld.Betriebsumfeld;
 
 public class RezeptGebuehren extends RehaSmartDialog implements ActionListener {
     /**
@@ -517,7 +518,7 @@ public class RezeptGebuehren extends RehaSmartDialog implements ActionListener {
                         + Reha.instance.patpanel.patDaten.get(2) + "," + SystemConfig.hmAdrRDaten.get("<Rnummer>")
                         + "', " + "pat_intern='" + SystemConfig.hmAdrRDaten.get("<Rpatid>") + "', " + "rez_nr='"
                         + SystemConfig.hmAdrRDaten.get("<Rnummer>") + "' ," + "user='" + Reha.aktUser + "'," + "ik='"
-                        + Reha.getAktIK() + "'";
+                        + Betriebsumfeld.getAktIK() + "'";
                 SqlInfo.sqlAusfuehren(cmd);
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(null,

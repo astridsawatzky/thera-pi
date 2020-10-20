@@ -60,6 +60,7 @@ import rehaInternalFrame.JBenutzerInternal;
 import sql.DatenquellenFactory;
 import systemEinstellungen.SystemConfig;
 import systemTools.ButtonTools;
+import umfeld.Betriebsumfeld;
 
 public class BenutzerRechte extends JXPanel {
     /**
@@ -721,7 +722,7 @@ public class BenutzerRechte extends JXPanel {
             SqlInfo.sqlAusfuehren(cmd);
         }
         try {
-            Benutzer.benutzerLaden(new DatenquellenFactory(Reha.getAktIK()));
+            Benutzer.benutzerLaden(new DatenquellenFactory(Betriebsumfeld.getAktIK()));
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

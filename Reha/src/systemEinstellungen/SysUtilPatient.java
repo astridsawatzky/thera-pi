@@ -41,6 +41,7 @@ import CommonTools.ini.Settings;
 import environment.Path;
 import gui.Cursors;
 import hauptFenster.Reha;
+import umfeld.Betriebsumfeld;
 
 public class SysUtilPatient extends JXPanel
         implements  ActionListener,  SysInitCommon_If {
@@ -139,8 +140,8 @@ public class SysUtilPatient extends JXPanel
         optimize = new JCheckBox();
 
         vorlagen = new SysUtilVorlagen(this);
-        vorlagen.setVPfad(Path.Instance.getProghome() + "vorlagen/" + Reha.getAktIK());
-        vorlagen.setIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK(), "patient.ini");
+        vorlagen.setVPfad(Path.Instance.getProghome() + "vorlagen/" + Betriebsumfeld.getAktIK());
+        vorlagen.setIni(Path.Instance.getProghome() + "ini/" + Betriebsumfeld.getAktIK(), "patient.ini");
         vorlagen.setLabels("Formulare", "PatientFormulareAnzahl", "PFormular");
         vorlagen.activateEditing();
 

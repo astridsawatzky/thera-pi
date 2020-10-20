@@ -89,6 +89,7 @@ import systemEinstellungen.SystemConfig;
 import systemEinstellungen.TKSettings;
 import terminKalender.ICalGenerator;
 import terminKalender.KollegenListe;
+import umfeld.Betriebsumfeld;
 
 public class SuchenSeite extends JXPanel
         implements TableModelListener, FocusListener, ActionListener, PropertyChangeListener, KeyListener {
@@ -1390,7 +1391,7 @@ public class SuchenSeite extends JXPanel
              * 17-208531, 18-6, 19-false]
              */
             try {
-                FileTools.deleteAllFiles(new File(Path.Instance.getProghome() + "temp/" + Reha.getAktIK()));
+                FileTools.deleteAllFiles(new File(Path.Instance.getProghome() + "temp/" + Betriebsumfeld.getAktIK()));
             } catch (Exception ex2) {
                 JOptionPane.showMessageDialog(null, "Fehler beim löschen der temporären Dateien");
                 return false;
@@ -1477,7 +1478,7 @@ public class SuchenSeite extends JXPanel
             }
             buf.append(ICalGenerator.macheEnd());
             FileOutputStream outputFile = new FileOutputStream(
-                    Path.Instance.getProghome() + "temp/" + Reha.getAktIK() + "/iCal-TherapieTermine.ics");
+                    Path.Instance.getProghome() + "temp/" + Betriebsumfeld.getAktIK() + "/iCal-TherapieTermine.ics");
             // OutputStreamWriter out = new OutputStreamWriter(outputFile, "ISO-8859-1");
             OutputStreamWriter out = new OutputStreamWriter(outputFile, "UTF8");
             BufferedWriter bw = null;
@@ -1492,14 +1493,14 @@ public class SuchenSeite extends JXPanel
             String recipient = emailaddy + ((Boolean) SystemConfig.hmIcalSettings.get("aufeigeneemail")
                     ? "," + SystemConfig.hmEmailExtern.get("SenderAdresse")
                     : "");
-            String[] aufDat = { Path.Instance.getProghome() + "temp/" + Reha.getAktIK() + "/iCal-TherapieTermine.ics",
+            String[] aufDat = { Path.Instance.getProghome() + "temp/" + Betriebsumfeld.getAktIK() + "/iCal-TherapieTermine.ics",
                     "iCal-TherapieTermine.ics" };
             ArrayList<String[]> attachments = new ArrayList<String[]>();
             attachments.add(aufDat);
             if ((Boolean) SystemConfig.hmIcalSettings.get("pdfbeilegen")) {
                 auswahlDrucken(false, false);
                 attachments.add(
-                        new String[] { Path.Instance.getProghome() + "temp/" + Reha.getAktIK() + "/Terminplan.pdf",
+                        new String[] { Path.Instance.getProghome() + "temp/" + Betriebsumfeld.getAktIK() + "/Terminplan.pdf",
                                 "Terminplan.pdf" });
             }
             EmailDialog emlDlg = new EmailDialog(Reha.getThisFrame(), "ICS-Datei der Behandlungstermin", recipient,
@@ -1542,7 +1543,7 @@ public class SuchenSeite extends JXPanel
                                     "Daten für Reha-iCal wurden exportiert und per Email versendet");
                             try {
                                 FileTools.deleteAllFiles(
-                                        new File(Path.Instance.getProghome() + "temp/" + Reha.getAktIK()));
+                                        new File(Path.Instance.getProghome() + "temp/" + Betriebsumfeld.getAktIK()));
                             } catch (Exception ex2) {
                                 JOptionPane.showMessageDialog(null, "Fehler beim löschen der temporären Dateien");
                                 return;
@@ -1556,7 +1557,7 @@ public class SuchenSeite extends JXPanel
             } else {
                 femlDlg.setVisible(true);
                 try {
-                    FileTools.deleteAllFiles(new File(Path.Instance.getProghome() + "temp/" + Reha.getAktIK()));
+                    FileTools.deleteAllFiles(new File(Path.Instance.getProghome() + "temp/" + Betriebsumfeld.getAktIK()));
                 } catch (Exception ex2) {
                     JOptionPane.showMessageDialog(null, "Fehler beim löschen der temporären Dateien");
                     return false;
@@ -1646,7 +1647,7 @@ public class SuchenSeite extends JXPanel
             out.close();
             outputFile.close();
             new LadeProg(Path.Instance.getProghome() + "FahrdienstExporter.jar" + " " + Path.Instance.getProghome() + "ini/"
-                    + Reha.getAktIK() + "/rehajava.ini");
+                    + Betriebsumfeld.getAktIK() + "/rehajava.ini");
         } catch (Exception ex) {
             ex.printStackTrace();
             cursorWait(false);

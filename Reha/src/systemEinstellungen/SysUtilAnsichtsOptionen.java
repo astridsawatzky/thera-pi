@@ -33,6 +33,7 @@ import CommonTools.ini.Settings;
 import environment.Path;
 import hauptFenster.Reha;
 import terminKalender.KollegenListe;
+import umfeld.Betriebsumfeld;
 
 public class SysUtilAnsichtsOptionen extends JXPanel implements KeyListener, ActionListener {
     /**
@@ -207,7 +208,7 @@ public class SysUtilAnsichtsOptionen extends JXPanel implements KeyListener, Act
     private void speichernHandeln() {
         try {
             String wert;
-            Settings ini = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/", "kalender.ini");
+            Settings ini = INITool.openIni(Path.Instance.getProghome() + "ini/" + Betriebsumfeld.getAktIK() + "/", "kalender.ini");
 
             wert = (unten.isSelected() ? "1" : "0");
             SystemConfig.hmContainer.put("Kalender", Integer.valueOf(wert));

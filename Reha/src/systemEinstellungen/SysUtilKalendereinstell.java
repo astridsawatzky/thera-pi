@@ -29,6 +29,7 @@ import CommonTools.ini.INITool;
 import CommonTools.ini.Settings;
 import environment.Path;
 import hauptFenster.Reha;
+import umfeld.Betriebsumfeld;
 
 public class SysUtilKalendereinstell extends JXPanel implements ActionListener, FocusListener {
 
@@ -177,12 +178,12 @@ public class SysUtilKalendereinstell extends JXPanel implements ActionListener, 
                         "Die Funktion Kalenderzeiten verändern, wird während der Softwarentwicklung nicht aufgerufen!");
             }
             try {
-                Settings ini = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/",
+                Settings ini = INITool.openIni(Path.Instance.getProghome() + "ini/" + Betriebsumfeld.getAktIK() + "/",
                         "terminkalender.ini");
                 ini.setStringProperty("Kalender", "KalenderBarcode", (scan.isSelected() ? "1" : "0"), null);
                 INITool.saveIni(ini);
 
-                ini = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/", "kalender.ini");
+                ini = INITool.openIni(Path.Instance.getProghome() + "ini/" + Betriebsumfeld.getAktIK() + "/", "kalender.ini");
                 ini.setStringProperty("Kalender", "LangesMenue", (langmenu.isSelected() ? "1" : "0"), null);
                 ini.setStringProperty("Kalender", "ZeitLabelZeigen", (zeitzeigen.isSelected() ? "1" : "0"), null);
                 ini.setStringProperty("Kalender", "ZeitLinieZeigen", (timelinezeigen.isSelected() ? "1" : "0"), null);

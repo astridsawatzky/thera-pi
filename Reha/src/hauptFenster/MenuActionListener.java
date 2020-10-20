@@ -19,6 +19,7 @@ import rechteTools.Rechte;
 import systemEinstellungen.SystemConfig;
 import systemTools.RezeptFahnder;
 import systemTools.TestePatStamm;
+import umfeld.Betriebsumfeld;
 import wecker.Wecker;
 
 final class MenuActionListener implements ActionListener {
@@ -124,14 +125,14 @@ final class MenuActionListener implements ActionListener {
                 return;
             }
             new LadeProg(Path.Instance.getProghome() + "RehaUrlaub.jar" + " " + Path.Instance.getProghome() + " "
-                    + Reha.getAktIK());
+                    + Betriebsumfeld.getAktIK());
             return;
         case "umsatzbeteiligung":
             reha.progLoader.BeteiligungFenster(1, "");
             return;
         case "lvastatistik":
             new LadeProg(Path.Instance.getProghome() + "RehaStatistik.jar" + " " + Path.Instance.getProghome() + " "
-                    + Reha.getAktIK());
+                    + Betriebsumfeld.getAktIK());
             return;
         case "offeneposten":
             if (!Rechte.hatRecht(Rechte.Funktion_offeneposten, true)) {
@@ -139,7 +140,7 @@ final class MenuActionListener implements ActionListener {
             }
             if (!RehaIOServer.offenePostenIsActive) {
                 new LadeProg(Path.Instance.getProghome() + "OffenePosten.jar" + " " + Path.Instance.getProghome() + " "
-                        + Reha.getAktIK() + " " + Reha.xport);
+                        + Betriebsumfeld.getAktIK() + " " + Reha.xport);
             } else {
                 new ReverseSocket().setzeRehaNachricht(RehaIOServer.offenePostenreversePort,
                         "Reha#" + RehaIOMessages.MUST_GOTOFRONT);
@@ -155,9 +156,9 @@ final class MenuActionListener implements ActionListener {
             }
             if (!RehaIOServer.rgAfIsActive) {
                 String[] args = new String[] {Path.Instance.getProghome(),
-                         Reha.getAktIK() , String.valueOf(Reha.xport)};
+                         Betriebsumfeld.getAktIK() , String.valueOf(Reha.xport)};
 
-                OpRgaf.start(Path.Instance.getProghome() , Reha.getAktIK(), Reha.xport);
+                OpRgaf.start(Path.Instance.getProghome() , Betriebsumfeld.getAktIK(), Reha.xport);
 
 //                new LadeProg(Path.Instance.getProghome() + "OpRgaf.jar" + " " + Path.Instance.getProghome() + " "
 //                        + Reha.getAktIK() + " " + Reha.xport);
@@ -171,14 +172,14 @@ final class MenuActionListener implements ActionListener {
                 return;
             }
             new LadeProg(Path.Instance.getProghome() + "RehaKassenbuch.jar" + " " + Path.Instance.getProghome() + " "
-                    + Reha.getAktIK());
+                    + Betriebsumfeld.getAktIK());
             return;
         case "geburtstagsbriefe":
             if (!Rechte.hatRecht(Rechte.Sonstiges_geburtstagsbriefe, true)) {
                 return;
             }
             new LadeProg(Path.Instance.getProghome() + "GBriefe.jar" + " " + Path.Instance.getProghome() + " "
-                    + Reha.getAktIK());
+                    + Betriebsumfeld.getAktIK());
             return;
         case "sqlmodul":
             if (!Rechte.hatRecht(Rechte.Sonstiges_sqlmodul, true)) {
@@ -189,7 +190,7 @@ final class MenuActionListener implements ActionListener {
 
 
                 new LadeProg(Path.Instance.getProghome() + "RehaSql.jar" + " " + Path.Instance.getProghome() + " "
-                        + Reha.getAktIK() + " " + String.valueOf(Integer.toString(Reha.xport))
+                        + Betriebsumfeld.getAktIK() + " " + String.valueOf(Integer.toString(Reha.xport))
                         + (!Rechte.hatRecht(Rechte.BenutzerSuper_user, false) ? " readonly" : " full"));
             } else {
                 new ReverseSocket().setzeRehaNachricht(RehaIOServer.rehaSqlreversePort,
@@ -212,7 +213,7 @@ final class MenuActionListener implements ActionListener {
                 return;
             }
             new LadeProg(Path.Instance.getProghome() + "Reha301.jar" + " " + Path.Instance.getProghome() + " "
-                    + Reha.getAktIK() + " " + String.valueOf(Integer.toString(Reha.xport)));
+                    + Betriebsumfeld.getAktIK() + " " + String.valueOf(Integer.toString(Reha.xport)));
             return;
         case "workflow":
             if (!Rechte.hatRecht(Rechte.Sonstiges_Reha301, true)) {
@@ -229,7 +230,7 @@ final class MenuActionListener implements ActionListener {
                 return;
             }
             new LadeProg(Path.Instance.getProghome() + "WorkFlow.jar" + " " + Path.Instance.getProghome() + " "
-                    + Reha.getAktIK() + " " + String.valueOf(Integer.toString(Reha.xport)));
+                    + Betriebsumfeld.getAktIK() + " " + String.valueOf(Integer.toString(Reha.xport)));
             return;
         case "hmrsearch":
             System.out.println("isActive = " + RehaIOServer.rehaHMKIsActive);
@@ -251,7 +252,7 @@ final class MenuActionListener implements ActionListener {
                 return;
             }
             new LadeProg(Path.Instance.getProghome() + "RehaHMK.jar" + " " + Path.Instance.getProghome() + " "
-                    + Reha.getAktIK() + " " + String.valueOf(Integer.toString(Reha.xport))
+                    + Betriebsumfeld.getAktIK() + " " + String.valueOf(Integer.toString(Reha.xport))
                     + (reha.patpanel != null ? " " + reha.patpanel.vecaktrez.get(1) : ""));
             // System.out.println("Übergebe Rezeptnummer:
             // "+SystemConfig.hmAdrRDaten.get("Rnummer"));
@@ -262,11 +263,11 @@ final class MenuActionListener implements ActionListener {
                 return;
             }
             new LadeProg(Path.Instance.getProghome() + "RehaIniedit.jar" + " " + Path.Instance.getProghome() + " "
-                    + Reha.getAktIK());
+                    + Betriebsumfeld.getAktIK());
             return;
         case "ocr":
             new LadeProg(Path.Instance.getProghome() + "RehaOCR.jar" + " " + Path.Instance.getProghome() + " "
-                    + Reha.getAktIK() + " " + String.valueOf(Integer.toString(Reha.xport)));
+                    + Betriebsumfeld.getAktIK() + " " + String.valueOf(Integer.toString(Reha.xport)));
             return;
         }
 

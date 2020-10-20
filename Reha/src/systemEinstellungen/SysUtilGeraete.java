@@ -35,6 +35,7 @@ import hauptFenster.Reha;
 import ocf.OcKVK;
 import uk.co.mmscomputing.device.scanner.Scanner;
 import uk.co.mmscomputing.device.scanner.ScannerIOException;
+import umfeld.Betriebsumfeld;
 
 public class SysUtilGeraete extends JXPanel implements KeyListener, ActionListener {
     /**
@@ -343,7 +344,7 @@ public class SysUtilGeraete extends JXPanel implements KeyListener, ActionListen
     }
 
     private void doSpeichern() {
-        Settings inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/", "geraete.ini");
+        Settings inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Betriebsumfeld.getAktIK() + "/", "geraete.ini");
 
         SystemConfig.sReaderAktiv = (kvkakt.isSelected() ? "1" : "0");
         inif.setStringProperty("KartenLeser", "KartenLeserAktivieren", SystemConfig.sReaderAktiv, null);

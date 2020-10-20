@@ -9,7 +9,7 @@ import CommonTools.ini.INIFile;
 import CommonTools.ini.INITool;
 import CommonTools.ini.Settings;
 import environment.Path;
-import hauptFenster.Reha;
+import umfeld.Betriebsumfeld;
 
 public class ImageRepository {
 
@@ -29,7 +29,7 @@ public class ImageRepository {
             "verkaufArtikel", "verkaufLieferant", "verkaufTuten", "patnachrichten", "ocr", "BarKasse" };
 
     public static void SystemIconsInit() {
-        Settings inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/", "icons.ini");
+        Settings inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Betriebsumfeld.getAktIK() + "/", "icons.ini");
         Settings iniFallBack = INITool.openIniFallback(Path.Instance.getProghome() + "defaults/ini/", "icons.ini"); // lokale
                                                                                                                    // ini
                                                                                                                    // (falls

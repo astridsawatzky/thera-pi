@@ -60,6 +60,7 @@ import systemEinstellungen.ImageRepository;
 import systemEinstellungen.SystemConfig;
 import terminKalender.TerminFenster;
 import terminKalender.TerminFenster.Ansicht;
+import umfeld.Betriebsumfeld;
 import wecker.Wecker;
 
 public class LinkeTaskPane extends JXPanel {
@@ -678,12 +679,12 @@ public class LinkeTaskPane extends JXPanel {
         monatsuebersichtPanel.updateUI();
     }
  private boolean testUserTask() {
-        File f = new File(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/usertask.ini");
+        File f = new File(Path.Instance.getProghome() + "ini/" + Betriebsumfeld.getAktIK() + "/usertask.ini");
         if (!f.exists()) {
             return false;
         }
         try {
-            Settings utask = new INIFile(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/usertask.ini");
+            Settings utask = new INIFile(Path.Instance.getProghome() + "ini/" + Betriebsumfeld.getAktIK() + "/usertask.ini");
             int tasks = Integer.parseInt(utask.getStringProperty("UserTasks", "AnzahlUserTasks"));
             if (tasks == 0) {
                 return false;

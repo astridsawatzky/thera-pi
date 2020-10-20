@@ -67,6 +67,7 @@ import hauptFenster.Reha;
 import office.OOService;
 import rehaContainer.RehaTP;
 import systemEinstellungen.SystemConfig;
+import umfeld.Betriebsumfeld;
 
 class DruckFenster extends RehaSmartDialog implements ActionListener {
     /**
@@ -605,7 +606,7 @@ class DruckFenster extends RehaSmartDialog implements ActionListener {
             }
 
             try {
-                String url = Path.Instance.getProghome() + "vorlagen/" + Reha.getAktIK() + "/"
+                String url = Path.Instance.getProghome() + "vorlagen/" + Betriebsumfeld.getAktIK() + "/"
                         + SystemConfig.oTerminListe.NameTemplate;
                 //// System.out.println("***************URL = "+url+"****************");
                 String terminDrucker = SystemConfig.oTerminListe.NameTerminDrucker;
@@ -920,7 +921,7 @@ class DruckFenster extends RehaSmartDialog implements ActionListener {
 
                 } else {
                     try {
-                        exporturl = Path.Instance.getProghome() + "temp/" + Reha.getAktIK() + "/Terminplan.pdf";
+                        exporturl = Path.Instance.getProghome() + "temp/" + Betriebsumfeld.getAktIK() + "/Terminplan.pdf";
                         File f = new File(exporturl);
                         if (f.exists()) {
                             f.delete();
@@ -1062,7 +1063,7 @@ class DruckFenster extends RehaSmartDialog implements ActionListener {
                 }
             }
             try {
-                File f = new File(Path.Instance.getProghome() + "temp/" + Reha.getAktIK() + "/Terminplan.pdf");
+                File f = new File(Path.Instance.getProghome() + "temp/" + Betriebsumfeld.getAktIK() + "/Terminplan.pdf");
                 if (f.exists()) {
                     f.delete();
                 }
@@ -1109,12 +1110,12 @@ class DruckFenster extends RehaSmartDialog implements ActionListener {
             ArrayList<String[]> attachments = new ArrayList<String[]>();
             String[] anhang = { null, null };// zwei weitere Elemente für iCal-Datei erforderlich
 
-            anhang[0] = Path.Instance.getProghome() + "temp/" + Reha.getAktIK() + "/Terminplan.pdf";
+            anhang[0] = Path.Instance.getProghome() + "temp/" + Betriebsumfeld.getAktIK() + "/Terminplan.pdf";
             anhang[1] = "Terminplan.pdf";
             attachments.add(anhang.clone());
             if (success) {
                 attachments.add(new String[] {
-                        Path.Instance.getProghome() + "temp/" + Reha.getAktIK() + "/iCal-TherapieTermine.ics",
+                        Path.Instance.getProghome() + "temp/" + Betriebsumfeld.getAktIK() + "/iCal-TherapieTermine.ics",
                         "iCal-TherapieTermine.ics" });
             }
             File f = new File(anhang[0]);
@@ -1154,7 +1155,7 @@ class DruckFenster extends RehaSmartDialog implements ActionListener {
 
             String text = "";
             /*********/
-            File file = new File(Path.Instance.getProghome() + "vorlagen/" + Reha.getAktIK() + "/EmailTerminliste.txt");
+            File file = new File(Path.Instance.getProghome() + "vorlagen/" + Betriebsumfeld.getAktIK() + "/EmailTerminliste.txt");
             try {
                 // FileReader zum Lesen aus Datei
                 FileReader fr = new FileReader(file);
@@ -1280,7 +1281,7 @@ class DruckFenster extends RehaSmartDialog implements ActionListener {
                 }
                 buf.append(ICalGenerator.macheEnd());
                 FileOutputStream outputFile = new FileOutputStream(
-                        Path.Instance.getProghome() + "temp/" + Reha.getAktIK() + "/iCal-TherapieTermine.ics");
+                        Path.Instance.getProghome() + "temp/" + Betriebsumfeld.getAktIK() + "/iCal-TherapieTermine.ics");
                 // OutputStreamWriter out = new OutputStreamWriter(outputFile, "ISO-8859-1");
                 OutputStreamWriter out = new OutputStreamWriter(outputFile, "UTF8");
                 BufferedWriter bw = null;

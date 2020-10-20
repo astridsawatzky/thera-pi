@@ -52,6 +52,7 @@ import office.OOTools;
 import systemEinstellungen.SystemConfig;
 import uk.co.mmscomputing.device.scanner.Scanner;
 import uk.co.mmscomputing.device.scanner.ScannerIOException;
+import umfeld.Betriebsumfeld;
 
 public class ScannerUtil extends RehaSmartDialog implements ActionListener {
     /**
@@ -279,7 +280,7 @@ public class ScannerUtil extends RehaSmartDialog implements ActionListener {
     private void doSpeichernScanner() {
         String item = "";
         if (jcbscan[1].isSelected()) {
-            Settings inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/", "geraete.ini");
+            Settings inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Betriebsumfeld.getAktIK() + "/", "geraete.ini");
 
             item = (String) jcmbscan[0].getSelectedItem();
             SystemConfig.sDokuScanner = item;

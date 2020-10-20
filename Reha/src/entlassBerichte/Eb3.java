@@ -52,6 +52,7 @@ import hauptFenster.Reha;
 import oOorgTools.RehaOOTools;
 import office.OOService;
 import office.OOTools;
+import umfeld.Betriebsumfeld;
 
 public class Eb3 implements RehaEventListener {
     RehaEventClass rEvent = null;
@@ -62,7 +63,7 @@ public class Eb3 implements RehaEventListener {
     Container xparent = null;
     NativeView nativeView = null;
     ByteArrayOutputStream outtemp = null;
-    public String tempPfad = Path.Instance.getProghome() + "temp/" + Reha.getAktIK() + "/";
+    public String tempPfad = Path.Instance.getProghome() + "temp/" + Betriebsumfeld.getAktIK() + "/";
 
     /*********** neue logische Variable ***************/
     boolean newframeok = false;

@@ -55,6 +55,7 @@ import gui.Cursors;
 import hauptFenster.Reha;
 import hilfsFenster.EmailText;
 import office.OOService;
+import umfeld.Betriebsumfeld;
 
 public class SysUtilDruckvorlage extends JXPanel implements KeyListener, ActionListener, FocusListener {
 
@@ -445,7 +446,7 @@ public class SysUtilDruckvorlage extends JXPanel implements KeyListener, ActionL
         }
         try {
 
-            Settings ini = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/",
+            Settings ini = INITool.openIni(Path.Instance.getProghome() + "ini/" + Betriebsumfeld.getAktIK() + "/",
                     "terminliste.ini");
             ini.setStringProperty("TerminListe1", "AnzahlTabellen", Integer.valueOf(test1)
                                                                            .toString(),
@@ -534,7 +535,7 @@ public class SysUtilDruckvorlage extends JXPanel implements KeyListener, ActionL
         final JFileChooser chooser = new JFileChooser("Verzeichnis wählen");
         chooser.setDialogType(JFileChooser.OPEN_DIALOG);
         chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-        final File file = new File(Path.Instance.getProghome() + "/vorlagen/" + Reha.getAktIK());
+        final File file = new File(Path.Instance.getProghome() + "/vorlagen/" + Betriebsumfeld.getAktIK());
 
         chooser.setCurrentDirectory(file);
 
@@ -575,7 +576,7 @@ public class SysUtilDruckvorlage extends JXPanel implements KeyListener, ActionL
     /*************************************/
     private void vorlageBearbeiten() {
         IDocumentService documentService = null;
-        String url = Path.Instance.getProghome() + "vorlagen/" + Reha.getAktIK() + "/" + vorlagenname.getText()
+        String url = Path.Instance.getProghome() + "vorlagen/" + Betriebsumfeld.getAktIK() + "/" + vorlagenname.getText()
                                                                                                      .trim();
         // String url = urlx.replaceAll("/", "\\\\");
         //// System.out.println("Url = -------------->"+url);
@@ -644,7 +645,7 @@ public class SysUtilDruckvorlage extends JXPanel implements KeyListener, ActionL
     }
 
     private void testDruck() {
-        String url = Path.Instance.getProghome() + "vorlagen/" + Reha.getAktIK() + "/" + vorlagenname.getText()
+        String url = Path.Instance.getProghome() + "vorlagen/" + Betriebsumfeld.getAktIK() + "/" + vorlagenname.getText()
                                                                                                      .trim();
         //// System.out.println("***************URL = "+url+"****************");
         String terminDrucker = (String) druckername.getSelectedItem();

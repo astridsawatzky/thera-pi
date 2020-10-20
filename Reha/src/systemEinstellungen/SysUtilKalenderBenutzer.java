@@ -53,6 +53,7 @@ import mitarbeiter.MitarbeiterDto;
 import office.OOService;
 import opRgaf.CommonTools.DateTimeFormatters;
 import terminKalender.KollegenListe;
+import umfeld.Betriebsumfeld;
 
 class Swingma {
     private Mitarbeiter ma;
@@ -103,7 +104,7 @@ class SysUtilKalenderBenutzer extends JXPanel {
      * @deprecated Use {@link #SysUtilKalenderBenutzer(IK)} instead
      */
     SysUtilKalenderBenutzer() {
-        this(Reha.instance.mandant()
+        this(Betriebsumfeld.umfeld.getMandant()
                           .ik());
     }
 

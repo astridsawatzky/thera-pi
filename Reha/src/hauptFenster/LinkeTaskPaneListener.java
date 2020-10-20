@@ -33,6 +33,7 @@ import systemEinstellungen.TKSettings;
 import systemTools.TestePatStamm;
 import terminKalender.TerminFenster.Ansicht;
 import textBausteine.textbaus;
+import umfeld.Betriebsumfeld;
 import wecker.Wecker;
 
 final class LinkeTaskPaneListener implements ActionListener {
@@ -182,7 +183,7 @@ final class LinkeTaskPaneListener implements ActionListener {
                     @Override
                     public void run() {
                         new LadeProg(Path.Instance.getProghome() + "RehaMail.jar" + " "
-                                + Path.Instance.getProghome() + " " + Reha.getAktIK() + " " + Reha.xport + " "
+                                + Path.Instance.getProghome() + " " + Betriebsumfeld.getAktIK() + " " + Reha.xport + " "
                                 + Reha.aktUser.replace(" ", "#"));
                     }
                 }.start();
@@ -218,7 +219,7 @@ final class LinkeTaskPaneListener implements ActionListener {
                 public void run() {
 
                     new LadeProg(Path.Instance.getProghome() + "piHelp.jar" + " " + Path.Instance.getProghome() + " "
-                            + Reha.getAktIK());
+                            + Betriebsumfeld.getAktIK());
                 }
             }.start();
             new SwingWorker<Void, Void>() {
@@ -247,8 +248,8 @@ final class LinkeTaskPaneListener implements ActionListener {
             new LadeProg(Path.Instance.getProghome() + "piTool.jar");
             break;
         case "piTextb":
-            textbaus.main(new String[] { Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/rehajava.ini",
-                    Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/thbericht.ini"
+            textbaus.main(new String[] { Path.Instance.getProghome() + "ini/" + Betriebsumfeld.getAktIK() + "/rehajava.ini",
+                    Path.Instance.getProghome() + "ini/" + Betriebsumfeld.getAktIK() + "/thbericht.ini"
 
             });
 
@@ -261,7 +262,7 @@ final class LinkeTaskPaneListener implements ActionListener {
                 @Override
                 public void run() {
                     try {
-                        ArztBaustein.start(new IK(Reha.getAktIK()), new OOService().getOfficeapplication());
+                        ArztBaustein.start(new IK(Betriebsumfeld.getAktIK()), new OOService().getOfficeapplication());
                     } catch (SQLException e) {
                         e.printStackTrace();
                     }
@@ -325,7 +326,7 @@ final class LinkeTaskPaneListener implements ActionListener {
                 @Override
                 public void run() {
                     new LadeProg(Path.Instance.getProghome() + "QMAuswertung.jar" + " "
-                            + Path.Instance.getProghome() + " " + Reha.getAktIK());
+                            + Path.Instance.getProghome() + " " + Betriebsumfeld.getAktIK());
                 }
             }.start();
             new SwingWorker<Void, Void>() {

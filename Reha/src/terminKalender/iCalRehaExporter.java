@@ -24,6 +24,7 @@ import environment.Path;
 import gui.Cursors;
 import hauptFenster.Reha;
 import systemEinstellungen.SystemConfig;
+import umfeld.Betriebsumfeld;
 
 public class iCalRehaExporter {
 
@@ -65,7 +66,7 @@ public class iCalRehaExporter {
                             : "");
 
                     String[] aufDat = {
-                            Path.Instance.getProghome() + "temp/" + Reha.getAktIK() + "/iCal-RehaTermine.ics",
+                            Path.Instance.getProghome() + "temp/" + Betriebsumfeld.getAktIK() + "/iCal-RehaTermine.ics",
                             "iCal-RehaTermine.ics" };
                     ArrayList<String[]> attachments = new ArrayList<String[]>();
                     attachments.add(aufDat);
@@ -136,7 +137,7 @@ public class iCalRehaExporter {
         FileOutputStream outputFile;
         try {
             outputFile = new FileOutputStream(
-                    Path.Instance.getProghome() + "temp/" + Reha.getAktIK() + "/iCal-RehaTermine.ics");
+                    Path.Instance.getProghome() + "temp/" + Betriebsumfeld.getAktIK() + "/iCal-RehaTermine.ics");
             OutputStreamWriter out = new OutputStreamWriter(outputFile, "UTF8");
             BufferedWriter bw = null;
             bw = new BufferedWriter(out);

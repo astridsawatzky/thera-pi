@@ -59,6 +59,7 @@ import stammDatenTools.PatTools;
 import stammDatenTools.RezTools;
 import systemEinstellungen.SystemConfig;
 import systemEinstellungen.SystemPreislisten;
+import umfeld.Betriebsumfeld;
 
 public class AbrechnungReha extends JXPanel {
     private static final long serialVersionUID = -7029656388659186476L;
@@ -848,7 +849,7 @@ public class AbrechnungReha extends JXPanel {
                                                                           .trim()
                                                                           .replace(",", ".")));
 
-        starteDokument(Path.Instance.getProghome() + "vorlagen/" + Reha.getAktIK() + "/" + this.druckFormular,
+        starteDokument(Path.Instance.getProghome() + "vorlagen/" + Betriebsumfeld.getAktIK() + "/" + this.druckFormular,
                 this.druckDrucker);
         starteErsetzen(hmRechnung);
         startePositionen(vecposrechnung, gesamtPreis);
@@ -940,7 +941,7 @@ public class AbrechnungReha extends JXPanel {
                     + "', ");
             rechnungBuf.append("disziplin='" + "RH" + "', ");
             rechnungBuf.append("rdatum='" + DatFunk.sDatInSQL(DatFunk.sHeute()) + "',");
-            rechnungBuf.append("ik='" + Reha.getAktIK() + "'");
+            rechnungBuf.append("ik='" + Betriebsumfeld.getAktIK() + "'");
             SqlInfo.sqlAusfuehren(rechnungBuf.toString());
             try {
                 Thread.sleep(50);
@@ -987,7 +988,7 @@ public class AbrechnungReha extends JXPanel {
         rechnungBuf.append("ikktraeger='" + kassvec.get(0)
                                                    .get(6)
                 + "',");
-        rechnungBuf.append("ik='" + Reha.getAktIK() + "'");
+        rechnungBuf.append("ik='" + Betriebsumfeld.getAktIK() + "'");
         SqlInfo.sqlAusfuehren(rechnungBuf.toString());
 
     }
@@ -1143,7 +1144,7 @@ public class AbrechnungReha extends JXPanel {
                 }
             }
 
-            starteDokument(Path.Instance.getProghome() + "vorlagen/" + Reha.getAktIK() + "/" + this.druckFormular,
+            starteDokument(Path.Instance.getProghome() + "vorlagen/" + Betriebsumfeld.getAktIK() + "/" + this.druckFormular,
                     this.druckDrucker);
             starteErsetzen(hmRechnung);
             startePositionen(vecposrechnung, gesamtPreis);

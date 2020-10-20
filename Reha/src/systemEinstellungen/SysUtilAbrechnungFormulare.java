@@ -39,6 +39,7 @@ import CommonTools.ini.INITool;
 import CommonTools.ini.Settings;
 import environment.Path;
 import hauptFenster.Reha;
+import umfeld.Betriebsumfeld;
 
 class SysUtilAbrechnungFormulare extends JXPanel
         implements KeyListener, ActionListener, ItemListener, SysInitCommon_If {
@@ -332,7 +333,7 @@ class SysUtilAbrechnungFormulare extends JXPanel
     private void doSpeichern() {
         try {
             String wert;
-            Settings inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/",
+            Settings inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Betriebsumfeld.getAktIK() + "/",
                     "abrechnung.ini");
             inif.setStringProperty("HMGKVRechnung", "Rformular", tf[0].getText()
                                                                       .trim(),
@@ -384,7 +385,7 @@ class SysUtilAbrechnungFormulare extends JXPanel
         final JFileChooser chooser = new JFileChooser("Verzeichnis wählen");
         chooser.setDialogType(JFileChooser.OPEN_DIALOG);
         chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-        final File file = new File(Path.Instance.getProghome() + "/vorlagen/" + Reha.getAktIK());
+        final File file = new File(Path.Instance.getProghome() + "/vorlagen/" + Betriebsumfeld.getAktIK());
 
         chooser.setCurrentDirectory(file);
 

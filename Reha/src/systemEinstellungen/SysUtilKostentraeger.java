@@ -43,7 +43,9 @@ import CommonTools.ini.INITool;
 import CommonTools.ini.Settings;
 import environment.Path;
 import hauptFenster.Reha;
+import mandant.IK;
 import sqlTools.PLServerAuslesen;
+import umfeld.Betriebsumfeld;
 
 public class SysUtilKostentraeger extends JXPanel {
     private static final long serialVersionUID = 1L;
@@ -53,7 +55,7 @@ public class SysUtilKostentraeger extends JXPanel {
     MyKtraegerModel ktrmod = null;
     JButton[] but = { null, null, null, null };
     JRtaCheckBoxR cbGetFromGKV;
-    Settings inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/", "ktraeger.ini");
+
     private TableCellRenderer JLabelRenderer = null; // = new DefaultTableRenderer(new MappedValue(StringValues.EMPTY,
                                                      // IconValues.ICON), JLabel.CENTER);
     PLServerAuslesen plServer = null;
@@ -64,13 +66,18 @@ public class SysUtilKostentraeger extends JXPanel {
 
     // @VisibleForTesting
     SysUtilKostentraeger(String s) {
+        String testIK = "123456789";
+        inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + testIK + "/", "ktraeger.ini");
+
         if (!"Testing".equals(s)) {
             logger.error("Are you sure you want this constructor?");
         }
-    }
 
-    public SysUtilKostentraeger() {
+    }
+    Settings inif ;
+    public SysUtilKostentraeger(IK ik) {
         super(new BorderLayout());
+        inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + ik.digitString() + "/", "ktraeger.ini");
         this.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 20));
         setBackgroundPainter(Reha.instance.compoundPainter.get("SystemInit"));
 

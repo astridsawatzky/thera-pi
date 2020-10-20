@@ -86,6 +86,7 @@ import rehaInternalFrame.JGutachtenInternal;
 import systemEinstellungen.SystemConfig;
 import systemTools.IconListRenderer;
 import systemTools.ListenerTools;
+import umfeld.Betriebsumfeld;
 
 public class EBerichtPanel extends JXPanel implements ChangeListener, RehaEventListener, PropertyChangeListener,
         TableModelListener, KeyListener, FocusListener, ActionListener, MouseListener {
@@ -122,8 +123,8 @@ public class EBerichtPanel extends JXPanel implements ChangeListener, RehaEventL
     public boolean neu = false;
     public boolean jetztneu = false;
     public boolean inebericht = false;
-    public String tempPfad = Path.Instance.getProghome() + "temp/" + Reha.getAktIK() + "/";
-    public String vorlagenPfad = Path.Instance.getProghome() + "vorlagen/" + Reha.getAktIK() + "/";
+    public String tempPfad = Path.Instance.getProghome() + "temp/" + Betriebsumfeld.getAktIK() + "/";
+    public String vorlagenPfad = Path.Instance.getProghome() + "vorlagen/" + Betriebsumfeld.getAktIK() + "/";
     public String[] rvVorlagen = { null, null, null, null };
     EBerichtTab ebt = null;
     NachsorgeTab nat = null;
@@ -2360,7 +2361,7 @@ public class EBerichtPanel extends JXPanel implements ChangeListener, RehaEventL
                 break;
             case 3:
                 new LadeProg(Path.Instance.getProghome() + "RehaOCR.jar" + " " + Path.Instance.getProghome() + " "
-                        + Reha.getAktIK() + " " + String.valueOf(Integer.toString(Reha.xport)));
+                        + Betriebsumfeld.getAktIK() + " " + String.valueOf(Integer.toString(Reha.xport)));
                 break;
             case 4:
                 starteTest();

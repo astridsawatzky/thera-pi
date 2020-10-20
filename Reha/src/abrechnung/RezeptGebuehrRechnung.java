@@ -62,6 +62,7 @@ import office.OOService;
 import office.OOTools;
 import stammDatenTools.ZuzahlTools.ZZStat;
 import systemEinstellungen.SystemConfig;
+import umfeld.Betriebsumfeld;
 
 public class RezeptGebuehrRechnung extends JXDialog implements ActionListener, KeyListener, RehaTPEventListener {
     private static final Logger LOGGER = LoggerFactory.getLogger(RezeptGebuehrRechnung.class);
@@ -285,7 +286,7 @@ public class RezeptGebuehrRechnung extends JXDialog implements ActionListener, K
         }
         hmRezgeb.put("<rgbehandlung>", rgBehandlungTextfield.getText()
                                                             .trim());
-        String url = Path.Instance.getProghome() + "vorlagen/" + Reha.getAktIK() + "/RezeptgebuehrRechnung.ott";
+        String url = Path.Instance.getProghome() + "vorlagen/" + Betriebsumfeld.getAktIK() + "/RezeptgebuehrRechnung.ott";
         try {
             officeStarten(url);
         } catch (OfficeApplicationException | NOAException | TextException | DocumentException e) {
@@ -341,7 +342,7 @@ public class RezeptGebuehrRechnung extends JXDialog implements ActionListener, K
            .append(DatFunk.sDatInSQL(DatFunk.sHeute()))
            .append("',");
         buf.append("ik='")
-           .append(Reha.getAktIK())
+           .append(Betriebsumfeld.getAktIK())
            .append("'");
         return buf.toString();
     }
@@ -383,7 +384,7 @@ public class RezeptGebuehrRechnung extends JXDialog implements ActionListener, K
            .append(DatFunk.sDatInSQL(DatFunk.sHeute()))
            .append("',");
         buf.append("ik='")
-           .append(Reha.getAktIK())
+           .append(Betriebsumfeld.getAktIK())
            .append("'");
         buf.append(" where rnr='")
            .append(hmRezgeb.get("<rgnr>"))

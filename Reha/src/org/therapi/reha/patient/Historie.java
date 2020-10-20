@@ -62,6 +62,7 @@ import stammDatenTools.RezTools;
 import stammDatenTools.ZuzahlTools.ZZStat;
 import systemEinstellungen.SystemConfig;
 import systemTools.IconListRenderer;
+import umfeld.Betriebsumfeld;
 
 public class Historie extends JXPanel implements ActionListener, TableModelListener, PropertyChangeListener {
     /**
@@ -997,7 +998,7 @@ public class Historie extends JXPanel implements ActionListener, TableModelListe
                     + "' or ktext like '%" + sreznum + "%'LIMIT 1");
             SystemConfig.hmRgkDaten.put("<Rgkbezahldatum>", String.valueOf(DatFunk.sDatInDeutsch(bezdatum)));
             RehaOOTools.starteRGKopie(
-                    Path.Instance.getProghome() + "vorlagen/" + Reha.getAktIK() + "/Rezeptgebuehr.ott.Kopie.ott",
+                    Path.Instance.getProghome() + "vorlagen/" + Betriebsumfeld.getAktIK() + "/Rezeptgebuehr.ott.Kopie.ott",
                     SystemConfig.rezGebDrucker,Reha.instance);
             return;
         }

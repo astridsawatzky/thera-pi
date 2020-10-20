@@ -29,7 +29,7 @@ import CommonTools.JRtaTextField;
 import CommonTools.ini.INITool;
 import CommonTools.ini.Settings;
 import environment.Path;
-import hauptFenster.Reha;
+import umfeld.Betriebsumfeld;
 
 public class SysUtilVerkauf extends JXPanel implements SysInitCommon_If {
 
@@ -137,8 +137,8 @@ public class SysUtilVerkauf extends JXPanel implements SysInitCommon_If {
         }
 
         vorlagen = new SysUtilVorlagen(this);
-        vorlagen.setVPfad(Path.Instance.getProghome() + "vorlagen/" + Reha.getAktIK());
-        vorlagen.setIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK(), "verkauf.ini");
+        vorlagen.setVPfad(Path.Instance.getProghome() + "vorlagen/" + Betriebsumfeld.getAktIK());
+        vorlagen.setIni(Path.Instance.getProghome() + "ini/" + Betriebsumfeld.getAktIK(), "verkauf.ini");
         vorlagen.setLabels("Formulare", "FormulareAnzahl", "Formular");
         vorlagen.activateEditing();
 

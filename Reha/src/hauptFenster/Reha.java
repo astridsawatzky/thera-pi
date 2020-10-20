@@ -105,6 +105,7 @@ import systemTools.RezeptFahnder;
 import systemTools.TestePatStamm;
 import terminKalender.TerminFenster;
 import therapi.updatehint.UpdatesMain;
+import umfeld.Betriebsumfeld;
 import update.DueUpdates;
 import urlaubBeteiligung.Beteiligung;
 import urlaubBeteiligung.Urlaub;
@@ -279,16 +280,8 @@ public class Reha implements RehaEventListener , Monitor{
 
     public static Vector<Vector<List<String>>> terminLookup = new Vector<Vector<List<String>>>();
 
-    private final static Mandant nullMandant = new Mandant("000000000", "Übungs-Mandant");
-    private Mandant mandant;
-    public Mandant getMandant() {
-        return mandant;
-    }
 
-    private static String aktIK = nullMandant.ikDigitString();
-    private static String aktMandant = nullMandant.name();
-
-    public static Reha instance = new Reha(nullMandant);
+    public static Reha instance = new Reha();
     static JXFrame thisFrame;
 
     static Logger logger;
@@ -303,16 +296,10 @@ public class Reha implements RehaEventListener , Monitor{
         Reha.thisFrame = thisFrame;
     }
 
-    public static String getAktIK() {
-        return aktIK;
-    }
+    public Reha() {
 
-    public static String getAktMandant() {
-        return aktMandant;
-    }
 
-    public Reha(Mandant mandant) {
-        this.mandant = mandant;
+
         instance = this;
 
     }
@@ -333,7 +320,9 @@ public class Reha implements RehaEventListener , Monitor{
                     inif.getStringProperty("TheraPiMandanten", "MAND-NAME" + DefaultMandant));
         }
 
-        new Reha(mainMandant).startWithMandantSet();
+         new Betriebsumfeld(mainMandant);
+
+        new Reha().startWithMandantSet(mainMandant);
 
     }
 
@@ -341,24 +330,22 @@ public class Reha implements RehaEventListener , Monitor{
 
         logger = LoggerFactory.getLogger(Reha.class);
     }
-
-    public void startWithMandantSet() {
+    public void startWithMandantSet(Mandant mandant) {
 
         logger.info("Thera-Pi Version: " + new Version().number());
         logger.info("Java Version:     " + System.getProperty("java.version"));
-        aktIK = mandant().ikDigitString();
-        aktMandant = mandant().name();
+
         Feature.init(mandant);
-        DueUpdates du = new DueUpdates(new DatenquellenFactory(aktIK));
+        DueUpdates du = new DueUpdates(new DatenquellenFactory(Betriebsumfeld.getAktIK()));
         du.init();
         du.execute();
 
-        String iniPath = Path.Instance.getProghome() + "ini/" + mandant().ikDigitString() + "/";
+        String iniPath = Path.Instance.getProghome() + "ini/" + mandant.ikDigitString() + "/";
 
         INITool.init(iniPath);
         logger.info("Insgesamt sind " + INITool.anzahlInisInDB() + " INI-Dateien in der Tabelle inidatei abgelegt");
 
-        Titel2 = "  -->  [Mandant: " + getAktMandant() + "]";
+        Titel2 = "  -->  [Mandant: " + Betriebsumfeld.getAktMandant() + "]";
 
         Thread rehasockeThread = new Thread(new RehaSockServer(), "RehaSocketServer");
         rehasockeThread.start();
@@ -529,7 +516,7 @@ public class Reha implements RehaEventListener , Monitor{
 
     private void saveAktuelleFensterAnordnung() {
         try {
-            Settings inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/",
+            Settings inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Betriebsumfeld.getAktIK() + "/",
                     "rehajava.ini");
             SystemConfig.UpdateIni(inif, "HauptFenster", "Divider1", jSplitLR.getDividerLocation(), null);
             SystemConfig.UpdateIni(inif, "HauptFenster", "Divider2", jSplitRechtsOU.getDividerLocation(), null);
@@ -935,7 +922,7 @@ public class Reha implements RehaEventListener , Monitor{
                     && Reha.checkForMails()) {
                 if (Reha.isStarted) {
                     new LadeProg(Path.Instance.getProghome() + "RehaMail.jar" + " " + Path.Instance.getProghome() + " "
-                            + Reha.getAktIK() + " " + Reha.xport + " " + Reha.aktUser.replace(" ", "#"));
+                            + Betriebsumfeld.getAktIK() + " " + Reha.xport + " " + Reha.aktUser.replace(" ", "#"));
                 }
             }
         }
@@ -2219,7 +2206,7 @@ public class Reha implements RehaEventListener , Monitor{
         if (vecnummern.size() <= 0) {
             cmd = "insert into nummern set pat='1',kg='1',ma='1',er='1',"
                     + "lo='1',rh='1',rnr='1',esol='1',bericht='1',afrnr='1',rgrnr='1',doku='1'," + "dfue='1',mandant='"
-                    + Reha.getAktIK() + "'";
+                    + Betriebsumfeld.getAktIK() + "'";
             // System.out.println(cmd);
             SqlInfo.sqlAusfuehren(cmd);
         }
@@ -2256,6 +2243,7 @@ public class Reha implements RehaEventListener , Monitor{
     }
 
     ActionListener actionListener = new MenuActionListener(this);
+
 
     public void activateWebCam() {
 
@@ -2341,9 +2329,7 @@ public class Reha implements RehaEventListener , Monitor{
         return componentListener;
     }
 
-    public Mandant mandant() {
-        return mandant;
-    }
+
 
     @Override
     public void statusChange(Object status) {

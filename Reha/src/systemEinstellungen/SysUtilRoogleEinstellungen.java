@@ -25,6 +25,7 @@ import CommonTools.ini.INITool;
 import CommonTools.ini.Settings;
 import environment.Path;
 import hauptFenster.Reha;
+import umfeld.Betriebsumfeld;
 
 public class SysUtilRoogleEinstellungen extends JXPanel implements KeyListener, ActionListener {
 
@@ -174,7 +175,7 @@ public class SysUtilRoogleEinstellungen extends JXPanel implements KeyListener, 
         if (e.getActionCommand()
              .equals("speichern")) {
             try {
-                Settings ini = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/",
+                Settings ini = INITool.openIni(Path.Instance.getProghome() + "ini/" + Betriebsumfeld.getAktIK() + "/",
                         "terminkalender.ini");
                 for (int i = 0; i < 7; i++) {
                     ini.setStringProperty("RoogleEinstellungen", "Tag" + (i + 1), (tage[i].isSelected() ? "1" : "0"),

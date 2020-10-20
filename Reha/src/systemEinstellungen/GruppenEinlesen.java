@@ -7,7 +7,7 @@ import CommonTools.ZeitFunk;
 import CommonTools.ini.INITool;
 import CommonTools.ini.Settings;
 import environment.Path;
-import hauptFenster.Reha;
+import umfeld.Betriebsumfeld;
 
 public class GruppenEinlesen {
     // public Vector gruppenParam = null;
@@ -19,7 +19,7 @@ public class GruppenEinlesen {
     private Settings ini;
 
     public GruppenEinlesen init() {
-        ini = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/", "gruppen.ini");
+        ini = INITool.openIni(Path.Instance.getProghome() + "ini/" + Betriebsumfeld.getAktIK() + "/", "gruppen.ini");
 
         anzahl = Integer.valueOf(ini.getStringProperty("Gruppen", "GruppenAnzahl"));
         gruppenNamen = new Vector<String>();

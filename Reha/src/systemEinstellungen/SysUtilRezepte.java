@@ -40,6 +40,7 @@ import CommonTools.ini.INITool;
 import CommonTools.ini.Settings;
 import environment.Path;
 import hauptFenster.Reha;
+import umfeld.Betriebsumfeld;
 
 public class SysUtilRezepte extends JXPanel implements KeyListener, ActionListener, SysInitCommon_If {
 
@@ -105,7 +106,7 @@ public class SysUtilRezepte extends JXPanel implements KeyListener, ActionListen
 
     private void fuelleMitWerten() {
         int aktiv;
-        Settings inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/", "rezept.ini");
+        Settings inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Betriebsumfeld.getAktIK() + "/", "rezept.ini");
         if (SystemConfig.mitRs) {
             for (int i = 0; i < 8; i++) {
                 aktiv = inif.getIntegerProperty("RezeptKlassen", "KlasseAktiv" + Integer.valueOf(i + 1)
@@ -254,9 +255,9 @@ public class SysUtilRezepte extends JXPanel implements KeyListener, ActionListen
          * cc2.xy(4, 3)); butPan.validate(); builder.add(butPan, cc.xyw(1, 37, 6));
          */
         vorlagen = new SysUtilVorlagen(this);
-        vorlagen.setVPfad(Path.Instance.getProghome() + "vorlagen/" + Reha.getAktIK());
+        vorlagen.setVPfad(Path.Instance.getProghome() + "vorlagen/" + Betriebsumfeld.getAktIK());
 
-        vorlagen.setIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK(), "rezept.ini");
+        vorlagen.setIni(Path.Instance.getProghome() + "ini/" + Betriebsumfeld.getAktIK(), "rezept.ini");
         vorlagen.setLabels("Formulare", "RezeptFormulareAnzahl", "RFormular");
         vorlagen.activateEditing();
 

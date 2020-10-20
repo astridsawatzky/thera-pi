@@ -16,6 +16,7 @@ import environment.Path;
 import hauptFenster.Reha;
 import mandant.Mandant;
 import uk.org.lidalia.sysoutslf4j.context.SysOutOverSLF4J;
+import umfeld.Betriebsumfeld;
 
 public class TheraPi {
 
@@ -84,9 +85,11 @@ public class TheraPi {
 
     private static void startReha(Mandant mandant) {
         Reha.initializeLogging();
-        Reha reha = new Reha(mandant);
+        Reha reha = new Reha();
 
-        reha.startWithMandantSet();
+        new Betriebsumfeld(mandant);
+
+        reha.startWithMandantSet(mandant);
     }
 
     private static void setLookAndFeel() {

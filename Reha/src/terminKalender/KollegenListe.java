@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import hauptFenster.Reha;
 import mitarbeiter.Mitarbeiter;
 import mitarbeiter.MitarbeiterDto;
+import umfeld.Betriebsumfeld;
 
 public class KollegenListe {
 
@@ -100,7 +101,7 @@ public class KollegenListe {
 
     private static void ladeKollegenAusDB(Reha reha) {
 
-        List<Mitarbeiter> mitarbeiterListe= new MitarbeiterDto(reha.mandant().ik()).all();
+        List<Mitarbeiter> mitarbeiterListe= new MitarbeiterDto(Betriebsumfeld.umfeld.getMandant().ik()).all();
 
         for (Mitarbeiter mitarbeiter : mitarbeiterListe) {
             vKKollegen.add(Kollegen.of(mitarbeiter));
@@ -123,7 +124,7 @@ public class KollegenListe {
     }
 
     public static Kollegen getByMatchcode(String matchcode) {
-        return Kollegen.of(new MitarbeiterDto(Reha.instance.mandant().ik()).byMatchcode(matchcode).get());
+        return Kollegen.of(new MitarbeiterDto(Betriebsumfeld.umfeld.getMandant().ik()).byMatchcode(matchcode).get());
     }
 
 }

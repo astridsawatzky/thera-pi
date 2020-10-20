@@ -14,7 +14,7 @@ import CommonTools.ini.INITool;
 import CommonTools.ini.Settings;
 import core.Disziplin;
 import environment.Path;
-import hauptFenster.Reha;
+import umfeld.Betriebsumfeld;
 
 public class SystemPreislisten {
 
@@ -51,7 +51,7 @@ public class SystemPreislisten {
     private static Vector<Object> odummy = new Vector<Object>();
 
     public static void ladePreise(String disziplin) {
-        String aktIK = Reha.getAktIK();
+        String aktIK = Betriebsumfeld.getAktIK();
         ladepreise(disziplin, aktIK);
 
     }

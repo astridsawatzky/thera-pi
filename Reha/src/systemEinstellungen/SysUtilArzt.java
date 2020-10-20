@@ -42,6 +42,7 @@ import CommonTools.ini.Settings;
 import environment.Path;
 import hauptFenster.Reha;
 import jxTableTools.TableTool;
+import umfeld.Betriebsumfeld;
 
 public class SysUtilArzt extends JXPanel implements KeyListener, ActionListener, SysInitCommon_If {
 
@@ -201,10 +202,10 @@ public class SysUtilArzt extends JXPanel implements KeyListener, ActionListener,
         // .setCellEditor(new TitelEditor());
         // vorlagen.setSortable(false);
         vorlagen = new SysUtilVorlagen(this);
-        vorlagen.setVPfad(Path.Instance.getProghome() + "vorlagen/" + Reha.getAktIK());
+        vorlagen.setVPfad(Path.Instance.getProghome() + "vorlagen/" + Betriebsumfeld.getAktIK());
 //      INIFile inif = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.getAktIK()+"/", "arzt.ini");
 //      vorlagen.setInif(inif);
-        vorlagen.setIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK(), "arzt.ini");
+        vorlagen.setIni(Path.Instance.getProghome() + "ini/" + Betriebsumfeld.getAktIK(), "arzt.ini");
         vorlagen.setLabels("Formulare", "ArztFormulareAnzahl", "AFormular");
         vorlagen.activateEditing();
         /*
@@ -366,7 +367,7 @@ public class SysUtilArzt extends JXPanel implements KeyListener, ActionListener,
             String wert = "";
             Settings inif = vorlagen.getInif();
             if (inif == null) { // sollte nie vorkommen
-                INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/", "arzt.ini");
+                INITool.openIni(Path.Instance.getProghome() + "ini/" + Betriebsumfeld.getAktIK() + "/", "arzt.ini");
             }
             // System.out.println(Path.Instance.getProghome()+"ini/"+Reha.getAktIK()+"/patient.ini");
 

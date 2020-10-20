@@ -81,6 +81,7 @@ import oOorgTools.RehaOOTools;
 import rehaInternalFrame.JKasseInternal;
 import stammDatenTools.KasseTools;
 import systemEinstellungen.SystemConfig;
+import umfeld.Betriebsumfeld;
 
 public class KassenPanel extends JXPanel implements PropertyChangeListener, TableModelListener, KeyListener,
         FocusListener, ActionListener, MouseListener {
@@ -728,7 +729,7 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener, Tabl
             @Override
             protected Void doInBackground() throws Exception {
 
-                Settings inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/",
+                Settings inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Betriebsumfeld.getAktIK() + "/",
                         "kasse.ini");
                 int forms = inif.getIntegerProperty("Formulare", "KassenFormulareAnzahl");
                 for (int i = 1; i <= forms; i++) {
@@ -761,7 +762,7 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener, Tabl
                     @Override
                     protected Void doInBackground() throws Exception {
                         try {
-                            RehaOOTools.starteStandardFormular(Path.Instance.getProghome() + "vorlagen/" + Reha.getAktIK()
+                            RehaOOTools.starteStandardFormular(Path.Instance.getProghome() + "vorlagen/" + Betriebsumfeld.getAktIK()
                                     + "/" + formular.get(iformular), null,Reha.instance);
                         } catch (Exception ex) {
                             ex.printStackTrace();
@@ -1242,7 +1243,7 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener, Tabl
                 JOptionPane.showMessageDialog(null, buf1.toString());
                 return;
             }
-            String datei = Path.Instance.getProghome() + "edifact/" + Reha.getAktIK() + "/" + testHm.get("kassen_ik");
+            String datei = Path.Instance.getProghome() + "edifact/" + Betriebsumfeld.getAktIK() + "/" + testHm.get("kassen_ik");
             if (!SystemConfig.hmAbrechnung.get("hmkeystoreusecertof")
                                           .equals(SystemConfig.hmAbrechnung.get("hmkeystorealias"))) {
                 JOptionPane.showMessageDialog(null,
@@ -1279,7 +1280,7 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener, Tabl
             }
             String text = "Es wurde absolut fehlerfrei ver- und entschlüsselt\n\n"
                     + "Die Testdateien liegen im Verzeichnis " + Path.Instance.getProghome() + "edifact/"
-                    + Reha.getAktIK() + "/" + "\n" + "1. " + testHm.get("kassen_ik") + ".original (Ursprungsdatei)\n"
+                    + Betriebsumfeld.getAktIK() + "/" + "\n" + "1. " + testHm.get("kassen_ik") + ".original (Ursprungsdatei)\n"
                     + "2. " + testHm.get("kassen_ik") + ".encoded (verschlüsselte Variante der Ursprungsdatei)\n"
                     + "3. " + testHm.get("kassen_ik") + ".decoded (entschlüsselte Variante der .encoded Datei)\n\n"
                     + "Die Dateigröße der Ursprungsdatei und der entschlüsselten Variante\n" + "ist absolut identisch ("

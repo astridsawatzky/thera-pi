@@ -49,6 +49,7 @@ import office.OOService;
 import office.OOTools;
 import rehaInternalFrame.JBarkassenInternal;
 import systemTools.ButtonTools;
+import umfeld.Betriebsumfeld;
 
 public class Barkasse extends JXPanel implements RgVkPr_IfCallBack {
 
@@ -403,7 +404,7 @@ public class Barkasse extends JXPanel implements RgVkPr_IfCallBack {
         DocumentDescriptor docdescript = new DocumentDescriptor();
         docdescript.setAsTemplate(true);
         // docdescript.setHidden(true);
-        url = Path.Instance.getProghome() + "vorlagen/" + Reha.getAktIK() + "/Barkasse.ott";
+        url = Path.Instance.getProghome() + "vorlagen/" + Betriebsumfeld.getAktIK() + "/Barkasse.ott";
         document = documentService.loadDocument(url, docdescript);
 
         docdescript.setHidden(hideOfficeInBackground);
@@ -511,7 +512,7 @@ public class Barkasse extends JXPanel implements RgVkPr_IfCallBack {
      * keine Einstellung vorhanden, wird ein Default gesetzt
      */
     private void readLastSelection() {
-        Settings inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/", "bedienung.ini");
+        Settings inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Betriebsumfeld.getAktIK() + "/", "bedienung.ini");
         if (inif.getStringProperty("BarKasse", "Rezeptgebuehren") != null) { // Eintraege in ini vorhanden
             incRG = inif.getBooleanProperty("BarKasse", "Rezeptgebuehren");
             incVerk = inif.getBooleanProperty("BarKasse", "Verkaeufe");
@@ -543,7 +544,7 @@ public class Barkasse extends JXPanel implements RgVkPr_IfCallBack {
     private void saveLastSelection() {
         if (!settingsLocked) { // ini-Eintraege duerfen aktualisiert werden
             readLastSelection();
-            Settings inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/",
+            Settings inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Betriebsumfeld.getAktIK() + "/",
                     "bedienung.ini");
             if ((selPan.useRGR() != incRG) || (selPan.useVKR() != incVerk) || (selPan.usePR() != incPR)) {
                 inif.setBooleanProperty("BarKasse", "Rezeptgebuehren", selPan.useRGR(),

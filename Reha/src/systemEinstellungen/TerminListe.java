@@ -3,7 +3,7 @@ package systemEinstellungen;
 import java.util.Vector;
 
 import environment.Path;
-import hauptFenster.Reha;
+import umfeld.Betriebsumfeld;
 
 public class TerminListe {
     public int AnzahlTerminTabellen;
@@ -16,7 +16,7 @@ public class TerminListe {
     public String NameTemplate;
     public String NameTerminDrucker;
     public String iniName = "terminliste.ini";
-    public String iniPfad = Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/";
+    public String iniPfad = Path.Instance.getProghome() + "ini/" + Betriebsumfeld.getAktIK() + "/";
     public int PatNameDrucken;
     public int MitUeberschrift;
     public boolean DirektDruck;

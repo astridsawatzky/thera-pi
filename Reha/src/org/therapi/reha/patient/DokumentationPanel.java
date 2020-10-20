@@ -95,6 +95,7 @@ import uk.co.mmscomputing.device.twain.TwainConstants;
 import uk.co.mmscomputing.device.twain.TwainIOMetadata;
 import uk.co.mmscomputing.device.twain.TwainImageLayout;
 import uk.co.mmscomputing.device.twain.TwainSource;
+import umfeld.Betriebsumfeld;
 
 public class DokumentationPanel extends JXPanel
         implements ActionListener, TableModelListener, PropertyChangeListener, ScannerListener {
@@ -2168,8 +2169,8 @@ public class DokumentationPanel extends JXPanel
         }
         String dest = null;
         if (art == 0) {
-            String src = Path.Instance.getProghome() + "vorlagen/" + Reha.getAktIK() + "/EmptyWriterDoku.ott";
-            dest = Path.Instance.getProghome() + "temp/" + Reha.getAktIK() + "/" + value + ".odt";
+            String src = Path.Instance.getProghome() + "vorlagen/" + Betriebsumfeld.getAktIK() + "/EmptyWriterDoku.ott";
+            dest = Path.Instance.getProghome() + "temp/" + Betriebsumfeld.getAktIK() + "/" + value + ".odt";
 
             try {
                 Files.copy(Paths.get(src), Paths.get(dest), StandardCopyOption.REPLACE_EXISTING);
@@ -2180,8 +2181,8 @@ public class DokumentationPanel extends JXPanel
                 JOptionPane.showMessageDialog(null, "Fehler kann neues WriterDokument nicht erzeugen");
             }
         } else if (art == 1) {
-            String src = Path.Instance.getProghome() + "vorlagen/" + Reha.getAktIK() + "/EmptyCalcDoku.ots";
-            dest = Path.Instance.getProghome() + "temp/" + Reha.getAktIK() + "/" + value + ".ods";
+            String src = Path.Instance.getProghome() + "vorlagen/" + Betriebsumfeld.getAktIK() + "/EmptyCalcDoku.ots";
+            dest = Path.Instance.getProghome() + "temp/" + Betriebsumfeld.getAktIK() + "/" + value + ".ods";
 
             try {
                 Files.copy(Paths.get(src), Paths.get(dest), StandardCopyOption.REPLACE_EXISTING);
@@ -2193,10 +2194,10 @@ public class DokumentationPanel extends JXPanel
                 JOptionPane.showMessageDialog(null, "Fehler kann neues CalcDokument nicht erzeugen");
             }
         } else if (art == 2) {
-            String src = Path.Instance.getProghome() + "vorlagen/" + Reha.getAktIK() + "/"
+            String src = Path.Instance.getProghome() + "vorlagen/" + Betriebsumfeld.getAktIK() + "/"
                     + SystemConfig.vOwnDokuTemplate.get(vecnum)
                                                    .get(1);
-            dest = Path.Instance.getProghome() + "temp/" + Reha.getAktIK() + "/" + value + "-"
+            dest = Path.Instance.getProghome() + "temp/" + Betriebsumfeld.getAktIK() + "/" + value + "-"
                     + Reha.instance.patpanel.aktPatID + testName(value) + ".odt";
             try {
                 Files.copy(Paths.get(src), Paths.get(dest), StandardCopyOption.REPLACE_EXISTING);
@@ -2208,10 +2209,10 @@ public class DokumentationPanel extends JXPanel
                 JOptionPane.showMessageDialog(null, "Fehler kann neues WriterDokument nicht erzeugen");
             }
         } else if (art == 3) {
-            String src = Path.Instance.getProghome() + "vorlagen/" + Reha.getAktIK() + "/"
+            String src = Path.Instance.getProghome() + "vorlagen/" + Betriebsumfeld.getAktIK() + "/"
                     + SystemConfig.vOwnDokuTemplate.get(vecnum)
                                                    .get(1);
-            dest = Path.Instance.getProghome() + "temp/" + Reha.getAktIK() + "/" + value + "-"
+            dest = Path.Instance.getProghome() + "temp/" + Betriebsumfeld.getAktIK() + "/" + value + "-"
                     + Reha.instance.patpanel.aktPatID + testName(value) + ".ods";
             try {
 

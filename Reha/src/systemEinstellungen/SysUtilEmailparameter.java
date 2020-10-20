@@ -32,6 +32,7 @@ import crypt.Verschluesseln;
 import emailHandling.EmailSendenExtern;
 import environment.Path;
 import hauptFenster.Reha;
+import umfeld.Betriebsumfeld;
 
 public class SysUtilEmailparameter extends JXPanel implements KeyListener, ActionListener {
 
@@ -329,7 +330,7 @@ public class SysUtilEmailparameter extends JXPanel implements KeyListener, Actio
             mailmap.put("SmtpSecure", Secure.getSelectedItem()
                                             .toString());
             mailmap.put("SmtpPort", useport);
-            Settings ini = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/", "email.ini");
+            Settings ini = INITool.openIni(Path.Instance.getProghome() + "ini/" + Betriebsumfeld.getAktIK() + "/", "email.ini");
             ini.setStringProperty(postfach, "SenderAdresse", sender, null);
             ini.setStringProperty(postfach, "EmpfangBestaetigen", bestaetigung, null);
             ini.setStringProperty(postfach, "Username", benutzer, null);

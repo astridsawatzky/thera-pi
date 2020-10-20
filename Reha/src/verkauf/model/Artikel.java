@@ -4,7 +4,7 @@ import java.text.DecimalFormat;
 import java.util.Vector;
 
 import CommonTools.SqlInfo;
-import hauptFenster.Reha;
+import umfeld.Betriebsumfeld;
 import verkauf.MwSTSatz;
 import verkauf.MwSt;
 
@@ -86,7 +86,7 @@ public class Artikel {
         this.update();
         String sql = "INSERT INTO verkfaktura (verkfakturaID, v_nummer, art_id, art_beschreibung, art_einzelpreis, art_mwst, anzahl, pat_id, ik) "
                 + "VALUES (NULL, '" + vnummer + "', '" + this.id + "', '" + this.getBeschreibung() + "', '" + vpreis
-                + "', '" + MwSTSatz.now( this.myMwSt)+ "', '" + anzahl + "', '" + patid + "', '" + Reha.getAktIK() + "')";
+                + "', '" + MwSTSatz.now( this.myMwSt)+ "', '" + anzahl + "', '" + patid + "', '" + Betriebsumfeld.getAktIK() + "')";
         SqlInfo.sqlAusfuehren(sql);
     }
 

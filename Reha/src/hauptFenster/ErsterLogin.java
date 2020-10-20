@@ -18,6 +18,7 @@ import environment.Path;
 import oOorgTools.RehaOOTools;
 import ocf.OcKVK;
 import systemEinstellungen.SystemConfig;
+import umfeld.Betriebsumfeld;
 
 final class ErsterLogin implements Runnable {
     private void Login() {
@@ -45,7 +46,7 @@ final class ErsterLogin implements Runnable {
                     .setExtendedState(JXFrame.MAXIMIZED_BOTH);
                 Reha.getThisFrame()
                     .setVisible(true);
-                Settings inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/",
+                Settings inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Betriebsumfeld.getAktIK() + "/",
                         "rehajava.ini");
                 if (inif.getIntegerProperty("HauptFenster", "Divider1") != null) {
                     Reha.instance.jSplitLR.setDividerLocation(

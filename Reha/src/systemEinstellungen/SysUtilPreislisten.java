@@ -49,6 +49,7 @@ import jxTableTools.DoubleTableCellRenderer;
 import jxTableTools.MitteRenderer;
 import jxTableTools.TableTool;
 import sqlTools.PLServerAuslesen;
+import umfeld.Betriebsumfeld;
 
 public class SysUtilPreislisten extends JXPanel implements KeyListener, ActionListener {
 
@@ -350,7 +351,7 @@ public class SysUtilPreislisten extends JXPanel implements KeyListener, ActionLi
 
     private void fuelleMitWerten() {
         int aktiv;
-        Settings inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/", "rezept.ini");
+        Settings inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Betriebsumfeld.getAktIK() + "/", "rezept.ini");
 
         for (int i = 0; i < 5; i++) {
             aktiv = inif.getIntegerProperty("RezeptKlassen", "KlasseAktiv" + Integer.valueOf(i + 1)
@@ -625,7 +626,7 @@ public class SysUtilPreislisten extends JXPanel implements KeyListener, ActionLi
                                             .set(jcmb[1].getSelectedIndex(), xgueltig);
             SystemPreislisten.hmNeuePreiseRegel.get(diszis[jcmb[0].getSelectedIndex()])
                                                .set(jcmb[1].getSelectedIndex(), jcmb[2].getSelectedIndex());
-            Settings inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/",
+            Settings inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Betriebsumfeld.getAktIK() + "/",
                     "preisgruppen.ini");
             inif.setStringProperty("PreisRegeln_" + diszis[jcmb[0].getSelectedIndex()], "PreisAb" + (diswelche),
                     xgueltig, null);

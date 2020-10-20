@@ -30,6 +30,7 @@ import CommonTools.ini.Settings;
 import environment.Path;
 import hauptFenster.Reha;
 import terminKalender.TerminFenster;
+import umfeld.Betriebsumfeld;
 
 public class SysUtilKalenderfarben extends JXPanel implements ActionListener {
 
@@ -197,7 +198,7 @@ public class SysUtilKalenderfarben extends JXPanel implements ActionListener {
                 defName = "UserFarben";
             }
 
-            Settings ini = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/", colorini);
+            Settings ini = INITool.openIni(Path.Instance.getProghome() + "ini/" + Betriebsumfeld.getAktIK() + "/", colorini);
 
             for (int i = 0; i < lang; i++) {
                 hg = ((Color) FarbTab.getValueAt(i, 2));

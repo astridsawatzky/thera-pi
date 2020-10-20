@@ -50,6 +50,7 @@ import suchen.PatMitAbgebrochenenVOs;
 import suchen.PatMitVollenVOs;
 import systemEinstellungen.SystemConfig;
 import systemEinstellungen.config.Datenbank;
+import umfeld.Betriebsumfeld;
 
 public class SuchenDialog extends JXDialog implements RehaTPEventListener {
 
@@ -903,10 +904,10 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener {
                     sstmt = select1 + "anamnese LIKE '%" + suche[0] + "%'" + orderResult;
                 }
             } else if (suchart == toolBar.getVolleVoIdx()) { // Patienten mit vollen, nicht abgeschlossenen Rezepten (® by Norbart/Astrid)
-                PatMitVollenVOs treffer = new PatMitVollenVOs(new IK(Reha.getAktIK()));
+                PatMitVollenVOs treffer = new PatMitVollenVOs(new IK(Betriebsumfeld.getAktIK()));
                 extErgebnis = treffer.getPatList();
             } else if (suchart == toolBar.getAbgebrVoIdx()) { // Patienten mit abgebrochenen Rezepten (® by MSc)
-                PatMitAbgebrochenenVOs treffer = new PatMitAbgebrochenenVOs(new IK(Reha.getAktIK()));
+                PatMitAbgebrochenenVOs treffer = new PatMitAbgebrochenenVOs(new IK(Betriebsumfeld.getAktIK()));
                 extErgebnis = treffer.getPatList();
             } else if (suchart == toolBar.getAktRezIdx()) { // Lemmi 20101212: Erweitert um "Nur Patienten mit aktuellen
                                                             // Rezepten"

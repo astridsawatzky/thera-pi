@@ -49,6 +49,7 @@ import environment.Path;
 import hauptFenster.Reha;
 import hilfsFenster.NeueGruppe;
 import jxTableTools.ZeitTableCellEditor;
+import umfeld.Betriebsumfeld;
 
 public class SysUtilGruppenDef extends JXPanel implements KeyListener, ActionListener {
     /**
@@ -86,7 +87,7 @@ public class SysUtilGruppenDef extends JXPanel implements KeyListener, ActionLis
     static String editGruppenName = null;
     static String editGruppenGueltigAb = null;
     static String gruppeninidat = "gruppen.ini";
-    static String gruppeninipfad = Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/";
+    static String gruppeninipfad = Path.Instance.getProghome() + "ini/" + Betriebsumfeld.getAktIK() + "/";
 
     boolean ltermneu = false, ltermedit = false;
     boolean lgruppeneu = false, lgruppeedit = false;

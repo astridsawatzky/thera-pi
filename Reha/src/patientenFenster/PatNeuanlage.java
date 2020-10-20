@@ -85,6 +85,7 @@ import stammDatenTools.ZuzahlTools;
 import sun.awt.image.ToolkitImage;
 import systemEinstellungen.SystemConfig;
 import systemTools.ListenerTools;
+import umfeld.Betriebsumfeld;
 
 public class PatNeuanlage extends JXPanel implements RehaTPEventListener, ActionListener, KeyListener, FocusListener {
 
@@ -1924,7 +1925,7 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener, Action
             @Override
             protected Void doInBackground() throws Exception {
                 try {
-                    Settings inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/",
+                    Settings inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Betriebsumfeld.getAktIK() + "/",
                             "arzt.ini");
                     int forms = inif.getIntegerProperty("Formulare", "ArztFormulareAnzahl");
                     for (int i = 1; i <= forms; i++) {
@@ -1960,7 +1961,7 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener, Action
                     @Override
                     protected Void doInBackground() throws Exception {
                         ArztTools.constructArztHMap(xid);
-                        RehaOOTools.starteStandardFormular(Path.Instance.getProghome() + "vorlagen/" + Reha.getAktIK() + "/"
+                        RehaOOTools.starteStandardFormular(Path.Instance.getProghome() + "vorlagen/" + Betriebsumfeld.getAktIK() + "/"
                                 + formular.get(iformular), null,Reha.instance);
                         return null;
                     }

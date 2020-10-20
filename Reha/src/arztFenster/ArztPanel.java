@@ -65,6 +65,7 @@ import oOorgTools.RehaOOTools;
 import rehaInternalFrame.JArztInternal;
 import stammDatenTools.ArztTools;
 import systemEinstellungen.SystemConfig;
+import umfeld.Betriebsumfeld;
 
 public class ArztPanel extends JXPanel implements PropertyChangeListener, TableModelListener, KeyListener,
         FocusListener, ActionListener, MouseListener {
@@ -620,7 +621,7 @@ public class ArztPanel extends JXPanel implements PropertyChangeListener, TableM
             @Override
             protected Void doInBackground() throws Exception {
 
-                Settings inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/",
+                Settings inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Betriebsumfeld.getAktIK() + "/",
                         "arzt.ini");
                 int forms = inif.getIntegerProperty("Formulare", "ArztFormulareAnzahl");
                 for (int i = 1; i <= forms; i++) {
@@ -655,7 +656,7 @@ public class ArztPanel extends JXPanel implements PropertyChangeListener, TableM
                     protected Void doInBackground() throws Exception {
                         try {
                             ArztTools.constructArztHMap(xid);
-                            RehaOOTools.starteStandardFormular(Path.Instance.getProghome() + "vorlagen/" + Reha.getAktIK()
+                            RehaOOTools.starteStandardFormular(Path.Instance.getProghome() + "vorlagen/" + Betriebsumfeld.getAktIK()
                                     + "/" + formular.get(iformular), null,Reha.instance);
                         } catch (Exception ex) {
                             JOptionPane.showMessageDialog(null, "Fehler beim Bezug der Arztadresse");

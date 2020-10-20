@@ -36,6 +36,7 @@ import environment.Path;
 import gui.Cursors;
 import hauptFenster.Reha;
 import office.OOService;
+import umfeld.Betriebsumfeld;
 
 class DruckeViewPanel extends SwingWorker<Void, Void> {
     private JXPanel printPan = null;
@@ -62,7 +63,7 @@ class DruckeViewPanel extends SwingWorker<Void, Void> {
             g2d.dispose();
             speichernQualitaet("", 1.0F);
 
-            String url = Path.Instance.getProghome() + "vorlagen/" + Reha.getAktIK() + "/terminshot_.ott";
+            String url = Path.Instance.getProghome() + "vorlagen/" + Betriebsumfeld.getAktIK() + "/terminshot_.ott";
             IDocumentService documentService = new OOService().getOfficeapplication().getDocumentService();
             IDocumentDescriptor docdescript = new DocumentDescriptor();
             docdescript.setHidden(false);

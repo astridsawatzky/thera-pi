@@ -9,8 +9,8 @@ import CommonTools.ini.INITool;
 import CommonTools.ini.Settings;
 import emailHandling.EmailSendenExtern;
 import environment.Path;
-import hauptFenster.Reha;
 import systemEinstellungen.SystemConfig;
+import umfeld.Betriebsumfeld;
 
 public class ErrorMail extends Thread {
     String fehlertext = null;
@@ -31,7 +31,7 @@ public class ErrorMail extends Thread {
 
     @Override
     public void run() {
-        Settings ini = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/", "error.ini");
+        Settings ini = INITool.openIni(Path.Instance.getProghome() + "ini/" + Betriebsumfeld.getAktIK() + "/", "error.ini");
         String empfaenger = ini.getStringProperty("Email", "RecipientAdress");
         EmailSendenExtern oMail = new EmailSendenExtern();
         String smtphost = SystemConfig.hmEmailIntern.get("SmtpHost");

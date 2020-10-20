@@ -90,6 +90,7 @@ import suchen.PatMitAbgebrochenenVOs;
 import suchen.PatMitVollenVOs;
 import systemEinstellungen.SystemConfig;
 import systemEinstellungen.SystemPreislisten;
+import umfeld.Betriebsumfeld;
 
 public class AbrechnungGKV extends JXPanel {
 
@@ -239,8 +240,8 @@ public class AbrechnungGKV extends JXPanel {
         new SwingWorker<Void, Void>() {
             @Override
             protected Void doInBackground() throws Exception {
-                volleVOs = new PatMitVollenVOs(new IK(Reha.getAktIK())).getVoList();
-                abgebrocheneVOs = new PatMitAbgebrochenenVOs(new IK(Reha.getAktIK())).getVoList();
+                volleVOs = new PatMitVollenVOs(new IK(Betriebsumfeld.getAktIK())).getVoList();
+                abgebrocheneVOs = new PatMitAbgebrochenenVOs(new IK(Betriebsumfeld.getAktIK())).getVoList();
                 return null;
             }
 
@@ -248,7 +249,7 @@ public class AbrechnungGKV extends JXPanel {
     }
 
     public void setEncryptTitle() {
-        this.jry.setzeTitel(originalTitel + " [Abrechnung für IK: " + Reha.getAktIK() + " - Zertifikat von IK: "
+        this.jry.setzeTitel(originalTitel + " [Abrechnung für IK: " + Betriebsumfeld.getAktIK() + " - Zertifikat von IK: "
                 + zertifikatVon.replace("IK", "") + "]");
         this.jry.repaint();
     }
@@ -374,7 +375,7 @@ public class AbrechnungGKV extends JXPanel {
                     abrRez.setRechtsAufNull();
                     aktuellerPat = "";
                 }
-                jry.setzeTitel(originalTitel + " [Abrechnung für IK: " + Reha.getAktIK() + " - Zertifikat von IK: "
+                jry.setzeTitel(originalTitel + " [Abrechnung für IK: " + Betriebsumfeld.getAktIK() + " - Zertifikat von IK: "
                         + zertifikatVon.replace("IK", "") + "] [Disziplin: " + aktDisziplin + "]");
                 doEinlesen(null, null);
             }
@@ -1294,7 +1295,7 @@ TreeSelectionListener treeSelectionListener = new TreeSelectionListener() {
             if (abrechnungsModus.equals(ABR_MODE_302)) {
                 try {
 
-                    f = new File(Path.Instance.getProghome() + "edifact/" + Reha.getAktIK() + "/" + "esol0" + aktEsol
+                    f = new File(Path.Instance.getProghome() + "edifact/" + Betriebsumfeld.getAktIK() + "/" + "esol0" + aktEsol
                             + ".org");
                     fw = new FileWriter(f);
                     bw = new BufferedWriter(fw);
@@ -1334,7 +1335,7 @@ TreeSelectionListener treeSelectionListener = new TreeSelectionListener() {
 
                     doAuftragsDatei(originalSize, encryptedSize);
 
-                    f = new File(Path.Instance.getProghome() + "edifact/" + Reha.getAktIK() + "/" + "esol0" + aktEsol
+                    f = new File(Path.Instance.getProghome() + "edifact/" + Betriebsumfeld.getAktIK() + "/" + "esol0" + aktEsol
                             + ".auf");
                     fw = new FileWriter(f);
                     bw = new BufferedWriter(fw);
@@ -1401,7 +1402,7 @@ TreeSelectionListener treeSelectionListener = new TreeSelectionListener() {
     private void cancelRechnung(String aktRnr) {
         if (aktRnr != null) {
             SqlInfo.sqlAusfuehren(
-                    "update nummern set rnr='" + aktRnr + "' where mandant='" + Reha.getAktIK() + "' LIMIT 1");
+                    "update nummern set rnr='" + aktRnr + "' where mandant='" + Betriebsumfeld.getAktIK() + "' LIMIT 1");
         }
         doDlgAbort();
     }
@@ -1432,10 +1433,10 @@ TreeSelectionListener treeSelectionListener = new TreeSelectionListener() {
             boolean authx = (authent.equals("0") ? false : true);
             boolean bestaetigen = false;
             String[] encodedDat = {
-                    Path.Instance.getProghome() + "edifact/" + Reha.getAktIK() + "/" + "esol0" + aktEsol,
+                    Path.Instance.getProghome() + "edifact/" + Betriebsumfeld.getAktIK() + "/" + "esol0" + aktEsol,
                     "esol0" + aktEsol };
             String[] aufDat = {
-                    Path.Instance.getProghome() + "edifact/" + Reha.getAktIK() + "/" + "esol0" + aktEsol + ".auf",
+                    Path.Instance.getProghome() + "edifact/" + Betriebsumfeld.getAktIK() + "/" + "esol0" + aktEsol + ".auf",
                     "esol0" + aktEsol + ".auf" };
             ArrayList<String[]> attachments = new ArrayList<String[]>();
             attachments.add(encodedDat);
@@ -1579,7 +1580,7 @@ TreeSelectionListener treeSelectionListener = new TreeSelectionListener() {
                     "123456", zertifikatVon.replace("IK", ""));
 
             NebraskaEncryptor encryptor = store.getEncryptor(ik_nutzer);
-            String inFile = Path.Instance.getProghome() + "edifact/" + Reha.getAktIK() + "/" + "esol0" + aktEsol
+            String inFile = Path.Instance.getProghome() + "edifact/" + Betriebsumfeld.getAktIK() + "/" + "esol0" + aktEsol
                     + ".org";
             long size = encryptor.encrypt(inFile, inFile.replace(".org", ""));
             return Integer.parseInt(Long.toString(size));
@@ -1673,7 +1674,7 @@ TreeSelectionListener treeSelectionListener = new TreeSelectionListener() {
                     try {
                         Thread.sleep(100);
                         new BegleitzettelDrucken(AbrechnungGKV.this, abrechnungRezepte, ik_kostent, name_kostent, hmAnnahme,
-                                aktRechnung, Path.Instance.getProghome() + "vorlagen/" + Reha.getAktIK() + "/"
+                                aktRechnung, Path.Instance.getProghome() + "vorlagen/" + Betriebsumfeld.getAktIK() + "/"
                                         + SystemConfig.hmAbrechnung.get("hmgkvbegleitzettel"));
                     } catch (Exception ex) {
                         JOptionPane.showMessageDialog(null,
@@ -1702,7 +1703,7 @@ TreeSelectionListener treeSelectionListener = new TreeSelectionListener() {
         unbBuf.append("2" + EOL);
 
         unbBuf.append("UNH+00001+SLGA:" + SlgaVersion + ":0:0" + EOL);
-        unbBuf.append("FKT+01" + plus + plus + Reha.getAktIK() + plus + ik_kostent + plus + ik_kasse + plus
+        unbBuf.append("FKT+01" + plus + plus + Betriebsumfeld.getAktIK() + plus + ik_kostent + plus + ik_kasse + plus
                 + zertifikatVon.replace("IK", "") + EOL);
         unbBuf.append("REC" + plus + aktRechnung + ":0" + plus + getEdiDatumFromDeutsch(DatFunk.sHeute()) + plus
                 + (lOwnCert ? "1" : "2") + EOL);
@@ -1732,7 +1733,7 @@ TreeSelectionListener treeSelectionListener = new TreeSelectionListener() {
                 + plus + SystemConfig.hmFirmenDaten.get("Telefon") + EOL);
         unbBuf.append("UNT+000010+00001" + EOL);
         unbBuf.append("UNH+00002+SLLA:" + SllaVersion + ":0:0" + EOL);
-        unbBuf.append("FKT+01" + plus + plus + Reha.getAktIK() + plus + ik_kostent + plus + ik_kasse + EOL);
+        unbBuf.append("FKT+01" + plus + plus + Betriebsumfeld.getAktIK() + plus + ik_kostent + plus + ik_kasse + EOL);
         unbBuf.append("REC" + plus + aktRechnung + ":0" + plus + getEdiDatumFromDeutsch(DatFunk.sHeute()) + plus
                 + (lOwnCert ? "1" : "2") + EOL);
         getEdiTimeString(false);
@@ -1842,7 +1843,7 @@ TreeSelectionListener treeSelectionListener = new TreeSelectionListener() {
         try {
             if (SystemConfig.hmAbrechnung.get("hmgkvrauchdrucken")
                                          .equals("1")) {
-                abrDruck = new AbrechnungDrucken(this, Path.Instance.getProghome() + "vorlagen/" + Reha.getAktIK() + "/"
+                abrDruck = new AbrechnungDrucken(this, Path.Instance.getProghome() + "vorlagen/" + Betriebsumfeld.getAktIK() + "/"
                         + SystemConfig.hmAbrechnung.get("hmgkvformular"));
             }
 
@@ -1930,7 +1931,7 @@ TreeSelectionListener treeSelectionListener = new TreeSelectionListener() {
                                              .replace(",", ".")
                 + "', ");
         rechnungBuf.append("ikktraeger='" + ik_kostent + "',");
-        rechnungBuf.append("ik='" + Reha.getAktIK() + "'");
+        rechnungBuf.append("ik='" + Betriebsumfeld.getAktIK() + "'");
         SqlInfo.sqlAusfuehren(rechnungBuf.toString());
     }
 
@@ -2144,7 +2145,7 @@ TreeSelectionListener treeSelectionListener = new TreeSelectionListener() {
             rechnungBuf.append("zuzahldiff='" + (zuzahlUmstellung ? "T" : "F") + "', ");
             rechnungBuf.append("disziplin='" + kopf[2].split("=")[1].subSequence(0, 2) + "', ");
             rechnungBuf.append("rdatum='" + DatFunk.sDatInSQL(DatFunk.sHeute()) + "',");
-            rechnungBuf.append("ik='" + Reha.getAktIK() + "'");
+            rechnungBuf.append("ik='" + Betriebsumfeld.getAktIK() + "'");
             SqlInfo.sqlAusfuehren(rechnungBuf.toString());
         }
 

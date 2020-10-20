@@ -38,6 +38,7 @@ import events.RehaTPEventClass;
 import events.RehaTPEventListener;
 import hauptFenster.Reha;
 import systemEinstellungen.SystemConfig;
+import umfeld.Betriebsumfeld;
 
 public class Floskeln extends JXDialog
         implements ActionListener, MouseListener, WindowListener, KeyListener, RehaTPEventListener {
@@ -130,7 +131,7 @@ public class Floskeln extends JXDialog
     }
 
     private void fuellen() {
-        Settings ini = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/", "floskeln.ini");
+        Settings ini = INITool.openIni(Path.Instance.getProghome() + "ini/" + Betriebsumfeld.getAktIK() + "/", "floskeln.ini");
         int floskeln = Integer.parseInt(ini.getStringProperty("Floskeln", "FloskelAnzahl"));
         Vector<String> vec = new Vector<String>();
         for (int i = 0; i < floskeln; i++) {

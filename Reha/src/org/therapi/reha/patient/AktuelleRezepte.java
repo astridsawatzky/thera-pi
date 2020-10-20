@@ -100,6 +100,7 @@ import systemEinstellungen.SystemConfig;
 import systemEinstellungen.SystemPreislisten;
 import systemTools.IconListRenderer;
 import systemTools.ListenerTools;
+import umfeld.Betriebsumfeld;
 
 public class AktuelleRezepte extends JXPanel implements ListSelectionListener, TableModelListener,
         TableColumnModelExtListener, PropertyChangeListener, ActionListener {
@@ -338,7 +339,7 @@ public class AktuelleRezepte extends JXPanel implements ListSelectionListener, T
                     @Override
                     protected Void doInBackground() throws Exception {
                         RezTools.constructRawHMap();
-                        RehaOOTools.starteStandardFormular(Path.Instance.getProghome() + "vorlagen/" + Reha.getAktIK()
+                        RehaOOTools.starteStandardFormular(Path.Instance.getProghome() + "vorlagen/" + Betriebsumfeld.getAktIK()
                                 + "/" + formular.get(iformular), null, Reha.instance);
                         return null;
                     }
@@ -1563,7 +1564,7 @@ public class AktuelleRezepte extends JXPanel implements ListSelectionListener, T
         new SwingWorker<Void, Void>() {
             @Override
             protected Void doInBackground() throws Exception {
-                Settings inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/",
+                Settings inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Betriebsumfeld.getAktIK() + "/",
                         "rezept.ini");
                 int forms = inif.getIntegerProperty("Formulare", "RezeptFormulareAnzahl");
                 for (int i = 1; i <= forms; i++) {
@@ -2822,7 +2823,7 @@ public class AktuelleRezepte extends JXPanel implements ListSelectionListener, T
         resetHmAdrRData();
         RezTools.testeRezGebArt(true, false, Reha.instance.patpanel.vecaktrez.get(1),
                 Reha.instance.patpanel.vecaktrez.get(34));
-        SystemConfig.hmAdrRDaten.put("<Bcik>", Reha.getAktIK());
+        SystemConfig.hmAdrRDaten.put("<Bcik>", Betriebsumfeld.getAktIK());
         String bcreznr = Reha.instance.patpanel.vecaktrez.get(1)
                                                          .toString();
         if (bcreznr.startsWith("RS") || bcreznr.startsWith("FT")) {
@@ -2840,7 +2841,7 @@ public class AktuelleRezepte extends JXPanel implements ListSelectionListener, T
         SystemConfig.hmAdrRDaten.put("<Bnr>", SystemConfig.hmAdrRDaten.get("<Rnummer>"));
         SystemConfig.hmAdrRDaten.put("<Buser>", Reha.aktUser);
         SystemConfig.hmAdrRDaten.put("<Rpatid>", Reha.instance.patpanel.vecaktrez.get(0));
-        RehaOOTools.starteBacrodeFormular(Path.Instance.getProghome() + "vorlagen/" + Reha.getAktIK() + "/" + url,
+        RehaOOTools.starteBacrodeFormular(Path.Instance.getProghome() + "vorlagen/" + Betriebsumfeld.getAktIK() + "/" + url,
                 SystemConfig.rezBarcodeDrucker, Reha.instance);
 
     }

@@ -35,6 +35,7 @@ import CommonTools.ini.Settings;
 import environment.Path;
 import gui.Cursors;
 import hauptFenster.Reha;
+import umfeld.Betriebsumfeld;
 
 public class SysUtilKrankenkasse extends JXPanel implements KeyListener, ActionListener, SysInitCommon_If {
 
@@ -294,9 +295,9 @@ public class SysUtilKrankenkasse extends JXPanel implements KeyListener, ActionL
          */
 
         vorlagen = new SysUtilVorlagen(this);
-        vorlagen.setVPfad(Path.Instance.getProghome() + "vorlagen/" + Reha.getAktIK());
+        vorlagen.setVPfad(Path.Instance.getProghome() + "vorlagen/" + Betriebsumfeld.getAktIK());
 
-        vorlagen.setIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK(), "kasse.ini");
+        vorlagen.setIni(Path.Instance.getProghome() + "ini/" + Betriebsumfeld.getAktIK(), "kasse.ini");
         vorlagen.setLabels("Formulare", "KassenFormulareAnzahl", "KFormular");
         vorlagen.activateEditing();
 

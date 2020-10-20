@@ -51,6 +51,7 @@ import hauptFenster.Reha;
 import jxTableTools.DateTableCellEditor;
 import jxTableTools.MitteRenderer;
 import preisListenHandling.MachePreisListe;
+import umfeld.Betriebsumfeld;
 
 public class SysUtilTarifgruppen extends JXPanel implements KeyListener, ActionListener {
     /**
@@ -526,7 +527,7 @@ public class SysUtilTarifgruppen extends JXPanel implements KeyListener, ActionL
     private void doSpeichern() {
         // String wert = "";
         try {
-            Settings inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/",
+            Settings inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Betriebsumfeld.getAktIK() + "/",
                     "preisgruppen.ini");
 
             // int lang = SystemConfig.vPreisGruppen.size();
@@ -934,7 +935,7 @@ public class SysUtilTarifgruppen extends JXPanel implements KeyListener, ActionL
 
     private void setzeIniEintraege(int position, String commonname) {
         try {
-            Settings inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/",
+            Settings inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Betriebsumfeld.getAktIK() + "/",
                     "preisgruppen.ini");
             inif.setIntegerProperty("PreisGruppen_Common", "AnzahlPreisGruppen", position, null);
             inif.setStringProperty("PreisGruppen_Common", "PGName" + Integer.toString(position), commonname, null);

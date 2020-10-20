@@ -32,6 +32,7 @@ import environment.Path;
 import hauptFenster.Reha;
 import office.OOService;
 import systemEinstellungen.SystemConfig;
+import umfeld.Betriebsumfeld;
 
 public class TerminplanDrucken extends Thread {
     private Vector<TermObjekt> termindat = null;
@@ -60,7 +61,7 @@ public class TerminplanDrucken extends Thread {
 
     @Override
     public synchronized void run() {
-        String url = Path.Instance.getProghome() + "vorlagen/" + Reha.getAktIK() + "/"
+        String url = Path.Instance.getProghome() + "vorlagen/" + Betriebsumfeld.getAktIK() + "/"
                 + SystemConfig.oTerminListe.NameTemplate;
         String terminDrucker = SystemConfig.oTerminListe.NameTerminDrucker;
         int anzahl = termindat.size();
@@ -473,7 +474,7 @@ public class TerminplanDrucken extends Thread {
             }
         } else {
 
-            exporturl = Path.Instance.getProghome() + "temp/" + Reha.getAktIK() + "/Terminplan.pdf";
+            exporturl = Path.Instance.getProghome() + "temp/" + Betriebsumfeld.getAktIK() + "/Terminplan.pdf";
             File f = new File(exporturl);
             if (f.exists()) {
                 f.delete();
@@ -590,7 +591,7 @@ public class TerminplanDrucken extends Thread {
          * bis hierher lediglich Emailadressen gewurschtel
          **************************/
         String[] anhang = { null, null };
-        anhang[0] = Path.Instance.getProghome() + "temp/" + Reha.getAktIK() + "/Terminplan.pdf";
+        anhang[0] = Path.Instance.getProghome() + "temp/" + Betriebsumfeld.getAktIK() + "/Terminplan.pdf";
         anhang[1] = "Terminplan.pdf";
 
         File f = new File(anhang[0]);
@@ -629,7 +630,7 @@ public class TerminplanDrucken extends Thread {
                                                          .equals("0") ? false : true);
         String text = "";
         /*********/
-        File file = new File(Path.Instance.getProghome() + "vorlagen/" + Reha.getAktIK() + "/EmailTerminliste.txt");
+        File file = new File(Path.Instance.getProghome() + "vorlagen/" + Betriebsumfeld.getAktIK() + "/EmailTerminliste.txt");
         try {
             // FileReader zum Lesen aus Datei
             FileReader fr = new FileReader(file);

@@ -23,6 +23,7 @@ import CommonTools.ini.INITool;
 import CommonTools.ini.Settings;
 import environment.Path;
 import hauptFenster.Reha;
+import umfeld.Betriebsumfeld;
 
 public class SysUtilAnschluesse extends JXPanel implements KeyListener, ActionListener {
     /**
@@ -162,7 +163,7 @@ public class SysUtilAnschluesse extends JXPanel implements KeyListener, ActionLi
         params[2] = (String) parity.getSelectedItem();
         params[3] = (String) stopbits.getSelectedItem();
 
-        Settings inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/", "geraete.ini");
+        Settings inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Betriebsumfeld.getAktIK() + "/", "geraete.ini");
         inif.setStringProperty(com, "BaudRate", params[0], null);
         inif.setStringProperty(com, "Bits", params[1], null);
         inif.setStringProperty(com, "Parity", params[2], null);

@@ -35,9 +35,9 @@ import com.jgoodies.forms.layout.FormLayout;
 import dialoge.RehaSmartDialog;
 import environment.Path;
 import gui.Cursors;
-import hauptFenster.Reha;
 import rehaContainer.RehaTP;
 import systemEinstellungen.SysUtilDruckvorlage;
+import umfeld.Betriebsumfeld;
 
 public class EmailText implements KeyListener, ActionListener, FocusListener {
 
@@ -100,7 +100,7 @@ public class EmailText implements KeyListener, ActionListener, FocusListener {
 
         String text = "";
         /*********/
-        File file = new File(Path.Instance.getProghome() + "vorlagen/" + Reha.getAktIK() + "/EmailTerminliste.txt");
+        File file = new File(Path.Instance.getProghome() + "vorlagen/" + Betriebsumfeld.getAktIK() + "/EmailTerminliste.txt");
         try {
             // FileReader zum Lesen aus Datei
             FileReader fr = new FileReader(file);
@@ -209,7 +209,7 @@ public class EmailText implements KeyListener, ActionListener, FocusListener {
 
                 try {
                     w = new FileWriter(
-                            Path.Instance.getProghome() + "vorlagen/" + Reha.getAktIK() + "/EmailTerminliste.txt");
+                            Path.Instance.getProghome() + "vorlagen/" + Betriebsumfeld.getAktIK() + "/EmailTerminliste.txt");
                     w.write(ta.getText());
 
                 } catch (IOException e) {

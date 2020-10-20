@@ -65,6 +65,7 @@ import office.OOTools;
 import stammDatenTools.RezTools;
 import systemEinstellungen.SystemConfig;
 import systemEinstellungen.SystemPreislisten;
+import umfeld.Betriebsumfeld;
 
 public class AbrechnungPrivat extends JXDialog {
     public static final int OK = 0;
@@ -152,7 +153,7 @@ public class AbrechnungPrivat extends JXDialog {
                 SystemPreislisten.hmPreise.get(RezTools.getDisziplinFromRezNr(Reha.instance.patpanel.vecaktrez.get(1)))
                                           .get(preisgruppe - 1),
                 Reha.instance.patpanel.patDaten.get(5), Reha.instance.patpanel.patDaten.get(66),
-                Reha.instance.patpanel.vecaktrez, Reha.instance.patpanel.patDaten, Reha.getAktIK(),
+                Reha.instance.patpanel.vecaktrez, Reha.instance.patpanel.patDaten, Betriebsumfeld.getAktIK(),
                 SystemConfig.hmAbrechnung.get("hmpriformular"), SystemConfig.hmAbrechnung);
     }
 
@@ -447,7 +448,7 @@ public class AbrechnungPrivat extends JXDialog {
             aktRechnung = Integer.toString(SqlInfo.erzeugeNummer("rnr"));
             hmAdresse.put("<pri6>", aktRechnung);
 
-            starteDokument(Path.Instance.getProghome() + "vorlagen/" + Reha.getAktIK() + "/"
+            starteDokument(Path.Instance.getProghome() + "vorlagen/" + Betriebsumfeld.getAktIK() + "/"
                     + SystemConfig.hmAbrechnung.get("hmbgeformular"));
             starteErsetzen();
             startePositionen();
@@ -619,7 +620,7 @@ public class AbrechnungPrivat extends JXDialog {
                     .append(DatFunk.sDatInSQL(DatFunk.sHeute()))
                     .append("',");
             writeBuf.append("ik='")
-                    .append(Reha.getAktIK())
+                    .append(Betriebsumfeld.getAktIK())
                     .append("'");
             SqlInfo.sqlAusfuehren(writeBuf.toString());
         }
@@ -668,7 +669,7 @@ public class AbrechnungPrivat extends JXDialog {
                    .append(vecaktrez.get(0))
                    .append("',");
         rechnungBuf.append("ik='")
-                   .append(Reha.getAktIK())
+                   .append(Betriebsumfeld.getAktIK())
                    .append("'");
         SqlInfo.sqlAusfuehren(rechnungBuf.toString());
     }

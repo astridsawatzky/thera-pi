@@ -9,6 +9,7 @@ import CommonTools.ini.INITool;
 import CommonTools.ini.Settings;
 import environment.Path;
 import systemEinstellungen.SystemConfig;
+import umfeld.Betriebsumfeld;
 
 public class FrameSave {
     public FrameSave(final Dimension groesse, final Point position, final int container, final int autosize,
@@ -17,7 +18,7 @@ public class FrameSave {
             @Override
             protected Void doInBackground() throws Exception {
                 try {
-                    Settings inifile = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/",
+                    Settings inifile = INITool.openIni(Path.Instance.getProghome() + "ini/" + Betriebsumfeld.getAktIK() + "/",
                             xinifile);
                     inifile.setIntegerProperty("Container", "StarteIn", container, null);
                     inifile.setIntegerProperty("Container", "ImmerOptimieren", autosize, null);

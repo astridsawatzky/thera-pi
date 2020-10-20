@@ -29,6 +29,7 @@ import environment.Path;
 import hauptFenster.Reha;
 import opRgaf.OpRgAfIni;
 import systemTools.ButtonTools;
+import umfeld.Betriebsumfeld;
 
 // Lemmi 20101228 neue Klasse in der System-Inititalisierung
 public class SysUtilOpMahnung extends JXPanel implements ActionListener, ItemListener {
@@ -227,9 +228,9 @@ public class SysUtilOpMahnung extends JXPanel implements ActionListener, ItemLis
     }
 
     private void readFromIni() { // noch umstellen auf iniOP-Klasse! (analog iniOpRgAf)
-        Settings iniOP = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/",
+        Settings iniOP = INITool.openIni(Path.Instance.getProghome() + "ini/" + Betriebsumfeld.getAktIK() + "/",
                 "offeneposten.ini");
-        OpRgAfIni iniOpRgAf = new OpRgAfIni(Path.Instance.getProghome(), "ini/", Reha.getAktIK(), "oprgaf.ini");
+        OpRgAfIni iniOpRgAf = new OpRgAfIni(Path.Instance.getProghome(), "ini/", Betriebsumfeld.getAktIK(), "oprgaf.ini");
 
         String section = "offenePosten";
         if (iniOP.getStringProperty(section, "lockSettings") != null) { // Eintrag in ini vorhanden?
@@ -249,7 +250,7 @@ public class SysUtilOpMahnung extends JXPanel implements ActionListener, ItemLis
         boolean saveChanges = false;
 
         try {
-            Settings iniOP = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/",
+            Settings iniOP = INITool.openIni(Path.Instance.getProghome() + "ini/" + Betriebsumfeld.getAktIK() + "/",
                     "offeneposten.ini");
 
             if (enableOP2BarKasse != iniOP.getBooleanProperty(section, "erlaubeBarzahlung")) {
@@ -273,7 +274,7 @@ public class SysUtilOpMahnung extends JXPanel implements ActionListener, ItemLis
 
         try {
             saveChanges = false;
-            OpRgAfIni iniOpRgAf = new OpRgAfIni(Path.Instance.getProghome(), "ini/", Reha.getAktIK(), "oprgaf.ini");
+            OpRgAfIni iniOpRgAf = new OpRgAfIni(Path.Instance.getProghome(), "ini/", Betriebsumfeld.getAktIK(), "oprgaf.ini");
 
             iniOpRgAf.setVbCashAllowed(enableVBon2BarKasse);
             iniOpRgAf.setVrCashAllowed(enableVRhg2BarKasse);

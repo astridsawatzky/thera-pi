@@ -49,6 +49,7 @@ import office.OOService;
 import office.OOTools;
 import systemEinstellungen.SystemConfig;
 import systemTools.LeistungTools;
+import umfeld.Betriebsumfeld;
 
 public class AusfallRechnung extends RehaSmartDialog implements ActionListener {
     /**
@@ -244,7 +245,7 @@ public class AusfallRechnung extends RehaSmartDialog implements ActionListener {
                 protected Void doInBackground() throws Exception {
                     try {
                         starteAusfallRechnung(
-                                Path.Instance.getProghome() + "vorlagen/" + Reha.getAktIK() + "/AusfallRechnung.ott");
+                                Path.Instance.getProghome() + "vorlagen/" + Betriebsumfeld.getAktIK() + "/AusfallRechnung.ott");
                         doBuchen();
                         if (leistung[4].isSelected()) {
                             macheMemoEintrag();
@@ -289,7 +290,7 @@ public class AusfallRechnung extends RehaSmartDialog implements ActionListener {
                                                           .replace(",", ".")
                 + "', ");
         buf.append("rdatum='" + DatFunk.sDatInSQL(DatFunk.sHeute()) + "',");
-        buf.append("ik='" + Reha.getAktIK() + "'");
+        buf.append("ik='" + Betriebsumfeld.getAktIK() + "'");
         SqlInfo.sqlAusfuehren(buf.toString());
     }
 

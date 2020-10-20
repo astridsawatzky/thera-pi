@@ -14,6 +14,7 @@ import io.RehaIOMessages;
 import oOorgTools.RehaOOTools;
 import opRgaf.OpRgaf;
 import systemEinstellungen.SystemConfig;
+import umfeld.Betriebsumfeld;
 
 class RgrKopie {
 
@@ -23,7 +24,7 @@ class RgrKopie {
                 @Override
                 protected Void doInBackground() throws Exception {
                     try {
-                        OpRgaf.start(Path.Instance.getProghome() , Reha.getAktIK(), Reha.xport);
+                        OpRgaf.start(Path.Instance.getProghome() , Betriebsumfeld.getAktIK(), Reha.xport);
                         long start = System.currentTimeMillis();
                         while (!RehaIOServer.rgAfIsActive) {
                             Thread.sleep(50);

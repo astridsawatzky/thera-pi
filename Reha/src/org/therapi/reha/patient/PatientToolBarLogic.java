@@ -34,6 +34,7 @@ import rechteTools.Rechte;
 import systemEinstellungen.SystemConfig;
 import systemTools.IconListRenderer;
 import terminKalender.iCalRehaExporter;
+import umfeld.Betriebsumfeld;
 
 public class PatientToolBarLogic {
     PatientHauptPanel patientHauptPanel = null;
@@ -204,7 +205,7 @@ public class PatientToolBarLogic {
                             .setCursor(Cursors.wartenCursor);
 
                         new LadeProg(Path.Instance.getProghome() + "RehaMail.jar" + " " + Path.Instance.getProghome()
-                                + " " + Reha.getAktIK() + " " + Reha.xport + " " + Reha.aktUser.replace(" ", "#"));
+                                + " " + Betriebsumfeld.getAktIK() + " " + Reha.xport + " " + Reha.aktUser.replace(" ", "#"));
                         long warten = System.currentTimeMillis();
                         while ((!RehaIOServer.rehaMailIsActive) && (System.currentTimeMillis() - warten < 15000)) {
                             Thread.sleep(75);

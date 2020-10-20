@@ -43,6 +43,7 @@ import CommonTools.ini.Settings;
 import environment.Path;
 import hauptFenster.Reha;
 import hilfsFenster.NeuerMandant;
+import umfeld.Betriebsumfeld;
 
 public class SysUtilMandanten extends JXPanel implements KeyListener, ActionListener, FocusListener {
 
@@ -479,7 +480,7 @@ public class SysUtilMandanten extends JXPanel implements KeyListener, ActionList
                 return;
             }
             int imandant = mandant.getSelectedIndex();
-            if (SystemConfig.Mandanten.get(imandant)[0].equals(Reha.getAktIK())) {
+            if (SystemConfig.Mandanten.get(imandant)[0].equals(Betriebsumfeld.getAktIK())) {
                 JOptionPane.showMessageDialog(null, "Der aktuelle (aktive) darf nicht gelöscht werden");
                 return;
             }

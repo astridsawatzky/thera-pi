@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 import CommonTools.ini.INITool;
 import CommonTools.ini.Settings;
 import environment.Path;
-import hauptFenster.Reha;
+import umfeld.Betriebsumfeld;
 
 public class BehandlerSets {
 
@@ -56,7 +56,7 @@ public class BehandlerSets {
     }
 
     static void behandlerSetsLaden() {
-        Settings termkalini = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/",
+        Settings termkalini = INITool.openIni(Path.Instance.getProghome() + "ini/" + Betriebsumfeld.getAktIK() + "/",
                 "terminkalender.ini");
         behandlerSetsLaden(termkalini);
 

@@ -33,6 +33,7 @@ import hauptFenster.Reha;
 import hauptFenster.UIFSplitPane;
 import rechteTools.Rechte;
 import rehaInternalFrame.JSysteminitInternal;
+import umfeld.Betriebsumfeld;
 
 public class SystemInit extends JXPanel implements TreeSelectionListener {
 
@@ -344,7 +345,7 @@ public class SystemInit extends JXPanel implements TreeSelectionListener {
                     doAccessDenied();
                     return;
                 }
-                jxInhaltRechts = new SysUtilKalenderBenutzer(Reha.instance.mandant().ik());
+                jxInhaltRechts = new SysUtilKalenderBenutzer(Betriebsumfeld.umfeld.getMandant().ik());
                 jxInhaltRechts.setVisible(true);
                 jxRechts.add(jxInhaltRechts, BorderLayout.CENTER);
                 jxRechts.revalidate();
@@ -629,7 +630,7 @@ public class SystemInit extends JXPanel implements TreeSelectionListener {
                     doAccessDenied();
                     return;
                 }
-                jxInhaltRechts = new SysUtilKostentraeger();
+                jxInhaltRechts = new SysUtilKostentraeger(Betriebsumfeld.umfeld.getMandant().ik());
                 jxInhaltRechts.setVisible(true);
                 jxRechts.add(jxInhaltRechts, BorderLayout.CENTER);
                 jxRechts.revalidate();
@@ -646,7 +647,7 @@ public class SystemInit extends JXPanel implements TreeSelectionListener {
                     @Override
                     protected Void doInBackground() throws Exception {
                         try {
-                            NebraskaMain.main(new String[]{Reha.getAktIK()});
+                            NebraskaMain.main(new String[]{Betriebsumfeld.getAktIK()});
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -733,7 +734,7 @@ public class SystemInit extends JXPanel implements TreeSelectionListener {
                 JOptionPane.showMessageDialog(null,
                         "<html><b>Achtung!!!!</b><br>Wenn Sie mit dem INI-Editor eine INI-Datei verändern oder neu erstellen,<br>wirkt sich die jeweilige Änderung erst dann aus wenn Sie<br><b>Thera-Pi neu starten!</b></html>");
                 new LadeProg(Path.Instance.getProghome() + "RehaIniedit.jar" + " " + Path.Instance.getProghome() + " "
-                        + Reha.getAktIK());
+                        + Betriebsumfeld.getAktIK());
                 cursorWait(false);
                 setHeader("dummy");
                 break;

@@ -37,6 +37,7 @@ import egk.CardTerminalEvent;
 import environment.Path;
 import hauptFenster.Reha;
 import systemEinstellungen.SystemConfig;
+import umfeld.Betriebsumfeld;
 
 public class OcKVK implements CardListener {
 
@@ -213,7 +214,7 @@ public class OcKVK implements CardListener {
                     in = new ByteArrayInputStream(resultpd);
                     // System.out.println(new String(resultpd));
                     /***** ausschalten nach Test ******/
-                    InDatei(Path.Instance.getProghome() + "temp/" + Reha.getAktIK() + "/eGKpd.zip", resultpd);
+                    InDatei(Path.Instance.getProghome() + "temp/" + Betriebsumfeld.getAktIK() + "/eGKpd.zip", resultpd);
                     out = Unzip("", in);
                     in.close();
                     out.flush();
@@ -275,7 +276,7 @@ public class OcKVK implements CardListener {
                 try {
                     in = new ByteArrayInputStream(resultvd);
                     /***** ausschalten nach Test ******/
-                    InDatei(Path.Instance.getProghome() + "temp/" + Reha.getAktIK() + "/eGKvd.zip", resultvd);
+                    InDatei(Path.Instance.getProghome() + "temp/" + Betriebsumfeld.getAktIK() + "/eGKvd.zip", resultvd);
                     out = Unzip("", in);
                     in.close();
                     out.flush();
@@ -311,8 +312,8 @@ public class OcKVK implements CardListener {
                         String rs1 = resultString.substring(0, resultString.lastIndexOf("<?xml version"));
                         String rs2 = resultString.substring(resultString.lastIndexOf("<?xml version"));
                         if (mustdebug) {
-                            InDatei(Path.Instance.getProghome() + "temp/" + Reha.getAktIK() + "/eGKvd", rs1.getBytes());
-                            InDatei(Path.Instance.getProghome() + "temp/" + Reha.getAktIK() + "/eGKzd", rs2.getBytes());
+                            InDatei(Path.Instance.getProghome() + "temp/" + Betriebsumfeld.getAktIK() + "/eGKvd", rs1.getBytes());
+                            InDatei(Path.Instance.getProghome() + "temp/" + Betriebsumfeld.getAktIK() + "/eGKzd", rs2.getBytes());
                         }
 
                         org.w3c.dom.Document doc = builder.parse(new ByteArrayInputStream(rs1.getBytes()));

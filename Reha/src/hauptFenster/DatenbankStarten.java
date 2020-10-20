@@ -27,6 +27,7 @@ import sql.DatenquellenFactory;
 import systemEinstellungen.SystemConfig;
 import systemEinstellungen.config.Datenbank;
 import terminKalender.KollegenListe;
+import umfeld.Betriebsumfeld;
 
 /**************
  *
@@ -180,7 +181,7 @@ final class DatenbankStarten implements Runnable {
 
                 Reha.sysConf.SystemInit(3);
 
-                Benutzer.benutzerLaden(new DatenquellenFactory(Reha.getAktIK()));
+                Benutzer.benutzerLaden(new DatenquellenFactory(Betriebsumfeld.getAktIK()));
                 new SocketClient().setzeInitStand("Systemparameter ok");
 
                 new SocketClient().setzeInitStand("Native Interface ok");

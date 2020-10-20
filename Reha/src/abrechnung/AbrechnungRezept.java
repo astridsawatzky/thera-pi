@@ -124,6 +124,7 @@ import systemEinstellungen.SystemConfig;
 import systemEinstellungen.SystemPreislisten;
 import systemTools.AdressTools;
 import systemTools.ListenerTools;
+import umfeld.Betriebsumfeld;
 
 /**
  * @author Admin
@@ -306,7 +307,7 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener, Acti
                 if (SystemConfig.hmAbrechnung.get("keepTTSize")
                                              .equals("1")) { // TageTreeSize Werte in ini gespeichert (McM)
                     int maxBehTage = Integer.parseInt(SystemConfig.hmAbrechnung.get("maxBehTage"));
-                    Settings inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/",
+                    Settings inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Betriebsumfeld.getAktIK() + "/",
                             "abrechnung.ini");
                     String section = "HMGKVRechnung";
                     for (int i = 1; i <= maxBehTage; i++) {
@@ -1043,7 +1044,7 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener, Acti
         for (int i = 1; i <= 18; i++) {
             taxWerte.put("<t" + i + ">", "");
         }
-        taxWerte.put("<t1>", Reha.getAktIK());
+        taxWerte.put("<t1>", Betriebsumfeld.getAktIK());
         taxWerte.put("<t3>", dfx.format(rezeptWert));
         taxWerte.put("<t2>", dfx.format(zuzahlungWert));
         int taxpos = 4;
@@ -1077,7 +1078,7 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener, Acti
                     "select barcodeform from verordn where rez_nr='" + aktRezNum.getText()
                                                                                 .trim()
                             + "' LIMIT 1");
-            String formular = Path.Instance.getProghome() + "vorlagen/" + Reha.getAktIK() + "/"
+            String formular = Path.Instance.getProghome() + "vorlagen/" + Betriebsumfeld.getAktIK() + "/"
                     + tbcombo.getSelectedItem()
                              .toString();
             RehaOOTools.starteTaxierung(formular, taxWerte,Reha.instance);
@@ -4443,7 +4444,7 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener, Acti
         if (!SystemConfig.hmAbrechnung.get("TTSizeLocked")
                                       .equals("1")) {
             boolean mustsave = false;
-            Settings inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/",
+            Settings inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Betriebsumfeld.getAktIK() + "/",
                     "abrechnung.ini");
             String section = "HMGKVRechnung";
             for (Entry<Integer, Integer> e : tts.getHmTageTreeSize()

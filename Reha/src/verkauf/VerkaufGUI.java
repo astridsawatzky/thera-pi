@@ -61,6 +61,7 @@ import hauptFenster.Reha;
 import office.OOTools;
 import office.OOService;
 import systemEinstellungen.SystemConfig;
+import umfeld.Betriebsumfeld;
 import verkauf.model.Artikel;
 import verkauf.model.ArtikelVerkauf;
 import verkauf.model.Verkauf;
@@ -114,7 +115,7 @@ public class VerkaufGUI extends JXPanel {
         this.add(this.getContent1(), BorderLayout.CENTER);
         verkauf = new Verkauf();
         df = new DecimalFormat("0.00");
-        settings = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/", "verkauf.ini");
+        settings = INITool.openIni(Path.Instance.getProghome() + "ini/" + Betriebsumfeld.getAktIK() + "/", "verkauf.ini");
 
         forms = new Formulare();
         forms.holeFormulare(settings);
@@ -639,7 +640,7 @@ public class VerkaufGUI extends JXPanel {
                 descriptor.setHidden(settings.getBooleanProperty(propSection, "SofortDrucken"));
                 descriptor.setAsTemplate(true);
 
-                String url = Path.Instance.getProghome() + "vorlagen/" + Reha.getAktIK() + "/"
+                String url = Path.Instance.getProghome() + "vorlagen/" + Betriebsumfeld.getAktIK() + "/"
                         + settings.getStringProperty(propSection, "Vorlage");
                 ITextDocument doc = (ITextDocument) service.loadDocument(url, descriptor);
                 if (settings.getBooleanProperty(propSection, "SeitenLaengeAendern")) {
@@ -788,10 +789,10 @@ public class VerkaufGUI extends JXPanel {
                     descriptor.setAsTemplate(true);
 
                     if (customForm == null) {
-                        url = Path.Instance.getProghome() + "vorlagen/" + Reha.getAktIK() + "/"
+                        url = Path.Instance.getProghome() + "vorlagen/" + Betriebsumfeld.getAktIK() + "/"
                                 + settings.getStringProperty(propSection, "Vorlage");
                     } else {
-                        url = Path.Instance.getProghome() + "vorlagen/" + Reha.getAktIK() + "/" + customForm;
+                        url = Path.Instance.getProghome() + "vorlagen/" + Betriebsumfeld.getAktIK() + "/" + customForm;
                         customForm = null;
                     }
                     IDocument document = service.loadDocument(url, descriptor);
@@ -1011,7 +1012,7 @@ public class VerkaufGUI extends JXPanel {
         String sql = "INSERT INTO verkliste (verklisteID, v_nummer, v_datum, v_betrag, v_mwst7, v_mwst19, v_offen, v_bezahldatum, mahndat1, mahndat2, mahndat3, mahnsperre, pat_id, user, ik) "
                 + "VALUES (NULL, '" + vnummer + "', '" + date.toString() + "', '" + verkauf.getBetragBrutto() + "', '"
                 + verkauf.getBetrag7() + "', '" + verkauf.getBetrag19() + "', '" + offen
-                + "', NULL, NULL, NULL, NULL, '0', '" + patid + "', '" + Reha.aktUser + "', '" + Reha.getAktIK()
+                + "', NULL, NULL, NULL, NULL, '0', '" + patid + "', '" + Reha.aktUser + "', '" + Betriebsumfeld.getAktIK()
                 + "');";
         SqlInfo.sqlAusfuehren(sql);
     }

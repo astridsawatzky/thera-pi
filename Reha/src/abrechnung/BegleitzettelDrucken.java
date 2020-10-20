@@ -12,10 +12,10 @@ import ag.ion.bion.officelayer.text.ITextDocument;
 import ag.ion.bion.officelayer.text.ITextField;
 import ag.ion.bion.officelayer.text.ITextFieldService;
 import ag.ion.bion.officelayer.text.TextException;
-import hauptFenster.Reha;
 import office.OOService;
 import office.OOTools;
 import systemEinstellungen.SystemConfig;
+import umfeld.Betriebsumfeld;
 
 public class BegleitzettelDrucken {
     ITextDocument textDocument = null;
@@ -151,7 +151,7 @@ public class BegleitzettelDrucken {
                                       .toLowerCase()
                                       .equals("<gkv8>")) {
                 placeholders[i].getTextRange()
-                               .setText(Reha.getAktIK());
+                               .setText(Betriebsumfeld.getAktIK());
             } else if (placeholders[i].getDisplayText()
                                       .toLowerCase()
                                       .equals("<gkv9>")) {
