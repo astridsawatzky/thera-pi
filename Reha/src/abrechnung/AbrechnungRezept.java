@@ -1284,15 +1284,16 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener, Acti
     }
 
     private void zurLetztenBehHinzufuegen(String position, boolean mitZuzahlung) {
-        if (root.getChildCount() <= 0) {
+        int zeilenInTab = root.getChildCount();
+        if (zeilenInTab <= 0) {
             JOptionPane.showMessageDialog(null,
                     "Es sind keine Behandlungspositionen ermittelbar.\nWurden evtl. Positionen aus der Preisliste gelöscht?");
             return;
         }
         boolean zuZahlFrei = mitZuzahlung ? false : true;
-        JXTTreeTableNode xnode = (JXTTreeTableNode) root.getChildAt(root.getChildCount() - 1);
+        JXTTreeTableNode xnode = (JXTTreeTableNode) root.getChildAt(zeilenInTab - 1);
         JXTTreeTableNode ynode = (JXTTreeTableNode) getBasicNodeFromChild(xnode);
-        abrfallAnhaengen(xnode.getChildCount() - 1, ynode, ynode.abr.datum, position,
+        abrfallAnhaengen(zeilenInTab, ynode, ynode.abr.datum, position,
                 Double.parseDouble("1.00"), zuZahlFrei);
     }
 
