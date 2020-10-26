@@ -12,6 +12,7 @@ import java.awt.Point;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.sql.ResultSet;
@@ -27,18 +28,7 @@ import java.util.Vector;
 import javax.imageio.ImageIO;
 import javax.smartcardio.CardTerminal;
 import javax.smartcardio.TerminalFactory;
-import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JFileChooser;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JScrollPane;
-import javax.swing.JTabbedPane;
-import javax.swing.SwingUtilities;
-import javax.swing.SwingWorker;
-import javax.swing.UIManager;
+import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 
@@ -82,7 +72,6 @@ import openMaps.Distance;
 import rechteTools.Rechte;
 import stammDatenTools.ArztTools;
 import stammDatenTools.ZuzahlTools;
-import sun.awt.image.ToolkitImage;
 import systemEinstellungen.SystemConfig;
 import systemTools.ListenerTools;
 import umfeld.Betriebsumfeld;
@@ -173,7 +162,7 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener, Action
 
     boolean startMitBild = false;
     boolean updateBild = false;
-    private Logger logger = LoggerFactory.getLogger(PatNeuanlage.class);
+    private static final Logger logger = LoggerFactory.getLogger(PatNeuanlage.class);
 
     public PatNeuanlage(Vector<String> vec, boolean neu, String sfeldname) {
         setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
@@ -590,7 +579,7 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener, Action
             boolean doof = false;
             if (!(freizumstart == freibeimspeichern)) {
                 if (((ZuzahlTools.getZuzahlRegel(jtf[34].getText()
-                                                                  .trim())) <= 0)) {
+                                                        .trim())) <= 0)) {
                     JOptionPane.showMessageDialog(null,
                             "Sie haben einen Kostenträger gwählt der keine Zuzahlung verlangt und\n"
                                     + "jetzt wollen Sie im Feld Zuzahlungsbefreiung rummurksen???????\n\nNa ja.....");
@@ -640,8 +629,7 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener, Action
             new SwingWorker<Void, Void>() {
                 @Override
                 protected Void doInBackground() throws Exception {
-                    speichernPatBild((inNeu || !startMitBild), (ImageIcon) lblbild.getIcon(),
-                            globPat_intern);
+                    speichernPatBild((inNeu || !startMitBild), (ImageIcon) lblbild.getIcon(), globPat_intern);
                     return null;
                 }
 
@@ -660,8 +648,8 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener, Action
             int row = AktuelleRezepte.tabelleaktrez.getSelectedRow();
             if (row >= 0) {
                 rez_num = AktuelleRezepte.tabelleaktrez.getValueAt(row, 0)
-                                                   .toString()
-                                                   .trim();
+                                                       .toString()
+                                                       .trim();
             }
         }
         final String xpatintern = spatintern;
@@ -1413,26 +1401,26 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener, Action
         jtf[TEXTFELD_INDEX_FUER_GEBURTSTAG].addFocusListener(new FocusAdapter() {
             @Override
             public void focusLost(FocusEvent e) {
-                    JRtaTextField textField = (JRtaTextField) e.getSource();
-                  String  inhalt = textField.getText();
-                    if(inhalt.replace(".","").isEmpty()) {
+                JRtaTextField textField = (JRtaTextField) e.getSource();
+                String inhalt = textField.getText();
+                if (inhalt.replace(".", "")
+                          .isEmpty()) {
 
-                    } else {
-                        if (!inhalt.equals(textField.getValue())) {
+                } else {
+                    if (!inhalt.equals(textField.getValue())) {
 
-                            LocalDate birthday = LocalDate.parse(inhalt,DateTimeFormatter.ofPattern("dd.MM.yyyy"));
-                            long age = ChronoUnit.YEARS.between(birthday, LocalDate.now());
-                            if(age>100)
-                            {
-                                JOptionPane.showMessageDialog(null, age + "! Das ist wirklich alt");
-                            } else if (LocalDate.now().isBefore(birthday)) {
-                                JOptionPane.showMessageDialog(null, "Wird also geboren werden!");
-                            }
+                        LocalDate birthday = LocalDate.parse(inhalt, DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+                        long age = ChronoUnit.YEARS.between(birthday, LocalDate.now());
+                        if (age > 100) {
+                            JOptionPane.showMessageDialog(null, age + "! Das ist wirklich alt");
+                        } else if (LocalDate.now()
+                                            .isBefore(birthday)) {
+                            JOptionPane.showMessageDialog(null, "Wird also geboren werden!");
                         }
                     }
+                }
             }
         });
-
 
         jtf[27] = new JRtaTextField("DATUM", true);
         jtf[27].setName("akutbis");
@@ -1925,8 +1913,8 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener, Action
             @Override
             protected Void doInBackground() throws Exception {
                 try {
-                    Settings inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Betriebsumfeld.getAktIK() + "/",
-                            "arzt.ini");
+                    Settings inif = INITool.openIni(
+                            Path.Instance.getProghome() + "ini/" + Betriebsumfeld.getAktIK() + "/", "arzt.ini");
                     int forms = inif.getIntegerProperty("Formulare", "ArztFormulareAnzahl");
                     for (int i = 1; i <= forms; i++) {
                         titel.add(inif.getStringProperty("Formulare", "AFormularText" + i));
@@ -1961,8 +1949,8 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener, Action
                     @Override
                     protected Void doInBackground() throws Exception {
                         ArztTools.constructArztHMap(xid);
-                        RehaOOTools.starteStandardFormular(Path.Instance.getProghome() + "vorlagen/" + Betriebsumfeld.getAktIK() + "/"
-                                + formular.get(iformular), null,Reha.instance);
+                        RehaOOTools.starteStandardFormular(Path.Instance.getProghome() + "vorlagen/"
+                                + Betriebsumfeld.getAktIK() + "/" + formular.get(iformular), null, Reha.instance);
                         return null;
                     }
                 }.execute();
@@ -2065,55 +2053,71 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener, Action
         } else {
             sqlString = "Update patbild set bild = ? , vorschau = ?  where pat_intern = ?";
         }
+
+        Image vorschau = ico.getImage()
+                            .getScaledInstance(35, 44, Image.SCALE_SMOOTH);
+
         try (PreparedStatement ps = (PreparedStatement) Reha.instance.conn.prepareStatement(sqlString);) {
 
-            ps.setBytes(1, JpegWriter.bufferedImageToByteArray(((ToolkitImage) ico.getImage()).getBufferedImage()));
-            BufferedImage buf = new BufferedImage(35, 44, BufferedImage.TYPE_INT_RGB);
-            Graphics2D g = buf.createGraphics();
-            g.drawImage(ico.getImage()
-                           .getScaledInstance(35, 44, Image.SCALE_SMOOTH),
-                    null, null);
-            g.dispose();
-            ps.setBytes(2, JpegWriter.bufferedImageToByteArray(buf));
+            ps.setBytes(1, JpegWriter.bufferedImageToByteArray(iconToBufferedImage(ico)));
+
+            ps.setBytes(2, JpegWriter.bufferedImageToByteArray(imageToBufferedImage(vorschau)));
             ps.setString(3, pat_intern);
             ps.execute();
-            buf = null;
         } catch (SQLException | IOException e) {
             logger.error("Fehler beim Speichern des Patientenbilds", e);
         }
     }
 
+    public static BufferedImage imageToBufferedImage(Image img) {
+        if (img instanceof BufferedImage) {
+            return (BufferedImage) img;
+        }
+
+        // Create a buffered image with transparency
+        BufferedImage bimage = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+
+        // Draw the image on to the buffered image
+        Graphics2D bGr = bimage.createGraphics();
+        bGr.drawImage(img, 0, 0, null);
+        bGr.dispose();
+
+        // Return the buffered image
+        return bimage;
+    }
+
+    private BufferedImage iconToBufferedImage(ImageIcon icon) {
+        BufferedImage bi = new BufferedImage(icon.getIconWidth(), icon.getIconHeight(), BufferedImage.TYPE_INT_RGB);
+        Graphics g = bi.createGraphics();
+        icon.paintIcon(null, g, 0, 0);
+        g.dispose();
+        return bi;
+    }
+
+    private byte[] bufferedImageToByteArray(BufferedImage originalImage) {
+        try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+            ImageIO.write(originalImage, "jpg", baos);
+            baos.flush();
+            byte[] imageInByte = baos.toByteArray();
+            baos.close();
+            return imageInByte;
+        } catch (IOException e) {
+            logger.error("Cannot convert Image ", e);
+            return new byte[0];
+        }
+
+    }
+
     public static BufferedImage holePatBild(String pat_intern) {
-        Statement stmt = null;
-        ResultSet rs = null;
+        String test = "select bild from patbild where pat_intern ='" + pat_intern + "'";
         Image bild = null;
-        try {
-            stmt = Reha.instance.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            String test = "select bild from patbild where pat_intern ='" + pat_intern + "'";
-            rs = stmt.executeQuery(test);
-            while (rs.next()) {
+        try (Statement stmt = Reha.instance.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+                ResultSet.CONCUR_UPDATABLE); ResultSet rs = stmt.executeQuery(test)) {
+            if (rs.next()) {
                 bild = ImageIO.read(new ByteArrayInputStream(rs.getBytes("bild")));
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        } finally {
-            if (rs != null) {
-                try {
-                    rs.close();
-                } catch (SQLException sqlEx) { // ignore }
-                    rs = null;
-                }
-            }
-            if (stmt != null) {
-                try {
-                    stmt.close();
-                } catch (SQLException sqlEx) { // ignore }
-                    stmt = null;
-                }
-            }
+        } catch (SQLException | IOException e) {
+            logger.error("Fehler beim Bezug des Bildes fuer pat_intern= " + pat_intern, e);
         }
         return (BufferedImage) bild;
     }
