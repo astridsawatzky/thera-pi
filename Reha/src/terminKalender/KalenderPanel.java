@@ -11,6 +11,7 @@ import java.awt.Point;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Vector;
 
 import javax.swing.ImageIcon;
@@ -22,6 +23,7 @@ import org.slf4j.LoggerFactory;
 
 import CommonTools.ZeitFunk;
 import hauptFenster.Reha;
+import systemEinstellungen.ImageRepository;
 import systemEinstellungen.SystemConfig;
 import systemEinstellungen.TKSettings;
 import terminKalender.TerminFenster.Ansicht;
@@ -32,7 +34,7 @@ class KalenderPanel extends JXPanel {
      *
      */
     private static final long serialVersionUID = 7354087866079956906L;
-    private Vector dat = new Vector();
+    private List dat = new Vector();
     private int anzahl = 0;
     private int vectorzahl = 0;
     private int i;
@@ -56,23 +58,21 @@ class KalenderPanel extends JXPanel {
     private boolean inGruppierung = false;
     private int[] positionScreen = { -1, -1, -1, -1 };
     private Font fon = new Font("Tahoma", Font.PLAIN, 10);
-    private ImageIcon dragImage = null;
-    private Image dragImage2 = null;
+    private ImageIcon dragImage = SystemConfig.hmSysIcons.get("buttongruen");
 
+    private Image dragImage2 = SystemConfig.hmSysIcons.get("buttongruen")
+      .getImage()
+      .getScaledInstance(8, 8, Image.SCALE_SMOOTH);
     private SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
     private float yTimeLine = .0f;
     private boolean showTimeLine = false;
     private int pfeily;
     private Logger logger = LoggerFactory.getLogger(KalenderPanel.class);
 
-    void ListenerSetzen(int aktPanel) {
+    void setPanelNumber(int aktPanel) {
         this.panelNummer = aktPanel;
-        this.dragImage = SystemConfig.hmSysIcons.get("buttongruen");
-        this.setDragImage2(SystemConfig.hmSysIcons.get("buttongruen")
-                                                  .getImage()
-                                                  .getScaledInstance(8, 8, Image.SCALE_SMOOTH));
-        // this.
-        return;
+
+
     }
 
     @Override
@@ -420,15 +420,15 @@ class KalenderPanel extends JXPanel {
         this.showTimeLine = show;
     }
 
-    void datenZeichnen(Vector vectOfCurrentDate, int therapeut, ArrayList therapistsDate) {
-        if (vectOfCurrentDate.size() > 0 && therapeut >= 0) {
+    void datenZeichnen(List vTerm, int therapeut, ArrayList therapistsDate) {
+        if (vTerm.size() > 0 && therapeut >= 0) {
             dat.clear();
-            dat.addElement(therapistsDate.get(0));
-            dat.addElement(therapistsDate.get(1));
-            dat.addElement(therapistsDate.get(2));
-            dat.addElement(therapistsDate.get(3));
-            dat.addElement(therapistsDate.get(4));
-            dat.addElement(therapistsDate.get(5));
+            dat.add(therapistsDate.get(0));
+            dat.add(therapistsDate.get(1));
+            dat.add(therapistsDate.get(2));
+            dat.add(therapistsDate.get(3));
+            dat.add(therapistsDate.get(4));
+            dat.add(therapistsDate.get(5));
 
             setAnzahl(((Vector) dat.get(0)).size());
         } else {

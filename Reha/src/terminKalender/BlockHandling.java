@@ -24,7 +24,7 @@ class BlockHandling {
 
     private int ret = -1;
     private int wasTun = -1;
-    private Vector<?> vterm = null;
+    private List vterm = null;
     private int kollege;
     private int spalte;
     private int block;
@@ -33,10 +33,10 @@ class BlockHandling {
     private String[] daten = null;
     private Felder datenfeld = new Felder();
 
-    BlockHandling(int wasTun, Vector<?> vterm, int kollege, int spalte, int block, String[] datum, int dbBehandler,
+    BlockHandling(int wasTun, List vTerm2, int kollege, int spalte, int block, String[] datum, int dbBehandler,
             String[] daten) {
         this.wasTun = wasTun;
-        this.vterm = vterm;
+        this.vterm = vTerm2;
         this.kollege = kollege;
         this.spalte = spalte;
         this.block = block;
@@ -46,7 +46,7 @@ class BlockHandling {
 
         debugTermin();
 
-        datenfeld.Init(vterm);
+        datenfeld.Init(vTerm2);
 
     }
 

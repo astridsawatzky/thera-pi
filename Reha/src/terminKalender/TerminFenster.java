@@ -26,6 +26,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.TooManyListenersException;
 import java.util.Vector;
 
@@ -118,7 +119,7 @@ public class TerminFenster implements RehaTPEventListener, ActionListener, DropT
     /** Nimmt die Termindaten auf. */
     private Vector<Object> aSpaltenDaten = new Vector<>();
     /** Wird gebraucht zur Datenübergabe auf die Spalten. */
-    private Vector vTerm = new Vector();
+    private java.util.List vTerm = new Vector();
     private boolean updateverbot;
 
     private Point dragDaten = new Point(0, 0);
@@ -3262,7 +3263,7 @@ public class TerminFenster implements RehaTPEventListener, ActionListener, DropT
         oSpalten[aktiveSpalte[2]].datenZeichnen(vTerm, aktiveSpalte[2]);
     }
 
-    public Vector getDatenVector() {
+    public List getDatenVector() {
         return vTerm;
     }
 
@@ -3409,7 +3410,10 @@ public class TerminFenster implements RehaTPEventListener, ActionListener, DropT
                     return;
                 }
                 setUpdateVerbot(true);
-                mb = new MaskeInKalenderSchreiben(Reha.getThisFrame(), maskenbelegung, (Vector) vTerm.clone());
+                List copy = new ArrayList<>();
+                copy.addAll(vTerm);
+
+                mb = new MaskeInKalenderSchreiben(Reha.getThisFrame(), maskenbelegung,  copy);
                 mb.setSize(new Dimension(700, 430));
                 mb.setLocation(new Point(250, 200));
                 mb.setVisible(true);
@@ -4700,11 +4704,11 @@ public class TerminFenster implements RehaTPEventListener, ActionListener, DropT
 class KalZeichnen implements Runnable {
     private TherapeutenTag kPanel = null;
     private int belegung;
-    private Vector vTerm = null;
+    private List vTerm = null;
 
-    public KalZeichnen(TherapeutenTag oSpalten, Vector vTerm, int belegung) {
+    public KalZeichnen(TherapeutenTag oSpalten, List vTerm2, int belegung) {
         this.kPanel = oSpalten;
-        this.vTerm = vTerm;
+        this.vTerm = vTerm2;
         this.belegung = belegung;
     }
 

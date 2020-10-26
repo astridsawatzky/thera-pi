@@ -8,6 +8,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 
 import javax.swing.JLabel;
@@ -31,7 +32,7 @@ class TherapeutenTag  {
     }
 
     void ListenerSetzen(int aktPanel) {
-        day.ListenerSetzen(aktPanel);
+        day.setPanelNumber(aktPanel);
       }
 
       public void paintComponent(Graphics g) {
@@ -47,9 +48,9 @@ class TherapeutenTag  {
          day.setShowTimeLine(show);
       }
 
-      void datenZeichnen(Vector vectOfCurrentDate, int therapeut) {
-          if(vectOfCurrentDate.size() > 0 && therapeut >= 0) {
-            day.datenZeichnen(vectOfCurrentDate, therapeut, (ArrayList) vectOfCurrentDate.get(therapeut));
+      void datenZeichnen(List vTerm, int therapeut) {
+          if(vTerm.size() > 0 && therapeut >= 0) {
+            day.datenZeichnen(vTerm, therapeut, (ArrayList) vTerm.get(therapeut));
         } else {
               day.setAnzahl(0);
           }

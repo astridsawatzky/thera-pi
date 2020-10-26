@@ -1,8 +1,12 @@
 package systemEinstellungen;
 
+import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.util.concurrent.ConcurrentHashMap;
 
+import javax.swing.GrayFilter;
 import javax.swing.ImageIcon;
 
 import CommonTools.ini.INIFile;
@@ -12,6 +16,22 @@ import environment.Path;
 import umfeld.Betriebsumfeld;
 
 public class ImageRepository {
+
+    private static final ImageIcon emptyIcon = createemptyicon();
+
+    private static ImageIcon createemptyicon() {
+        ImageIcon icon =new ImageIcon();
+
+        BufferedImage bi = new BufferedImage(24,24, BufferedImage.TYPE_INT_ARGB);
+        Graphics g = bi.createGraphics();
+        g.setColor(new Color(0, 0, 0, 0));
+        g.fillRect(0, 0,24, 24);
+        icon.paintIcon(null, g, 0, 0);
+        g.dispose();
+        Image i = GrayFilter.createDisabledImage(bi);
+        return new ImageIcon(i);
+
+    }
 
     ConcurrentHashMap<String, ImageIcon> map = new ConcurrentHashMap<String, ImageIcon>();
     private static String[] bilder = new String[] { "neu", "edit", "delete", "print", "save", "find", "stop",
@@ -108,7 +128,11 @@ public class ImageRepository {
     }
 
     public ImageIcon get(String name) {
-        return map.get(name);
+        if(map.contains(name)) {
+            return   map.get(name);
+        } else {
+            return emptyIcon;
+        }
     }
 
     public static ImageIcon paypalIcon() {

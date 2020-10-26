@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 
 import javax.swing.ImageIcon;
@@ -72,18 +73,18 @@ class MaskeInKalenderSchreiben extends RehaSmartDialog implements ActionListener
     private String sBehandler = "";
     private boolean stopUebertrag = false;
 
-    private Vector vTerm = new Vector();
+    private List vTerm = new Vector();
 
     private Vector<String> feiertagDatum = new Vector<String>();
     private Vector<String> feiertagName = new Vector<String>();
 
-    MaskeInKalenderSchreiben(JXFrame owner, int maskenBehandler, Vector vTerm) {
+    MaskeInKalenderSchreiben(JXFrame owner, int maskenBehandler, List copy) {
         // super(frame, titlePanel());
         super(owner, "MaskeSchreiben");
         dieserName = "MaskeSchreiben" + WinNum.NeueNummer();
         setName(dieserName);
         getSmartTitledPanel().setName(dieserName);
-        this.vTerm = (Vector) vTerm.clone();
+        this.vTerm =  copy;
         this.maskenBehandler = maskenBehandler;
         this.sBehandler = (maskenBehandler < 10 ? "0" + maskenBehandler + "BEHANDLER"
                 : Integer.toString(maskenBehandler) + "BEHANDLER");

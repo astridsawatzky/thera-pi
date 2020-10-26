@@ -3,6 +3,7 @@ package terminKalender;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 
 import javax.swing.JOptionPane;
@@ -26,7 +27,7 @@ class Tblock {
     private String Beginn;
     private int Dauer;
     private String Ende;
-    private Vector vect = new Vector();
+    private List vect = new Vector();
     private Felder feld;
     private int AnzahlOrigBloecke;
     private int aktBlockNeu;
@@ -42,7 +43,7 @@ class Tblock {
    public static final int     ENDE  =4;
 
 
-    public int TblockInit(TerminFenster parent, terminKalender.Block terminrueckgabe, int iSpalte, int iBlock, int iKollege, Vector vterm,
+    public int TblockInit(TerminFenster parent, terminKalender.Block terminrueckgabe, int iSpalte, int iBlock, int iKollege, List vTerm,
             String[] datum, int iKoll) {
 
 
@@ -63,7 +64,7 @@ class Tblock {
         this.aktBlockNeu = this.Block;
 
         this.Eltern = parent;
-        this.vect = vterm;
+        this.vect = vTerm;
         this.feld = new Felder();
         this.feld.Init(this.vect);
 
@@ -876,10 +877,10 @@ class Tblock {
 
 class Felder {
 
-    private Vector tvect = new Vector();
+    private List tvect = new Vector();
 
-    public Felder Init(Vector termv) {
-        tvect = termv;
+    public Felder Init(List vect) {
+        tvect = vect;
         return this;
     }
 
