@@ -7,9 +7,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.util.Formatter;
-import java.util.Locale;
 
 import javax.swing.JComboBox;
 import javax.swing.SwingUtilities;

@@ -24,7 +24,6 @@ import commonData.Rezeptvector;
 import core.Disziplin;
 import environment.Path;
 import hauptFenster.Reha;
-import rezept.RezeptDto;
 import systemEinstellungen.SystemConfig;
 import systemEinstellungen.SystemPreislisten;
 import terminKalender.BestaetigungsDaten;

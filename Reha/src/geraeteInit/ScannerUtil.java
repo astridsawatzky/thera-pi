@@ -46,7 +46,6 @@ import environment.Path;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
 import hauptFenster.Reha;
-import oOorgTools.RehaOOTools;
 import office.OOService;
 import office.OOTools;
 import systemEinstellungen.SystemConfig;

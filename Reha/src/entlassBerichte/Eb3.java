@@ -49,7 +49,6 @@ import ag.ion.bion.officelayer.text.IViewCursor;
 import ag.ion.noa.frame.ILayoutManager;
 import environment.Path;
 import hauptFenster.Reha;
-import oOorgTools.RehaOOTools;
 import office.OOService;
 import office.OOTools;
 import umfeld.Betriebsumfeld;

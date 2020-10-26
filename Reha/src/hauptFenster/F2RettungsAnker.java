@@ -19,7 +19,6 @@ import ag.ion.bion.officelayer.text.ITextDocument;
 import ag.ion.bion.officelayer.text.ITextTable;
 import ag.ion.bion.officelayer.text.TextException;
 import ag.ion.noa.NOAException;
-import oOorgTools.RehaOOTools;
 import office.OOService;
 import office.OOTools;
 

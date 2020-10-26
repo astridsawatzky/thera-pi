@@ -9,20 +9,9 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.Arrays;
 import java.util.Vector;
 
-import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JProgressBar;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.SwingConstants;
-import javax.swing.SwingWorker;
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 
@@ -45,7 +34,6 @@ import environment.Path;
 import hauptFenster.Reha;
 import mandant.IK;
 import sqlTools.PLServerAuslesen;
-import umfeld.Betriebsumfeld;
 
 public class SysUtilKostentraeger extends JXPanel {
     private static final long serialVersionUID = 1L;

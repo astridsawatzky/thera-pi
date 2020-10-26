@@ -8,7 +8,6 @@ import java.util.Vector;
 import javax.swing.JOptionPane;
 
 import com.sun.star.beans.XPropertySet;
-import com.sun.star.text.XTextTableCursor;
 
 import ag.ion.bion.officelayer.document.DocumentDescriptor;
 import ag.ion.bion.officelayer.document.DocumentException;

@@ -3,17 +3,12 @@ package org.therapi.reha.patient;
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 
-import CommonTools.DatFunk;
-import CommonTools.SqlInfo;
-import environment.LadeProg;
 import environment.Path;
 import hauptFenster.Reha;
 import hauptFenster.RehaIOServer;
 import hauptFenster.ReverseSocket;
 import io.RehaIOMessages;
-import oOorgTools.RehaOOTools;
 import opRgaf.OpRgaf;
-import systemEinstellungen.SystemConfig;
 import umfeld.Betriebsumfeld;
 
 class RgrKopie {

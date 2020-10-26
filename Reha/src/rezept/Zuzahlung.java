@@ -1,8 +1,5 @@
 package rezept;
 
-import stammDatenTools.ZuzahlTools;
-import systemEinstellungen.SystemConfig;
-
 public interface Zuzahlung {
 
     // TODO: use some get-/set-RezToStatus-way, or at least enum

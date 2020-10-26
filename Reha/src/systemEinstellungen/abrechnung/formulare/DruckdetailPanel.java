@@ -7,7 +7,6 @@ import java.awt.event.ItemListener;
 import java.util.Map;
 
 import javax.print.PrintService;
-import javax.print.PrintServiceLookup;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JButton;
 import javax.swing.JComboBox;

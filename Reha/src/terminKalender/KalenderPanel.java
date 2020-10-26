@@ -23,7 +23,6 @@ import org.slf4j.LoggerFactory;
 
 import CommonTools.ZeitFunk;
 import hauptFenster.Reha;
-import systemEinstellungen.ImageRepository;
 import systemEinstellungen.SystemConfig;
 import systemEinstellungen.TKSettings;
 import terminKalender.TerminFenster.Ansicht;

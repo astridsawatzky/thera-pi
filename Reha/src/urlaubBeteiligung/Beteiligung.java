@@ -7,8 +7,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.text.DecimalFormat;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Vector;
 
@@ -47,7 +45,6 @@ import ag.ion.bion.officelayer.document.IDocumentService;
 import ag.ion.bion.officelayer.spreadsheet.ISpreadsheetDocument;
 import ag.ion.noa.NOAException;
 import hauptFenster.Reha;
-import oOorgTools.RehaOOTools;
 import office.OOService;
 import office.OOTools;
 import rehaInternalFrame.JBeteiligungInternal;

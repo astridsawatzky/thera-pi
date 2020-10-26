@@ -11,7 +11,6 @@ import java.util.Vector;
 import javax.swing.JOptionPane;
 
 import crypt.Verschluesseln;
-import hauptFenster.Reha;
 import sql.DatenquellenFactory;
 
 public class Benutzer {

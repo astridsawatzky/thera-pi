@@ -10,20 +10,17 @@ import java.awt.event.KeyListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
-import java.util.List;
 
 import javax.print.PrintService;
 import javax.print.PrintServiceLookup;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
-import javax.swing.ComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingWorker;
-import javax.swing.event.ListDataListener;
 
 import org.jdesktop.swingx.JXPanel;
 

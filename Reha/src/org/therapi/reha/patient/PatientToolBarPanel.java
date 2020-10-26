@@ -7,8 +7,6 @@ import java.awt.Font;
 import java.awt.dnd.DropTargetAdapter;
 import java.awt.dnd.DropTargetDragEvent;
 import java.awt.dnd.DropTargetDropEvent;
-import java.awt.dnd.DropTargetEvent;
-import java.awt.dnd.DropTargetListener;
 import java.util.Arrays;
 import java.util.TooManyListenersException;
 
