@@ -10,8 +10,6 @@ import java.util.Optional;
 
 import org.junit.Ignore;
 import org.junit.Test;
-import org.therapi.reha.patient.PatientDTO;
-import org.therapi.reha.patient.PatientMapper;
 
 import core.Adresse;
 import core.Patient;

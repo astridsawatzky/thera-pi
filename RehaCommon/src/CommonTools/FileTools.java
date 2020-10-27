@@ -6,8 +6,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
 
 public class FileTools {
     public static void deleteAllFiles(File dir) {

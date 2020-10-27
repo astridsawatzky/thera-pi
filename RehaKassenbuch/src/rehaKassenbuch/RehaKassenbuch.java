@@ -18,8 +18,6 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 import CommonTools.SqlInfo;
-import CommonTools.ini.INIFile;
-import CommonTools.ini.Settings;
 import ag.ion.bion.officelayer.application.IOfficeApplication;
 import ch.qos.logback.classic.util.ContextInitializer;
 import gui.LaF;

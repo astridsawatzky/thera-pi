@@ -15,12 +15,9 @@ import javax.swing.UnsupportedLookAndFeelException;
 import org.jdesktop.swingworker.SwingWorker;
 
 import CommonTools.SqlInfo;
-import CommonTools.ini.INIFile;
-import CommonTools.ini.Settings;
 import rehaStatistik.Tools.SystemPreislisten;
 import ag.ion.bion.officelayer.application.IOfficeApplication;
 import logging.Logging;
-import office.OOService;
 import office.OOTools;
 import sql.DatenquellenFactory;
 

@@ -1,23 +1,13 @@
 package rezept;
 
-import static org.junit.Assert.*;
-
-import java.lang.reflect.Field;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import CommonTools.SqlInfo;
 import mandant.IK;
-import sql.DatenquellenFactory;
-import stammDatenTools.RezTools;
-import systemEinstellungen.SystemPreislisten;
 
 public class RezeptTest {
     private static RezeptDto rezDto;

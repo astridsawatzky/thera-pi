@@ -25,12 +25,9 @@ import CommonTools.ini.INITool;
 import CommonTools.ini.Settings;
 import offenePosten.RehaIO.RehaReverseServer;
 import offenePosten.RehaIO.SocketClient;
-import ag.ion.bion.officelayer.application.IOfficeApplication;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import io.RehaIOMessages;
 import logging.Logging;
-import offenePosten.RehaIO.RehaReverseServer;
-import offenePosten.RehaIO.SocketClient;
 import office.OOService;
 import sql.DatenquellenFactory;
 

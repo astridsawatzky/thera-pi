@@ -62,7 +62,6 @@ import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import ag.ion.bion.officelayer.text.TextException;
 import ag.ion.noa.NOAException;
 import crypt.Verschluesseln;
-import office.OOTools;
 
 public class NebraskaRequestDlg extends JDialog {
 

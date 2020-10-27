@@ -49,7 +49,6 @@ import CommonTools.ini.INIFile;
 import CommonTools.ini.Settings;
 import ag.ion.bion.officelayer.text.ITextDocument;
 import ag.ion.bion.officelayer.text.TextException;
-import environment.Path;
 import io.RehaIOMessages;
 import office.OOTools;
 import reha301.Dta301Model;

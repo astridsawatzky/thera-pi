@@ -1,6 +1,6 @@
 package org.therapi.reha.patient.therapieberichtpanel;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
 
 import java.util.List;
 

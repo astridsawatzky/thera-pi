@@ -1,5 +1,11 @@
 package rezept;
 
+import static org.hamcrest.Matchers.comparesEqualTo;
+import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.lessThan;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
+
 import java.time.LocalDate;
 import java.util.LinkedList;
 
@@ -8,9 +14,6 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import specs.ContractException;
-
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
 
 public class BehandlungTest {
     @Rule

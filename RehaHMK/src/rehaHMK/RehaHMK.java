@@ -1,23 +1,19 @@
 package rehaHMK;
 
-import CommonTools.Colors;
 import CommonTools.SqlInfo;
 import CommonTools.ini.INIFile;
 import CommonTools.ini.Settings;
 import rehaHMK.RehaIO.RehaReverseServer;
 import rehaHMK.RehaIO.SocketClient;
 import ag.ion.bion.officelayer.application.IOfficeApplication;
-import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import chrriis.dj.nativeswing.swtimpl.NativeInterface;
 import chrriis.dj.nativeswing.swtimpl.components.JWebBrowser;
 import environment.Path;
 import environment.SWTJarLoader;
 import io.RehaIOMessages;
 import logging.Logging;
-import office.OOService;
 import sql.DatenquellenFactory;
 
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Image;
 import java.awt.event.WindowEvent;
@@ -44,20 +40,6 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import CommonTools.SqlInfo;
-import CommonTools.ini.INIFile;
-import ag.ion.bion.officelayer.application.IOfficeApplication;
-import chrriis.dj.nativeswing.swtimpl.NativeInterface;
-import chrriis.dj.nativeswing.swtimpl.components.JWebBrowser;
-import environment.Path;
-import environment.SWTJarLoader;
-import io.RehaIOMessages;
-import logging.Logging;
-import office.OOTools;
-import rehaHMK.RehaIO.RehaReverseServer;
-import rehaHMK.RehaIO.SocketClient;
-import sql.DatenquellenFactory;
 
 public class RehaHMK implements WindowListener {
 

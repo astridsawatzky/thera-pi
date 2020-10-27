@@ -37,7 +37,6 @@ import CommonTools.JCompTools;
 import CommonTools.JRtaTextField;
 import CommonTools.SqlInfo;
 import rehaHMK.CompoundPainters;
-import rehaHMK.RehaHMK;
 
 public class ArztAuswahl extends RehaSmartDialog {
     /**

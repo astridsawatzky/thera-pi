@@ -12,9 +12,6 @@ import java.util.Vector;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import com.sun.star.awt.XExtendedToolkit;
-import com.sun.star.awt.XTopWindow;
-import com.sun.star.frame.XFrame;
 import com.sun.star.view.DocumentZoomType;
 
 import ag.ion.bion.officelayer.NativeView;

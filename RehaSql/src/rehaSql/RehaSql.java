@@ -22,15 +22,12 @@ import org.slf4j.LoggerFactory;
 
 import CommonTools.SqlInfo;
 import CommonTools.ini.INITool;
-import CommonTools.ini.Settings;
 import rehaSql.RehaIO.RehaReverseServer;
 import rehaSql.RehaIO.SocketClient;
 import ag.ion.bion.officelayer.application.IOfficeApplication;
 import ch.qos.logback.classic.util.ContextInitializer;
 import io.RehaIOMessages;
 import office.OOTools;
-import rehaSql.RehaIO.RehaReverseServer;
-import rehaSql.RehaIO.SocketClient;
 import sql.DatenquellenFactory;
 import uk.org.lidalia.sysoutslf4j.context.SysOutOverSLF4J;
 
