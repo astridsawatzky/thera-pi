@@ -2236,7 +2236,7 @@ public class TerminFenster implements RehaTPEventListener, ActionListener, DropT
         }
 
         if (lockok > 0) {
-            this.zf = new Zeitfenster(this);
+            this.zf = new Zeitfenster(terminangaben);
             int x, y;
             x = position.x;
             int xvp = this.viewPanel.getLocationOnScreen().x + this.viewPanel.getWidth();
@@ -2250,11 +2250,8 @@ public class TerminFenster implements RehaTPEventListener, ActionListener, DropT
             } else {
                 // y=y-(zf.getHeight()/2);
             }
-            zf.pack();
-            zf.setLocation(x, y);
-            zf.toFront();
-            zf.setModal(true);
-            zf.setVisible(true);
+            this.terminrueckgabe = zf. showAndWait(x, y);
+
             boolean update = false;
 
             if (!this.terminrueckgabe.getStartzeit2().isEmpty() && !this.terminrueckgabe.getDauer3().isEmpty()) {
@@ -2317,6 +2314,8 @@ public class TerminFenster implements RehaTPEventListener, ActionListener, DropT
         } // von rlockok > 0
     }
 
+
+
     private static void schreibeLog(final Block alt, final Block neu) {
         new Thread() {
 
@@ -2372,8 +2371,8 @@ public class TerminFenster implements RehaTPEventListener, ActionListener, DropT
         }
     }
 
-    public void setWerte(String[] srueck) {
-        this.terminrueckgabe = new Block(srueck);
+    public void setWerte(Block srueck) {
+        this.terminrueckgabe = srueck;
     }
 
     private void setzeRueckgabe() {
