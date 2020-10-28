@@ -1469,37 +1469,10 @@ public class AbrechnungPrivat extends JXDialog {
         }
     };
 
-//    @Override
-//    public void rehaTPEventOccurred(RehaTPEvent evt) {
-//        FensterSchliessen();
-//    }
+
 
     private void FensterSchliessen() {
-        jtp.removeMouseMotionListener(mymouse);
-        jcmb.removeActionListener(al);
-        content.removeKeyListener(kl);
-        originalPos.clear();
-        jtp.removeMouseListener(mymouse);
-        originalPos = null;
-        originalAnzahl.clear();
-        originalAnzahl = null;
-        einzelPreis.clear();
-        einzelPreis = null;
-        originalId.clear();
-        originalId = null;
-        originalLangtext.clear();
-        originalLangtext = null;
-        zeilenGesamt.clear();
-        zeilenGesamt = null;
-        rechnungGesamt = null;
-        hmAdresse.clear();
-        hmAdresse = null;
 
-        mymouse = null;
-        if (rtp != null) {
-            rtp = null;
-        }
-        this.pinPanel = null;
         setVisible(false);
         dispose();
     }
