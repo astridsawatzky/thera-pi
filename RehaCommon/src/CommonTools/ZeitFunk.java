@@ -7,14 +7,12 @@ public final class ZeitFunk {
 
     public static long ZeitDifferenzInMinuten(String szeit1, String szeit2) {
 
-        LocalTime lt1 = LocalTime.parse(szeit1);
-        LocalTime lt2 = LocalTime.parse(szeit2);
-
-        return ChronoUnit.MINUTES.between(lt1, lt2);
+        return ChronoUnit.MINUTES.between(LocalTime.parse(szeit1), LocalTime.parse(szeit2));
     }
 
     public static long MinutenSeitMitternacht(String szeit1) {
-        return ZeitDifferenzInMinuten("00:00", szeit1.substring(0, 5));
+        return ChronoUnit.MINUTES.between(LocalTime.MIDNIGHT, LocalTime.parse(szeit1));
+
 
     }
 

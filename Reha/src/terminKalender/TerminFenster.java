@@ -114,12 +114,12 @@ public class TerminFenster implements RehaTPEventListener, ActionListener, DropT
     /** Nimmt die KollegenNr auf dessen Maske erstellt/editiert wird. */
     private String[] sbelegung = { "./.", "./.", "./.", "./.", "./.", "./.", "./." };
     /** Welches Set soll dargestellt werden. */
- //   private int aktSet;
+    // private int aktSet;
 
     /** Nimmt die Termindaten auf. */
     private Vector<Object> aSpaltenDaten = new Vector<>();
     /** Wird gebraucht zur Datenübergabe auf die Spalten. */
-    private java.util.List vTerm = new Vector();
+    private List<ArrayList<Vector<String>>> vTerm = new Vector<ArrayList<Vector<String>>>();
     private boolean updateverbot;
 
     private Point dragDaten = new Point(0, 0);
@@ -142,10 +142,8 @@ public class TerminFenster implements RehaTPEventListener, ActionListener, DropT
 
     Ansicht aktAnsicht;
 
-    private Block terminangaben = new Block( "" , "" , ""  , "" ,
-            "", ""  );
-    private Block terminrueckgabe = new Block(  "" , ""  , "" , "",
-            "", "" );
+    private Block terminangaben = new Block("", "", "", "", "", "");
+    private Block terminrueckgabe = new Block("", "", "", "", "", "");
 
     private int focus[] = { 0, 0 };
     private boolean hasFocus;
@@ -198,12 +196,9 @@ public class TerminFenster implements RehaTPEventListener, ActionListener, DropT
 
     private InfoDialogTerminInfo infoDlg;
 
-
-
-    private  String[] dayname = { "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag",
-            "Sonntag" };
-    private  String[] dayshortname = { "Mo - ", "Di - ", "Mi - ", "Do - ", "Fr - ", "Sa - ", "So - " };
-    private  String[] tooltip = { "", "", "", "", "", "", "" };
+    private String[] dayname = { "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag", "Sonntag" };
+    private String[] dayshortname = { "Mo - ", "Di - ", "Mi - ", "Do - ", "Fr - ", "Sa - ", "So - " };
+    private String[] tooltip = { "", "", "", "", "", "", "" };
     private FinalGlassPane fgp;
 
     private Connection connection;
@@ -282,10 +277,11 @@ public class TerminFenster implements RehaTPEventListener, ActionListener, DropT
             setWochenanzeige();
         } else if (ansicht == Ansicht.NORMAL) {
 
-            aktuellesSet = BehandlerSets.find(TKSettings.defaultBehandlerSet) ;
-            if (aktuellesSet!=null) {
+            aktuellesSet = BehandlerSets.find(TKSettings.defaultBehandlerSet);
+            if (aktuellesSet != null) {
                 for (int i = 0; i < 7; i++) {
-                    oCombo[i].setSelectedItem(aktuellesSet.getMembers().get(i));
+                    oCombo[i].setSelectedItem(aktuellesSet.getMembers()
+                                                          .get(i));
                 }
             }
         }
@@ -504,11 +500,14 @@ public class TerminFenster implements RehaTPEventListener, ActionListener, DropT
                 }
                 if (TerminFenster.this.aktAnsicht == Ansicht.NORMAL) {
                     try {
-                        belegung[welche] = KollegenListe.vKKollegen.get(wahl).getReihe() - 1;
+                        belegung[welche] = KollegenListe.vKKollegen.get(wahl)
+                                                                   .getReihe()
+                                - 1;
                         oSpalten[welche].datenZeichnen(vTerm, belegung[welche]);
                         oSpalten[aktiveSpalte[2]].requestFocus();
                         if (welche == 0) {
-                            wochenbelegung = KollegenListe.vKKollegen.get(wahl).getReihe();
+                            wochenbelegung = KollegenListe.vKKollegen.get(wahl)
+                                                                     .getReihe();
                         }
 
                     } catch (java.lang.ArrayIndexOutOfBoundsException ex) {
@@ -517,7 +516,8 @@ public class TerminFenster implements RehaTPEventListener, ActionListener, DropT
                 } else if (TerminFenster.this.aktAnsicht == Ansicht.WOCHE) {
                     try {
                         if (welche == 0) {
-                            wochenbelegung = KollegenListe.vKKollegen.get(wahl).getReihe();
+                            wochenbelegung = KollegenListe.vKKollegen.get(wahl)
+                                                                     .getReihe();
                             if ("".equals(wocheErster)) {
                                 ansichtStatement(aktuellerTag, aktAnsicht);
                             } else {
@@ -530,7 +530,8 @@ public class TerminFenster implements RehaTPEventListener, ActionListener, DropT
 
                 } else if (TerminFenster.this.aktAnsicht == Ansicht.MASKE) {
 
-                    maskenbelegung = KollegenListe.vKKollegen.get(wahl).getReihe();
+                    maskenbelegung = KollegenListe.vKKollegen.get(wahl)
+                                                             .getReihe();
                     String maskenbehandler = (maskenbelegung < 10 ? "0" + maskenbelegung + "BEHANDLER"
                             : Integer.toString(maskenbelegung) + "BEHANDLER");
                     String stmtmaske = "select * from masken where behandler = '" + maskenbehandler + "' ORDER BY art";
@@ -568,13 +569,20 @@ public class TerminFenster implements RehaTPEventListener, ActionListener, DropT
             oCombo[i].removeAllItems();
         }
         for (von = 0; von < bis; von++) {
-            oCombo[0].addItem(KollegenListe.vKKollegen.get(von).getMatchcode());
-            oCombo[1].addItem(KollegenListe.vKKollegen.get(von).getMatchcode());
-            oCombo[2].addItem(KollegenListe.vKKollegen.get(von).getMatchcode());
-            oCombo[3].addItem(KollegenListe.vKKollegen.get(von).getMatchcode());
-            oCombo[4].addItem(KollegenListe.vKKollegen.get(von).getMatchcode());
-            oCombo[5].addItem(KollegenListe.vKKollegen.get(von).getMatchcode());
-            oCombo[6].addItem(KollegenListe.vKKollegen.get(von).getMatchcode());
+            oCombo[0].addItem(KollegenListe.vKKollegen.get(von)
+                                                      .getMatchcode());
+            oCombo[1].addItem(KollegenListe.vKKollegen.get(von)
+                                                      .getMatchcode());
+            oCombo[2].addItem(KollegenListe.vKKollegen.get(von)
+                                                      .getMatchcode());
+            oCombo[3].addItem(KollegenListe.vKKollegen.get(von)
+                                                      .getMatchcode());
+            oCombo[4].addItem(KollegenListe.vKKollegen.get(von)
+                                                      .getMatchcode());
+            oCombo[5].addItem(KollegenListe.vKKollegen.get(von)
+                                                      .getMatchcode());
+            oCombo[6].addItem(KollegenListe.vKKollegen.get(von)
+                                                      .getMatchcode());
         }
         oCombo[0].setMaximumRowCount(35);
         oCombo[0].setSelectedItem("./.");
@@ -607,13 +615,20 @@ public class TerminFenster implements RehaTPEventListener, ActionListener, DropT
         // String cwert = null;
         for (von = 0; von < bis; von++) {
             // cwert = ParameterLaden.vKKollegen.get(von).Matchcode;
-            oCombo[0].addItem(KollegenListe.vKKollegen.get(von).getMatchcode());
-            oCombo[1].addItem(KollegenListe.vKKollegen.get(von).getMatchcode());
-            oCombo[2].addItem(KollegenListe.vKKollegen.get(von).getMatchcode());
-            oCombo[3].addItem(KollegenListe.vKKollegen.get(von).getMatchcode());
-            oCombo[4].addItem(KollegenListe.vKKollegen.get(von).getMatchcode());
-            oCombo[5].addItem(KollegenListe.vKKollegen.get(von).getMatchcode());
-            oCombo[6].addItem(KollegenListe.vKKollegen.get(von).getMatchcode());
+            oCombo[0].addItem(KollegenListe.vKKollegen.get(von)
+                                                      .getMatchcode());
+            oCombo[1].addItem(KollegenListe.vKKollegen.get(von)
+                                                      .getMatchcode());
+            oCombo[2].addItem(KollegenListe.vKKollegen.get(von)
+                                                      .getMatchcode());
+            oCombo[3].addItem(KollegenListe.vKKollegen.get(von)
+                                                      .getMatchcode());
+            oCombo[4].addItem(KollegenListe.vKKollegen.get(von)
+                                                      .getMatchcode());
+            oCombo[5].addItem(KollegenListe.vKKollegen.get(von)
+                                                      .getMatchcode());
+            oCombo[6].addItem(KollegenListe.vKKollegen.get(von)
+                                                      .getMatchcode());
         }
         oCombo[0].setMaximumRowCount(35);
         oCombo[0].setSelectedItem("./.");
@@ -658,8 +673,7 @@ public class TerminFenster implements RehaTPEventListener, ActionListener, DropT
                 cb.setBorder(null);
                 cb.setBackground(TKSettings.KalenderHintergrund);
                 String name = "Spalte" + i;
-                oSpalten[i] = new TherapeutenTag(name,true,TKSettings.KalenderAlpha);
-
+                oSpalten[i] = new TherapeutenTag(name, true, TKSettings.KalenderAlpha);
 
                 dragLab[i] = new JLabel();
                 dragLab[i].setName("draLab-" + i);
@@ -1145,11 +1159,13 @@ public class TerminFenster implements RehaTPEventListener, ActionListener, DropT
                         String reznummer = "";
                         // TerminInfo aufrufen
                         if (aktAnsicht == Ansicht.NORMAL) {
-                            reznummer = (String) ((Vector) ((ArrayList) vTerm.get(belegung[aktiveSpalte[2]])).get(
-                                    1)).get(aktiveSpalte[0]);
+                            reznummer = vTerm.get(belegung[aktiveSpalte[2]])
+                                             .get(1)
+                                             .get(aktiveSpalte[0]);
                         } else if (aktAnsicht == Ansicht.WOCHE) {
-                            reznummer = (String) ((Vector) ((ArrayList) vTerm.get(aktiveSpalte[2])).get(1)).get(
-                                    aktiveSpalte[0]);
+                            reznummer = vTerm.get(aktiveSpalte[2])
+                                             .get(1)
+                                             .get(aktiveSpalte[0]);
                         }
                         infoDlg = new InfoDialogTerminInfo(reznummer, null);
                         infoDlg.pack();
@@ -2216,16 +2232,16 @@ public class TerminFenster implements RehaTPEventListener, ActionListener, DropT
         }
         ArrayList<Vector<String>> terminangabe = (ArrayList<Vector<String>>) vTerm.get(behandler);
         terminangaben = new Block(terminangabe.get(0)
-                                                                             .get(block),
-        terminangabe.get(1)
-                                                          .get(block),
-        terminangabe.get(2)
-                                                          .get(block),
-        terminangabe.get(3)
-                                                          .get(block),
-        terminangabe.get(4)
-                                                          .get(block),
-        Integer.toString(block));
+                                              .get(block),
+                terminangabe.get(1)
+                            .get(block),
+                terminangabe.get(2)
+                            .get(block),
+                terminangabe.get(3)
+                            .get(block),
+                terminangabe.get(4)
+                            .get(block),
+                Integer.toString(block));
 
         /* Test der Berechtigungen */
         if (!rechteTest(terminangaben.getName0())) {
@@ -2250,11 +2266,14 @@ public class TerminFenster implements RehaTPEventListener, ActionListener, DropT
             } else {
                 // y=y-(zf.getHeight()/2);
             }
-            this.terminrueckgabe = zf. showAndWait(x, y);
+            this.terminrueckgabe = zf.showAndWait(x, y);
 
             boolean update = false;
 
-            if (!this.terminrueckgabe.getStartzeit2().isEmpty() && !this.terminrueckgabe.getDauer3().isEmpty()) {
+            if (!this.terminrueckgabe.getStartzeit2()
+                                     .isEmpty()
+                    && !this.terminrueckgabe.getDauer3()
+                                            .isEmpty()) {
                 for (int i = 0; i <= 4; i++) {
                     if (!this.terminangaben.equals(this.terminrueckgabe)) {
                         update = true;
@@ -2263,46 +2282,54 @@ public class TerminFenster implements RehaTPEventListener, ActionListener, DropT
                 }
             }
             if (update) {
-
-                if (lockok > 0 && aktAnsicht == Ansicht.NORMAL) {
+                if (lockok > 0) {
                     Tblock tbl = new Tblock();
-                    spaltenDatumSetzen(true);
-                    if ((tbl.TblockInit(this, this.terminrueckgabe, aktiveSpalte[2], aktiveSpalte[0],
-                            belegung[aktiveSpalte[2]], vTerm, spaltenDatum, 0)) >= 0) {
-                        setUpdateVerbot(true);
-                        oSpalten[aktiveSpalte[2]].schwarzAbgleich(aktiveSpalte[0], aktiveSpalte[0]);
-                        oSpalten[aktiveSpalte[2]].datenZeichnen(vTerm, belegung[aktiveSpalte[2]]);
-                        setUpdateVerbot(false);
-                    }
-                } else if (lockok > 0 && aktAnsicht == Ansicht.WOCHE) {
-                    Tblock tbl = new Tblock();
-                    spaltenDatumSetzen(false);
-                    if ((tbl.TblockInit(this, this.terminrueckgabe, aktiveSpalte[2], aktiveSpalte[0], aktiveSpalte[2],
-                            vTerm, spaltenDatum, this.wocheBehandler)) >= 0) {
-                        setUpdateVerbot(true);
-                        oSpalten[aktiveSpalte[2]].schwarzAbgleich(aktiveSpalte[0], aktiveSpalte[0]);
-                        oSpalten[aktiveSpalte[2]].datenZeichnen(vTerm, aktiveSpalte[2]);
-                        setUpdateVerbot(false);
-                    }
-                } else if (lockok > 0 && aktAnsicht == Ansicht.MASKE) {
-                    Tblock tbl = new Tblock();
-                    spaltenDatumSetzen(true);
-                    if ((tbl.TblockInit(this, this.terminrueckgabe, aktiveSpalte[2], aktiveSpalte[0], aktiveSpalte[2],
-                            vTerm, spaltenDatum, maskenbelegung)) >= 0) {
-                        setUpdateVerbot(true);
-                        oSpalten[aktiveSpalte[2]].schwarzAbgleich(aktiveSpalte[0], aktiveSpalte[0]);
-                        oSpalten[aktiveSpalte[2]].datenZeichnen(vTerm, aktiveSpalte[2]);
-                        setUpdateVerbot(false);
+                    switch (aktAnsicht) {
+                    case NORMAL:
+                        spaltenDatumSetzen(true);
+                        if ((tbl.TblockInit(this, this.terminrueckgabe, aktiveSpalte[2], aktiveSpalte[0],
+                                belegung[aktiveSpalte[2]], vTerm, spaltenDatum, 0)) >= 0) {
+                            setUpdateVerbot(true);
+                            oSpalten[aktiveSpalte[2]].schwarzAbgleich(aktiveSpalte[0], aktiveSpalte[0]);
+                            oSpalten[aktiveSpalte[2]].datenZeichnen(vTerm, belegung[aktiveSpalte[2]]);
+                            setUpdateVerbot(false);
+                        }
+                        break;
+                    case WOCHE:
+                        spaltenDatumSetzen(false);
+                        if ((tbl.TblockInit(this, this.terminrueckgabe, aktiveSpalte[2], aktiveSpalte[0],
+                                aktiveSpalte[2], vTerm, spaltenDatum, this.wocheBehandler)) >= 0) {
+                            setUpdateVerbot(true);
+                            oSpalten[aktiveSpalte[2]].schwarzAbgleich(aktiveSpalte[0], aktiveSpalte[0]);
+                            oSpalten[aktiveSpalte[2]].datenZeichnen(vTerm, aktiveSpalte[2]);
+                            setUpdateVerbot(false);
+                        }
+                        break;
+                    case MASKE:
+                        spaltenDatumSetzen(true);
+                        if ((tbl.TblockInit(this, this.terminrueckgabe, aktiveSpalte[2], aktiveSpalte[0],
+                                aktiveSpalte[2], vTerm, spaltenDatum, maskenbelegung)) >= 0) {
+                            setUpdateVerbot(true);
+                            oSpalten[aktiveSpalte[2]].schwarzAbgleich(aktiveSpalte[0], aktiveSpalte[0]);
+                            oSpalten[aktiveSpalte[2]].datenZeichnen(vTerm, aktiveSpalte[2]);
+                            setUpdateVerbot(false);
+                        }
+                        break;
                     }
                 }
-            } else {
+            }
+
+            else {
                 setUpdateVerbot(false);
                 starteUnlock();
             }
             this.zf = null;
             if ((SystemConfig.logVTermine || SystemConfig.logAlleTermine) && update) {
                 if (SystemConfig.logVTermine) {
-                    if ((terminangaben.getName0().startsWith("V?") || terminrueckgabe.getName0().startsWith("V?"))) {
+                    if ((terminangaben.getName0()
+                                      .startsWith("V?")
+                            || terminrueckgabe.getName0()
+                                              .startsWith("V?"))) {
 
                         schreibeLog(terminangaben, terminrueckgabe);
                     }
@@ -2314,8 +2341,6 @@ public class TerminFenster implements RehaTPEventListener, ActionListener, DropT
         } // von rlockok > 0
     }
 
-
-
     private static void schreibeLog(final Block alt, final Block neu) {
         new Thread() {
 
@@ -2324,9 +2349,10 @@ public class TerminFenster implements RehaTPEventListener, ActionListener, DropT
                 String cmd = "insert into vlog set datum='" + LocalDateTime.now()
                                                                            .format(ddmmyyy_hhmmss)
                         + "', benutzer='" + Reha.aktUser + "', maschine='" + SystemConfig.dieseMaschine + "', vname='"
-                        + alt.getName0() + "', " + "vreznr='" + alt.getRezeptnr1() + "', vdauer='" + alt.getDauer3() + "', vstart='" + alt.getStartzeit2()
-                        + "', " + "vend='" + alt.getEndzeit4() + "', nname='" + neu.getName0() + "', nreznr='" + neu.getRezeptnr1() + "', ndauer='"
-                        + neu.getDauer3() + "', " + "nstart='" + neu.getStartzeit2() + "', nend='" + neu.getEndzeit4() + "'";
+                        + alt.getName0() + "', " + "vreznr='" + alt.getRezeptnr1() + "', vdauer='" + alt.getDauer3()
+                        + "', vstart='" + alt.getStartzeit2() + "', " + "vend='" + alt.getEndzeit4() + "', nname='"
+                        + neu.getName0() + "', nreznr='" + neu.getRezeptnr1() + "', ndauer='" + neu.getDauer3() + "', "
+                        + "nstart='" + neu.getStartzeit2() + "', nend='" + neu.getEndzeit4() + "'";
                 SqlInfo.sqlAusfuehren(cmd);
             }
         }.start();
@@ -2394,16 +2420,15 @@ public class TerminFenster implements RehaTPEventListener, ActionListener, DropT
         }
         try {
             ArrayList<?> behandlerVector = (ArrayList<?>) vTerm.get(behandler);
-            terminrueckgabe = new Block( (String) ((Vector<?>) behandlerVector.get(0)).get(block),
-            (String) ((Vector<?>) behandlerVector.get(1)).get(block),
-            (String) ((Vector<?>) behandlerVector.get(2)).get(block),
-            (String) ((Vector<?>) behandlerVector.get(3)).get(block),
-            (String) ((Vector<?>) behandlerVector.get(4)).get(block),
-            Integer.toString(block));
+            terminrueckgabe = new Block((String) ((Vector<?>) behandlerVector.get(0)).get(block),
+                    (String) ((Vector<?>) behandlerVector.get(1)).get(block),
+                    (String) ((Vector<?>) behandlerVector.get(2)).get(block),
+                    (String) ((Vector<?>) behandlerVector.get(3)).get(block),
+                    (String) ((Vector<?>) behandlerVector.get(4)).get(block), Integer.toString(block));
         } catch (ArrayIndexOutOfBoundsException ex) {
             terminrueckgabe = Block.EMPTYBLOCK;
 
-            neuerBlockAktiv(((ArrayList) vTerm.get(behandler)).size());
+            neuerBlockAktiv( vTerm.get(behandler).size());
         }
     }
 
@@ -2415,8 +2440,8 @@ public class TerminFenster implements RehaTPEventListener, ActionListener, DropT
         return this.viewPanel;
     }
 
-    public void setUpdateVerbot(boolean lwert) {
-        this.updateverbot = lwert;
+    public void setUpdateVerbot(boolean istVerboten) {
+        this.updateverbot = istVerboten;
     }
 
     public boolean getUpdateVerbot() {
@@ -2432,8 +2457,8 @@ public class TerminFenster implements RehaTPEventListener, ActionListener, DropT
         aktiveSpalte[1] = neuBlock;
     }
 
-    private void KlickSetzen(TherapeutenTag oSpalten2, MouseEvent e) {
-        aktiveSpalte = oSpalten2.BlockTest(e.getX(), e.getY(), aktiveSpalte);
+    private void KlickSetzen(TherapeutenTag therapeutenTag, MouseEvent e) {
+        aktiveSpalte = therapeutenTag.BlockTest(e.getX(), e.getY(), aktiveSpalte);
         if (aktiveSpalte[2] != aktiveSpalte[3]) {
             if (gruppierenAktiv) {
                 gruppierenAktiv = false;
@@ -2442,7 +2467,7 @@ public class TerminFenster implements RehaTPEventListener, ActionListener, DropT
                 gruppierenBloecke[0] = -1;
                 gruppierenBloecke[1] = -1;
             }
-            oSpalten2.blockGeklickt(aktiveSpalte[0]);
+            therapeutenTag.blockGeklickt(aktiveSpalte[0]);
             oSpalten[aktiveSpalte[3]].blockGeklickt(-1);
         } else {
             if (gruppierenAktiv) {
@@ -2451,7 +2476,7 @@ public class TerminFenster implements RehaTPEventListener, ActionListener, DropT
                 oSpalten[gruppierenSpalte].gruppierungZeichnen(gruppierenBloecke.clone());
                 oSpalten[gruppierenSpalte].requestFocus();
             } else {
-                oSpalten2.blockGeklickt(aktiveSpalte[0]);
+                therapeutenTag.blockGeklickt(aktiveSpalte[0]);
             }
         }
         return;
@@ -2488,7 +2513,8 @@ public class TerminFenster implements RehaTPEventListener, ActionListener, DropT
         setUpdateVerbot(false);
         if (!"./.".equals(sw.ret)) {
             aktuellesSet = BehandlerSets.find(sw.ret);
-            String[] sSet = aktuellesSet.getMembers().toArray(new String[0]);
+            String[] sSet = aktuellesSet.getMembers()
+                                        .toArray(new String[0]);
             oCombo[0].setSelectedItem(sSet[0]);
             oCombo[1].setSelectedItem(sSet[1]);
             oCombo[2].setSelectedItem(sSet[2]);
@@ -2540,8 +2566,8 @@ public class TerminFenster implements RehaTPEventListener, ActionListener, DropT
         } else if (aktAnsicht == Ansicht.WOCHE) {
             behandler = wochenbelegung;
             if (behandler == 0) {
-                behandler = KollegenListe.vKKollegen.get(
-                        KollegenListe.suchen((String) oCombo[0].getSelectedItem())).getReihe();
+                behandler = KollegenListe.vKKollegen.get(KollegenListe.suchen((String) oCombo[0].getSelectedItem()))
+                                                    .getReihe();
             }
             sbehandler = behandler < 10 ? "0" + behandler : "" + Integer.toString(behandler);
             serster = DatFunk.WocheErster(stag);
@@ -2572,6 +2598,7 @@ public class TerminFenster implements RehaTPEventListener, ActionListener, DropT
 
     /***
      * Mache Statement.
+     *
      * @param behandlerMaxAnzahl TODO
      * @param ansicht            TODO
      */
@@ -2602,15 +2629,13 @@ public class TerminFenster implements RehaTPEventListener, ActionListener, DropT
                     int ende = (5 * belegt);
                     maxblock = maxblock + (ende + 5);
 
-
-                        for (int i = 1; i < ende; i = i + 5) {
-                            v1.addElement(rs.getString(i) != null ? rs.getString(i) : "");
-                            v2.addElement(rs.getString(i + 1) != null ? rs.getString(i + 1) : "");
-                            v3.addElement(rs.getString(i + 2));
-                            v4.addElement(rs.getString(i + 3));
-                            v5.addElement(rs.getString(i + 4));
-                        }
-
+                    for (int i = 1; i < ende; i = i + 5) {
+                        v1.addElement(rs.getString(i) != null ? rs.getString(i) : "");
+                        v2.addElement(rs.getString(i + 1) != null ? rs.getString(i + 1) : "");
+                        v3.addElement(rs.getString(i + 2));
+                        v4.addElement(rs.getString(i + 3));
+                        v5.addElement(rs.getString(i + 4));
+                    }
 
                     v6.addElement(rs.getString(SPALTE_ANZ_BELGEGTE_BLOECKE)); // Anzahl
                     v6.addElement(rs.getString(302)); // Art
@@ -2681,16 +2706,9 @@ public class TerminFenster implements RehaTPEventListener, ActionListener, DropT
             stmt = Reha.instance.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             try {
                 rs = stmt.executeQuery(sstmt);
-                int i = 0;
                 int durchlauf = 0;
-                int maxbehandler;
-                if (aktAnsicht == Ansicht.NORMAL) {
-                    maxbehandler = KollegenListe.vKKollegen.size();
-                } else {
-                    maxbehandler = 7;
-                }
+
                 int maxblock = 0;
-                int aktbehandler = 1;
                 ArrayList<Object> aKalList = new ArrayList<Object>();
                 aSpaltenDaten.clear();
                 while ((rs.next())) {
@@ -2718,8 +2736,6 @@ public class TerminFenster implements RehaTPEventListener, ActionListener, DropT
                         durchlauf1 = durchlauf1 + 1;
 
                     }
-                    i = i1;
-
                     v6.addElement(rs.getString(226)); // Anzahl
                     v6.addElement(rs.getString(227)); // Art
                     v6.addElement(rs.getString(228)); // Behandler
@@ -2734,7 +2750,6 @@ public class TerminFenster implements RehaTPEventListener, ActionListener, DropT
                     aKalList.add(v6.clone());
                     aSpaltenDaten.add(aKalList.clone());
                     aKalList.clear();
-                    aktbehandler++;
                 }
 
                 if (maxblock > 0) {
@@ -2907,10 +2922,10 @@ public class TerminFenster implements RehaTPEventListener, ActionListener, DropT
         if (aktbehandler == -1) {
             return;
         }
-        datenSpeicher[0] = ((String) ((Vector) ((ArrayList) vTerm.get(aktbehandler)).get(0)).get(aktblock)).replaceAll(
+        datenSpeicher[0] =  vTerm.get(aktbehandler).get(0).get(aktblock).replaceAll(
                 "\u00AE", "");
-        datenSpeicher[1] = (String) ((Vector) ((ArrayList) vTerm.get(aktbehandler)).get(1)).get(aktblock);
-        datenSpeicher[3] = (String) ((Vector) ((ArrayList) vTerm.get(aktbehandler)).get(3)).get(aktblock);
+        datenSpeicher[1] = vTerm.get(aktbehandler).get(1).get(aktblock);
+        datenSpeicher[3] =  vTerm.get(aktbehandler).get(3).get(aktblock);
 
         Reha.instance.copyLabel.setText(datenSpeicher[0] + "°" + datenSpeicher[1] + "°" + datenSpeicher[3] + " Min.");
         Reha.instance.bunker.setText(
@@ -2936,10 +2951,10 @@ public class TerminFenster implements RehaTPEventListener, ActionListener, DropT
             return srueck;
         }
         try {
-            srueck[0] = ((String) ((Vector) ((ArrayList) vTerm.get(aktbehandler)).get(0)).get(aktblock)).replaceAll(
+            srueck[0] =  vTerm.get(aktbehandler).get(0).get(aktblock).replaceAll(
                     "\u00AE", "");
-            srueck[1] = (String) ((Vector) ((ArrayList) vTerm.get(aktbehandler)).get(1)).get(aktblock);
-            srueck[3] = (String) ((Vector) ((ArrayList) vTerm.get(aktbehandler)).get(3)).get(aktblock);
+            srueck[1] = vTerm.get(aktbehandler).get(1).get(aktblock);
+            srueck[3] = vTerm.get(aktbehandler).get(3).get(aktblock);
             return srueck;
         } catch (ArrayIndexOutOfBoundsException ex) {
             return new String[] { null, null, null, null, null };
@@ -2992,7 +3007,7 @@ public class TerminFenster implements RehaTPEventListener, ActionListener, DropT
                     } else {
                         String[] internerSpeicher = { terminVergabe.get(anzahl - 1)[8],
                                 terminVergabe.get(anzahl - 1)[9], "", terminVergabe.get(anzahl - 1)[4] };
-                        setDatenSpeicher(internerSpeicher.clone());
+                        setDatenSpeicher(internerSpeicher);
                     }
                 }
             }
@@ -3262,7 +3277,7 @@ public class TerminFenster implements RehaTPEventListener, ActionListener, DropT
         oSpalten[aktiveSpalte[2]].datenZeichnen(vTerm, aktiveSpalte[2]);
     }
 
-    public List getDatenVector() {
+    public List<ArrayList<Vector<String>>> getDatenVector() {
         return vTerm;
     }
 
@@ -3283,8 +3298,6 @@ public class TerminFenster implements RehaTPEventListener, ActionListener, DropT
                 if (!((String) ((Vector<?>) ((ArrayList<?>) Reha.instance.terminpanel.vTerm.get(tage)).get(1)).get(
                         i)).trim()
                            .contains("@FREI")) {
-                    // minuten_tag = minuten_tag + Integer.valueOf( ((String)
-                    // ((Vector<?>)((ArrayList<?>)Reha.instance.terminpanel.vTerm.get(tage)).get(3)).get(i)).trim());
                     minuten_tag = minuten_tag + Integer.parseInt(
                             ((String) ((Vector<?>) ((ArrayList<?>) Reha.instance.terminpanel.vTerm.get(tage)).get(
                                     3)).get(i)).trim());
@@ -3412,7 +3425,7 @@ public class TerminFenster implements RehaTPEventListener, ActionListener, DropT
                 List copy = new ArrayList<>();
                 copy.addAll(vTerm);
 
-                mb = new MaskeInKalenderSchreiben(Reha.getThisFrame(), maskenbelegung,  copy);
+                mb = new MaskeInKalenderSchreiben(Reha.getThisFrame(), maskenbelegung, copy);
                 mb.setSize(new Dimension(700, 430));
                 mb.setLocation(new Point(250, 200));
                 mb.setVisible(true);
@@ -4692,7 +4705,6 @@ public class TerminFenster implements RehaTPEventListener, ActionListener, DropT
 
     }
 
-
     void setSwSetWahl(String setName) {
         this.swSetWahl = setName;
     }
@@ -4703,9 +4715,9 @@ public class TerminFenster implements RehaTPEventListener, ActionListener, DropT
 class KalZeichnen implements Runnable {
     private TherapeutenTag kPanel = null;
     private int belegung;
-    private List vTerm = null;
+    private List<ArrayList<Vector<String>>> vTerm = null;
 
-    public KalZeichnen(TherapeutenTag oSpalten, List vTerm2, int belegung) {
+    public KalZeichnen(TherapeutenTag oSpalten, List<ArrayList<Vector<String>>> vTerm2, int belegung) {
         this.kPanel = oSpalten;
         this.vTerm = vTerm2;
         this.belegung = belegung;

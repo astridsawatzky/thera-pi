@@ -6,13 +6,14 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-
+import java.time.LocalTime;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -34,39 +35,95 @@ import CommonTools.ZeitFunk;
 import hauptFenster.Reha;
 import hauptFenster.UIFSplitPane;
 
-class Zeitfenster extends JDialog implements KeyListener, FocusListener, ActionListener {
-
+class Zeitfenster extends JDialog implements KeyListener, ActionListener {
     private static final long serialVersionUID = 1L;
-    private JXPanel jContentPane = null; // @jve:decl-index=0:visual-constraint="37,10"
-    private JRtaTextField NamePatient = null;
-    private JRtaTextField Rezeptnummer = null;
+    /** @jve:decl-index=0:visual-constraint="37,10" */
+    private JXPanel jContentPane;
+    private JRtaTextField NamePatient;
+    private JRtaTextField Rezeptnummer;
 
-    private JRtaTextField Dauer = null;
-    private JRtaTextField BeginnStunde = null;
-    private JRtaTextField BeginnMinute = null;
-    private JRtaTextField EndeStunde = null;
-    private JRtaTextField EndeMinute = null;
-    private JButton Ok = null;
-    private JButton Abbruch = null;
-    private JXPanel neuPanel = null;
+    private JRtaTextField Dauer;
+    private JRtaTextField BeginnStunde;
+    private JRtaTextField BeginnMinute;
+    private JRtaTextField EndeStunde;
+    private JRtaTextField EndeMinute;
+    private JButton Ok;
+    private JButton Abbruch;
+    private JXPanel neuPanel;
     private JRadioButton[] rb = { null, null, null };
 
     private JLabel[] lbl = { null, null, null };
 
     private enum RechenArt {
-        startUndDauer,
-        endUndDauer,
-        startUndEnde;
+        startUndDauer {
+            @Override
+            boolean benutztStart() {
+                return true;
+            }
 
+            @Override
+            boolean benutztEnde() {
+                return false;
+            }
+
+            @Override
+            boolean benutztDauer() {
+                return true;
+            }
+        },
+        endUndDauer {
+            @Override
+            boolean benutztStart() {
+                return false;
+            }
+
+            @Override
+            boolean benutztEnde() {
+                return true;
+            }
+
+            @Override
+            boolean benutztDauer() {
+                return true;
+            }
+        },
+        startUndEnde {
+            @Override
+            boolean benutztStart() {
+                return true;
+            }
+
+            @Override
+            boolean benutztEnde() {
+                return true;
+            }
+
+            @Override
+            boolean benutztDauer() {
+                return false;
+            }
+        };
+
+        abstract boolean benutztStart();
+        abstract boolean benutztEnde();
+        abstract boolean benutztDauer();
     }
 
     private RechenArt rechenart = RechenArt.startUndDauer;
-    private UIFSplitPane jSplitLR = null;
-    private JXPanel panelRadio = null;
-    private int dividerLocLR = 0;
-    private ButtonGroup rechenartbg = new ButtonGroup(); // @jve:decl-index=0:
+    private UIFSplitPane jSplitLR;
+    private JXPanel panelRadio;
+    private int dividerLocLR;
+    /** @jve:decl-index=0: */
+    private ButtonGroup rechenartbg = new ButtonGroup();
     private Block rueck;
     private final Block originalWerte;
+
+    private FocusListener recalculate = new FocusAdapter() {
+        @Override
+        public void focusLost(FocusEvent arg0) {
+            wertesetzen(wertelesen());
+        }
+    };
 
     /**
      * @param terminblock TODO
@@ -93,7 +150,6 @@ class Zeitfenster extends JDialog implements KeyListener, FocusListener, ActionL
      */
     private JXPanel getJContentPane() {
         if (jContentPane == null) {
-
             jContentPane = new JXPanel();
             jContentPane.setBackground(Color.WHITE);
             jContentPane.setBackgroundPainter(Reha.instance.compoundPainter.get("Zeitfenster"));
@@ -111,7 +167,6 @@ class Zeitfenster extends JDialog implements KeyListener, FocusListener, ActionL
 
             jContentPane.add(grundSplit(), BorderLayout.CENTER);
             jContentPane.addKeyListener(this);
-
         }
         jSplitLR.setDividerLocation(399);
         return jContentPane;
@@ -166,24 +221,10 @@ class Zeitfenster extends JDialog implements KeyListener, FocusListener, ActionL
             public void propertyChange(PropertyChangeEvent arg0) {
                 dividerLocLR = jSplitLR.getDividerLocation();
                 int letzte = ((UIFSplitPane) arg0.getSource()).getLastDividerLocation();
-                for (int i = 0; i < 1; i++) {
-                    if ((letzte == 290) && (dividerLocLR == 279)) {
-                        jSplitLR.setDividerLocation(0);
-                        break;
-                    }
-                    if ((letzte == 0) && (dividerLocLR == 279)) {
-                        jSplitLR.setDividerLocation(290);
-                        break;
-                    }
-                    if ((letzte == 0) && (dividerLocLR == 0)) {
-                        jSplitLR.setDividerLocation(290);
-                        break;
-                    }
-                    if ((letzte == 290) && (dividerLocLR == 290)) {
-                        jSplitLR.setDividerLocation(0);
-                        break;
-                    }
-
+                if ((letzte == 290 && dividerLocLR == 279) || (letzte == 290 && dividerLocLR == 290)) {
+                    jSplitLR.setDividerLocation(0);
+                } else if ((letzte == 0 && dividerLocLR == 279) || (letzte == 0 && dividerLocLR == 0)) {
+                    jSplitLR.setDividerLocation(290);
                 }
             }
         });
@@ -236,34 +277,34 @@ class Zeitfenster extends JDialog implements KeyListener, FocusListener, ActionL
         Dauer = new JRtaTextField("ZAHLEN", true);
         Dauer.setHorizontalAlignment(JFormattedTextField.RIGHT);
         Dauer.setName("Dauer");
-        Dauer.addFocusListener(this);
+        Dauer.addFocusListener(recalculate);
         Dauer.addKeyListener(this);
         neuPanel.add(Dauer, cc.xy(2, 6));
 
         BeginnStunde = new JRtaTextField("STUNDEN", true);
         BeginnStunde.setHorizontalAlignment(JFormattedTextField.RIGHT);
         BeginnStunde.setName("BeginnStunde");
-        BeginnStunde.addFocusListener(this);
+        BeginnStunde.addFocusListener(recalculate);
         BeginnStunde.addKeyListener(this);
 
         neuPanel.add(BeginnStunde, cc.xy(4, 6));
 
         BeginnMinute = new JRtaTextField("MINUTEN", true);
         BeginnMinute.setName("BeginnMinute");
-        BeginnMinute.addFocusListener(this);
+        BeginnMinute.addFocusListener(recalculate);
         BeginnMinute.addKeyListener(this);
         neuPanel.add(BeginnMinute, cc.xy(6, 6));
 
         EndeStunde = new JRtaTextField("STUNDEN", true);
         EndeStunde.setHorizontalAlignment(JFormattedTextField.RIGHT);
         EndeStunde.setName("EndeStunde");
-        EndeStunde.addFocusListener(this);
+        EndeStunde.addFocusListener(recalculate);
         EndeStunde.addKeyListener(this);
         neuPanel.add(EndeStunde, cc.xy(8, 6));
 
         EndeMinute = new JRtaTextField("MINUTEN", true);
         EndeMinute.setName("EndeMinute");
-        EndeMinute.addFocusListener(this);
+        EndeMinute.addFocusListener(recalculate);
         EndeMinute.addKeyListener(this);
         neuPanel.add(EndeMinute, cc.xy(10, 6));
 
@@ -285,16 +326,13 @@ class Zeitfenster extends JDialog implements KeyListener, FocusListener, ActionL
     }
 
     private void Beenden(int endewert) {
-        String[] srueck = new String[] { "", "", "", "", "", "" };
         if (endewert == 1) {
-            srueck = new String[] { NamePatient.getText(), Rezeptnummer.getText(),
-                    BeginnStunde.getText() + ":" + BeginnMinute.getText() + ":00", Dauer.getText(),
-                    EndeStunde.getText() + ":" + EndeMinute.getText() + ":00", "" };
+            rueck = wertelesen();
+        } else {
+            rueck = Block.EMPTYBLOCK;
         }
-        rueck = new Block(srueck);
-        this.setVisible(false);
-        this.dispose();
-
+        setVisible(false);
+        dispose();
     }
 
     private void wertesetzen(Block werte) {
@@ -311,231 +349,76 @@ class Zeitfenster extends JDialog implements KeyListener, FocusListener, ActionL
                                 .split(":")[1]);
     }
 
+    private Block wertelesen() {
+        Block newblock;
+        String name = NamePatient.getText();
+        String reznr = Rezeptnummer.getText();
+        String nr = originalWerte.getNr5();
+        int dauer = Integer.parseInt(Dauer.getText());
+
+        LocalTime beginn = startzeitlesen();
+
+        LocalTime ende = endzeitLesen();
+
+        switch (rechenart) {
+        case startUndEnde:
+            newblock = new Block(name, reznr, beginn, ende, nr);
+            break;
+        case endUndDauer:
+            newblock = new Block(name, reznr, dauer, ende, nr);
+            break;
+        case startUndDauer:
+            newblock = new Block(name, reznr, beginn, dauer, nr);
+            break;
+        default:
+            newblock = originalWerte;
+            break;
+        }
+
+        return newblock;
+    }
+
+    private LocalTime endzeitLesen() {
+        int endStd = Integer.parseInt(EndeStunde.getText());
+        int endMin = Integer.parseInt(EndeMinute.getText());
+        return LocalTime.of(endStd, endMin);
+    }
+
+    private LocalTime startzeitlesen() {
+        int beginnstd = Integer.parseInt(BeginnStunde.getText());
+        int beginminute = Integer.parseInt(BeginnMinute.getText());
+        return LocalTime.of(beginnstd, beginminute);
+    }
+
     @Override
     public void keyPressed(KeyEvent arg0) {
-        if (arg0.getKeyCode() == KeyEvent.VK_ESCAPE) {
+        if (arg0.getKeyCode() == KeyEvent.VK_ESCAPE || arg0.getKeyCode() == KeyEvent.VK_CAPS_LOCK) {
             arg0.consume();
             Beenden(0);
             return;
         }
-        if (((JComponent) arg0.getSource()).getName()
-                                           .equals("Ok")) {
-            if (arg0.getKeyCode() == KeyEvent.VK_ENTER) {
-                arg0.consume();
-                Beenden(1);
-                return;
-            }
-            if (arg0.getKeyCode() == KeyEvent.VK_CAPS_LOCK) {
-                arg0.consume();
-                Beenden(0);
-                return;
-            }
+        if ("Ok".equals(((JComponent) arg0.getSource()).getName()) && arg0.getKeyCode() == KeyEvent.VK_ENTER) {
+            arg0.consume();
+            Beenden(1);
+            return;
         }
-        if (((JComponent) arg0.getSource()).getName()
-                                           .equals("Abbruch")) {
-            if (arg0.getKeyCode() == KeyEvent.VK_ENTER) {
-                arg0.consume();
-                Beenden(0);
-                return;
-            }
-            if (arg0.getKeyCode() == KeyEvent.VK_CAPS_LOCK) {
-                arg0.consume();
-                Beenden(0);
-                return;
-            }
+        if ("Abbruch".equals(((JComponent) arg0.getSource()).getName()) && arg0.getKeyCode() == KeyEvent.VK_ENTER ) {
+            arg0.consume();
+            Beenden(0);
         }
-        String name = ((JComponent) arg0.getSource()).getName()
-                                                     .trim();
-        if (name == "Dauer" || name == "BeginnStunde" || name == "BeginnMinute" || name == "EndeStunde"
-                || name == "EndeMinute" || name == "Abbruch" || name == "Rezeptnummer" || name == "NamePatient") {
-            if (arg0.getKeyCode() == KeyEvent.VK_CAPS_LOCK) {
-                arg0.consume();
-                Beenden(0);
-                return;
-            }
-        }
-
     }
 
     @Override
     public void keyReleased(KeyEvent arg0) {
-
     }
 
     @Override
     public void keyTyped(KeyEvent arg0) {
-
-    }
-
-    @Override
-    public void focusGained(FocusEvent arg0) {
-
-    }
-
-    @Override
-    public void focusLost(FocusEvent arg0) {
-
-        for (int i = 0; i < 1; i++) {
-            if (((JComponent) arg0.getSource()).getName()
-                                               .equals("Dauer")) {
-                if (rechenart == RechenArt.startUndDauer) {
-                    int dauer1 = Integer.parseInt(((JRtaTextField) arg0.getSource()).getText());
-
-                    int dauer2 = (int) ZeitFunk.MinutenSeitMitternacht(
-                            BeginnStunde.getText() + ":" + BeginnMinute.getText() + ":00");
-                    // String sEnde = String.valueOf();
-                    String sEnde = ZeitFunk.MinutenZuZeit(dauer1 + dauer2);
-                    EndeStunde.setText(sEnde.split(":")[0]);
-                    EndeMinute.setText(sEnde.split(":")[1]);
-                }
-                if (rechenart == RechenArt.endUndDauer) {
-                    int dauer1 = Integer.parseInt(((JRtaTextField) arg0.getSource()).getText());
-
-                    int dauer2 = (int) ZeitFunk.MinutenSeitMitternacht(
-                            EndeStunde.getText() + ":" + EndeMinute.getText() + ":00");
-                    // String sEnde = String.valueOf();
-                    String sEnde = ZeitFunk.MinutenZuZeit(dauer2 - dauer1);
-                    BeginnStunde.setText(sEnde.split(":")[0]);
-                    BeginnMinute.setText(sEnde.split(":")[1]);
-                }
-
-                break;
-            }
-            if (((JComponent) arg0.getSource()).getName()
-                                               .equals("BeginnStunde")) {
-                // String sb = String.valueOf();
-                String sb = ((JRtaTextField) arg0.getSource()).getText();
-                if (sb.isEmpty()) {
-                    ((JRtaTextField) arg0.getSource()).requestFocus();
-                    return;
-                }
-                if (sb.length() == 1) {
-                    ((JRtaTextField) arg0.getSource()).setText("0" + sb);
-                }
-                int dauer1 = Integer.parseInt(Dauer.getText());
-                int dauer2 = (int) ZeitFunk.MinutenSeitMitternacht(
-                        BeginnStunde.getText() + ":" + BeginnMinute.getText() + ":00");
-                int dauer3 = (int) ZeitFunk.MinutenSeitMitternacht(
-                        EndeStunde.getText() + ":" + EndeMinute.getText() + ":00");
-                /*************************/
-                if (rechenart == RechenArt.startUndDauer) {
-                    // String sEnde = String.valueOf();
-                    String sEnde = ZeitFunk.MinutenZuZeit(dauer1 + dauer2);
-                    EndeStunde.setText(sEnde.split(":")[0]);
-                    EndeMinute.setText(sEnde.split(":")[1]);
-                }
-                if (rechenart == RechenArt.startUndEnde) {
-                    Dauer.setText(Integer.toString(dauer3 - dauer2));
-                }
-                break;
-            }
-            if (((JComponent) arg0.getSource()).getName()
-                                               .equals("BeginnMinute")) {
-                // String sb = String.valueOf();
-                String sb = ((JRtaTextField) arg0.getSource()).getText();
-                if (sb.isEmpty()) {
-                    ((JRtaTextField) arg0.getSource()).requestFocus();
-                    return;
-                }
-                if (sb.length() == 1) {
-                    ((JRtaTextField) arg0.getSource()).setText("0" + sb);
-                }
-                int dauer1 = Integer.parseInt(Dauer.getText());
-                int dauer2 = (int) ZeitFunk.MinutenSeitMitternacht(
-                        BeginnStunde.getText() + ":" + BeginnMinute.getText() + ":00");
-                int dauer3 = (int) ZeitFunk.MinutenSeitMitternacht(
-                        EndeStunde.getText() + ":" + EndeMinute.getText() + ":00");
-                /*************************/
-                if (rechenart == RechenArt.startUndDauer) {
-                    // String sEnde = String.valueOf();
-                    String sEnde = ZeitFunk.MinutenZuZeit(dauer1 + dauer2);
-                    EndeStunde.setText(sEnde.split(":")[0]);
-                    EndeMinute.setText(sEnde.split(":")[1]);
-                }
-                if (rechenart == RechenArt.startUndEnde) {
-                    Dauer.setText(Integer.toString(dauer3 - dauer2));
-                }
-
-                break;
-            }
-            if (((JComponent) arg0.getSource()).getName()
-                                               .equals("EndeStunde")) {
-                // String sb = String.valueOf();
-                String sb = ((JRtaTextField) arg0.getSource()).getText();
-                if (sb.isEmpty()) {
-                    ((JRtaTextField) arg0.getSource()).requestFocus();
-                    return;
-                }
-                if (sb.length() == 1) {
-                    ((JRtaTextField) arg0.getSource()).setText("0" + sb);
-                }
-                // int dauer1 = Integer.valueOf( (String) ((JRtaTextField)Dauer).getText() );
-                int dauer1 = (int) ZeitFunk.MinutenSeitMitternacht(
-                        EndeStunde.getText() + ":" + EndeMinute.getText() + ":00");
-                int dauer2 = (int) ZeitFunk.MinutenSeitMitternacht(
-                        BeginnStunde.getText() + ":" + BeginnMinute.getText() + ":00");
-                int dauer3 = Integer.parseInt(Dauer.getText()
-                                                   .trim());
-                if (rechenart == RechenArt.startUndEnde) {
-                    Dauer.setText(Integer.toString(dauer1 - dauer2));
-                }
-                if (rechenart == RechenArt.endUndDauer) {
-                    // String sBeginn = String.valueOf();
-                    String sBeginn = ZeitFunk.MinutenZuZeit(dauer1 - dauer3);
-                    BeginnStunde.setText(sBeginn.split(":")[0]);
-                    BeginnMinute.setText(sBeginn.split(":")[1]);
-                }
-
-                break;
-            }
-            if (((JComponent) arg0.getSource()).getName()
-                                               .equals("EndeMinute")) {
-                // String sb = String.valueOf();
-                String sb = ((JRtaTextField) arg0.getSource()).getText();
-                if (sb.isEmpty()) {
-                    ((JRtaTextField) arg0.getSource()).requestFocus();
-                    return;
-                }
-                if (sb.length() == 1) {
-                    ((JRtaTextField) arg0.getSource()).setText("0" + sb);
-                }
-                // int dauer1 = Integer.valueOf( (String) ((JRtaTextField)Dauer).getText() );
-                int dauer1 = (int) ZeitFunk.MinutenSeitMitternacht(
-                        EndeStunde.getText() + ":" + EndeMinute.getText() + ":00");
-                int dauer2 = (int) ZeitFunk.MinutenSeitMitternacht(
-                        BeginnStunde.getText() + ":" + BeginnMinute.getText() + ":00");
-                int dauer3 = Integer.parseInt(Dauer.getText()
-                                                   .trim());
-                if (rechenart == RechenArt.endUndDauer) {
-                    String sBeginn;
-                    sBeginn = ZeitFunk.MinutenZuZeit(dauer1 - dauer3);
-                    BeginnStunde.setText(sBeginn.split(":")[0]);
-                    BeginnMinute.setText(sBeginn.split(":")[1]);
-                }
-                if (rechenart == RechenArt.startUndEnde) {
-                    Dauer.setText(Integer.toString(dauer1 - dauer2));
-                }
-                dauer3 = Integer.parseInt(Dauer.getText()
-                                               .trim());
-                if ((dauer1 - dauer2) != dauer3) {
-                    wertesetzen(originalWerte);
-                    Dauer.requestFocus();
-                    return;
-                }
-
-                break;
-            }
-
-        }
-
     }
 
     @Override
     public void actionPerformed(ActionEvent arg0) {
-        System.out.println(rechenartbg.getSelection()
-                                      .getSelectedObjects());
-        if (((JComponent) arg0.getSource()).getName()
-                                           .equals("Ok")) {
+        if ("Ok".equals(((JComponent) arg0.getSource()).getName())) {
             int dauer1 = Integer.parseInt(Dauer.getText());
             int dauer2 = (int) ZeitFunk.MinutenSeitMitternacht(
                     BeginnStunde.getText() + ":" + BeginnMinute.getText() + ":00");
@@ -547,7 +430,7 @@ class Zeitfenster extends JDialog implements KeyListener, FocusListener, ActionL
                 Dauer.requestFocus();
                 return;
             }
-            if ((dauer3 - dauer2) != dauer1) {
+            if (dauer3 - dauer2 != dauer1) {
                 String sEnde;
                 sEnde = ZeitFunk.MinutenZuZeit(dauer2 + dauer1);
                 EndeStunde.setText(sEnde.split(":")[0]);
@@ -559,30 +442,34 @@ class Zeitfenster extends JDialog implements KeyListener, FocusListener, ActionL
             dauer3 = (int) ZeitFunk.MinutenSeitMitternacht(EndeStunde.getText() + ":" + EndeMinute.getText() + ":00");
             dauer1 = dauer3 - dauer2;
             if (dauer1 != Integer.parseInt(Dauer.getText()
-                                                .trim())) {
-                wertesetzen(originalWerte);
-                Dauer.requestFocus();
-                return;
-            }
-            if (dauer1 <= 0) {
-                wertesetzen(originalWerte);
-                Dauer.requestFocus();
-                return;
-            }
-
+                                                .trim()) || dauer1 <= 0) {
+            wertesetzen(originalWerte);
+            Dauer.requestFocus();
+            return;
+         }
             Beenden(1);
         }
-        if (((JComponent) arg0.getSource()).getName()
-                                           .equals("Abbruch")) {
+        if ("Abbruch".equals(((JComponent) arg0.getSource()).getName())) {
             Beenden(0);
         }
-
     }
 
-    private void setRechenartAndFocus(RechenArt startundende, JRtaTextField componentToFocus) {
-        this.rechenart = startundende;
+    private void setRechenartAndFocus(RechenArt rechenart, JRtaTextField componentToFocus) {
+        setRechenart(rechenart);
         jSplitLR.setDividerLocation(399);
         componentToFocus.requestFocus();
+    }
+
+    private void setRechenart(RechenArt rechenart) {
+        this.rechenart = rechenart;
+
+        BeginnStunde.setEnabled(rechenart.benutztStart());
+        BeginnMinute.setEnabled(rechenart.benutztStart());
+
+        EndeStunde.setEnabled(rechenart.benutztEnde());
+        EndeMinute.setEnabled(rechenart.benutztEnde());
+
+        Dauer.setEnabled(rechenart.benutztDauer());
     }
 
     public Block showAndWait(int x, int y) {

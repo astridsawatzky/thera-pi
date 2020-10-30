@@ -387,17 +387,17 @@ class KalenderPanel extends JXPanel {
         this.showTimeLine = show;
     }
 
-    void datenZeichnen(List vTerm, int therapeut, List<List<String>> therapistsDate) {
+    void datenZeichnen(List<ArrayList<Vector<String>>> vTerm, int therapeut, ArrayList<Vector<String>> therapeutTag) {
         if (vTerm.isEmpty() || therapeut < 0) {
             setAnzahl(0);
         } else {
             dat.clear();
-            dat.add(therapistsDate.get(0));
-            dat.add(therapistsDate.get(1));
-            dat.add(therapistsDate.get(2));
-            dat.add(therapistsDate.get(3));
-            dat.add(therapistsDate.get(4));
-            dat.add(therapistsDate.get(5));
+            dat.add(therapeutTag.get(0));
+            dat.add(therapeutTag.get(1));
+            dat.add(therapeutTag.get(2));
+            dat.add(therapeutTag.get(3));
+            dat.add(therapeutTag.get(4));
+            dat.add(therapeutTag.get(5));
 
             setAnzahl(dat.get(0).size());
         }

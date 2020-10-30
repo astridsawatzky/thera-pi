@@ -1,7 +1,11 @@
 package terminKalender;
 
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
+import CommonTools.DateTimeFormatters;
 import specs.Contracts;
 
 public class Block {
@@ -57,6 +61,54 @@ public class Block {
         this.dauer = daten[3];
         this.endzeit = daten[4];
         this.nr = daten[5];
+    }
+
+    /** creates a new Block and calculates duration.
+     *
+     * @param name
+     * @param reznr
+     * @param beginn
+     * @param ende
+     * @param nr
+     */
+    public Block(String name, String reznr, LocalTime beginn, LocalTime ende,String nr) {
+        this(name,reznr,beginn,ChronoUnit.MINUTES.between(beginn, ende) ,ende,nr);
+    }
+
+    /**creates a new Block and calculates the end time
+     *
+     * @param name
+     * @param reznr
+     * @param beginn
+     * @param dauer
+     * @param nr
+     */
+    public Block(String name, String reznr, LocalTime beginn, int dauer,String nr) {
+        this(name,reznr,beginn,dauer, beginn.plusMinutes(dauer),nr);
+    }
+
+    /**creates a new Block and calculates the start time.
+     *
+     * @param name
+     * @param reznr
+     * @param dauer
+     * @param ende
+     * @param nr
+     */
+    public Block(String name, String reznr, int dauer, LocalTime ende,String nr) {
+        this(name,reznr,ende.minusMinutes(dauer),dauer,ende,nr);
+    }
+
+
+
+
+    public Block(String name, String reznr, LocalTime beginn, long dauer, LocalTime ende, String nr) {
+        this.name = name;
+        this.rezeptnr = reznr;
+        this.startzeit = beginn.format(DateTimeFormatter.ISO_LOCAL_TIME);
+        this.dauer = String.valueOf(dauer);
+        this.endzeit = ende.format(DateTimeFormatter.ISO_LOCAL_TIME);
+        this.nr = nr;
     }
 
     public String getName0() {

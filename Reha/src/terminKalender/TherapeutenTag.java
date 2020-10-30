@@ -9,6 +9,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 import javax.swing.JLabel;
 
@@ -47,9 +48,9 @@ class TherapeutenTag  {
          day.setShowTimeLine(show);
       }
 
-      void datenZeichnen(List vTerm, int therapeut) {
+      void datenZeichnen( List<ArrayList<Vector<String>>> vTerm, int therapeut) {
           if(vTerm.size() > 0 && therapeut >= 0) {
-            day.datenZeichnen(vTerm, therapeut, (ArrayList) vTerm.get(therapeut));
+            day.datenZeichnen(vTerm, therapeut,  vTerm.get(therapeut));
         } else {
               day.setAnzahl(0);
           }

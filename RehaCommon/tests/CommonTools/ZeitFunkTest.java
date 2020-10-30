@@ -6,7 +6,7 @@ import org.junit.Test;
 
 public class ZeitFunkTest {
     @Test
-    public void testName() throws Exception {
+    public void minutenumrechnen() throws Exception {
 
         assertEquals(330, ZeitFunk.ZeitDifferenzInMinuten("07:00", "12:30"));
         ;
