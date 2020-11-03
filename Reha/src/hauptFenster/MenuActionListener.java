@@ -103,6 +103,7 @@ final class MenuActionListener implements ActionListener {
                         "<html>Bevor zum ersten Mal mit der GKV abgerechnet wird<br><br><b>muß(!) der Emailaccount in der System-Init konfiguriert werden.</b><br><br></html>");
                 return;
             }
+
             reha.progLoader.AbrechnungFenster(1, this.reha.conn);
             return;
         case "rehaabrechnung":

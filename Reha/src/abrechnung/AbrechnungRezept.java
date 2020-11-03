@@ -98,11 +98,13 @@ import oOorgTools.RehaOOTools;
 import patientenFenster.KassenAuswahl;
 import patientenFenster.PatUndVOsuchen;
 import patientenFenster.RezNeuanlage;
+import rezept.Rezeptnummer;
 import stammDatenTools.RezTools;
 import systemEinstellungen.SystemConfig;
 import systemEinstellungen.SystemPreislisten;
 import systemTools.AdressTools;
 import systemTools.ListenerTools;
+import therapi.abrechnung.split.Splitting;
 import umfeld.Betriebsumfeld;
 
 /**
@@ -467,6 +469,7 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener, Acti
     }
 
     public boolean setNewRez(String rez, boolean schonfertig, String aktDisziplin) {
+
 
         String preisgr = SqlInfo.holeEinzelFeld("select preisgruppe from verordn where rez_nr='" + rez + "' LIMIT 1");
         this.aktDisziplin = aktDisziplin;
@@ -969,7 +972,7 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener, Acti
         HashMap<String, String> taxWerte = new HashMap<String, String>();
         JXTTreeTableNode node;
 
-       
+
 
         boolean hb = false;
 
@@ -1050,7 +1053,7 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener, Acti
                 taxWerte.put("<t12>", Integer.toString(wgkmstrecke));
             }
         }
-        taxWerte.put("<t18>", aktRezNum.getText()); 
+        taxWerte.put("<t18>", aktRezNum.getText());
 
         try {
             String bcform = SqlInfo.holeEinzelFeld(
@@ -1542,6 +1545,11 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener, Acti
                 zuZahlungsPos = "3";
             }
         }
+
+        if(new Splitting().isSplitter(new Rezeptnummer(aktRezept.getRezNb()))) {
+            mitPauschale =false;
+        }
+
         /***** HausbesuchsCheck *****/
 
         ///// Jetzt der Tarifwchsel-Check
@@ -1954,34 +1962,30 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener, Acti
     }
 
     private void doTreeRezeptWertermitteln() {
-        int lang = 0;
+        int anzahl = this.getNodeCount();
+        if (anzahl <= 0) {
+            return;
+        }
         rezeptWert = 0.00;
         zuzahlungWert = 0.00;
 
-        BigDecimal dummy1 = BigDecimal.valueOf(Double.parseDouble("0.00"));
-        BigDecimal dummy2 = BigDecimal.valueOf(Double.parseDouble("0.00"));
+        BigDecimal dummy1 =  BigDecimal.ZERO;
+        BigDecimal dummy2 =  BigDecimal.ZERO;
+        BigDecimal ddummy1 = BigDecimal.ZERO;
+        BigDecimal ddummy2 = BigDecimal.ZERO;
 
-        BigDecimal ddummy1 = BigDecimal.valueOf(Double.parseDouble("0.00"));
-        BigDecimal ddummy2 = BigDecimal.valueOf(Double.parseDouble("0.00"));
-
-        if ((lang = this.getNodeCount()) <= 0) {
-            return;
-        }
-        Object ob1 = null;
-        Object ob2 = null;
-        Object ob3 = null;
         boolean zuzahl = false;
-        for (int i = 0; i < lang; i++) {
+        for (int i = 0; i < anzahl; i++) {
             AbrFall abr = this.holeAbrFall(i);
-            ob1 = abr.anzahl;
-            ob2 = abr.preis;
+            Object ob1 = abr.anzahl ;
+            Object ob2 = abr.preis ;
 
             zuzahl = abr.zuzahlung;
             ddummy1 = dummy1.add((BigDecimal.valueOf((Double) ob1)
                                             .multiply(BigDecimal.valueOf((Double) ob2))));
             if (zuzahl && (!abr.niezuzahl)) {
-                ob3 = (BigDecimal.valueOf((Double) ob1)
-                                 .multiply(BigDecimal.valueOf(this.rechneRezGebFromDouble(abr.preis))));
+                Object ob3 = (BigDecimal.valueOf((Double) ob1)
+                                 .multiply(BigDecimal.valueOf(this.rechneRezGebFromDouble(abr.preis)))) ;
                 abr.rezgeb = ((BigDecimal) ob3).doubleValue();
                 ddummy2 = dummy2.add(((BigDecimal) ob3));
             } else {
@@ -1993,7 +1997,9 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener, Acti
             dummy2 = ddummy2;
         }
         if (mitPauschale) {
-            ddummy2 = dummy2.add(BigDecimal.valueOf(Double.parseDouble("10.00")));
+
+
+            ddummy2 = dummy2.add(BigDecimal.TEN);
         }
         rezeptWert = ddummy1.doubleValue();
         zuzahlungWert = ddummy2.doubleValue();
@@ -3836,6 +3842,10 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener, Acti
         double gesamt = 0.00;
         double rez = 0.00;
         double pauschal = (mitPauschale ? 10.00 : 0.00);
+
+
+
+
         edibuf.setLength(0);
         edibuf.trimToSize();
         String test = vec_pat.get(0)
@@ -4138,6 +4148,11 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener, Acti
         edibuf.insert(0, kopfzeile);
 
         return ret;
+    }
+
+    double useSplitFeature(double pauschal) {
+        return pauschal;
+
     }
 
     private boolean testeZahl(String zahl) {

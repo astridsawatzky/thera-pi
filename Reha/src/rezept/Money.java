@@ -6,24 +6,29 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 
-public class Money implements Comparable<Money>{
+public class Money implements Comparable<Money> {
     private BigDecimal value = new BigDecimal(".00");
-    private static final NumberFormat df= twoDecimalsRoundingDown();
+    private static final NumberFormat df = twoDecimalsRoundingDown();
+    public static final Money ZERO = new Money();
 
     public Money() {
+
     }
 
     public Money(Money geld) {
-        value = geld.value;
+        value = geld.getValue();
     }
 
-    public Money(String string) {
-        this.value= new BigDecimal(string);
+    public Money(String value) {
+        if (value != null && !value.isEmpty()) {
+
+            this.value = new BigDecimal(value).setScale(2, RoundingMode.DOWN);
+        }
 
     }
 
-    Money(double value){
-        this.value= new BigDecimal(df.format(value));
+    public Money(double value) {
+        this.value = new BigDecimal(df.format(value));
     }
 
     private static NumberFormat twoDecimalsRoundingDown() {
@@ -31,7 +36,7 @@ public class Money implements Comparable<Money>{
         DecimalFormatSymbols dezimalPunkt = DecimalFormatSymbols.getInstance();
         dezimalPunkt.setDecimalSeparator('.');
 
-        NumberFormat df = new DecimalFormat("###0.##",dezimalPunkt);
+        NumberFormat df = new DecimalFormat("###0.##", dezimalPunkt);
         df.setMinimumFractionDigits(2);
         df.setMaximumFractionDigits(2);
 
@@ -40,28 +45,41 @@ public class Money implements Comparable<Money>{
         return df;
     }
 
-
     public Money add(Money other) {
         Money m = new Money();
-        m.value = this.value.add(other.value);
+        m.value = this.getValue()
+                      .add(other.getValue());
         return m;
+    }
+
+    public Money minus(Money eingang) {
+        Money m = new Money();
+        m.value = value.subtract(eingang.value);
+        return m;
+    }
+
+    public String toPlainString() {
+        return getValue().toPlainString();
+
     }
 
     @Override
     public String toString() {
-        return value.toString();
+        return getValue().toString();
     }
+
     @Override
     public int compareTo(Money o) {
 
-        return this.value.compareTo(o.value);
+        return this.getValue()
+                   .compareTo(o.getValue());
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((value == null) ? 0 : value.hashCode());
+        result = prime * result + ((getValue() == null) ? 0 : getValue().hashCode());
         return result;
     }
 
@@ -74,25 +92,31 @@ public class Money implements Comparable<Money>{
         if (getClass() != obj.getClass())
             return false;
         Money other = (Money) obj;
-        if (value == null) {
-            if (other.value != null)
+        if (getValue() == null) {
+            if (other.getValue() != null)
                 return false;
-        } else if (!value.equals(other.value))
+        } else if (!getValue().equals(other.getValue()))
             return false;
         return true;
     }
 
     public boolean isMoreThan(Money other) {
-        return value.compareTo(other.value) >0 ;
+        return getValue().compareTo(other.getValue()) > 0;
     }
 
     public boolean isLessThan(Money other) {
-        return value.compareTo(other.value) < 0;
+        return getValue().compareTo(other.getValue()) < 0;
     }
 
     public boolean hasSameValue(Money other) {
-        return value.compareTo(other.value) == 0;
+        if (other == null) {
+            return false;
+        }
+        return getValue().compareTo(other.getValue()) == 0;
     }
 
+    public BigDecimal getValue() {
+        return value;
+    }
 
 }

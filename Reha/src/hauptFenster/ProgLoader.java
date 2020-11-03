@@ -40,6 +40,8 @@ import systemEinstellungen.SystemInit;
 import systemTools.WinNum;
 import terminKalender.TerminFenster;
 import terminKalender.TerminFenster.Ansicht;
+import therapi.abrechnung.split.SplittingDAO;
+import umfeld.Betriebsumfeld;
 import urlaubBeteiligung.Beteiligung;
 import urlaubBeteiligung.Urlaub;
 import verkauf.VerkaufTab;
@@ -374,6 +376,8 @@ public class ProgLoader {
         if (!Rechte.hatRecht(Rechte.Funktion_kassenabrechnung, true)) {
             return;
         }
+
+
         JComponent abrech1 = AktiveFenster.getFensterAlle("Abrechnung");
         if (abrech1 != null) {
             //// System.out.println("InternalFrame Kassenabrechnung bereits geöffnet");
@@ -388,9 +392,11 @@ public class ProgLoader {
             }
             return;
         }
-        // neuer Titel eingebaut
+
+
         Reha.getThisFrame()
             .setCursor(Cursors.wartenCursor);
+        new SplittingDAO(Betriebsumfeld.umfeld.mandant().ik()).load();
         String name = "Abrechnung" + WinNum.NeueNummer();
         int containerNr = setPos;
         Reha.containerHandling(containerNr);

@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package rezept;
 
@@ -8,58 +8,70 @@ import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.sun.istack.internal.NotNull;
+
 import core.Disziplin;
+
+import static core.Disziplin.*;
 
 /**
  * Small class to provide RezeptNr magic
- * 
+ *
  */
 public class Rezeptnummer {
-    
-    private static final Logger logger = LoggerFactory.getLogger(Rezeptnummer.class);
-    
-    private Disziplin disziplin;
-    private int rezeptZiffern;
-    
+
+    private static final int INVALID = -1;
+
+
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(Rezeptnummer.class);
+
+
+
+    private final Disziplin disziplin;
+    private final int rezeptZiffern;
+
     public Rezeptnummer() {
-        disziplin = Disziplin.INV;
+        disziplin = INV;
+        rezeptZiffern=INVALID;
     }
-    
+
     /**
      * PRE: expects a String in the format of e.g. "ER101"
      * POST: class members diszi and rezNr are set
-     * 
+     *
      * @param rezNr
      */
     public Rezeptnummer(String rezNr) {
-        // TODO: handle malformed rezNr
-        // - disziplin can't be found - set INV?
-        // - parseInt screws up
-        disziplin = Disziplin.INV;
-        if ( rezNr == null || rezNr == "" )
+        if ( rezNr == null || rezNr == "" ) {
+            disziplin = Disziplin.INV;
+            rezeptZiffern=INVALID;
             return;
+        }
         String diszi2check = rezNr.replaceAll("[0-9]", "");
-        disziplin = disziplin.ofShort(diszi2check);
+        disziplin = Disziplin.ofShort(diszi2check);
+
         String rezNrDigits = rezNr.replaceAll("[a-zA-Z]", "");
-        
         this.rezeptZiffern = Integer.parseInt(rezNrDigits);
     }
-    // constructor only passing in INT -> take from sysconfig def. diszi or set inv?
-    
-    public Rezeptnummer(Disziplin disziplin, int rezeptZiffern) {
-        // super();
+
+    public Rezeptnummer(@NotNull Disziplin disziplin, int rezeptZiffern) {
+        if(disziplin==null) {
+            LOGGER.error("Disziplin must not be null.");
+            disziplin = INV;
+        }
         this.disziplin = disziplin;
         this.rezeptZiffern = rezeptZiffern;
     }
-    
+
     public Disziplin disziplin() {
         return disziplin;
     }
-    
+
     public int rezeptZiffern() {
         return rezeptZiffern;
     }
-    
+
     public String rezeptNummer() {
         // logger.debug("Diszi=" + disziplin + " and rezZiffern=" + rezeptZiffern);
         // TODO: if diszi == (COMMON || INV) => boing!
@@ -71,7 +83,7 @@ public class Rezeptnummer {
     public String toString() {
         return "Rezeptnummer [disziplin=" + disziplin + ", rezeptZiffern=" + rezeptZiffern + "]";
     }
-    
+
     @Override
     public int hashCode() {
         return Objects.hash(disziplin, rezeptZiffern);
@@ -89,5 +101,5 @@ public class Rezeptnummer {
         return disziplin == other.disziplin && rezeptZiffern == other.rezeptZiffern;
     }
 
-    
+
 }

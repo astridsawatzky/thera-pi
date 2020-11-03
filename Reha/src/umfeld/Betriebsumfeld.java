@@ -23,4 +23,8 @@ public class Betriebsumfeld {
     public static String getAktMandant() {
         return umfeld.mandant.name();
     }
+
+    public Mandant mandant() {
+        return mandant;
+    }
 }

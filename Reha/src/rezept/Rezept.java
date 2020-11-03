@@ -16,7 +16,7 @@ import core.Disziplin;
 
 public class Rezept {
     private static final Logger logger = LoggerFactory.getLogger(Rezept.class);
-    
+
     // "Erstverordnung", "Folgeverordnung", "Folgev. ausserhalb d.R."
     // TODO: Enum?
     public static final int REZART_ERSTVO = 0;
@@ -56,9 +56,9 @@ public class Rezept {
     Money preise4;
 
     LocalDate erfassungsDatum;
-    
+
     String diagnose;
-    
+
     boolean heimbewohn;
     LocalDate veraenderd;   // suspected dead meat
     int veraendera;         // suspected dead meat
@@ -68,17 +68,17 @@ public class Rezept {
     int numfrei2;
     String charfrei1;
     String charfrei2;
-    
+
     // TODO: Change to Behandlung-class
     String termine;
-    // Behandlung termine;    
-    
+    // Behandlung termine;
+
     String ktraeger;
     int kId = -1;
-    
+
     int zzStatus = Zuzahlung.ZZSTATUS_NOTSET;
     int zzRegel = -1;
-    
+
     LocalDate lastDate;
     int preisgruppe = -1;
     boolean begruendADR;
@@ -86,7 +86,7 @@ public class Rezept {
     int anzahlHb;
     boolean hbVoll;
     BigDecimal anzahlKM;
-    
+
     String indikatSchl;
     String angelegtVon;
     String lastEditor;
@@ -118,10 +118,10 @@ public class Rezept {
     public static final int REZEPTART_ERSTVO = 0;
     public static final int REZEPTART_FOLGEVO = 1;
     public static final int REZEPTART_ADR = 2;
-    
+
     // Auxiliary helpers
     public boolean isToBeInserted;
-    
+
     public Rezept() {
         this.disziplin = Disziplin.INV;
         this.rezGeb = new Money();
@@ -131,10 +131,10 @@ public class Rezept {
         this.preise4 = new Money();
 
     }
-    
+
     /**
      * Copy Constructor - make a copy of a Rezept (copy as is e.g. no new RzNr!)
-     * 
+     *
      * @param fromRez - source-Rezept to copy from
      */
     public Rezept(Rezept fromRez) {
@@ -153,7 +153,7 @@ public class Rezept {
         this.artDerBeh4 = fromRez.artDerBeh4;
         this.befr = fromRez.befr;
         this.rezGeb = new Money(fromRez.rezGeb);
-        
+
         this.rezBez = fromRez.rezBez;
         this.arzt = fromRez.arzt;
         this.arztId = fromRez.arztId;
@@ -215,10 +215,10 @@ public class Rezept {
         this.icd10_2 = fromRez.icd10_2;
         this.pauschale = fromRez.pauschale;
     }
-    
+
     /**
      * Liefert die Anzahl der gespeicherten Termine in einem Rezept
-     * 
+     *
      * @return
      */
     public int AnzahlTermineInRezept() {
@@ -226,7 +226,7 @@ public class Rezept {
             return 0;
         return getTermine().split("\n").length;
     }
-    
+
     @Override
     public String toString() {
         return "Rezept [PAT_INTERN=" + patIntern + ", REZ_NR=" + rezNr + ", disziplin=" + disziplin + ", REZ_datum=" + rezDatum + ", anzahl1="
@@ -296,10 +296,10 @@ public class Rezept {
 
         }
     }
-    
+
     /**
      * Returns the first 2 chars of RezNr, expecting Rezepte to be of the format e.g. "ER101"
-     * 
+     *
      * @return String e.g. "ER"
      */
     public String getRezClass() {
@@ -308,7 +308,7 @@ public class Rezept {
         return (getRezNr() == null ? null : getRezNr().substring(0, 2)
                                                          .toUpperCase());
     }
-    
+
     /**
      * Return the ArtDBehX where X is passed in int i
      * @param i - The index at which to retrieve ADB
@@ -327,29 +327,29 @@ public class Rezept {
         default:
             logger.error("Index " + i + " ist ungueltig. - only 1-4 are impl. so far");
             return -1;
-        
+
         }
     }
 
     /**
      * Returns an array of ints containing all 4 fields "anzahlN" in order
-     * 
+     *
      * @return int[] of anzahl1-4
      */
     public int[] getAnzahlAlle() {
         return new int[] { anzahl1, anzahl2, anzahl3, anzahl4};
     }
-    
+
 
     /**
      * Public standard getter/setters
      *  if member is of type boolean there are 3 possible types:
-     * 
+     *
      *  1. isField() - will return a bool
      *  2. getField() - will return a String repr. of the bool in the form of "T"/"F"
      *  3. setField() - set field via bool
      */
-    
+
     /**
      * @return the rezNr
      */
@@ -371,7 +371,7 @@ public class Rezept {
     public void setId(int ID) {
         id = ID;
     }
-    
+
     /**
      * @return the rezeptArt
      */
@@ -406,7 +406,7 @@ public class Rezept {
     public void setRezDatum(LocalDate Datum) {
         rezDatum = Datum;
     }
-    
+
     /**
      * set the rezDatum
      *
@@ -415,7 +415,7 @@ public class Rezept {
         rezDatum = LocalDate.parse(Datum);
     }
     */
-    
+
     /**
      * @return the patIntern
      */
@@ -430,7 +430,7 @@ public class Rezept {
         patIntern = internId;
     }
 
-    
+
     /**
      * @return the patId
      */
@@ -445,7 +445,7 @@ public class Rezept {
         patId = patID;
     }
 
-    
+
     /**
      * @return the anzahl1
      */
@@ -505,7 +505,7 @@ public class Rezept {
     /**
      * Takes an index indicating which BehandlungsAnzahl to retrieve.
      * Will return -1 on invalid index (0 < idx < 5)
-     * 
+     *
      * @param idx
      * @return
      */
@@ -525,16 +525,16 @@ public class Rezept {
                 return -1;
         }
     }
-    
+
     /**
      * Returns an array of ints containing all 4 fields "artDerBehN" in order
-     * 
+     *
      * @return int[] of artDerBeh1-4
      */
     public int[] getArtDerBehAlle() {
         return new int[] {artDerBeh1, artDerBeh2, artDerBeh3, artDerBeh4 };
     }
-    
+
     /**
      * @return the artDerBeh1
      */
@@ -593,7 +593,7 @@ public class Rezept {
 
     /**
      * Sets 1 of the 4 ArtDerBehandlungen by index to value
-     * 
+     *
      * @param idx Which field to set (ArtDerBehan[1-4])
      * @param value The value to set the field to
      */
@@ -613,10 +613,10 @@ public class Rezept {
                 break;
             default:
                 logger.error("Index " + idx + " ist ungueltig. Can only set ArtDerBehandlungen 1-4");
-                
+
         }
     }
-    
+
     /**
      * @return the anzahlKM
      */
@@ -626,7 +626,7 @@ public class Rezept {
 
     /**
      * Set the Entfernung für HB in KiloMetern
-     * 
+     *
      * @param BigDecimal for KM
      */
     public void setAnzahlKM(BigDecimal km) {
@@ -642,13 +642,13 @@ public class Rezept {
 
     /**
      * Get befr bool as String "T"/"F". To use the bool directly, call isBefr()
-     * 
+     *
      * @return befr as String
      */
     public String getBefr() {
         return isBefr() ? "T" : "F";
     }
-    
+
     /**
      * @param befr the befr to set
      */
@@ -680,7 +680,7 @@ public class Rezept {
 
     /**
      * Returns a String "T"/"F" depending on bool rezBez. To use the bool directly, call isRezBez()
-     * 
+     *
      * @return String "T"/"F" if rezBez
      */
     public String getRezBez() {
@@ -689,7 +689,7 @@ public class Rezept {
         else
             return "F";
     }
-    
+
     /**
      * Rezept(Gebuehr) bezahlt?
      * @param rezBez the rezBez to set
@@ -712,7 +712,7 @@ public class Rezept {
     public void setArzt(String Arzt) {
         arzt = Arzt;
     }
-    
+
     /**
      * @return the ArztId
      */
@@ -727,7 +727,7 @@ public class Rezept {
     public void setArztId(int ArztId) {
         arztId = ArztId;
     }
-    
+
     /**
      * @return the aerzte
      */
@@ -745,11 +745,11 @@ public class Rezept {
     public int getArztBetriebsnummer() {
         return arztBetriebsnummer;
     }
-    
+
     public void setArztBetriebsnummer(int aBN) {
         arztBetriebsnummer = aBN;
     }
-    
+
     /**
      * @return the preise1
      */
@@ -764,14 +764,14 @@ public class Rezept {
         preise1 = preis;
     }
 
-    
+
     /**
      * @return the preise2
      */
     public Money getPreise2() {
         return preise2;
     }
-    
+
     /**
      * Set the preise2
      */
@@ -786,7 +786,7 @@ public class Rezept {
     public Money getPreise3() {
         return preise3;
     }
-    
+
     /**
      * Set the preise3
      */
@@ -794,7 +794,7 @@ public class Rezept {
         preise3 = preis;
     }
 
-    
+
 
     /**
      * @return the preise4
@@ -812,7 +812,7 @@ public class Rezept {
 
     /**
      * Gets 1 of the 4 Preise by index
-     * 
+     *
      * @param idx Which field to get (preise[1-4])
      */
     public Money getPreis(int idx) {
@@ -830,10 +830,10 @@ public class Rezept {
                 return new Money("0");
         }
     }
-    
+
     /**
      * Sets 1 of the 4 Preise by index to value
-     * 
+     *
      * @param idx Which field to set (preise[1-4])
      * @param value The value to set the field to
      */
@@ -869,8 +869,8 @@ public class Rezept {
     public void setDiagnose(String diag) {
         diagnose = diag;
     }
-    
-    
+
+
     /**
      * @return the heimbewohn
      */
@@ -885,23 +885,23 @@ public class Rezept {
     public String getHeimbewohn() {
         return isHeimbewohn() ? "T" : "F";
     }
-    
+
     /**
      * Set the bool heimbewohn
-     * 
+     *
      */
     public void setHeimbewohn(boolean bewohntHeim) {
         heimbewohn = bewohntHeim;
     }
 
-    
+
     /**
      * @return the veraenderd
      */
     public LocalDate getVeraenderD() {
         return veraenderd;
     }
-    
+
     public void setVeraenderD(LocalDate date) {
         veraenderd = date;
     }
@@ -919,7 +919,7 @@ public class Rezept {
     public void setVeraenderA(int VeraenderA) {
         veraendera = VeraenderA;
     }
-    
+
     /**
      * @return the logfrei1
      */
@@ -934,14 +934,14 @@ public class Rezept {
     public String getLogfrei1() {
         return isLogfrei1() ? "T" : "F";
     }
-    
+
     /**
      * Set the logfrei1
      */
     public void setLogfrei1(boolean LogFrei) {
         logfrei1 = LogFrei;
     }
-    
+
     /**
      * @return the logfrei2
      */
@@ -956,14 +956,14 @@ public class Rezept {
     public String getLogfrei2() {
         return isLogfrei2() ? "T" : "F";
     }
-    
+
     /**
      * Set the logfrei2
      */
     public void setLogfrei2(boolean LogFrei) {
         logfrei2 = LogFrei;
     }
-    
+
     /**
      * @return the numfrei1
      */
@@ -977,14 +977,14 @@ public class Rezept {
     public void setNumfrei1(int Numfrei) {
         numfrei1 = Numfrei;
     }
-    
+
     /**
      * @return the numfrei2
      */
     public int getNumfrei2() {
         return numfrei2;
     }
-    
+
     /**
      * @param the numfrei1
      */
@@ -998,7 +998,7 @@ public class Rezept {
     public String getCharfrei1() {
         return charfrei1;
     }
-    
+
     /**
      * @param the charfrei1
      */
@@ -1019,7 +1019,7 @@ public class Rezept {
     public void setCharfrei2(String Charfrei) {
         charfrei2 = Charfrei;
     }
-    
+
     /**
      * @return the Erfassungsdatum
      */
@@ -1034,7 +1034,7 @@ public class Rezept {
         erfassungsDatum = datum;
     }
 
-    
+
     /**
      * @return the termine as is in DB (one String w/ LFs)
      */
@@ -1044,7 +1044,7 @@ public class Rezept {
 
     /**
      * Set the termine-field as one String w/ CR/LF
-     * 
+     *
      * @param termine the termine to set
      */
     public void setTermine(String termine) {
@@ -1060,16 +1060,16 @@ public class Rezept {
 
     /**
      * Set the ktraeger
-     * 
+     *
      * @param String - name of the KostenTraeger
      */
     public void setKTraegerName(String KTraeger) {
         ktraeger = KTraeger;
     }
-    
+
     /**
      * Retrieve the KostenTraegerID
-     * 
+     *
      * @return the kId
      */
     public int getkId() {
@@ -1078,7 +1078,7 @@ public class Rezept {
 
     /**
      * Set the KostenTraegerID
-     * 
+     *
      * @param kId the kId to set
      */
     public void setkId(int kId) {
@@ -1106,7 +1106,7 @@ public class Rezept {
         lastDate = datum;
     }
 
-    
+
     /**
      * @return the PreisGruppe
      */
@@ -1121,7 +1121,7 @@ public class Rezept {
         preisgruppe = pg;
     }
 
-    
+
     /**
      * @return the begruendADR
      */
@@ -1144,14 +1144,14 @@ public class Rezept {
         begruendADR = begruendetADR;
     }
 
-    
+
     /**
      * @return the hausBes bool. To get a String "T"/"F" use getHausBesuch()
      */
     public boolean isHausBesuch() {
         return hausbes;
     }
-    
+
     /**
      * Returns a String "T"/"F" depending on value of hausBes. To use the bool directly, call isHausBesuch()
      * @return
@@ -1169,7 +1169,7 @@ public class Rezept {
     public void setHausBesuch(boolean hb) {
         hausbes = hb;
     }
-    
+
     /**
      * @return the iNDIKATSCHL
      */
@@ -1184,7 +1184,7 @@ public class Rezept {
         indikatSchl = indiSchl;
     }
 
-    
+
     /**
      * @return the angelegtVon
      */
@@ -1199,7 +1199,7 @@ public class Rezept {
         this.angelegtVon = angelegtVon;
     }
 
-    
+
     /**
      * @return the lastEdDate
      */
@@ -1213,7 +1213,7 @@ public class Rezept {
     public void setLastEdDate(LocalDate datum) {
         lastEdDate = datum;
     }
-    
+
     /**
      * @return the barcodeform
      */
@@ -1241,8 +1241,8 @@ public class Rezept {
     public void setDauer(String Dauer) {
         dauer = Dauer;
     }
-    
-    
+
+
     /**
      * @return the frequenz
      */
@@ -1257,10 +1257,10 @@ public class Rezept {
         frequenz = bHz;
     }
 
-    
+
     /**
      * @return the matchcode of lastEditor (last edited by user)
-     * 
+     *
      */
     public String getLastEditor() {
         return lastEditor;
@@ -1268,13 +1268,13 @@ public class Rezept {
 
     /**
      * Set the matchcode of lastEditor (last edited by user)
-     * 
+     *
      */
     public void setLastEditor(String matchCode) {
         lastEditor = matchCode;
     }
 
-    
+
     /**
      * @return the berId
      */
@@ -1303,7 +1303,7 @@ public class Rezept {
     public String getArztBericht() {
         return isArztBericht() ? "T" : "F";
     }
- 
+
     /**
      * Set the arztBericht
      */
@@ -1311,7 +1311,7 @@ public class Rezept {
         arztBericht = ab;
     }
 
-    
+
     /**
      * @return the Abschluss as bool
      */
@@ -1322,14 +1322,14 @@ public class Rezept {
     public String getAbschluss() {
         return isAbschluss() ? "T" : "F";
     }
-    
+
     /**
      * Set the Abschluss as bool
      */
     public void setAbschluss(boolean Abschluss) {
         abschluss = Abschluss;
     }
-    
+
     /**
      * @return the zZSTATUS
      */
@@ -1337,7 +1337,7 @@ public class Rezept {
         return zzStatus;
     }
 
-    
+
     /**
      * @param zzStatus the zzStatus to set
      */
@@ -1359,7 +1359,7 @@ public class Rezept {
         zzRegel = zzR;
     }
 
-    
+
     /**
      * @return the pos1
      */
@@ -1436,7 +1436,7 @@ public class Rezept {
                 return "";
         }
     }
-    
+
     /**
      * Set the desired HMPos via an index. This will set HMPosX, where X=idx to value
      * @param idx   the HMPos to set
@@ -1460,7 +1460,7 @@ public class Rezept {
                 logger.error("Index " + idx + " ist ungueltig. Es sind nur HM-Positionen 1-4 setzbar");
         }
     }
-    
+
     /**
      * @return the farbcode
      */
@@ -1474,7 +1474,7 @@ public class Rezept {
     public void setFarbcode(int fc) {
         farbcode = fc;
     }
-    
+
     /**
      * @return the rsplit
      */
@@ -1488,7 +1488,7 @@ public class Rezept {
     public void setRSplit(String RSplit) {
         rsplit = RSplit;
     }
-    
+
     /**
      * @return the jahrfrei (=VorJahrFrei?)
      */
@@ -1503,7 +1503,7 @@ public class Rezept {
         jahrfrei = vjf;
     }
 
-    
+
     /**
      * @return the unter18
      */
@@ -1555,10 +1555,10 @@ public class Rezept {
     public int getAnzahlHb() {
         return anzahlHb;
     }
-    
+
     /**
      * set the anzahlHausBesuche
-     * 
+     *
      * @param int
      */
     public void setAnzahlHb(int Anzahl) {
@@ -1620,7 +1620,7 @@ public class Rezept {
     public void setHMKuerzel4(String kuerzel4) {
         this.kuerzel4 = kuerzel4;
     }
-    
+
     /**
      * @param kuerzel5 the kuerzel5 to set
      */
@@ -1641,22 +1641,22 @@ public class Rezept {
     public String getHMKuerzel6() {
         return kuerzel6;
     }
-    
+
     /**
      * @param kuerzel6 the kuerzel6 to set
      */
     public void setHMKuerzel6(String kuerzel6) {
         this.kuerzel6 = kuerzel6;
     }
-    
+
     /**
      * Get 1 of the 6 (HM-?)KuerzelX
-     *  
+     *
      * @param idx - the Kuerzel to set
      */
     public String getHMKuerzel(int idx){
         switch (idx) {
-            
+
             case 1:
                 return getHMKuerzel1();
             case 2:
@@ -1674,16 +1674,16 @@ public class Rezept {
                 return "";
         }
     }
-    
+
     /**
      * Set 1 of the 6 (HM-?)KuerzelX to value
-     *  
+     *
      * @param idx - the Kuerzel to set
      * @param value the value to set it to
      */
     public void setHMKuerzel(int idx, String value){
         switch (idx) {
-            
+
             case 1:
                 setHMKuerzel1(value);
                 break;
@@ -1706,7 +1706,7 @@ public class Rezept {
                 logger.error("Index " + idx + " ist ungueltig. Nur 1-6 sind Kuerzel");
         }
     }
-   
+
     /**
      * @return the icd10
      */
@@ -1748,7 +1748,7 @@ public class Rezept {
         else
             return "F";
     }
-    
+
     public void setPauschale(boolean pausch) {
         pauschale = pausch;
     }
