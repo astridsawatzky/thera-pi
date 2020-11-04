@@ -128,11 +128,8 @@ public class ImageRepository {
     }
 
     public ImageIcon get(String name) {
-        if(map.contains(name)) {
-            return   map.get(name);
-        } else {
-            return emptyIcon;
-        }
+        
+      return  map.getOrDefault(name, emptyIcon);
     }
 
     public static ImageIcon paypalIcon() {
