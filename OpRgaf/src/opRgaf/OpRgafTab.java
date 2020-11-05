@@ -164,7 +164,7 @@ class OpRgafTab extends JXPanel implements ChangeListener {
         System.out.println("Eingang" + eingang);
         Money restbetrag = op.offen.minus(eingang);
 
-        op.bezahltAm = LocalDate.now();
+
         if (bar) {
             String ktext = op.kennung.name + "," + op.rezNummer.rezeptNummer();
             if (ktext.length() > 35) {
