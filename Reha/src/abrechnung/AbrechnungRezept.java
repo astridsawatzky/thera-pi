@@ -4349,9 +4349,16 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener, Acti
         String ergebnis = svec.substring(1);
         ergebnis = ergebnis.substring(0, ergebnis.length() - 1);
         String[] teile = ergebnis.split(",");
-        for (int i = 0; i < teile.length; i++) {
-            vec.add((type == 0 ? teile[i].trim() : Integer.parseInt(teile[i].trim())));
+        for (String teil : teile) {
+            try {
+            vec.add((type == 0 ? teil.trim() : Integer.parseInt(teil.trim())));
+            }
+            catch (NumberFormatException e) {
+                vec.add(0);
+
+            }
         }
+
     }
 
     /************************/
