@@ -476,6 +476,7 @@ class Zeitfenster extends JDialog implements KeyListener, ActionListener {
         pack();
         setLocation(x, y);
         toFront();
+        setRechenart(rechenart);
         setModal(true);
         setVisible(true);
         return rueck;
