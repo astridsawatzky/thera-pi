@@ -7,11 +7,19 @@ Datumsformat ist jjjj-mm-tt, also Jahr-Monat-Tag
 ## unveroeffentlicht
 
 - HMR2020 Formulare
+
+## [1.1.12] - 2020-11-10
+
 ### changed
 - im Panel AktuelleRezepte Werkzeugfenster durch Buttons auf der Leiste ersetzt.
+- Projektstruktur: Office hat sein eigenes Paket bekommen
+- Projektstruktur: Zugriff auf akutellen Mandanten über Klasse Betriebsumfeld
+- Zeitfenster refactored
+- OpRgAf rewrite aktiviert
 
 ### fixed
 - BG / Privatrezepte rechnen nur die geleisteten Einheiten ab #230
+- flasche Nummerierung der Behandlungstage #398
 
 
 ## [1.1.11] - 2020-10-18
