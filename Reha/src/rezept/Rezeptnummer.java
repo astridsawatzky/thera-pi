@@ -8,7 +8,6 @@ import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.sun.istack.internal.NotNull;
 
 import core.Disziplin;
 
@@ -55,7 +54,7 @@ public class Rezeptnummer {
         this.rezeptZiffern = Integer.parseInt(rezNrDigits);
     }
 
-    public Rezeptnummer(@NotNull Disziplin disziplin, int rezeptZiffern) {
+    public Rezeptnummer( Disziplin disziplin, int rezeptZiffern) {
         if(disziplin==null) {
             LOGGER.error("Disziplin must not be null.");
             disziplin = INV;
