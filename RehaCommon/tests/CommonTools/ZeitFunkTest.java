@@ -1,6 +1,6 @@
 package CommonTools;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import org.junit.Test;
 
@@ -27,4 +27,13 @@ public class ZeitFunkTest {
         assertEquals("23:30", ZeitFunk.ZeitMinusMinuten("00:11", "41"));
     }
 
+
+    @Test
+    public void malformedTimesgetSpecialTreatment() throws Exception{
+        assertEquals(480, ZeitFunk.MinutenSeitMitternacht("08:00:00"));
+        assertEquals(480, ZeitFunk.MinutenSeitMitternacht("08:000:0"));
+
+
+
+    }
 }

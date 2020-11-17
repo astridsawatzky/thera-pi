@@ -23,7 +23,7 @@ class TherapeutenTag  {
 
   private KalenderPanel day = new KalenderPanel();
 
-      private Logger logger = LoggerFactory.getLogger(TherapeutenTag.class);
+      private static final Logger logger = LoggerFactory.getLogger(TherapeutenTag.class);
 
       public TherapeutenTag(String name, boolean b, float kalenderAlpha) {
          day.setName(name);
