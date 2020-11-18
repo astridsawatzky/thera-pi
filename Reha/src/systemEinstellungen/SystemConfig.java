@@ -717,7 +717,7 @@ public class SystemConfig {
             // ICalGenerator.setUtcTime("20151029T113000");
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null,
-                    "Fehler bei der Verarbeitung der icalendar.ini, Mehode:ICalSettingns!\nFehlertext: "
+                    "Fehler bei der Verarbeitung der icalendar.ini, Methode:ICalSettings!\nFehlertext: "
                             + ex.getMessage());
         }
     }
