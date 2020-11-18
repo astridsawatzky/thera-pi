@@ -13,6 +13,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.transform.Scale;
 import javafx.stage.Stage;
+import speichern.HmvSaver;
 
 public class Hmv13fxtest extends ApplicationTest implements Closeable {
     Context context = CoreTestDataFactory.createContext();
@@ -41,26 +42,27 @@ public class Hmv13fxtest extends ApplicationTest implements Closeable {
 
             @Override
             public boolean save(Hmv hmv) {
-                // TODO Auto-generated method stub entwurf
                 return false;
             }
-        }, new HmvSaver() {
+        },new HmvSaver() {
 
             @Override
             public boolean save(Hmv hmv) {
-                // TODO Auto-generated method stub in echt
                 return false;
-            }
-        }, this));
+            }} , this));
 
     }
 
     @Test
-    public void testName() throws Exception {
+    public void testSame() throws Exception {
         Object hmvfromgui = hmv13.toHmv();
         assertNotSame(hmvorig, hmvfromgui);
         assertEquals(hmvorig.toString(), hmvfromgui.toString());
+
+
     }
+
+
 
     @Override
     public void close() throws IOException {

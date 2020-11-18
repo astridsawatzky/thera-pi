@@ -3,11 +3,9 @@ package hmv;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Optional;
 
 import core.Arzt;
@@ -20,13 +18,8 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.*;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
-import javafx.scene.paint.Color;
 import javafx.util.StringConverter;
 import specs.Contracts;
 
@@ -393,6 +386,7 @@ public class Hmv13 {
                                                                                                     .getUserData()),
                         leitsymptomatik.getText()));
         hmvOut.beh = new Behandlung();
+        hmvOut.nummer = hmv.nummer;
         return hmvOut;
 
     }

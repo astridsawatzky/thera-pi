@@ -9,11 +9,11 @@ import core.Krankenversicherung;
 import core.Patient;
 import mandant.Mandant;
 
-public class Hmv {
+public class Hmv  {
     User angelegtvon;
     //mandant
     Mandant mandant;
-    Disziplin disziplin;
+    public Disziplin disziplin;
     //Patient
     Patient patient;
     Arzt arzt;
@@ -27,6 +27,7 @@ public class Hmv {
 
     Behandlung beh;
     public Boolean dringlich;
+    public HMVnr nummer;
 
 
 
