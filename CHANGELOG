@@ -13,13 +13,13 @@ Datumsformat ist jjjj-mm-tt, also Jahr-Monat-Tag
 ### changed
 - im Panel AktuelleRezepte Werkzeugfenster durch Buttons auf der Leiste ersetzt.
 - Projektstruktur: Office hat sein eigenes Paket bekommen
-- Projektstruktur: Zugriff auf akutellen Mandanten über Klasse Betriebsumfeld
+- Projektstruktur: Zugriff auf aktuellen Mandanten über Klasse Betriebsumfeld
 - Zeitfenster refactored
 - OpRgAf rewrite aktiviert
 
 ### fixed
-- BG / Privatrezepte rechnen nur die geleisteten Einheiten ab #230
-- flasche Nummerierung der Behandlungstage #398
+
+- falsche Nummerierung der Behandlungstage #398
 
 
 ## [1.1.11] - 2020-10-18
@@ -30,7 +30,7 @@ Datumsformat ist jjjj-mm-tt, also Jahr-Monat-Tag
 
 
 ### fixed
-
+- BG / Privatrezepte rechnen nur die geleisteten Einheiten ab #230
 - Feiertage konnten nur bis 2020 ausgelesen werden #481
 - HMR Check max pro Fall korrigiert #406
 - Hinweis auf Mail an Admin bei mehrmaligen fehlerhaften Loginversuchen entfernt #478
