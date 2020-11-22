@@ -1990,6 +1990,8 @@ public class AktuelleRezepte extends JXPanel implements ListSelectionListener, T
                 } else if (isAltPressed) {
                     kopiereHistorienRezept();
                     strModus = "KopiereHistorienRezept";
+                } else {
+                    neuanlageRezept(true, "", "");
                 }
 
             }
