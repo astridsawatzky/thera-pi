@@ -92,6 +92,7 @@ public class OffenePosten implements WindowListener {
                 String officeProgrammPfad = inif.getStringProperty("OpenOffice.org", "OfficePfad");
                 String officeNativePfad = inif.getStringProperty("OpenOffice.org", "OfficeNativePfad");
                 try {
+                    OOService.setLibpath(officeNativePfad, officeProgrammPfad);
                     new OOService().start();
                 } catch (FileNotFoundException | OfficeApplicationException e) {
                     e.printStackTrace();
