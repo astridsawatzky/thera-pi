@@ -5,10 +5,14 @@ import java.util.Vector;
 
 import javax.swing.JOptionPane;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import CommonTools.SqlInfo;
 import CommonTools.StringTools;
 
 public class Rezeptvector {
+    private static final Logger LOGGER = LoggerFactory.getLogger(Rezeptvector.class);
     private Vector<Vector<String>> vecvec_rezepte;
     private Vector<String> vec_rezept;
 
@@ -21,7 +25,7 @@ public class Rezeptvector {
         String cmd = "select * from verordn where rez_nr='" + rezNr.trim() + "' LIMIT 1";
         this.vecvec_rezepte = SqlInfo.holeFelder(cmd);
         if (this.vecvec_rezepte.isEmpty()) {
-            System.out.println("RezeptVektor ist leer");
+            LOGGER.debug("RezeptVektor ist leer");
             this.vec_rezept = null;
             return false;
         }
@@ -56,7 +60,7 @@ public class Rezeptvector {
         if ("F".equalsIgnoreCase(data) || "T".equalsIgnoreCase(data)) {
             this.vec_rezept.set(index, data.toUpperCase());
         } else {
-            System.out.println("Fehler setBoolAt(String) idx: " + index + " val: " + data);
+            LOGGER.debug("Fehler setBoolAt(String) idx: " + index + " val: " + data);
         }
     }
 
@@ -152,7 +156,7 @@ public class Rezeptvector {
         if (0 < index && index < 5) {
             setStringAt(2 + index, data);
         } else {
-            System.out.println("Indexfehler setAnzBeh: " + index);
+            LOGGER.debug("Indexfehler setAnzBeh: " + index);
         }
     }
 
@@ -179,7 +183,7 @@ public class Rezeptvector {
         if (0 < index && index < 5) {
             setStringAt(7 + index, data);
         } else {
-            System.out.println("Indexfehler setArtDBehandl: " + index);
+            LOGGER.debug("Indexfehler setArtDBehandl: " + index);
         }
     }
 
@@ -250,7 +254,7 @@ public class Rezeptvector {
         if (0 < index && index < 5) {
             setStringAt(17 + index, data);
         } else {
-            System.out.println("Indexfehler setPreis: " + index);
+            LOGGER.debug("Indexfehler setPreis: " + index);
         }
     }
 
@@ -299,7 +303,7 @@ public class Rezeptvector {
     }
 
     public void setTermine(String termine) {
-        System.out.println(termine);
+        LOGGER.debug(termine);
         setStringAt(34, termine);
     }
 
@@ -440,7 +444,7 @@ public class Rezeptvector {
         if (0 < index && index < 5) {
             setStringAt(47 + index, data);
         } else {
-            System.out.println("Indexfehler setHmPos: " + index);
+            LOGGER.debug("Indexfehler setHmPos: " + index);
         }
     }
 
@@ -568,7 +572,7 @@ public class Rezeptvector {
         if (0 < index && index < 7) { // es gibt 6 Kuerzel!
             setStringAt(64 + index, data);
         } else {
-            System.out.println("Indexfehler setHMkurz: " + index);
+            LOGGER.debug("Indexfehler setHMkurz: " + index);
         }
     }
 

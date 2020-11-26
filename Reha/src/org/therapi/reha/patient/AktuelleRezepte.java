@@ -48,6 +48,8 @@ import org.jdesktop.swingx.renderer.DefaultTableRenderer;
 import org.jdesktop.swingx.renderer.IconValues;
 import org.jdesktop.swingx.renderer.MappedValue;
 import org.jdesktop.swingx.renderer.StringValues;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
@@ -437,7 +439,9 @@ public class AktuelleRezepte extends JXPanel implements ListSelectionListener, T
                 + "Halten sie gleichzeitig Die Taste <b><font color='#0000ff'>Strg</font></b> gedrückt,"
                 + "<br>wird <font color='#0000ff'>das jüngste Rezept</font> das Patienten kopiert!<br><br></html>");
         neuButton.setActionCommand("rezneu");
-        neuButton.addActionListener(this);
+
+        neuButton.addActionListener(e -> neuanlageRezept(e));
+
         jtb.add(neuButton);
         editButton = new JButton();
         editButton.setIcon(SystemConfig.hmSysIcons.get("edit"));
@@ -1694,7 +1698,7 @@ public class AktuelleRezepte extends JXPanel implements ListSelectionListener, T
             }
             break;
         case "rezneu":
-            neuanlageRezept(arg0);
+           LoggerFactory.getLogger(AktuelleRezepte.class).debug("rezneu by deprecated call");
             break;
         case "rezedit":
             if (aktPanel.equals("leerPanel")) {
@@ -1977,9 +1981,9 @@ public class AktuelleRezepte extends JXPanel implements ListSelectionListener, T
             } else {
 
                 int modifiers = arg0.getModifiers();
-                boolean isCtrlPressed = checkModifiers(modifiers, KeyEvent.CTRL_DOWN_MASK);
-                boolean isShiftPressed = checkModifiers(modifiers, KeyEvent.SHIFT_DOWN_MASK);
-                boolean isAltPressed = checkModifiers(modifiers, KeyEvent.ALT_DOWN_MASK);
+                boolean isCtrlPressed = checkModifiers(modifiers, KeyEvent.CTRL_MASK);
+                boolean isShiftPressed = checkModifiers(modifiers, KeyEvent.SHIFT_MASK);
+                boolean isAltPressed = checkModifiers(modifiers, KeyEvent.ALT_MASK);
                 String strModus = "";
                 if (isCtrlPressed) {
                     strModus = "KopiereLetztes";
@@ -2003,7 +2007,7 @@ public class AktuelleRezepte extends JXPanel implements ListSelectionListener, T
     }
 
     private boolean checkModifiers(int modifiers, int mask) {
-        return ((modifiers & mask) == mask);
+        return ((modifiers & mask) != 0);
     }
 
     public static String getActiveRezNr() {
