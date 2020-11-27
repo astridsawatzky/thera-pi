@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.Arrays;
@@ -32,17 +33,12 @@ import hauptFenster.Reha;
 import systemEinstellungen.SystemConfig;
 
 public class PatientMemoPanel extends JXPanel {
-
-    /**
-     *
-     */
     private static final long serialVersionUID = 1894163619378832811L;
-    PatientHauptPanel patientHauptPanel = null;
-    MouseListener ml = null;
-    JButton[] memobut = { null, null, null, null, null, null };
-    JTextArea[] pmemo = { null, null };
-    public PatientMemoPanel(PatientHauptPanel patHauptPanel) {
-        super();
+    private PatientHauptPanel patientHauptPanel;
+    private MouseListener ml;
+    private JButton[] memobut = { null, null, null, null, null, null };
+    private JTextArea[] pmemo = { null, null };
+    PatientMemoPanel(PatientHauptPanel patHauptPanel) {
         setLayout(new BorderLayout());
         setOpaque(false);
         this.patientHauptPanel = patHauptPanel;
@@ -51,31 +47,23 @@ public class PatientMemoPanel extends JXPanel {
     }
 
     public void setNewText(String text) {
-
-        if (text.equals("")) {
-            caretAufNull();
-            return;
-        } else {
-            // Variable im Text
-            if (text.indexOf("^") >= 0) {
+        if (!"".equals(text)) {
+            if (text.indexOf('^') >= 0) {
                 String newtext = testeAufPlatzhalter(text);
                 String oldtext = getPmemo()[patientHauptPanel.inMemo].getText();
                 getPmemo()[patientHauptPanel.inMemo].setText(newtext + "\n" + oldtext);
-                caretAufNull();
             } else {
                 String oldtext = getPmemo()[patientHauptPanel.inMemo].getText();
                 getPmemo()[patientHauptPanel.inMemo].setText(text + "\n" + oldtext);
-                caretAufNull();
             }
         }
+        caretAufNull();
     }
 
     private void caretAufNull() {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                // patientHauptPanel.pmemo[patientHauptPanel.inMemo].setSelectionStart(0);
-                // patientHauptPanel.pmemo[patientHauptPanel.inMemo].setSelectionEnd(0);
                 getPmemo()[patientHauptPanel.inMemo].setCaretPosition(0);
             }
         });
@@ -83,8 +71,6 @@ public class PatientMemoPanel extends JXPanel {
 
     private String testeAufPlatzhalter(String text) {
         String sret = "";
-        // int lang = text.length();
-        // System.out.println(text);
         text = text.replace("^Datum^", DatFunk.sHeute())
                    .replace("^User^", Reha.aktUser);
         String stext = text;
@@ -94,34 +80,19 @@ public class PatientMemoPanel extends JXPanel {
         int vars = 0;
         // int sysvar = -1;
         boolean noendfound = false;
-        while ((start = stext.indexOf("^")) >= 0) {
+        while ((start = stext.indexOf('^')) >= 0) {
             noendfound = true;
             for (int i = 1; i < 350; i++) {
-                if (stext.substring(start + i, start + (i + 1))
-                         .equals("^")) {
-                    dummy = stext.substring(start, start + (i + 1));
-                    String sanweisung = dummy.toString()
+                if ("^".equals(stext.substring(start + i, start + i + 1))) {
+                    dummy = stext.substring(start, start + i + 1);
+                    String sanweisung = dummy
                                              .replace("^", "");
                     Object ret = JOptionPane.showInputDialog(null,
                             "<html>Bitte Wert eingeben für: --\u003E<b> " + sanweisung + " </b> &nbsp; </html>",
                             "Platzhalter gefunden", 1);
                     if (ret == null) {
                         return "";
-                        // sucheErsetze(dummy,"");
                     } else {
-                        // sucheErsetze(document,dummy,((String)ret).trim(),false);
-                        /*
-                         * if( ((String)ret).trim().length()==10 && ((String)ret).trim().indexOf(".")
-                         * ==2 && ((String)ret).trim().lastIndexOf(".") == 5 ) {
-                         *
-                         *
-                         * try{ ret = terminKalender.DatFunk.sDatInSQL((String)ret); }catch(Exception
-                         * ex){
-                         * JOptionPane.showMessageDialog(null,"Fehler in der Konvertierung des Datums");
-                         * }
-                         *
-                         * }
-                         */
                         sret = stext.replace(dummy, ((String) ret).trim());
                         stext = sret;
                     }
@@ -137,15 +108,16 @@ public class PatientMemoPanel extends JXPanel {
             }
         }
 
-        return (sret.equals("") ? text : sret);
+        return "".equals(sret) ? text : sret;
     }
 
     private PatientMemoPanel getInstance() {
         return this;
     }
 
-    public void activateMouseListener() {
-        ml = new MouseListener() {
+    private void activateMouseListener() {
+        ml = new MouseAdapter() {
+
             @Override
             public void mouseClicked(MouseEvent e) {
             }
@@ -153,8 +125,7 @@ public class PatientMemoPanel extends JXPanel {
             @Override
             public void mousePressed(MouseEvent e) {
                 if (e.getButton() == 3
-                        && ((getPmemo()[0].isEditable()) || (getPmemo()[1].isEditable()))) {
-                    // new Floskeln( (patientHauptPanel.pmemo[0].isEditable() ? 0 : 1), e );
+                        && (getPmemo()[0].isEditable() || getPmemo()[1].isEditable())) {
                     Floskeln fl = new Floskeln(Reha.getThisFrame(), "Floskeln", getInstance());
                     fl.setBounds(200, 200, 200, 200);
                     fl.setPreferredSize(new Dimension(200, 200));
@@ -164,28 +135,16 @@ public class PatientMemoPanel extends JXPanel {
                     fl.setModal(true);
                     fl.setAlwaysOnTop(false);
                     fl = null;
-                    // JXFrame owner,String titel, Component aktFocus
                 }
             }
 
-            @Override
-            public void mouseReleased(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-            }
 
         };
         getPmemo()[0].addMouseListener(ml);
         getPmemo()[1].addMouseListener(ml);
     }
 
-    public void fireAufraeumen() {
+    void fireAufraeumen() {
         for (int i = 0; i < memobut.length; i++) {
             memobut[i].removeActionListener(patientHauptPanel.memoAction);
         }
@@ -195,10 +154,9 @@ public class PatientMemoPanel extends JXPanel {
         patientHauptPanel.memoAction = null;
     }
 
-    public void doMemoAction(ActionEvent arg0) {
-
+    void doMemoAction(ActionEvent arg0) {
         String sc = arg0.getActionCommand();
-        if (sc.equals("kedit")) {
+        if ("kedit".equals(sc)) {
             patientHauptPanel.inMemo = 0;
             memobut[0].setEnabled(false);
             memobut[1].setEnabled(true);
@@ -209,7 +167,7 @@ public class PatientMemoPanel extends JXPanel {
             memobut[3].setEnabled(false);
             return;
         }
-        if (sc.equals("kedit2")) {
+        if ("kedit2".equals(sc)) {
             patientHauptPanel.inMemo = 1;
             memobut[3].setEnabled(false);
             memobut[4].setEnabled(true);
@@ -220,7 +178,7 @@ public class PatientMemoPanel extends JXPanel {
             memobut[0].setEnabled(false);
             return;
         }
-        if (sc.equals("ksave")) {
+        if ("ksave".equals(sc)) {
             memobut[0].setEnabled(true);
             memobut[1].setEnabled(false);
             memobut[2].setEnabled(false);
@@ -233,7 +191,7 @@ public class PatientMemoPanel extends JXPanel {
             patientHauptPanel.inMemo = -1;
             return;
         }
-        if (sc.equals("ksave2")) {
+        if ("ksave2".equals(sc)) {
             memobut[3].setEnabled(true);
             memobut[4].setEnabled(false);
             memobut[5].setEnabled(false);
@@ -246,7 +204,7 @@ public class PatientMemoPanel extends JXPanel {
             patientHauptPanel.inMemo = -1;
             return;
         }
-        if (sc.equals("kbreak")) {
+        if ("kbreak".equals(sc)) {
             memobut[0].setEnabled(true);
             memobut[1].setEnabled(false);
             memobut[2].setEnabled(false);
@@ -260,7 +218,7 @@ public class PatientMemoPanel extends JXPanel {
             patientHauptPanel.inMemo = -1;
             return;
         }
-        if (sc.equals("kbreak2")) {
+        if ("kbreak2".equals(sc)) {
             memobut[3].setEnabled(true);
             memobut[4].setEnabled(false);
             memobut[5].setEnabled(false);
@@ -272,9 +230,7 @@ public class PatientMemoPanel extends JXPanel {
                                                       .get(0));
             getPmemo()[1].setCaretPosition(0);
             patientHauptPanel.inMemo = -1;
-            return;
         }
-
     }
 
     private JXPanel getMemoPanel() {
@@ -328,14 +284,12 @@ public class PatientMemoPanel extends JXPanel {
         JXPanel jpan = JCompTools.getEmptyJXPanel(new BorderLayout());
         jpan.setOpaque(true);
         JXPanel jpan2 = JCompTools.getEmptyJXPanel(new BorderLayout());
-        /*****************/
 
         jpan2.setBackgroundPainter(Reha.instance.compoundPainter.get("FliessText"));
         jpan2.add(jtoolb);
         jpan.add(jpan2, BorderLayout.NORTH);
         jpan.add(span, BorderLayout.CENTER);
         patientHauptPanel.memotab.addTab("Notizen", jpan);
-        /******************************************/
         JToolBar jtoolb2 = new JToolBar();
         jtoolb2.setOpaque(false);
         jtoolb2.setBorder(null);
@@ -393,7 +347,6 @@ public class PatientMemoPanel extends JXPanel {
             }
         });
         return mittelinksunten;
-
     }
 
     public JTextArea[] getPmemo() {
@@ -404,6 +357,4 @@ public class PatientMemoPanel extends JXPanel {
         getPmemo()[0].setText("");
         getPmemo()[1].setText("");
     }
-
-
 }
