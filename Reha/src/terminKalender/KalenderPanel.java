@@ -465,7 +465,7 @@ class KalenderPanel extends JXPanel {
 
     int[] BlockTestOhneAktivierung(int x, int y) {
         int[] ret = { -1, -1, -1, -1 };
-        vectorzahl = ((Vector<?>) dat).size();
+        vectorzahl =  dat.size();
         if (vectorzahl > 0) {
             String sStart = ""; // Startzeit
             int dauer; // Termin Dauer
@@ -473,8 +473,8 @@ class KalenderPanel extends JXPanel {
             float fStartPix;
             float fEndePix;
             for (i = 0; i < getAnzahl(); i++) {
-                sStart = (String) ((Vector<?>) dat.get(2)).get(i);
-                dauer = Integer.parseInt((String) ((Vector<?>) dat.get(3)).get(i));
+                sStart =  dat.get(2).get(i);
+                dauer = Integer.parseInt( dat.get(3).get(i));
 
                 yStartMin = (int) ZeitFunk.MinutenSeitMitternacht(sStart) - zeitSpanneVon;
                 fStartPix = yStartMin * fPixelProMinute;
