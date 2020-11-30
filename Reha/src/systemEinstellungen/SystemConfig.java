@@ -229,7 +229,7 @@ public class SystemConfig {
         try {
             dieseMaschine = java.net.InetAddress.getLocalHost();
         } catch (java.net.UnknownHostException uhe) {
-
+            logger.debug("cannot set dieseMaschine",uhe);
         }
 
     }

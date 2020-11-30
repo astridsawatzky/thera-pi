@@ -48,6 +48,7 @@ public class SqlInfo {
     }
 
     public void setDieseMaschine(InetAddress dieseMaschine) {
+        if (dieseMaschine == null) return;
         SqlInfo.dieseMaschine = dieseMaschine;
     }
 
@@ -64,6 +65,10 @@ public class SqlInfo {
     }
 
     public static void loescheLocksMaschine() {
+        if (dieseMaschine == null) {
+            logger.info("dieseMaschine not set");
+            return;
+        }
         int stelle = dieseMaschine.toString()
                                   .indexOf('/');
         String maschine = dieseMaschine.toString()
