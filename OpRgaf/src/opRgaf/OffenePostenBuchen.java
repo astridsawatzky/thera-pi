@@ -106,11 +106,11 @@ class OffenePostenBuchen extends JXPanel implements OPRGAFGui,TableModelListener
         });
     }
 
-    static final OffenePostenSchaltbarerTextFilter rgrTypefilter = new OffenePostenSchaltbarerTextFilter(
+    private static final OffenePostenSchaltbarerTextFilter rgrTypefilter = new OffenePostenSchaltbarerTextFilter(
             OffenePostenTableModel.RGNR, "rgr", false);
-    static final OffenePostenSchaltbarerTextFilter afrTypefilter = new OffenePostenSchaltbarerTextFilter(
+    private static final OffenePostenSchaltbarerTextFilter afrTypefilter = new OffenePostenSchaltbarerTextFilter(
             OffenePostenTableModel.RGNR, "afr", false);
-    static final OffenePostenSchaltbarerTextFilter vrTypefilter = new OffenePostenSchaltbarerTextFilter(
+    private static final OffenePostenSchaltbarerTextFilter vrTypefilter = new OffenePostenSchaltbarerTextFilter(
             OffenePostenTableModel.RGNR, "vr", false);
 
     private List<OffenePosten> opListe;
@@ -538,6 +538,7 @@ class OffenePostenBuchen extends JXPanel implements OPRGAFGui,TableModelListener
         }
     }
 
+
     private static void verknuepfen(OffenePostenJTable opJTable, JTextField eingabeFeld,
             OffenePostenComboBox opComboBox) {
         opComboBox.addItemListener(new ItemListener() {
@@ -545,19 +546,12 @@ class OffenePostenBuchen extends JXPanel implements OPRGAFGui,TableModelListener
             @Override
             public void itemStateChanged(ItemEvent e) {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
-                    CBModel selectedItem = (CBModel) opComboBox.getSelectedItem();
-                    if (selectedItem != null) {
-                        OffenePostenAbstractRowFilter filter = selectedItem.filter;
-                        opJTable.setContentFilter(filter);
-                        if (filter != null) {
-                            filter.setFiltertext(eingabeFeld.getText());
-                        }
-                        opJTable.sorter.sort();
-
-                    }
+                    applycombofilter(opJTable, eingabeFeld, opComboBox);
                 }
             }
+
         });
+        applycombofilter(opJTable, eingabeFeld, opComboBox);
         eingabeFeld.getDocument()
                    .addDocumentListener(new DocumentListener() {
 
@@ -583,17 +577,29 @@ class OffenePostenBuchen extends JXPanel implements OPRGAFGui,TableModelListener
 
                        }
 
-                       private void updateTableView(OffenePostenJTable opJTable, JTextField eingabeFeld,
-                               OffenePostenComboBox opComboBox) {
-                           OffenePostenAbstractRowFilter filter = ((CBModel) opComboBox.getSelectedItem()).filter;
-                           if (filter != null) {
-                               filter.setFiltertext(eingabeFeld.getText());
-                               opJTable.sorter.sort();
-                           }
-                       }
                    });
     }
+    private static void updateTableView(OffenePostenJTable opJTable, JTextField eingabeFeld,
+            OffenePostenComboBox opComboBox) {
+        OffenePostenAbstractRowFilter filter = ((CBModel) opComboBox.getSelectedItem()).filter;
+        if (filter != null) {
+            filter.setFiltertext(eingabeFeld.getText());
+            opJTable.sorter.sort();
+        }
+    }
+    private static void applycombofilter(OffenePostenJTable opJTable, JTextField eingabeFeld,
+            OffenePostenComboBox opComboBox) {
+        CBModel selectedItem = (CBModel) opComboBox.getSelectedItem();
+        if (selectedItem != null) {
+            OffenePostenAbstractRowFilter filter = selectedItem.filter;
+            opJTable.setContentFilter(filter);
+            if (filter != null) {
+                filter.setFiltertext(eingabeFeld.getText());
+            }
+            opJTable.sorter.sort();
 
+        }
+    }
     public void addKopierenListener(ActionListener listener) {
         kopierenListener = listener;
 

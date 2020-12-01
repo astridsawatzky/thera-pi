@@ -47,7 +47,7 @@ public class Gui {
         OffenePostenCHKBX select3ChkBx = new OffenePostenCHKBX();
 
         verknuepfe(opJTable, select3ChkBx);
-
+        opJTable.sorter.sort();
         frame.getContentPane()
              .add(select3ChkBx.getPanel(), BorderLayout.WEST);
         frame.pack();
