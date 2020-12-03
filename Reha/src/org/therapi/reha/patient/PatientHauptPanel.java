@@ -54,7 +54,6 @@ public class PatientHauptPanel extends JXPanel {
     // StammDaten-Controls & Listener
     JPatTextField[] ptfield = new JPatTextField[15];
 
-
     // MemoPanel-Controls & Listener
     JTabbedPane memotab = null;
 
@@ -68,9 +67,8 @@ public class PatientHauptPanel extends JXPanel {
     TherapieBerichte berichte = null;
     DokumentationPanel dokumentation = null;
     public Gutachten gutachten = null;
-    String[] tabTitel = { "aktuelle Rezepte", "Rezept-Historie", "Therapieberichte", "Dokumentation",
-            "Gutachten", "Arzt & KK", "Plandaten" };
-
+    String[] tabTitel = { "aktuelle Rezepte", "Rezept-Historie", "Therapieberichte", "Dokumentation", "Gutachten",
+            "Arzt & KK", "Plandaten" };
 
     JTextArea rezdiag = null;
 
@@ -98,11 +96,6 @@ public class PatientHauptPanel extends JXPanel {
     public int aid = -1;
     public int kid = -1;
     boolean patDatenOk = false;
-
-
-
-
-
 
     // Bezug zum unterliegenden JInternalFrame
     JPatientInternal patientInternal = null;
@@ -206,7 +199,7 @@ public class PatientHauptPanel extends JXPanel {
     }
 
     private synchronized JXPanel getToolBarPatient() {
-        patToolBarPanel = new PatientToolBarPanel(this,patientLogic);
+        patToolBarPanel = new PatientToolBarPanel(this, patientLogic);
         return patToolBarPanel;
 
     }
@@ -265,9 +258,9 @@ public class PatientHauptPanel extends JXPanel {
                                .reactOnAction(arg0);
             }
         };
-        if (dbPatid != -1) {
-            memoAction = (e) -> patMemoPanel.doMemoAction(e);
-        }
+
+            memoAction = (e) -> patMemoPanel.doMemoAction(e,dbPatid);
+
 
     }
 
@@ -285,7 +278,6 @@ public class PatientHauptPanel extends JXPanel {
                                .reactOnKeyPressed(e);
             }
 
-
         };
     }
 
@@ -298,8 +290,6 @@ public class PatientHauptPanel extends JXPanel {
             }
         };
     }
-
-
 
     private void createMouseListeners() {
         toolBarMouse = new MouseAdapter() {
@@ -377,8 +367,6 @@ public class PatientHauptPanel extends JXPanel {
         gutachten.setzeGutachtenPanelAufNull(true);
         patMemoPanel.memoPanelAufNull();
     }
-
-
 
     void setPatdaten(Vector<String> patDaten) {
         if (patDaten.size() >= 71) {

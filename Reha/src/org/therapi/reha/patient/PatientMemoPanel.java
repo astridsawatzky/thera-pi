@@ -38,6 +38,7 @@ public class PatientMemoPanel extends JXPanel {
     private MouseListener ml;
     private JButton[] memobut = { null, null, null, null, null, null };
     private JTextArea[] pmemo = { null, null };
+
     PatientMemoPanel(PatientHauptPanel patHauptPanel) {
         setLayout(new BorderLayout());
         setOpaque(false);
@@ -85,8 +86,7 @@ public class PatientMemoPanel extends JXPanel {
             for (int i = 1; i < 350; i++) {
                 if ("^".equals(stext.substring(start + i, start + i + 1))) {
                     dummy = stext.substring(start, start + i + 1);
-                    String sanweisung = dummy
-                                             .replace("^", "");
+                    String sanweisung = dummy.replace("^", "");
                     Object ret = JOptionPane.showInputDialog(null,
                             "<html>Bitte Wert eingeben für: --\u003E<b> " + sanweisung + " </b> &nbsp; </html>",
                             "Platzhalter gefunden", 1);
@@ -124,8 +124,7 @@ public class PatientMemoPanel extends JXPanel {
 
             @Override
             public void mousePressed(MouseEvent e) {
-                if (e.getButton() == 3
-                        && (getPmemo()[0].isEditable() || getPmemo()[1].isEditable())) {
+                if (e.getButton() == 3 && (getPmemo()[0].isEditable() || getPmemo()[1].isEditable())) {
                     Floskeln fl = new Floskeln(Reha.getThisFrame(), "Floskeln", getInstance());
                     fl.setBounds(200, 200, 200, 200);
                     fl.setPreferredSize(new Dimension(200, 200));
@@ -137,7 +136,6 @@ public class PatientMemoPanel extends JXPanel {
                     fl = null;
                 }
             }
-
 
         };
         getPmemo()[0].addMouseListener(ml);
@@ -154,82 +152,88 @@ public class PatientMemoPanel extends JXPanel {
         patientHauptPanel.memoAction = null;
     }
 
-    void doMemoAction(ActionEvent arg0) {
-        String sc = arg0.getActionCommand();
-        if ("kedit".equals(sc)) {
-            patientHauptPanel.inMemo = 0;
-            memobut[0].setEnabled(false);
-            memobut[1].setEnabled(true);
-            memobut[2].setEnabled(true);
-            getPmemo()[0].setForeground(Color.RED);
-            getPmemo()[0].setEditable(true);
-            getPmemo()[0].setCaretPosition(0);
-            memobut[3].setEnabled(false);
-            return;
-        }
-        if ("kedit2".equals(sc)) {
-            patientHauptPanel.inMemo = 1;
-            memobut[3].setEnabled(false);
-            memobut[4].setEnabled(true);
-            memobut[5].setEnabled(true);
-            getPmemo()[1].setForeground(Color.RED);
-            getPmemo()[1].setEditable(true);
-            getPmemo()[1].setCaretPosition(0);
-            memobut[0].setEnabled(false);
-            return;
-        }
-        if ("ksave".equals(sc)) {
-            memobut[0].setEnabled(true);
-            memobut[1].setEnabled(false);
-            memobut[2].setEnabled(false);
-            getPmemo()[0].setForeground(Color.BLUE);
-            getPmemo()[0].setEditable(false);
-            memobut[3].setEnabled(true);
-            String cmd = "update pat5 set anamnese='" + StringTools.Escaped(getPmemo()[0].getText())
-                    + "' where id='" + patientHauptPanel.dbPatid + "'";
-            new ExUndHop().setzeStatement(cmd);
-            patientHauptPanel.inMemo = -1;
-            return;
-        }
-        if ("ksave2".equals(sc)) {
-            memobut[3].setEnabled(true);
-            memobut[4].setEnabled(false);
-            memobut[5].setEnabled(false);
-            getPmemo()[1].setForeground(Color.BLUE);
-            getPmemo()[1].setEditable(false);
-            memobut[0].setEnabled(true);
-            String cmd = "update pat5 set pat_text='" + StringTools.Escaped(getPmemo()[1].getText())
-                    + "' where id='" + patientHauptPanel.dbPatid + "'";
-            new ExUndHop().setzeStatement(cmd);
-            patientHauptPanel.inMemo = -1;
-            return;
-        }
-        if ("kbreak".equals(sc)) {
-            memobut[0].setEnabled(true);
-            memobut[1].setEnabled(false);
-            memobut[2].setEnabled(false);
-            getPmemo()[0].setForeground(Color.BLUE);
-            getPmemo()[0].setEditable(false);
-            memobut[3].setEnabled(true);
-            getPmemo()[0].setText(SqlInfo.holeSatz("pat5", "anamnese",
-                    "id='" + patientHauptPanel.dbPatid + "'", Arrays.asList(new String[] {}))
-                                                      .get(0));
-            getPmemo()[0].setCaretPosition(0);
-            patientHauptPanel.inMemo = -1;
-            return;
-        }
-        if ("kbreak2".equals(sc)) {
-            memobut[3].setEnabled(true);
-            memobut[4].setEnabled(false);
-            memobut[5].setEnabled(false);
-            getPmemo()[1].setForeground(Color.BLUE);
-            getPmemo()[1].setEditable(false);
-            memobut[0].setEnabled(true);
-            getPmemo()[1].setText(SqlInfo.holeSatz("pat5", "pat_text",
-                    "id='" + patientHauptPanel.dbPatid + "'", Arrays.asList(new String[] {}))
-                                                      .get(0));
-            getPmemo()[1].setCaretPosition(0);
-            patientHauptPanel.inMemo = -1;
+    void doMemoAction(ActionEvent arg0, int dbPatid) {
+
+        if (dbPatid != -1) {
+
+            String sc = arg0.getActionCommand();
+            if ("kedit".equals(sc)) {
+                patientHauptPanel.inMemo = 0;
+                memobut[0].setEnabled(false);
+                memobut[1].setEnabled(true);
+                memobut[2].setEnabled(true);
+                getPmemo()[0].setForeground(Color.RED);
+                getPmemo()[0].setEditable(true);
+                getPmemo()[0].setCaretPosition(0);
+                memobut[3].setEnabled(false);
+                return;
+            }
+            if ("kedit2".equals(sc)) {
+                patientHauptPanel.inMemo = 1;
+                memobut[3].setEnabled(false);
+                memobut[4].setEnabled(true);
+                memobut[5].setEnabled(true);
+                getPmemo()[1].setForeground(Color.RED);
+                getPmemo()[1].setEditable(true);
+                getPmemo()[1].setCaretPosition(0);
+                memobut[0].setEnabled(false);
+                return;
+            }
+            if ("ksave".equals(sc)) {
+                memobut[0].setEnabled(true);
+                memobut[1].setEnabled(false);
+                memobut[2].setEnabled(false);
+                getPmemo()[0].setForeground(Color.BLUE);
+                getPmemo()[0].setEditable(false);
+                memobut[3].setEnabled(true);
+                String cmd = "update pat5 set anamnese='" + StringTools.Escaped(getPmemo()[0].getText())
+                        + "' where id='" + patientHauptPanel.dbPatid + "'";
+                new ExUndHop().setzeStatement(cmd);
+                patientHauptPanel.inMemo = -1;
+                return;
+            }
+            if ("ksave2".equals(sc)) {
+                memobut[3].setEnabled(true);
+                memobut[4].setEnabled(false);
+                memobut[5].setEnabled(false);
+                getPmemo()[1].setForeground(Color.BLUE);
+                getPmemo()[1].setEditable(false);
+                memobut[0].setEnabled(true);
+                String cmd = "update pat5 set pat_text='" + StringTools.Escaped(getPmemo()[1].getText())
+                        + "' where id='" + patientHauptPanel.dbPatid + "'";
+                new ExUndHop().setzeStatement(cmd);
+                patientHauptPanel.inMemo = -1;
+                return;
+            }
+            if ("kbreak".equals(sc)) {
+                memobut[0].setEnabled(true);
+                memobut[1].setEnabled(false);
+                memobut[2].setEnabled(false);
+                getPmemo()[0].setForeground(Color.BLUE);
+                getPmemo()[0].setEditable(false);
+                memobut[3].setEnabled(true);
+                getPmemo()[0].setText(SqlInfo
+                                             .holeSatz("pat5", "anamnese", "id='" + patientHauptPanel.dbPatid + "'",
+                                                     Arrays.asList(new String[] {}))
+                                             .get(0));
+                getPmemo()[0].setCaretPosition(0);
+                patientHauptPanel.inMemo = -1;
+                return;
+            }
+            if ("kbreak2".equals(sc)) {
+                memobut[3].setEnabled(true);
+                memobut[4].setEnabled(false);
+                memobut[5].setEnabled(false);
+                getPmemo()[1].setForeground(Color.BLUE);
+                getPmemo()[1].setEditable(false);
+                memobut[0].setEnabled(true);
+                getPmemo()[1].setText(SqlInfo
+                                             .holeSatz("pat5", "pat_text", "id='" + patientHauptPanel.dbPatid + "'",
+                                                     Arrays.asList(new String[] {}))
+                                             .get(0));
+                getPmemo()[1].setCaretPosition(0);
+                patientHauptPanel.inMemo = -1;
+            }
         }
     }
 

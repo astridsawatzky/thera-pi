@@ -924,10 +924,6 @@ public class ProgLoader {
      * @param connection
      ***********************/
     public void ProgPatientenVerwaltung(int setPos, Connection connection) {
-        if (!Reha.DbOk) {
-            Reha.instance.progressStarten(false);
-            return;
-        }
         try {
             JComponent patient = AktiveFenster.getFensterAlle("PatientenVerwaltung");
             if (patient != null) {
