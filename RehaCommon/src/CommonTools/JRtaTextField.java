@@ -302,7 +302,7 @@ public class JRtaTextField extends JFormattedTextField implements PropertyChange
                 }
                 if (teil.length() == 2) {
                     String jahrtausend = "";
-                    if (IntegerTools.trailNullAndRetInt(teil) > 20) {
+                    if (IntegerTools.trailNullAndRetInt(teil) > 21) {
                         jahrtausend = inhalt.substring(0, 6)
                                             .trim()
                                 + "19" + teil;
@@ -503,8 +503,8 @@ public class JRtaTextField extends JFormattedTextField implements PropertyChange
 /*************************************************/
 class NurZahlenDocument extends javax.swing.text.PlainDocument {
     /**
-    	 *
-    	 */
+         *
+         */
     private static final long serialVersionUID = -29699654036665632L;
     private JTextField textField;
     private String text;
@@ -534,8 +534,8 @@ class NurZahlenDocument extends javax.swing.text.PlainDocument {
 
 class NurGrossDocument extends javax.swing.text.PlainDocument {
     /**
-    	 *
-    	 */
+         *
+         */
     private static final long serialVersionUID = -1708532746033381872L;
 
 
@@ -561,8 +561,8 @@ class NurGrossDocument extends javax.swing.text.PlainDocument {
 
 class NurKleinDocument extends javax.swing.text.PlainDocument {
     /**
-    	 *
-    	 */
+         *
+         */
     private static final long serialVersionUID = -1708532746033381872L;
 
 
@@ -586,8 +586,8 @@ class NurKleinDocument extends javax.swing.text.PlainDocument {
 
 class NurStundenDocument extends javax.swing.text.PlainDocument {
     /**
-    	 *
-    	 */
+         *
+         */
     private static final long serialVersionUID = -29699654036665632L;
     private JTextField textField;
     private String text;
@@ -619,8 +619,8 @@ class NurStundenDocument extends javax.swing.text.PlainDocument {
 /*************************************************/
 class NurMinutenDocument extends javax.swing.text.PlainDocument {
     /**
-    	 *
-    	 */
+         *
+         */
     private static final long serialVersionUID = -29699654036665632L;
     private JTextField textField;
     private String text;
