@@ -17,15 +17,6 @@ import java.util.stream.Collectors;
                      .collect(Collectors.joining());
     }
 
-    public String encodeforosm(String input) {
-        try {
-            return URLEncoder.encode(input, "UTF-8")
-                             .replaceAll("\\+", "%20");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        return "";
-
-    }
+    
 
 }

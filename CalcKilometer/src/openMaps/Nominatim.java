@@ -22,7 +22,7 @@ class Nominatim {
 
     private static final Logger logger = LoggerFactory.getLogger(Nominatim.class);
 
-    Coordinate getCoordsForAddressFromNominatim(String client) throws IOException  {
+    Coordinate getCoordsForAddressFromNominatim(String client) throws IOException {
         try {
             client = URLEncoder.encode(client, "UTF-8");
         } catch (UnsupportedEncodingException e1) {
@@ -32,32 +32,14 @@ class Nominatim {
         UrlReader reader = new UrlReader();
         String[] args2 = { urlstart + client + "&format=xml" };
         String ergebnis = reader.readfromUrlt(args2);
-
         return analyzeallXml(ergebnis).get(0);
     }
 
-    public Coordinate analyzeXml(String ergebnis) {
-
-        String lat = null;
-        String lon = null;
-
-        String[] splitted = ergebnis.split(" ");
-
-        for (String test : splitted) {
-            if (test.startsWith("lat=")) {
-                lat = test.substring(5, test.length() - 1);
-
-            } else if (test.startsWith("lon=")) {
-                lon = test.substring(5, test.length() - 1);
-            }
-
-        }
-
-        return new Coordinate(lon, lat);
-    }
+    
 
     public List<Coordinate> analyzeallXml(String nominatimresult) {
-        List<Coordinate> coords = new LinkedList<>();;
+        List<Coordinate> coords = new LinkedList<>();
+        ;
         try {
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
@@ -70,7 +52,6 @@ class Nominatim {
             doc.getDocumentElement()
                .normalize();
 
-
             NodeList nList = doc.getElementsByTagName("place");
 
             System.out.println("----------------------------");
@@ -78,8 +59,6 @@ class Nominatim {
             for (int temp = 0; temp < nList.getLength(); temp++) {
 
                 Node nNode = nList.item(temp);
-
-
 
                 if (nNode.getNodeType() == Node.ELEMENT_NODE) {
 
@@ -93,7 +72,7 @@ class Nominatim {
 
             }
         } catch (Exception e) {
-            logger.error("Fehler bei der Analyze der Rückgabe",e);
+            logger.error("Fehler bei der Analyze der Rückgabe", e);
         }
         return coords;
 

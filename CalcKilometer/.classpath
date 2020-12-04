@@ -24,5 +24,6 @@
 			<attribute name="test" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="/Libraries/lib/json/json-20201115.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

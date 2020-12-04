@@ -13,8 +13,8 @@ import org.slf4j.LoggerFactory;
 import environment.Path;
 
 public class CalcKilometer {
-
     private static String API_KEY = "";
+    private static final Logger logger = LoggerFactory.getLogger(CalcKilometer.class);
 
     public static void main(String[] args) throws Exception {
         CalcKilometer calcKilometer = new CalcKilometer();
@@ -23,14 +23,13 @@ public class CalcKilometer {
         String mandAdr = args[0];
         String patientAdr = args[1];
         Distance distanz = calcKilometer.distanzZwischen(mandAdr, patientAdr);
-        System.out.println(Math.round(distanz.getKilometer() * 2) + ";" + distanz.getDurationInMinutes() * 2 + ";"
+        logger.debug(Math.round(distanz.getKilometer() * 2) + ";" + distanz.getDurationInMinutes() * 2 + ";"
                 + distanz.getMeter() + ";" + distanz.getDuration() + ";");
     }
 
     private String readApikey() {
         List<String> ini = readFileInList(Path.Instance.getProghome() + "/ini/openroute.ini");
         API_KEY = ini.get(0);
-        System.out.println(API_KEY);
         return API_KEY;
     }
 
@@ -41,9 +40,9 @@ public class CalcKilometer {
         return route.getDistanceFromOpenRouteService(API_KEY);
     }
 
-    private static final Logger logger = LoggerFactory.getLogger(CalcKilometer.class);
 
-    public List<String> readFileInList(String fileName) {
+
+    private List<String> readFileInList(String fileName) {
 
         List<String> lines = Collections.emptyList();
         try {

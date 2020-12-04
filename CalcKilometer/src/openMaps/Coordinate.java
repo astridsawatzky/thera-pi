@@ -8,7 +8,7 @@ import java.util.Objects;
 class Coordinate {
     private Double latitude;
     private Double longitude;
-    DecimalFormat NACHKOMMA5 = new DecimalFormat(".00000");
+    private DecimalFormat NACHKOMMA5 = new DecimalFormat(".00000");
     private String display="";
     {
         NACHKOMMA5.setRoundingMode(RoundingMode.FLOOR);

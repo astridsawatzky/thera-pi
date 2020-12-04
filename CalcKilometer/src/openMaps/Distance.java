@@ -1,21 +1,16 @@
 package openMaps;
 
+import org.json.JSONObject;
+
 public class Distance {
     int distanceInM = 0;
-    int seconds = 0;
+    private int seconds = 0;
 
     Distance parseOpenRouteServiceAnswer(String answer) {
-        int start = answer.indexOf("distance");
-        start = answer.indexOf(":", start) + 1;
-        int stop = answer.indexOf(",", start);
-        String distanceString = answer.substring(start, stop);
-        start = answer.indexOf("duration");
-        start = answer.indexOf(":", start) + 1;
-        stop = answer.indexOf("}", start);
-        String durationString = answer.substring(start, stop);
 
-        return this.withDistance(Double.parseDouble(distanceString))
-                   .withDuration(Double.parseDouble(durationString));
+        JSONObject obj = new JSONObject(answer);
+        return this.withDistance(Double.parseDouble(new JsonBruteForce().findFirstValuetoKey(obj, "distance").toString()))
+                   .withDuration(Double.parseDouble(new JsonBruteForce().findFirstValuetoKey(obj, "duration").toString()));
 
     }
 

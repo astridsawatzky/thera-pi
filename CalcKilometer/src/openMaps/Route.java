@@ -20,11 +20,8 @@ class Route {
     }
 
     Distance getDistanceFromOpenRouteService(String api_key) {
-        Coordinate from = coordEnd;
-        Coordinate to = coordStart;
-        String urlstart = "https://api.openrouteservice.org/directions?api_key=" + api_key + "&coordinates="
-                + from.getLongitude() + "%2C" + from.getLatitude() + "%7C" + to.getLongitude() + "%2C"
-                + to.getLatitude() + "&profile=driving-car";
+
+        String urlstart = composeURL(api_key);
         String[] args2 = { urlstart };
         String ergebnis = null;
         try {
@@ -35,5 +32,12 @@ class Route {
         }
         return new Distance().parseOpenRouteServiceAnswer(ergebnis);
 
+    }
+
+    String composeURL(String api_key) {
+        String urlstart = "https://api.openrouteservice.org/v2/directions/driving-car?api_key=" + api_key + "&start="
+                + coordStart.getLongitude() + "," + coordStart.getLatitude() + "&end=" + coordEnd.getLongitude() + ","
+                + coordEnd.getLatitude();
+        return urlstart;
     }
 }
