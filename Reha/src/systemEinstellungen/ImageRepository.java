@@ -9,6 +9,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.swing.GrayFilter;
 import javax.swing.ImageIcon;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import CommonTools.ini.INIFile;
 import CommonTools.ini.INITool;
 import CommonTools.ini.Settings;
@@ -33,7 +36,13 @@ public class ImageRepository {
 
     }
 
-    ConcurrentHashMap<String, ImageIcon> map = new ConcurrentHashMap<String, ImageIcon>();
+    public ImageRepository() {
+        werkzeugeIcon();
+        noaccessIcon();
+
+    }
+
+  final private static  ConcurrentHashMap<String, ImageIcon> map = new ConcurrentHashMap<String, ImageIcon>();
     private static String[] bilder = new String[] { "neu", "edit", "delete", "print", "save", "find", "stop",
             "zuzahlfrei", "zuzahlok", "zuzahlRGR", "zuzahlnichtok", "nichtgesperrt", "rezeptgebuehr",
             "rezeptgebuehrrechnung", "ausfallrechnung", "arztbericht", "privatrechnung", "sort", "historieumsatz",
@@ -48,7 +57,7 @@ public class ImageRepository {
             "right", "search", "tellist", "termin", "upw", "week", "abrdreieins", "ebcheck", "hbmehrere",
             "verkaufArtikel", "verkaufLieferant", "verkaufTuten", "patnachrichten", "ocr", "BarKasse" };
 
-    public static void SystemIconsInit() {
+    public void SystemIconsInit() {
         Settings inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Betriebsumfeld.getAktIK() + "/", "icons.ini");
         Settings iniFallBack = INITool.openIniFallback(Path.Instance.getProghome() + "defaults/ini/", "icons.ini"); // lokale
                                                                                                                    // ini
@@ -84,9 +93,6 @@ public class ImageRepository {
                     System.out.println("found " + bilder[i] + " in " + use_ini.getFileName());
                 }
                 yscale = use_ini.getIntegerProperty("Icons", bilder[i] + "ScaleY");
-            } else {
-                System.out.println("Fehler!!!!!!!!! bei Bild: " + bilder[i]
-                        + ". Fehler->Bilddatei existiert nicht, oder ist nicht in icons.ini vermerkt");
             }
 
             if ((xscale > 0) && (yscale > 0)) {
@@ -99,28 +105,12 @@ public class ImageRepository {
                 SystemConfig.hmSysIcons.put(bilder[i], new ImageIcon(
                         Path.Instance.getProghome() + "icons/" + use_ini.getStringProperty("Icons", bilder[i])));
             }
-            /*
-             * Wenn das Icon im default-Pfad gefunden wurde, sollte es hier in die icons.ini
-             * vom IK (egal ob file oder in DB) übernommen werden: INITool.addIcon(String
-             * key, String file, int xDim, int yDim); INITool.addIcon("Icons", "dummy.png",
-             * xscale, yscale); public Integer getIntegerProperty(String pstrSection, String
-             * pstrProp) public void setIntegerProperty(String pstrSection, String pstrProp,
-             * int pintVal, String pstrComments)
-             *
-             * public String getStringProperty(String pstrSection, String pstrProp) public
-             * void setStringProperty(String pstrSection, String pstrProp, String pstrVal,
-             * String pstrComments)
-             *
-             * inif.setStringProperty("Icons", bilder[i], "", "");
-             * inif.setIntegerProperty("Icons", bilder[i]+"ScaleX", xscale, "")
-             * inif.setIntegerProperty("Icons", bilder[i]+"ScaleY", yscale, "")
-             */
         }
-        // Reha.instance.copyLabel.setDropTarget(true);
-        //// System.out.println("System-Icons wurden geladen");
-        werkzeugeIcon();
-        noaccessIcon();
+        System.out.println("System-Icons wurden geladen");
+
     }
+
+    private static final Logger logger = LoggerFactory.getLogger(ImageRepository.class);
 
     private void put(String name, ImageIcon imageIcon) {
         map.put(name, imageIcon);
@@ -128,8 +118,12 @@ public class ImageRepository {
     }
 
     public ImageIcon get(String name) {
-        
-      return  map.getOrDefault(name, emptyIcon);
+
+      return  map.getOrDefault(name, emptyIcon(name));
+    }
+
+    private ImageIcon emptyIcon(String name) {
+        return emptyIcon;
     }
 
     public static ImageIcon paypalIcon() {
@@ -139,21 +133,16 @@ public class ImageRepository {
     }
 
     private static void werkzeugeIcon() {
+           map.put("werkzeuge", new ImageIcon(Path.Instance.getProghome() + "icons/werkzeug.gif"));
 
-        if (SystemConfig.hmSysIcons.get("werkzeuge") == null) {
-            SystemConfig.hmSysIcons.put("werkzeuge", new ImageIcon(Path.Instance.getProghome() + "icons/werkzeug.gif"));
-        }
     }
 
     private static void noaccessIcon() {
-        if (SystemConfig.hmSysIcons.get("noaccess") == null) {
-            SystemConfig.hmSysIcons.put("noaccess",
-                    new ImageIcon(Path.Instance.getProghome() + "icons/" + "noaccess.gif"));
-        }
+        map.put("noaccess",             new ImageIcon(Path.Instance.getProghome() + "icons/" + "noaccess.gif"));
     }
 
     public void add(String string, ImageIcon image) {
-        SystemConfig.hmSysIcons.put(string, image);
+        map.put(string, image);
 
     }
 }

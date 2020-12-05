@@ -97,7 +97,6 @@ import rehaInternalFrame.JRehaInternal;
 import rehaInternalFrame.OOODesktopManager;
 import roogle.RoogleFenster;
 import sql.DatenquellenFactory;
-import systemEinstellungen.ImageRepository;
 import systemEinstellungen.SystemConfig;
 import systemEinstellungen.SystemInit;
 import systemTools.RehaPainters;
@@ -335,6 +334,7 @@ public class Reha implements RehaEventListener , Monitor{
         logger.info("Thera-Pi Version: " + new Version().number());
         logger.info("Java Version:     " + System.getProperty("java.version"));
 
+
         Feature.init(mandant);
         DueUpdates du = new DueUpdates(new DatenquellenFactory(Betriebsumfeld.getAktIK()));
         du.init();
@@ -373,14 +373,8 @@ public class Reha implements RehaEventListener , Monitor{
                 public void run() {
 
                     new SocketClient().setzeInitStand("System-Icons laden");
-                    while (!Reha.DbOk) {
-                        try {
-                            Thread.sleep(25);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    ImageRepository.SystemIconsInit();
+
+                    SystemConfig.hmSysIcons.SystemIconsInit();
                     iconsOk = true;
                     new SocketClient().setzeInitStand("System-Config initialisieren");
                 }
@@ -984,6 +978,7 @@ public class Reha implements RehaEventListener , Monitor{
 
     private JXFrame getJFrame() {
         if (jFrame == null) {
+
             jFrame = new RehaFrame(Titel, Titel2);
 
             sqlInfo.setFrame(jFrame);
