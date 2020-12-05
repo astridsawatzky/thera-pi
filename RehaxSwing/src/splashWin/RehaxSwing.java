@@ -65,7 +65,7 @@ public class RehaxSwing implements WindowListener, KeyListener {
 
         // new RxSocketClient().setzeInitStand("Mandant = [510841109]");
 
-        // jDiag.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+         jDiag.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         jDiag = application.getDialog();
 
         jDiag.validate();
