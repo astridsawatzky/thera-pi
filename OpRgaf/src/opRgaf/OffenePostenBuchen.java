@@ -45,7 +45,7 @@ import opRgaf.RehaIO.SocketClient;
 import opRgaf.rezept.Money;
 import opRgaf.rezept.MoneyFormatter;
 
-class OffenePostenBuchen extends JXPanel implements OPRGAFGui,TableModelListener {
+class OffenePostenBuchen extends JXPanel implements OPRGAFGui, TableModelListener {
     private static final long serialVersionUID = -7883557713071422132L;
 
     private JRtaTextField suchen;
@@ -131,7 +131,7 @@ class OffenePostenBuchen extends JXPanel implements OPRGAFGui,TableModelListener
         // if not set do nothing but don't NPE
     };
 
-    private LocalDate aktuellesBuchungsDatum=LocalDate.now();
+    private LocalDate aktuellesBuchungsDatum = LocalDate.now();
 
     private void verknuepfe(OffenePostenJTable opJTable, OffenePostenCHKBX select3ChkBx) {
 
@@ -169,7 +169,8 @@ class OffenePostenBuchen extends JXPanel implements OPRGAFGui,TableModelListener
 
     private JPanel getContent() {
         // 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19
-        String xwerte = "10dlu,50dlu,2dlu,90dlu,10dlu,p,2dlu,70dlu:g,40dlu,5dlu,50dlu,5dlu,50dlu,5dlu,50dlu,5dlu,60dlu,10dlu,p";
+        String xwerte = "10dlu," + "50dlu," + "2dlu," + "90dlu," + "10dlu," + "p," + "2dlu," + "60dlu:g,"
+                + "50dlu,5dlu,50dlu,5dlu,50dlu,5dlu,50dlu,5dlu,60dlu,10dlu,p";
         // 1 2 3 4 5 6 7 8 9 10 11
         String reihe1 = "15dlu";
         String reihe2 = "p";
@@ -182,7 +183,8 @@ class OffenePostenBuchen extends JXPanel implements OPRGAFGui,TableModelListener
         String reihe9 = "p";
         String reihe10 = "8dlu";
         String reihe11 = "0dlu";
-        String ywerte = reihe1 + "," + reihe2 + "," + reihe3 + "," + reihe4 + "," + reihe5 + "," + reihe6 + "," + reihe7 + "," + reihe8 + "," + reihe9 + "," + reihe10 + "," + reihe11;
+        String ywerte = reihe1 + "," + reihe2 + "," + reihe3 + "," + reihe4 + "," + reihe5 + "," + reihe6 + "," + reihe7
+                + "," + reihe8 + "," + reihe9 + "," + reihe10 + "," + reihe11;
         FormLayout lay = new FormLayout(xwerte, ywerte);
         PanelBuilder builder = new PanelBuilder(lay);
 
@@ -213,10 +215,9 @@ class OffenePostenBuchen extends JXPanel implements OPRGAFGui,TableModelListener
 
         builder.add(suchen, cc.xy(++colCnt, rowCnt, CellConstraints.FILL, CellConstraints.DEFAULT)); // 8,2
 
-        JToggleButton offenOnly = new JToggleButton("offene");
+        JCheckBox offenOnly = new JCheckBox("nur offen", true);
         builder.add(offenOnly, cc.xy(9, rowCnt, CellConstraints.FILL, CellConstraints.DEFAULT)); // 9,2
-        offenOnly.setToolTipText(
-                "wenn gedr\u00fcckt,\nwird in allen Rechnungen gesucht,\nsonst nur in offenen Rechnungen");
+        offenOnly.setToolTipText("wenn ausgewählt, wird nur in offenen gesucht sonst in allen");
 
         // Auswahl RGR/AFR/Verkauf
         colCnt += 2;
@@ -238,15 +239,14 @@ class OffenePostenBuchen extends JXPanel implements OPRGAFGui,TableModelListener
             public void actionPerformed(ActionEvent e) {
                 boolean isSelected = offenOnly.isSelected();
                 if (isSelected) {
-                    tab.disableOffenFilter();
-                    offenOnly.setText("alle");
-                } else {
-                    offenOnly.setText("offene");
                     tab.enableOffenFilter();
+                } else {
+                    tab.disableOffenFilter();
                 }
 
             }
         });
+        tab.enableOffenFilter();
         verknuepfe(tab, selPan);
         verknuepfen(tab, suchen, suchkriterienCombo);
         tab.getSelectionModel()
@@ -313,14 +313,17 @@ class OffenePostenBuchen extends JXPanel implements OPRGAFGui,TableModelListener
         builder.add(ausbuchenBtn, cc.xy(17, 6));
         ausbuchenBtn.setMnemonic(KeyEvent.VK_A);
         java.util.Date selected = new java.util.Date();
-        JXDatePicker buchungsDatum = new JXDatePicker(selected ,Locale.GERMAN);
-        builder.add(buchungsDatum,cc.xy(17,5));
+        JXDatePicker buchungsDatum = new JXDatePicker(selected, Locale.GERMAN);
+        builder.add(buchungsDatum, cc.xy(17, 5));
 
         buchungsDatum.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                setAktuellesBuchungsDatum(buchungsDatum.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+                setAktuellesBuchungsDatum(buchungsDatum.getDate()
+                                                       .toInstant()
+                                                       .atZone(ZoneId.systemDefault())
+                                                       .toLocalDate());
 
             }
 
@@ -342,6 +345,7 @@ class OffenePostenBuchen extends JXPanel implements OPRGAFGui,TableModelListener
     private void setAktuellesBuchungsDatum(LocalDate localDate) {
         this.aktuellesBuchungsDatum = localDate;
     }
+
     private JButton createMerkenButton() {
         JButton merkenBtn = new JButton("merken");
         merkenBtn.setToolTipText("h\u00e4lt die Suchergebnisse in der Anzeige fest");
@@ -362,7 +366,7 @@ class OffenePostenBuchen extends JXPanel implements OPRGAFGui,TableModelListener
             logger.error("Fehler beim Ausbuchen", e1);
             eingang = new Money();
         }
-        opl.forEach((o)-> o.bezahltAm = aktuellesBuchungsDatum);
+        opl.forEach((o) -> o.bezahltAm = aktuellesBuchungsDatum);
         if (opl.size() == 1) {
             if (!opl.get(0).offen.hasSameValue(eingang)) {
                 Payment paid = new Payment(opl.get(0), eingang);
@@ -538,7 +542,6 @@ class OffenePostenBuchen extends JXPanel implements OPRGAFGui,TableModelListener
         }
     }
 
-
     private static void verknuepfen(OffenePostenJTable opJTable, JTextField eingabeFeld,
             OffenePostenComboBox opComboBox) {
         opComboBox.addItemListener(new ItemListener() {
@@ -579,6 +582,7 @@ class OffenePostenBuchen extends JXPanel implements OPRGAFGui,TableModelListener
 
                    });
     }
+
     private static void updateTableView(OffenePostenJTable opJTable, JTextField eingabeFeld,
             OffenePostenComboBox opComboBox) {
         OffenePostenAbstractRowFilter filter = ((CBModel) opComboBox.getSelectedItem()).filter;
@@ -587,6 +591,7 @@ class OffenePostenBuchen extends JXPanel implements OPRGAFGui,TableModelListener
             opJTable.sorter.sort();
         }
     }
+
     private static void applycombofilter(OffenePostenJTable opJTable, JTextField eingabeFeld,
             OffenePostenComboBox opComboBox) {
         CBModel selectedItem = (CBModel) opComboBox.getSelectedItem();
@@ -600,6 +605,7 @@ class OffenePostenBuchen extends JXPanel implements OPRGAFGui,TableModelListener
 
         }
     }
+
     public void addKopierenListener(ActionListener listener) {
         kopierenListener = listener;
 
