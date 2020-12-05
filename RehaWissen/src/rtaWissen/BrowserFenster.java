@@ -61,7 +61,7 @@ import com.jgoodies.forms.layout.FormLayout;
 import CommonTools.JRtaTextField;
 import environment.Path;
 import rehaWissen.RehaWissen;
-import rehaWissen.SystemConfig;
+import rehaWissen.RehaWissenConfig;
 import rehaWissen.UIFSplitPane;
 
 public class BrowserFenster extends JFrame implements MouseListener, MouseMotionListener, ListSelectionListener,
@@ -173,7 +173,7 @@ public class BrowserFenster extends JFrame implements MouseListener, MouseMotion
          */
         BrowserFenster.thisClass.setCursor(new Cursor(Cursor.WAIT_CURSOR));
 
-        rtaWissen = new RtaWissen(1, SystemConfig.InetSeiten.get(0)
+        rtaWissen = new RtaWissen(1, RehaWissenConfig.InetSeiten.get(0)
                                                             .get(2));
         // rtaWissen = new RtaWissen(1,"http://www.thera-pi.org");
         rightPanel.add(rtaWissen);
@@ -197,25 +197,25 @@ public class BrowserFenster extends JFrame implements MouseListener, MouseMotion
                 int ind = listSeiten.getSelectedIndex();
                 linkneu = ind;
                 RtaWissen.highlight = false;
-                rtaWissen.Navigiere(SystemConfig.InetSeiten.get(ind)
+                rtaWissen.Navigiere(RehaWissenConfig.InetSeiten.get(ind)
                                                            .get(2));
             }
         });
 
         JXLabel lab = null;
         // System.out.println("InetSeiten-Anzahl = "+SystemConfig.InetSeiten.size());
-        for (int i = 0; i < SystemConfig.InetSeiten.size(); i++) {
-            if (SystemConfig.InetSeiten.get(i)
+        for (int i = 0; i < RehaWissenConfig.InetSeiten.size(); i++) {
+            if (RehaWissenConfig.InetSeiten.get(i)
                                        .get(1)
                                        .equals("")) {
-                lab = new JXLabel(SystemConfig.InetSeiten.get(i)
+                lab = new JXLabel(RehaWissenConfig.InetSeiten.get(i)
                                                          .get(0));
                 lab.setIcon(new ImageIcon(Path.Instance.getProghome() + "icons/eye_16x16.gif"));
                 lab.setIconTextGap(10);
             } else {
-                lab = new JXLabel(SystemConfig.InetSeiten.get(i)
+                lab = new JXLabel(RehaWissenConfig.InetSeiten.get(i)
                                                          .get(0));
-                lab.setIcon(new ImageIcon(Path.Instance.getProghome() + "icons/" + SystemConfig.InetSeiten.get(i)
+                lab.setIcon(new ImageIcon(Path.Instance.getProghome() + "icons/" + RehaWissenConfig.InetSeiten.get(i)
                                                                                                   .get(1)));
                 lab.setIconTextGap(10);
             }
@@ -325,7 +325,7 @@ public class BrowserFenster extends JFrame implements MouseListener, MouseMotion
                 if (tblgefunden.getSelectedRow() >= 0) {
                     String url = (String) tblgefunden.getValueAt(tblgefunden.getSelectedRow(), 2);
                     RtaWissen.highlight = true;
-                    rtaWissen.Navigiere(SystemConfig.HilfeServer + url);
+                    rtaWissen.Navigiere(RehaWissenConfig.HilfeServer + url);
                 }
             }
         });
@@ -538,7 +538,7 @@ public class BrowserFenster extends JFrame implements MouseListener, MouseMotion
         if (linkneu != linkalt) {
             // System.out.println("Indes des gewï¿½hlten Items = "+ind);
             // System.out.println(SystemConfig.InetSeiten.get(ind).get(2));
-            rtaWissen.Navigiere(SystemConfig.InetSeiten.get(ind)
+            rtaWissen.Navigiere(RehaWissenConfig.InetSeiten.get(ind)
                                                        .get(2));
             linkalt = linkneu;
         }
@@ -580,10 +580,10 @@ public class BrowserFenster extends JFrame implements MouseListener, MouseMotion
                         File file = new File(pfad, sitem + ".html");
                         if (file.exists()) {
                             RtaWissen.highlight = true;
-                            rtaWissen.Navigiere(SystemConfig.HilfeServer + ((String) ((Vector) dateien.get(i)).get(2)));
+                            rtaWissen.Navigiere(RehaWissenConfig.HilfeServer + ((String) ((Vector) dateien.get(i)).get(2)));
                         } else {
                             RtaWissen.highlight = true;
-                            rtaWissen.Navigiere(SystemConfig.HilfeServer + ((String) ((Vector) dateien.get(i)).get(2)));
+                            rtaWissen.Navigiere(RehaWissenConfig.HilfeServer + ((String) ((Vector) dateien.get(i)).get(2)));
                         }
                         break;
                     }
@@ -764,7 +764,7 @@ class SharedListSelectionHandler implements ListSelectionListener {
                 if (lsm.isSelectedIndex(i)) {
                     String url = (String) BrowserFenster.thisClass.themenDtblm.getValueAt(i, 2);
                     RtaWissen.highlight = false;
-                    BrowserFenster.thisClass.rtaWissen.Navigiere(SystemConfig.HilfeServer + url);
+                    BrowserFenster.thisClass.rtaWissen.Navigiere(RehaWissenConfig.HilfeServer + url);
                     // helpFenster.thisClass.stitel.setText(
                     // (String)helpFenster.thisClass.tblThemen.getValueAt(i,0)) ;
                     // output.append(" " + i);
@@ -870,7 +870,7 @@ final class MachSuche extends SwingWorker<Void, Void> {
             if (BrowserFenster.thisClass.tblgefunden.getRowCount() > 0) {
                 BrowserFenster.thisClass.tblgefunden.setRowSelectionInterval(0, 0);
                 String url = (String) BrowserFenster.thisClass.tblgefunden.getValueAt(0, 2);
-                BrowserFenster.thisClass.rtaWissen.Navigiere(SystemConfig.HilfeServer + url);
+                BrowserFenster.thisClass.rtaWissen.Navigiere(RehaWissenConfig.HilfeServer + url);
                 BrowserFenster.thisClass.rtaWissen.Markiere(fundstelle);
 
             } /*

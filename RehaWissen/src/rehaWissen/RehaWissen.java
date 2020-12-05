@@ -57,7 +57,7 @@ public class RehaWissen {
 
             e.printStackTrace();
         }
-        SystemConfig.InetSeitenEinlesen();
+        RehaWissenConfig.InetSeitenEinlesen();
         NativeInterface.initialize();
         JWebBrowser.useXULRunnerRuntime();
         NativeInterface.open();

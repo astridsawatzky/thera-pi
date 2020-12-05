@@ -8,7 +8,7 @@ import CommonTools.ini.INIFile;
 import CommonTools.ini.Settings;
 import environment.Path;
 
-public class SystemConfig {
+public class RehaWissenConfig {
     public static java.net.InetAddress dieseMaschine = null;
     public static String wissenURL = null;
     public static String homeDir = null;
@@ -19,8 +19,8 @@ public class SystemConfig {
     public static String HilfeServer = null;
     public static boolean HilfeServerIstDatenServer;
     public static HashMap<String, String> hmHilfeServer;
-    
-    public SystemConfig() {
+
+    public RehaWissenConfig() {
 
     }
 
@@ -43,4 +43,3 @@ public class SystemConfig {
 
 }
 
-/*****************************************/
