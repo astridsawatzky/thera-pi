@@ -474,11 +474,11 @@ public class JRtaTextField extends JFormattedTextField implements PropertyChange
         }
         if (((JRtaTextField) event.getSource()).type.equals("DATUM")) {
 
-            if (code == 127) {
+            if (code == KeyEvent.VK_DELETE) {
                 ((JRtaTextField) event.getSource()).setText("  .  .    ");
                 ((JRtaTextField) event.getSource()).setCaretPosition(0);
             }
-            if (code == 8) {
+            if (code == KeyEvent.VK_BACK_SPACE) {
                 ((JRtaTextField) event.getSource()).setText("  .  .    ");
                 ((JRtaTextField) event.getSource()).setCaretPosition(0);
             }
@@ -682,6 +682,8 @@ class DateFieldDocument extends javax.swing.text.PlainDocument {
             KonstrEx.printStackTrace();
         }
     }
+
+
 
 
 
