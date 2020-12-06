@@ -73,6 +73,11 @@ public class Feature {
                 logger.error("cannot read all lines from existing file", e);
             }
         }
+
+        if(!features.isEmpty()) logger.debug("starting with features:");
+        for (Feature feature : features) {
+            logger.debug(feature.name);
+        }
     }
 
     @Override
