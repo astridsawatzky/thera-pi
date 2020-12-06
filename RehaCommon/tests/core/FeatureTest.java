@@ -25,6 +25,8 @@ public class FeatureTest {
         originalFeature.enable();
         Feature secondaryFeature = new Feature("new");
         assertTrue(secondaryFeature.isEnabled());
+        Feature thirdFeature = new Feature("NEW");
+        assertTrue(thirdFeature.isEnabled());
 
     }
 
@@ -42,6 +44,7 @@ public class FeatureTest {
     public void featuresAreCaseinsensitive() throws Exception {
 
         assertEquals(new Feature("kleinGeschrieben"), new Feature("kleinGESCHRIEBEN"));
+
 
     }
     @Rule
