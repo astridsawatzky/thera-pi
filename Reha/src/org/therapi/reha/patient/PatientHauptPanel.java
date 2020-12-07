@@ -133,10 +133,6 @@ public class PatientHauptPanel extends JXPanel {
         return patientLogic;
     }
 
-    public PatientHauptPanel getInstance() {
-        return this;
-    }
-
     public JPatientInternal getInternal() {
         return patientInternal;
     }
