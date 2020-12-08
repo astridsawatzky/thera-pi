@@ -4203,12 +4203,12 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener, Acti
         edibuf.setLength(0);
         edibuf.trimToSize();
 
-        edibuf.append(SqlInfo.holeFelder("select edifact from fertige where rez_nr='" + rez_nr + "'")
+        edibuf.append(SqlInfo.holeFelder("SELECT edifact FROM fertige WHERE rez_nr='" + rez_nr + "'")
                              .get(0)
                              .get(0));
 
         if (edibuf.length() <= 0) {
-            JOptionPane.showMessageDialog(null, "EDIFACT-Code kann nicht abgeholt werden");
+            JOptionPane.showMessageDialog(null, "Zu der Verordnung " + rez_nr + " ist keine EDIFACT-Nachricht in der Datenbank gespeichert.\n\n[ Technische Info: SELECT * FROM fertige WHERE rez_nr='" + rez_nr + "' ]");
         }
 
         String[] zeilen = edibuf.toString()
