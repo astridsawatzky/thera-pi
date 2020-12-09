@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.text.NumberFormat;
 import java.util.Locale;
 
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -24,15 +25,17 @@ public class OffenePostenSummenPanel {
 
     private NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(Locale.GERMANY);
 
-    public OffenePostenSummenPanel() {
+    public OffenePostenSummenPanel(JButton merkenBtn) {
         auswertung = new JPanel();
         JLabel tmpLbl = new JLabel();
 
+        String xwerte = "5dlu,145dlu,5dlu,100dlu:g,182dlu:g,5dlu,40dlu,5dlu,120dlu";
+        String ywerte = "0dlu,p,3dlu,p,2dlu,p,2dlu,p,5dlu";
         FormLayout lay = new FormLayout(
                 // 1 2 3 4 5 6 7
-                "5dlu,145dlu,5dlu,100dlu:g,182dlu:g,5dlu,40dlu", // xwerte,
+                xwerte,
                 // 1 2 3 4 5 6 7 8 9
-                "0dlu,p,3dlu,p,2dlu,p,2dlu,p,5dlu" // ywerte
+                ywerte
         );
         PanelBuilder builder = new PanelBuilder(lay);
 
@@ -65,6 +68,8 @@ public class OffenePostenSummenPanel {
         setValGesamtOffen(Money.ZERO);
         setValSuchGesamt(Money.ZERO);
         setValSuchOffen(Money.ZERO);
+
+        builder.add(merkenBtn, cc.xy(9, 4, CellConstraints.FILL, CellConstraints.DEFAULT));
         auswertung.add(builder.getPanel());
     }
 

@@ -220,15 +220,13 @@ class OffenePostenBuchen extends JXPanel implements OPRGAFGui, TableModelListene
         offenOnly.setToolTipText("wenn ausgewählt, wird nur in offenen gesucht sonst in allen");
 
         // Auswahl RGR/AFR/Verkauf
-        colCnt += 2;
+        colCnt += 3;
         selPan = new OffenePostenCHKBX();
 
         builder.add(selPan.getPanel(),
                 cc.xywh(++colCnt, rowCnt - 1, 5, 3, CellConstraints.LEFT, CellConstraints.DEFAULT)); // 10..15,1..3
         // Ende Auswahl
-        JButton merkenBtn = createMerkenButton();
 
-        builder.add(merkenBtn, cc.xy(17, rowCnt));
 
         modelNeu = new OffenePostenTableModel(opListe);
         modelNeu.addTableModelListener(this);
@@ -334,7 +332,7 @@ class OffenePostenBuchen extends JXPanel implements OPRGAFGui, TableModelListene
         colCnt = 1;
         builder.add(new JSeparator(SwingConstants.HORIZONTAL), cc.xyw(colCnt, rowCnt++, 19));
 
-        sumPan = new OffenePostenSummenPanel();
+        sumPan = new OffenePostenSummenPanel(createMerkenButton());
         builder.add(sumPan.getPanel(), cc.xyw(colCnt, rowCnt, 2, CellConstraints.LEFT, CellConstraints.TOP)); // 2,2
 
         sumPan.setValGesamtOffen(calcGesamtOffen(opListe));
@@ -347,7 +345,7 @@ class OffenePostenBuchen extends JXPanel implements OPRGAFGui, TableModelListene
     }
 
     private JButton createMerkenButton() {
-        JButton merkenBtn = new JButton("merken");
+        JButton merkenBtn = new JButton("Ergebnisse aktualisieren");
         merkenBtn.setToolTipText("h\u00e4lt die Suchergebnisse in der Anzeige fest");
         merkenBtn.addActionListener(e -> merken());
 
