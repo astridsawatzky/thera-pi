@@ -12,6 +12,8 @@ import javax.swing.JComboBox;
 final class OffenePostenComboBox extends JComboBox<CBModel> {
 
 
+    static final CBModel REZNUMMER_ENTHAELT = new CBModel("Rezeptnummer enth\u00e4lt", new OffenePostenTextFilter(REZNUMMER));
+
     public OffenePostenComboBox(int vorauswahl) {
         addItem(new CBModel("Rechnungsnummer enth\u00e4lt", new OffenePostenTextFilter(RGNR)));
         addItem(new CBModel("Rechnungsdatum =", new OffenePostenDatumFilter(RGDATUM,Strategy.gleich)));
@@ -24,7 +26,7 @@ final class OffenePostenComboBox extends JComboBox<CBModel> {
         addItem(new CBModel("Rechnungsbetrag", new OffenePostenMoneyFilter(GESAMTBETRAG,Strategy.gleich)));
         addItem(new CBModel("Rechnungsbetrag >=", new OffenePostenMoneyFilter(GESAMTBETRAG,Strategy.groesserOderGleich)));
         addItem(new CBModel("Rechnungsbetrag <=", new OffenePostenMoneyFilter(GESAMTBETRAG,Strategy.kleinerOderGleich)));
-        addItem(new CBModel("Rezeptnummer enth\u00e4lt", new OffenePostenTextFilter(REZNUMMER)));
+        addItem(REZNUMMER_ENTHAELT);
         addItem(new CBModel("Name enth\u00e4lt", new OffenePostenTextFilter(KENNUNG)));
         addItem(new CBModel("Krankenkasse enth\u00e4lt", new OffenePostenTextFilter(KRANKENKASSENNAME)));
         setSelectedIndex(vorauswahl< getItemCount()?vorauswahl:0);

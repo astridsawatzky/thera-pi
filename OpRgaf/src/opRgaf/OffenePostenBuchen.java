@@ -466,7 +466,7 @@ class OffenePostenBuchen extends JXPanel implements OPRGAFGui, TableModelListene
 
     public void sucheRezept(String rezept) { // Einstieg für RehaReverseServer (z.B. RGR-Kopie aus Historie)
         suchen.setText(rezept);
-        suchkriterienCombo.setSelectedItem("Rezeptnummer =");
+        suchkriterienCombo.setSelectedItem(OffenePostenComboBox.REZNUMMER_ENTHAELT);
 
         doSuchen();
 
