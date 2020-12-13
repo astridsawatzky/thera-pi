@@ -86,6 +86,7 @@ public class RehaSql implements WindowListener {
 
         officeapplication = OOTools.initOffice(path, aktik);
 
+
         progHome = path;
         aktIK = aktik;
         INITool.init(progHome + "ini/" + aktIK + "/");
@@ -206,52 +207,18 @@ public class RehaSql implements WindowListener {
 
     private void starteDB() {
 
-        DatenbankStarten dbstart = new DatenbankStarten();
-        dbstart.run();
-
-    }
-
-    /**********************************************************
-     *
-     */
-    final class DatenbankStarten implements Runnable {
-        private void StarteDB() {
-            final String sDB = "SQL";
-            if (RehaSql.thisClass.conn != null) {
-                try {
-                    RehaSql.thisClass.conn.close();
-                } catch (final SQLException e) {
-                }
-            }
-            try {
-                Class.forName("com.mysql.jdbc.Driver")
-                     .newInstance();
-            } catch (InstantiationException | ClassNotFoundException | IllegalAccessException e) {
-                e.printStackTrace();
-                System.out.println(sDB + "Treiberfehler: " + e.getMessage());
-                RehaSql.DbOk = false;
-                return;
-            }
-            try {
-                RehaSql.thisClass.conn = new DatenquellenFactory(aktIK).createConnection();
-                RehaSql.thisClass.sqlInfo.setConnection(RehaSql.thisClass.conn);
-                RehaSql.DbOk = true;
-                System.out.println("Datenbankkontakt hergestellt");
-            } catch (final SQLException ex) {
-                System.out.println("SQLException: " + ex.getMessage());
-                System.out.println("SQLState: " + ex.getSQLState());
-                System.out.println("VendorError: " + ex.getErrorCode());
-                RehaSql.DbOk = false;
-
-            }
-        }
-
-        @Override
-        public void run() {
-            StarteDB();
+        try {
+            RehaSql.thisClass.conn = new DatenquellenFactory(aktIK).createConnection();
+            RehaSql.thisClass.sqlInfo.setConnection(RehaSql.thisClass.conn);
+            RehaSql.DbOk = true;
+            LOGGER.info("Datenbankkontakt hergestellt");
+        } catch (final SQLException ex) {
+            LOGGER.error("datenbank konnte nicht gestartet werden",ex);
+            RehaSql.DbOk = false;
         }
 
     }
+
 
     @Override
     public void windowActivated(WindowEvent arg0) {
