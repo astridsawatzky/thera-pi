@@ -9,17 +9,25 @@ Datumsformat ist jjjj-mm-tt, also Jahr-Monat-Tag
 - HMR2020 Formulare
 
 ## [1.1.12] - 2020-11-10
-
+### added
+- Lizensen zu benutzen Bibliotheken in Gitlab referenziert
+- missing icons
 ### changed
+- icons.ini vervollständigt.
+- mandatory switch to API V2 in openMaps  adding library json
 - im Panel AktuelleRezepte Werkzeugfenster durch Buttons auf der Leiste ersetzt.
 - Projektstruktur: Office hat sein eigenes Paket bekommen
 - Projektstruktur: Zugriff auf aktuellen Mandanten über Klasse Betriebsumfeld
 - Zeitfenster refactored
 - OpRgAf rewrite aktiviert
+- verbesserte Fehlermeldung in Abrechnung, wenn edifact nicht vorhanden
+
 
 ### fixed
-
+- fehlende Icons im Repository wurden ergänzt
+- Ruugle lässt sich nicht schließen
 - falsche Nummerierung der Behandlungstage #398
+- Rezept kann nicht per Drag and Drop in den Terminkalender gezogen werden #573
 
 
 ## [1.1.11] - 2020-10-18
