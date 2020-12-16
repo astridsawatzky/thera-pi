@@ -30,6 +30,7 @@ public class DueUpdates {
     public void init() {
 
         add(new VerkaufsTabellenUpdate());
+        add(new Add_Indischluessel_NF_QF_2_HMRCheck());
 
     }
 
