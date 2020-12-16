@@ -1,12 +1,16 @@
 package rehaSql;
 
+import static org.junit.Assert.assertEquals;
+
 import org.junit.Test;
 
 public class RehaSqlTest {
 
-    @Test
-    public void test() {
 
+
+    @Test
+    public void path() {
+        assertEquals("C:/mimimi/mimim/blob", RehaSql.exchangebackslashes("C:\\mimimi\\mimim\\blob"));
 
     }
 
@@ -23,4 +27,6 @@ public class RehaSqlTest {
 
         RehaSql.main(rehasqlargs );
     }
+
+
 }
