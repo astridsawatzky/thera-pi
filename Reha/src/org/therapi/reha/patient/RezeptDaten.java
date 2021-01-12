@@ -38,6 +38,11 @@ class RezeptDaten extends JXPanel implements ActionListener {
     private static final String FOLGEV_AUSSERHALB_D_R = "Folgev. außerhalb d.R.";
     private static final String FOLGEVERORDNUNG = "Folgeverordnung";
     private static final String ERSTVERORDNUNG = "Erstverordnung";
+    private static final String STANDARDVO = "Standard 2021";
+    private static final String BESVOBEDARF = "Bes.VO Bedarf 2021";
+    private static final String LANGFRISTVO = "Langfrist-VO 2021";
+    private static final String BLANKOVO = "Blanko VO";
+    private static final String ENTLASSMANAGEMENT = "Entlassmanagement";
     /**
      *
      */
@@ -53,7 +58,7 @@ class RezeptDaten extends JXPanel implements ActionListener {
     private JMenuItem copyToBunker = null;
     private JRtaLabel hblab = null;
 
-    private String[] rezart = { ERSTVERORDNUNG, FOLGEVERORDNUNG, FOLGEV_AUSSERHALB_D_R };
+    private String[] rezart = { ERSTVERORDNUNG, FOLGEVERORDNUNG, FOLGEV_AUSSERHALB_D_R, STANDARDVO, BESVOBEDARF, LANGFRISTVO, BLANKOVO, ENTLASSMANAGEMENT};
 
     private JLabel angelegtLbl;
     private JLabel kostentraegerLbl;

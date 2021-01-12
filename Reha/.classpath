@@ -77,5 +77,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry combineaccessrules="false" kind="src" path="/office"/>
+	<classpathentry kind="lib" path="/Libraries/lib/jdom/jdom-2.0.6.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -417,8 +417,9 @@ public class AbrechnungPrivat extends JXDialog {
             }
             aktRechnung = Integer.toString(SqlInfo.erzeugeNummer("rnr"));
             hmAdresse.put("<pri6>", aktRechnung);
-
-            starteDokument(Path.Instance.getProghome() + "vorlagen/" + aktIk + "/" + privatRgFormular);
+            
+            System.out.println(Path.Instance.getProghome() + "vorlagen\\" + aktIk + "\\" + privatRgFormular);
+            starteDokument(Path.Instance.getProghome() + "vorlagen\\" + aktIk + "\\" + privatRgFormular);
             starteErsetzen();
             startePositionen();
 

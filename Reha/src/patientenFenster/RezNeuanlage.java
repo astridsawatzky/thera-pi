@@ -1283,7 +1283,7 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
                             + "Wollen Sie jetzt das ICD-10-Tool starten?<br><br></html>",
                     "falscher ICD-10", JOptionPane.YES_NO_OPTION);
             if (frage == JOptionPane.YES_OPTION) {
-                new LadeProg(Path.Instance.getProghome()+"ICDSuche.jar"+" "+Path.Instance.getProghome()+" "+Betriebsumfeld.getAktIK());
+                new LadeProg(Path.Instance.getProghome()+"ICDSuche.jar"+" "+Betriebsumfeld.getAktIK());
             }
             if (welcher == 1) {
                 jtf[cICD10].setText("");
@@ -1865,7 +1865,7 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
             jtf[cBEGINDAT].setText(DatFunk.sDatInDeutsch(test));
         }
         int itest = myRezept.getRezArt();
-        if (itest >= 0) {
+        if (itest <= 2) {
             jcmb[cVERORD].setSelectedIndex(itest);
         }
         jcb[cBEGRADR].setSelected(myRezept.getBegrAdR());

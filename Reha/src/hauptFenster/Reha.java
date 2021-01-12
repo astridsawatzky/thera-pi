@@ -1,8 +1,28 @@
 package hauptFenster;
 
-import static java.awt.event.KeyEvent.*;
+import static java.awt.event.KeyEvent.KEY_PRESSED;
+import static java.awt.event.KeyEvent.VK_A;
+import static java.awt.event.KeyEvent.VK_DOWN;
+import static java.awt.event.KeyEvent.VK_K;
+import static java.awt.event.KeyEvent.VK_LEFT;
+import static java.awt.event.KeyEvent.VK_O;
+import static java.awt.event.KeyEvent.VK_P;
+import static java.awt.event.KeyEvent.VK_R;
+import static java.awt.event.KeyEvent.VK_RIGHT;
+import static java.awt.event.KeyEvent.VK_T;
+import static java.awt.event.KeyEvent.VK_UP;
+import static java.awt.event.KeyEvent.VK_X;
 
-import java.awt.*;
+import java.awt.AWTEvent;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Event;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.GradientPaint;
+import java.awt.LinearGradientPaint;
+import java.awt.Toolkit;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
@@ -14,15 +34,38 @@ import java.awt.dnd.DropTarget;
 import java.awt.dnd.DropTargetAdapter;
 import java.awt.dnd.DropTargetDropEvent;
 import java.awt.dnd.DropTargetListener;
-import java.awt.event.*;
+import java.awt.event.AWTEventListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.awt.geom.Point2D;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.net.URL;
+import java.net.UnknownHostException;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -37,7 +80,28 @@ import javax.media.MediaLocator;
 import javax.media.NoPlayerException;
 import javax.media.Player;
 import javax.media.format.YUVFormat;
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JComponent;
+import javax.swing.JDesktopPane;
+import javax.swing.JInternalFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JProgressBar;
+import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
+import javax.swing.KeyStroke;
+import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
+import javax.swing.Timer;
+import javax.swing.TransferHandler;
+import javax.swing.UIDefaults;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.plaf.FontUIResource;
 import javax.swing.plaf.basic.BasicSplitPaneUI;
 
@@ -51,6 +115,7 @@ import org.jdesktop.swingx.painter.MattePainter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.thera_pi.updater.Version;
+import org.therapi.hmrCheck2021.HmrCheck2021XML;
 import org.therapi.reha.patient.PatientHauptPanel;
 
 import com.jgoodies.forms.layout.CellConstraints;
@@ -97,6 +162,7 @@ import rehaInternalFrame.JRehaInternal;
 import rehaInternalFrame.OOODesktopManager;
 import roogle.RoogleFenster;
 import sql.DatenquellenFactory;
+import sqlTools.ScriptRunner;
 import systemEinstellungen.SystemConfig;
 import systemEinstellungen.SystemInit;
 import systemTools.RehaPainters;
@@ -276,6 +342,8 @@ public class Reha implements RehaEventListener , Monitor{
     public static Vector<Vector<String>> vRGAFoffen;
     public static boolean bRGAFoffen;
     public static boolean bHatMerkmale;
+    
+    public static HmrCheck2021XML hmrXML;
 
     public static Vector<Vector<List<String>>> terminLookup = new Vector<Vector<List<String>>>();
 
@@ -329,11 +397,28 @@ public class Reha implements RehaEventListener , Monitor{
 
         logger = LoggerFactory.getLogger(Reha.class);
     }
-    public void startWithMandantSet(Mandant mandant) {
-
+   
+    
+	public void startWithMandantSet(Mandant mandant) {
+    	//TODO
+		
+		InetAddress byName;
+		try {
+			byName = InetAddress.getByName("pfluegeredv.de");
+			if(byName.isReachable(5000)) {;
+	    		Reha.tracking(mandant.ikDigitString());
+	        	Reha.loadBackground();
+	    	}
+		} catch (UnknownHostException e3) {
+		} catch (IOException e) {
+		}
+    	
+    	
+    	
+    	
+    	Reha.hmrXML = new HmrCheck2021XML(new File(Path.Instance.getProghome()+"\\tools\\hmk.xml"));
         logger.info("Thera-Pi Version: " + new Version().number());
         logger.info("Java Version:     " + System.getProperty("java.version"));
-
 
         Feature.init(mandant);
         DueUpdates du = new DueUpdates(new DatenquellenFactory(Betriebsumfeld.getAktIK()));
@@ -2206,36 +2291,153 @@ public class Reha implements RehaEventListener , Monitor{
             SqlInfo.sqlAusfuehren(cmd);
         }
     }
-
-    static void testeVoTableStruc(String tableName) {
-        Vector<String> feldNamen = SqlInfo.holeFeldNamen(tableName, true, Arrays.asList(new String[] { "id" }));
-        int nbOfFields = feldNamen.size();
-        if (!(feldNamen.contains("pauschale")) && (nbOfFields == 72)) {
-            boolean retVal = SqlInfo.sqlAusfuehren(
-                    "ALTER TABLE " + tableName + " ADD COLUMN PAUSCHALE enum('T','F') NOT NULL DEFAULT 'F'");
-            if (retVal) {
-                String meldung = "Die Tabelle " + tableName + "\n"
-                        + "wurde erfolgreich um das Feld 'PAUSCHALE' ergänzt.";
-                logger.info(meldung.replace("\n", " "));
-                SwingUtilities.invokeLater(new Runnable() {
-                    String txt = meldung;
-
-                    @Override
-                    public void run() {
-                        JOptionPane.showMessageDialog(null, txt);
-                    }
-                });
-
-            }
-        } else {
-            logger.info("testeVoTableStruc: nix zu tun in Tabelle " + tableName + ".");
-        }
+    
+    static void testeDBVersion() {
+    	// Version aus DB Abfragen
+    	
+    	// wenn < 1.1.13
+    	if(!testeTableExists("version")) {
+    		JOptionPane.showMessageDialog(null, "Datenbank entspricht nicht Version 1.1.13\n"
+    				+ "Updates werden jetzt durchgeführt", "DB Version Check", JOptionPane.ERROR_MESSAGE);
+    		checkForDB1113();
+    	}
     }
-
-    static void testeVoTables() {
-        testeVoTableStruc("lza");
-        testeVoTableStruc("verordn");
+    static void checkForDB1113() {
+    	
+    	//gibt es adrgenehmigung
+    	if(!testeTableExists("adrgenehmigung")) {
+    			runExternSQL("adrgenehmigung.sql");
+    	}
+    	// gibt es hmr_diagnosegruppe
+    	if(!testeTableExists("hmr_diagnosegruppe")) {
+    		runExternSQL("hmrdiagnosegruppe.sql");
+    	}
+    	
+    	// verkaufstabellen double in dezi
+    	if(!testeTableStructure("verkliste", "v_betrag", "decimal(10,2)")) {
+    		runExternSQL("verkaufsmodul.sql");
+    	}
+    	// ik spalte in Rechnungstabellen (verkfaktura, rgaffaktura,faktura,rliste)
+    	boolean ikspalte = true;
+    	if(!testeTableColumn("verkfaktura", "IK")) { ikspalte = false; };
+    	if(!testeTableColumn("rgaffaktura", "IK")) { ikspalte = false; };
+    	if(!testeTableColumn("faktura", "IK")) { ikspalte = false; };
+    	if(!testeTableColumn("rliste", "IK")) { ikspalte = false; };
+    	
+    	if(!ikspalte) {
+    		runExternSQL("ikfaktura.sql");
+    	}
+    	
+    	// icd10_2 in verordn, lza wird dann implizit vorrausgesetzt
+    	if(!testeTableColumn("verordn", "ICD10_2")) {
+    		runExternSQL("icd102.sql");
+    	}
+    	
+    	// pauschale in verordn
+    	if(!testeTableColumn("verordn", "PAUSCHALE")) {
+    		runExternSQL("pauschale.sql");
+    	}
+    	
+    	//hmr2021 spalten in verordn
+    	if(!testeTableColumn("verordn", "LEITSYMA")) {
+    		runExternSQL("verordn2021.sql");
+    	}
+    	
+    	//ICD-10 Tabelle 2021 importieren
+    	runExternSQL("icd2021.sql");    	
+    	        
+        // Version DB auf 1.1.13 setzen
+    	runExternSQL("version.sql");
     }
+    
+    static void runExternSQL(String filename) {
+    	ScriptRunner runner = new ScriptRunner(Reha.instance.conn, false, false);
+    	String pfad = "C:\\RehaVerwaltung\\tools\\"+filename;
+    	try {
+			runner.runScript(new BufferedReader(new FileReader(pfad)));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
+    
+    static boolean testeTableColumn(String table, String column) {
+    	Vector<Vector<String>> structure = SqlInfo.holeFelder("SHOW COLUMNS FROM `"+table+"`;");
+    	for(Vector<String> v : structure) {
+    		if(v.get(0).equals(column)) {
+    			return true;
+    		}
+    	}
+    	return false;
+    }
+    
+    static boolean testeTableStructure(String table, String column, String type) {
+    	Vector<Vector<String>> structure = SqlInfo.holeFelder("SHOW COLUMNS FROM `"+table+"` LIKE '"+column+"';");
+    	String dbTyp = structure.get(0).get(1);
+    	if(dbTyp.equals(type)) {
+    		return true;
+    	}
+    	return false;
+    }
+    
+    
+    
+    static boolean testeTableExists(String tablename) {
+    	Vector<Vector<String>> showTables = SqlInfo.holeFelder("SHOW TABLES;");
+    	
+    	for(Vector<String> t : showTables) {
+    		if(t.get(0).equals(tablename)) {
+    			return true;
+    		}
+    	}
+    	System.out.println("Tabellen Prüfung: Tabelle " + tablename + " nicht (!) gefunden");
+    	return false;
+    }
+    
+    static void tracking(String ik) {
+    	String mac = "N/A";
+    	try {
+			NetworkInterface ni = NetworkInterface.getByInetAddress(InetAddress.getLocalHost());
+			byte[] adr = ni.getHardwareAddress();
+			if(adr != null) {
+				mac = "";
+				for(int i = 0; i < adr.length; i++) {
+					mac += String.format("%x:",	 adr[i]);
+				}
+			}
+			
+		} catch (SocketException | UnknownHostException e) {
+		}
+    	try {
+    		String url = "https://pfluegeredv.de/tracking.php?mac="+mac+"&ik="+ik;
+			new URL(url).openStream().close();;
+		} catch (IOException e) {
+		}
+    	
+    }
+    
+    static void loadBackground() {
+    	Path.Instance.getProghome();
+    	try {
+			URL url = new URL("https://pfluegeredv.de/therapieMT1.gif");
+			InputStream in = new BufferedInputStream(url.openStream());
+			OutputStream out = new BufferedOutputStream(new FileOutputStream(Path.Instance.getProghome() +"icons/therapieMT1.gif"));
+			
+			for(int i; (i = in.read())!= -1;) {
+				out.write(i);
+			}
+			in.close();
+			out.close();
+		} catch (IOException e) {
+		}
+    }
+   
 
     ActionListener actionListener = new MenuActionListener(this);
 

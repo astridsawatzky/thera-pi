@@ -126,21 +126,26 @@ public class RezTools {
         boolean[] bvorrangig = null;
         // String aktpos = "";
         for (int i = 1; i < 5; i++) {
-            if ("".equals(rezvec.get(i)
-                                .trim())) {
-                break;
-            }
-            positionen.add(String.valueOf(rezvec.get(i)));
-            bvorrangig = isVorrangigAndExtra(rezvec.get(i + 4), xreznr.substring(0, 2));
-            vorrangig.add(Boolean.valueOf(bvorrangig[0]));
-            einzelerlaubt.add(Boolean.valueOf(bvorrangig[1]));
-            anzahl.add(0);
+            if (!("".equals(rezvec.get(i).trim()))) {
+            	positionen.add(String.valueOf(rezvec.get(i)));
+                bvorrangig = isVorrangigAndExtra(rezvec.get(i + 4), xreznr.substring(0, 2));
+                vorrangig.add(Boolean.valueOf(bvorrangig[0]));
+                einzelerlaubt.add(Boolean.valueOf(bvorrangig[1]));
+                anzahl.add(0);
 
-            if (countOccurence(list, rezvec.get(i)) > 1) {
-                doppelpos.add(sucheDoppel(i - 1, list, rezvec.get(i)));
-            } else {
-                Object[] obj = { false, i - 1, i - 1 };
-                doppelpos.add(obj.clone());
+                if (countOccurence(list, rezvec.get(i)) > 1) {
+                    doppelpos.add(sucheDoppel(i - 1, list, rezvec.get(i)));
+                } else {
+                    Object[] obj = { false, i - 1, i - 1 };
+                    doppelpos.add(obj.clone());
+                }
+            }
+            else {
+            	positionen.add("./.");
+            	vorrangig.add(true);
+            	anzahl.add(0);
+            	einzelerlaubt.add(false);
+            	doppelpos.add(null);
             }
         }
 
@@ -2460,8 +2465,8 @@ public class RezTools {
                 // termine.get(4) = Object[]
                 // {doppelbehandlung(Boolean),erstepos(Integer),letztepos(Integer)}
 
-                for (i = 0; i <= 3; i++) {
-                    if ("".equals(vec.get(1 + i)
+                for (i = 0; i < 4; i++) {
+                    if ("".equals(vec.get(i + 1)
                                      .trim())) {
                         hMPos.get(i).hMPosNr = "./.";
                         hMPos.get(i).vOMenge = 0;
@@ -2627,14 +2632,17 @@ public class RezTools {
                 String[] params = { null, null, null, null };
                 count = 0;
                 for (i = 0; i < j; i++) {
+
+                	
                     if (hMPos.get(i).best) {
-                        params[i] = vec.get(i + 1);
+                        params[i] = hMPos.get(i).hMPosNr;
                         count++;
                     }
                 }
                 if (count == 0) {
                     jetztVoll = true;
                 }
+                
                 termbuf.append(TermineErfassen.macheNeuTermin2(params[0] != null ? params[0] : "",
                         params[1] != null ? params[1] : "", params[2] != null ? params[2] : "",
                         params[3] != null ? params[3] : "", xkollege, datum));

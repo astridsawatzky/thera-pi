@@ -656,7 +656,8 @@ public class AbrechnungGKV extends JXPanel {
         String ktraeger = ((JXTTreeNode) rootKasse.getChildAt(knoten)).knotenObjekt.ktraeger;
         String dsz = disziSelect.getCurrRezClass();
         String cmd = "select rez_nr,pat_intern,ediok,ikkasse from fertige where rezklasse='" + dsz
-                + "' AND ikktraeger='" + ktraeger + "' ORDER BY id,pat_intern";
+                + "' AND ikktraeger='" + ktraeger + "' AND fertige.neueversion LIKE 'F' ORDER BY id,pat_intern";
+        System.out.println(cmd);
 
         Vector<Vector<String>> vecRezepte = SqlInfo.holeFelder(cmd);
 
