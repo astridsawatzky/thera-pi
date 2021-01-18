@@ -7,7 +7,7 @@ import java.util.Objects;
 public class Version implements Comparable<Version> {
 
     private final boolean IS_TESTVERSION = false;
-    private final LocalDate releaseDate = LocalDate.of(2020, 12, 16);
+    private final LocalDate releaseDate = LocalDate.of(2021, 01, 10);
     public final int major;
     public final int minor;
     public final int revision;
@@ -15,7 +15,7 @@ public class Version implements Comparable<Version> {
     public Version() {
         major = 1;
         minor = 1;
-        revision = 12;
+        revision = 13;
     }
 
     public boolean isTestVersion(){
