@@ -8,6 +8,21 @@ Datumsformat ist jjjj-mm-tt, also Jahr-Monat-Tag
 
 - HMR2020 Formulare
 
+## [1.1.14] - 2020-01-31
+### added
+- Abrechnung für Verordnungen HMR 2020
+- Filter Möglichkeit in der Abrechnung für Verordnungen HMR 2020 nach IK Nummer
+
+### removed
+- Eintrag "Software Updateservice" in SystemInitialisierung
+- Eintrag "PiTool", "PiBrowser" aus Taskpane
+
+## [1.1.13] - 2020-01-10
+### added
+- Eingabemaske Verordnungen HMR 2020
+- Rezeptprüfung HMR 2020 (ohne Verordnungsbesonderheiten / Langfristen)
+- Routine zur Prüfung der Tabellen Änderungen ab 2013
+
 ## [1.1.12] - 2020-11-10
 ### added
 - Lizensen zu benutzen Bibliotheken in Gitlab referenziert
